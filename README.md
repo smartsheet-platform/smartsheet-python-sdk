@@ -5,7 +5,7 @@ Python client library for version 1.1 of the Smartsheet API.
 The Smartsheet API is documented at:
 https://www.smartsheet.com/developers/api-documentation
 
-**NOTE: This library frightenlying, terribly, and horribly incomplete at the moment.**
+**NOTE: This library is frightenlying, terribly, and horribly incomplete at the moment.**
 
 # What Works
 
