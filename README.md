@@ -33,14 +33,14 @@ that are covered here.
 * Replacing an attachment doesn't work, only uploading a new version
 * Adding new data (other than new attachment versions) to a Sheet
 * Can't issue HEAD requests on the S3 link used to download attachments
-  * These result in a 403 error even thought the S3 docs say that GET and HeAD use the same permissions object
+  * These result in a 403 error even thought the S3 docs say that GET and HEAD use the same permissions object
 
 # TODO
 
 * Continue adding support for more of the version 1.1 API
   * Change Cell content
   * Add Rows (including new content in their Cells)
-  * Add Columns (including new content intheir Cells)
+  * Add Columns (including new content in their Cells)
   * Bare minimum support for Workspaces and Folders
   * Bare minimum support for Reports
   * Bare minimum support for Search
@@ -58,14 +58,14 @@ interface.  In this model, changes could be made to a local copy of the
 Sheet, and then synchronized with the Smartsheet servers by calling
 a .save() method on either the Sheet or whatever object was changed. In
 this model, calling .save() on the Sheet (or any object that can contain
-other objects) would result in the the saving of any "contained" objects.
+other objects) would result in the saving of any "contained" objects.
 
 That's the goal, it may take a while to get there.
 
 # Code Guidelines
 
 In general, follow PEP 8 (https://www.python.org/dev/peps/pep-0008/),
-the Python Syle Guide.  Try valiently to limit lines to 80 characters
+the Python Style Guide.  Try valiantly to limit lines to 80 characters
 or less.
 
 There's really only one hard rule:  do not use tabs for indentation.
