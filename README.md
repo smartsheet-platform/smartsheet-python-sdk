@@ -37,6 +37,8 @@ that are covered here.
 
 # TODO
 
+* Add unit tests
+  * Probably using the unittest standard library
 * Continue adding support for more of the version 1.1 API
   * Change Cell content
   * Add Rows (including new content in their Cells)
