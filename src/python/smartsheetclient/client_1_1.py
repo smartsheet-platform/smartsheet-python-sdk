@@ -15,9 +15,7 @@ import logging
 
 # Things that I know need to be fixed.
 # TODO:  Create exception classes and use them to pass errors to the caller.
-# TODO:  Get a logger into the classes.
 # TODO:  Log when deprecated things (attributes and paths) are used.
-# TODO:  The error handling of errors from the server is abysmal.
 # TODO:  Add OAuth support.
 
 
