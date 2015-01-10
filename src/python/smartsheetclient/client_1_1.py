@@ -673,6 +673,18 @@ class Row(ContainedThing, object):
                 return c
         return None
 
+    def __getitem__(self, column_index):
+        '''
+        Enable indexing a Row object to fetch the cell in the indicated column.
+        This allows a Row to be used like a Python list.
+        Colum indexes start at 0.
+        NOTE:  Negative indexes are not supported.
+        Returns the Cell at the specified column
+        '''
+        if column_index >= 0:
+            return self.getCellByColumnIndex(column_index)
+        raise Exception("Invalid column index: %r" % column_index)
+
     def __str__(self):
         return '<Row id:%r rowNumber:%r>' % (self.id, self.rowNumber)
 
