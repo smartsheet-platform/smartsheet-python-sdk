@@ -128,4 +128,29 @@ sheet = client.fetchSheetByPermalink(sheet_info.permalink)
 sheet = sheet_info.loadSheet()
 ```
 
+## Access the Rows and Cells in a Sheet
+
+This example assumes that you are working with a fetched sheet.  The Rows
+of a Sheet are available via `sheet.rows`.  In addition, the Sheet supports
+certain list-style access patterns.  In particular, you can access the Cells
+of the Sheet as if the Sheet were a 2-dimensional array.  When doing so, it
+is important to remember that Rows start at 1, and Columns start at 0.
+
+```
+# Print the value of the top left-hand Cell of a sheet:
+print sheet[1][0].value
+
+# This 2-dimensional access pattern is also available via `sheet.rows`:
+# This is equivalent ot the prior print statement.
+print sheet.rows[1][0]
+```
+
+The rows of a sheet can be iterated over as if they were a normal Python
+list:
+```
+# Print the value of the second Column of each Row in the Sheet.
+# Remember that Columns are zero-indexed (the second Column has index=0).
+for row in sheet.rows:
+    print row[1]
+```
 

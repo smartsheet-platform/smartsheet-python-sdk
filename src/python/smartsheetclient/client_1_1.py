@@ -370,7 +370,8 @@ class Sheet(TopLevelThing, object):
     @property
     def rows(self):
         if self._rows is None:
-            self._rows =  [Row(r, self) for r in self.fields.get('rows', [])]
+            self._rows = SheetRows(self.fields.get('rows', []), self)
+            # self._rows =  [Row(r, self) for r in self.fields.get('rows', [])]
         return self._rows
 
     @property
@@ -474,7 +475,6 @@ class Sheet(TopLevelThing, object):
         except IndexError:
             return None
 
-
     def allAttachments(self, include_rows=True, include_discussions=False):
         '''
         Get a list of all the Attachments to the Sheet.
@@ -536,6 +536,82 @@ class Sheet(TopLevelThing, object):
     def __repr__(self):
         return str(self)
 
+    def __getitem__(self, row_number):
+        '''
+        Add a list-style interface to fetching a Row from the sheet.
+        The index is the row_number (1-based) and not a classic (0-based) index.
+        '''
+        return self.rows.getRowByRowNumber(row_number)
+
+    def __iter__(self):
+        return iter(self.rows)
+ 
+
+
+class SheetRows(ContainedThing, object):
+    '''
+    The set of Rows on a Sheet object.
+    The SheetRow supports accessing the rows of the Sheet with list-style
+    syntax.  That combined with a similar support on the individual Rows
+    allows individual Cells to be accessed via [][] as if the sheet were
+    a two-dimensional array.  It is important to remember that Rows are
+    numbered starting at 1, but Columns are numbered starting at 0.  
+    '''
+    # This supports a partial set of Rows (such as when the Sheet is fetched
+    # using the rowIds parameter).
+    # Having this object wrap the list of Rows helps to pave the way for
+    # nice semantics for adding, moving, and removing Rows.
+
+    def __init__(self, rows, sheet):
+        '''
+        Initialize with the specified rows.
+        '''
+        self.parent = sheet
+        self.sheet = sheet
+        self._rows = []
+        self._rows = [Row(r, sheet) for r in rows]
+
+    def getRowByRowNumber(self, row_number):
+        '''
+        Fetch the Row with the specified row number.
+        The numbering for rows starts at 1.
+        This is distinct from Columns which have indexes that start at 0.
+        Returns the Row.
+        Raises an IndexError exception if the Row is not found.
+        '''
+        if not self._rows:
+            raise Exception("Sheet has no Rows")
+        if row_number < 1:
+            raise Exception("Invalid row number, row numbers start at 1")
+
+        # The ideal case is that the Sheet was fetched with all of the Rows.
+        # If it was, convert the row_number to a list index and return the
+        # specified Row (assuming it's the correct one).
+        if self._rows[0].rowNumber == 1:
+            idx = row_number - 1
+            if idx >= len(self._rows):
+                raise Exception("Invalid row number, max valid is %d" %
+                        len(self._rows) -1 )
+            if self._rows[idx].rowNumber == row_number:
+                return self._rows[idx]
+
+        # Have to scan for the matching row.
+        for row in self._rows:
+            if row.rowNumber == row_number:
+                return row
+
+        raise IndexError("Specified row_number %d not found" % row_number)
+
+    def __getitem__(self, row_number):
+        '''
+        Add a list-style interface to fetching a Row.
+        The index is the row_number (1-based) and not a classic (0-based) index.
+        '''
+        return self.getRowByRowNumber(row_number)
+
+    def __iter__(self):
+        return iter(self._rows)
+    
 
 
 class Row(ContainedThing, object):
