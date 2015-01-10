@@ -1138,7 +1138,7 @@ class AttachmentDownloadInfo(ContainedThing, object):
         client = client or self.client
         resp, self._data = client.raw_request(self.url, '', 'GET')
         self._download_resp = resp
-        resp = NewHttpResponse(resp)
+        resp = HttpResponse(resp)
         if resp.isOK():
             return True
         raise Exception("Attachment download failed: %r: %s" % (self.id, resp))
@@ -1343,7 +1343,7 @@ class SimpleUser(object):
 
 
 
-class NewHttpResponse(object):
+class HttpResponse(object):
     '''
     A response from an HTTP request.
     The response contains a header and content object.  The content may be
@@ -1385,7 +1385,7 @@ class NewHttpResponse(object):
         return json.loads(self.content)
 
     def __str__(self):
-        return '<NewHttpResponse status:%s content.len: %d>' % (
+        return '<HttpResponse status:%s content.len: %d>' % (
                 self.status, len(sel.content))
 
     def __repr__(self):
@@ -1393,7 +1393,7 @@ class NewHttpResponse(object):
 
 
 
-class SmartsheetAPIResponseHeader(NewHttpResponse):
+class SmartsheetAPIResponseHeader(HttpResponse):
     '''
     Response header from a Smartsheet API request.
     '''
