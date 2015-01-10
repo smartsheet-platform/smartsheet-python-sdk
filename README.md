@@ -96,7 +96,7 @@ client.connect()
 print client
 ```
 
-## List the available sheets.
+## List and load Sheets
 
 These few lines list the sheets available to the your client.  In the
 listing, each sheet is represented by a `smartsheetclient.SheetInfo`
