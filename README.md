@@ -72,3 +72,60 @@ or less.
 
 There's really only one hard rule:  do not use tabs for indentation.
 
+# Examples
+
+## Connect to the API
+
+These few lines should appear in nearly any client you write.  They connect
+your client to the server and validate the connection by issuing a request
+for the `/user/me` API endpoint -- getting the information about the user
+you have connected as (a `smartsheetclient.UserProfile` object).
+Subsequent examples will assume that `client` is a connected
+`SmartsheetClient` instance unless otherwise noted.  The use of logging is,
+of course, optional, but recommended.  Logging at the DEBUG level will
+capture the requests and responses between your client and the API server.
+
+```
+import smartsheetclient
+import logging
+logging.basicConfig(filename='client.debug.log', level=logging.DEBUG)
+client_logger = logging.getLogger()
+my_token = 'TOKEN TO USE FOR DIRECT ACCESS'
+client = smartsheetclient.SmartsheetClient(my_token, logger=client_logger)
+client.connect()
+print client
+```
+
+## List the available sheets.
+
+These few lines list the sheets available to the your client.  In the
+listing, each sheet is represented by a `smartsheetclient.SheetInfo`
+object.  Specific SheetInfo objects can be fetched by name (which may match
+multiple sheets) or permalink (which will match at most one sheet).  Once
+the sheet you are interested in has been found, it can be fetched, either
+directly from its corresponding `SheetInfo` object, or directly via the
+client.  Both methods are show below.
+
+```
+# Full list of available sheets.
+sheet_list = client.fetchSheetList()
+
+# Find SheetInfo objects by name
+matching_sheet_info_list = client.fetchSheetInfoByName('Test Sheet 1')
+print matching_sheet_info_list
+# [<SheetInfo id:7703071930247044, name: u'Test Sheet 1', accessLevel: u'OWNER', permalink:u'https://app.smartsheet.com/b/home?lx=8LBckEZmSx8n6a1om0WXKw'>]
+
+# Find SheetInfo objects by permalink.
+sheet_info = client.fetchSheetInfoByPermalink('https://app.smartsheet.com/b/home?lx=8LBckEZmSx8n6a1om0WXKw')
+
+# Load Sheet by ID.
+sheet = client.fetchSheetByID(sheet_info.id)
+
+# Load Sheet by permalink.
+sheet = client.fetchSheetByPermalink(sheet_info.permalink)
+
+# Load Sheet from SheetInfo object.
+sheet = sheet_info.loadSheet()
+```
+
+
