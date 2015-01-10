@@ -1269,6 +1269,18 @@ class SheetInfo(TopLevelThing, object):
     def permalink(self):
         return self.fields.get('permalink', '')
 
+    def loadSheet(self, discussions=False, attachments=False,
+            format=False, filters=False, row_ids=None, column_ids=None,
+            page_size=None, page=None):
+
+        '''
+        Load the Sheet this SheetInfo object is about.
+        The optional parameters are the same as those for
+        SmartsheetClient.fetchSheetByID().
+        Returns the corresponding Sheet.
+        '''
+        return self.client.fetchSheetByID(self.id)
+
     def __str__(self):
         return '<SheetInfo id:%r, name: %r, accessLevel: %r, permalink:%r>' % (
                 self.id, self.name, self.accessLevel, self.permalink)
