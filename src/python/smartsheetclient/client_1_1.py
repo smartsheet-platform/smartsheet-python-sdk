@@ -192,10 +192,11 @@ class SmartsheetClient(object):
             filters=False, row_ids=None, column_ids=None, page_size=None,
             page=None):
         '''
-        Fetch the specified sheet.
+        Fetch the specified Sheet.
         May optionally fetch a variety of attributes:
             discussions, attachments, format, filters, rowIds, and columnIds
         NOTE:  Does not support pagination at the moment.
+        Returns the Sheet with the specified permalink.
         '''
         si = self.fetchSheetInfoByPermalink(permalink, use_cache=use_cache)
         return self.fetchSheetByID(si.id, discussions=discussions,
@@ -208,10 +209,11 @@ class SmartsheetClient(object):
             format=False, filters=False, row_ids=None, column_ids=None,
             page_size=None, page=None):
         '''
-        Fetch the specified sheet.
+        Fetch the specified Sheet.
         May optionally fetch a variety of attributes:
             discussions, attachments, format, filters, rowIds, and columnIds
         NOTE:  Does not support pagination at the moment.
+        Returns the specified Sheet.
         '''
         path = 'sheet/' + str(sheet_id)
         path_params = []
