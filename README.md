@@ -96,7 +96,7 @@ client.connect()
 print client
 ```
 
-## List and load Sheets
+## List and Load Sheets
 
 These few lines list the sheets available to the your client.  In the
 listing, each sheet is represented by a `smartsheetclient.SheetInfo`
@@ -149,7 +149,7 @@ The rows of a sheet can be iterated over as if they were a normal Python
 list:
 ```
 # Print the value of the second Column of each Row in the Sheet.
-# Remember that Columns are zero-indexed (the second Column has index=0).
+# Remember that Columns are zero-indexed (the second Column has index=1).
 for row in sheet.rows:
     print row[1]
 ```
