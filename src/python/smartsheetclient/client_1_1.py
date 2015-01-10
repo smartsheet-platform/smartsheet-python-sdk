@@ -32,6 +32,7 @@ class SmartsheetClient(object):
         self._sheet_list_cache = []
         self.logger = logger or logging.getLogger('SmartsheetClient')
         self.user = None
+        self.handle = None
         self.request_count = 0
         self.request_error_count = 0
 
@@ -66,6 +67,9 @@ class SmartsheetClient(object):
                 req_url = url + '/' + path
         else:
             req_url = url
+
+        if not self.handle:
+            raise Exception("Must call .connect() before any other calls.")
 
         self.logger.debug('req_url: %r', req_url)
         resp, content = self.handle.request(req_url, method, body=body,
