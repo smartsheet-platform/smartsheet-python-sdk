@@ -26,11 +26,13 @@ class SmartsheetClient(object):
     base_url = 'https://api.smartsheet.com/1.1/'
     version = '1.1'
 
-    def __init__(self, token=None, rate_limit_sleep=10, logger=None):
+    def __init__(self, token=None, rate_limit_sleep=10, logger=None,
+            read_only=False):
         self.token = token
         self.rate_limit_sleep = rate_limit_sleep
-        self._sheet_list_cache = []
         self.logger = logger or logging.getLogger('SmartsheetClient')
+        self.read_only = read_only
+        self._sheet_list_cache = []
         self.user = None
         self.handle = None
         self.request_count = 0
@@ -93,6 +95,12 @@ class SmartsheetClient(object):
 
         request_try_count = 0
         request_start_time = time.time()
+
+        if self.read_only and (method != 'GET' or method != 'HEAD'):
+            self.logger.error("Client is read only, request (%s %s %s) " +
+                    "not permitted.", method, self.base_url, path)
+            raise Exception(("Client is read only, request (%s %s %s) " + 
+                    "not permitted.") % (method, self.base_url, path))
 
         while True:
             self.request_count += 1
