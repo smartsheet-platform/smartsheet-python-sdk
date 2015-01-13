@@ -906,8 +906,6 @@ class Cell(ContainedThing, object):
     A Cell in a Row of a Sheet.
     Cells don't have a unique ID exposed via the API.  Instead, each Cell is
     uniquely identified by the tuple of Row ID and Column ID.
-
-    A Cell can be either fully (the 
     '''
     field_names = '''type value displayValue columnId link hyperlink
                     linkInFromCell linksOutToCells formula format
@@ -978,10 +976,16 @@ class Cell(ContainedThing, object):
 
     def fetchHistory(self, client=None):
         '''
-        Fetch the history of the cell.
-        Not yet implemented.
+        Fetch the history of the Cell.
         '''
-        raise NotImplementedError("Fetching Cell history not supported yet.")
+        path = '/sheet/%s/row/%s/column/%s/history' % (
+                str(self.row.sheet.id), str(self.rowId), str(self.columnId))
+        client = client or self.client
+        hdr, body = client.request(path, 'GET')
+        if hdr.isOK():
+            return [Cell(c, self.row) for c in body]
+        self.logger.error("Unable to fetch Cell %s history: %s", cell, str(hdr))
+        raise Exception("Error fetching Cell history: %s" % str(hdr))
 
     def __str__(self):
         return '<Cell rowId:%r, columnId:%r, type:%r value=%r>' % (
