@@ -18,6 +18,35 @@ import logging
 # TODO:  Log when deprecated things (attributes and paths) are used.
 # TODO:  Add OAuth support.
 
+# All Exceptions raised by the client will inherit from this class.
+class SmartsheetClientError(Exception): pass
+
+class ReadOnlyClientError(SmartsheetClientError):
+    '''
+    An attempt was made to write using a client in read-only mode.
+    '''
+    pass
+
+class APIRequestError(SmartsheetClientError):
+    '''
+    The Smartsheet API request failed for any reason other than rate limit.
+    The exception object contains the error information set by the API server.
+    '''
+    def __init__(self, hdr):
+        self.hdr = hdr
+
+    def __str__(self):
+        return '<APIRequestError status: %s  error_code: %r  message: %r>' % (
+                self.hdr.status, self.hdr.error_code, self.hdr.error_message)
+
+class SheetIntegrityError(SmartsheetClientError):
+    '''
+    A Sheet or something related to it had data in an inconsistent state.
+    Any further processing would have undefined behavior and be unsafe.
+    '''
+    pass
+
+
 
 class SmartsheetClient(object):
     '''
@@ -27,11 +56,12 @@ class SmartsheetClient(object):
     version = '1.1'
 
     def __init__(self, token=None, rate_limit_sleep=10, logger=None,
-            read_only=False):
+            read_only=False, retry_limit=3):
         self.token = token
         self.rate_limit_sleep = rate_limit_sleep
         self.logger = logger or logging.getLogger('SmartsheetClient')
         self.read_only = read_only
+        self.retry_limit = retry_limit
         self._sheet_list_cache = []
         self.user = None
         self.handle = None
@@ -71,7 +101,7 @@ class SmartsheetClient(object):
             req_url = url
 
         if not self.handle:
-            raise Exception("Must call .connect() before any other calls.")
+            self.connect()
 
         self.logger.debug('req_url: %r', req_url)
         resp, content = self.handle.request(req_url, method, body=body,
@@ -88,6 +118,7 @@ class SmartsheetClient(object):
         API requests that fail due to rate limiting will be retried after a
         brief sleep.
         Returns a SmartsheetAPIResponseHeader and a body (typically a dict).
+        On failure raises the APIRequestError exception.
         '''
         headers = self.default_headers()
         if extra_headers:
@@ -99,8 +130,8 @@ class SmartsheetClient(object):
         if self.read_only and (method != 'GET' or method != 'HEAD'):
             self.logger.error("Client is read only, request (%s %s %s) " +
                     "not permitted.", method, self.base_url, path)
-            raise Exception(("Client is read only, request (%s %s %s) " + 
-                    "not permitted.") % (method, self.base_url, path))
+            raise ReadOnlyClientError(("Client is read only, request " +
+                    "(%s %s %s) not permitted.") %(method, self.base_url, path))
 
         while True:
             self.request_count += 1
@@ -120,13 +151,22 @@ class SmartsheetClient(object):
                     self.logger.warn('Request succeeded, with no response body')
                 break
             self.request_error_count += 1
+            if request_try_count > self.retry_limit:
+                self.logger.error(('Retry limit %d reached, abandoning ' +
+                        'request for %r'), self.retry_limit, path)
+                raise APIRequestError(hdr)
+
             if hdr.rateLimitExceeded():
-                self.logger.warn('Hit the rate limit, sleeping for %d',
+                self.logger.warn('Hit the rate limit, sleeping for %d.',
                         self.rate_limit_sleep)
+                time.sleep(self.rate_limit_sleep)
+            elif hdr.isTransientError():
+                self.logger.warn('Transient error: %s, retrying in %f seconds.',
+                        str(hdr), self.rate_limit_sleep)
                 time.sleep(self.rate_limit_sleep)
             else:
                 self.logger.error("Request error: %r", hdr)
-                raise Exception("Request error: %r" % hdr)
+                raise APIRequestError(hdr)
         request_end_time = time.time()
         request_duration = request_end_time - request_start_time
         self.logger.info("Request for %r took: %d tries and %f seconds",
@@ -144,7 +184,6 @@ class SmartsheetClient(object):
         if hdr.isOK():
             user_profile = UserProfile(body)
             return user_profile
-        raise Exception("Bad request: " + str(hdr))
 
 
     def fetchSheetList(self, use_cache=False):
@@ -157,13 +196,10 @@ class SmartsheetClient(object):
         sheet_list = []
         if not (use_cache and len(self._sheet_list_cache) != 0):
             hdr, body = self.request(path, 'GET')
-            if hdr.isOK():
-                for sheet_info in body:
-                    sheet_list.append(SheetInfo(sheet_info, self))
-                if use_cache:
-                    self._sheet_list_cache = copy.copy(sheet_list)
-            else:
-                raise Exception("Bad request: " + str(hdr))
+            for sheet_info in body:
+                sheet_list.append(SheetInfo(sheet_info, self))
+            if use_cache:
+                self._sheet_list_cache = copy.copy(sheet_list)
         if use_cache:
             return copy.copy(self._sheet_list_cache)
         else:
@@ -190,8 +226,8 @@ class SmartsheetClient(object):
         sheets = self.fetchSheetList(use_cache=use_cache)
         matches = [si for si in sheets if si.permalink == permalink.strip()]
         if len(matches) > 1:
-            raise Exception("Multiple sheets had the same permalink: %r" %
-                    [str(si) for si in matches])
+            raise SheetIntegrityError("Multiple sheets had the same " +
+                    "permalink: %r" % [str(si) for si in matches])
         return matches[0]
 
 
@@ -1511,6 +1547,10 @@ class SmartsheetAPIResponseHeader(HttpResponse):
     '''
     Response header from a Smartsheet API request.
     '''
+    # If a request results in one of these errors, it might not have the same
+    # behavior on a future request.
+    transient_errors = dict([(error_code, True) for error_code in
+        '''1050 1092 1093 1106 2001 2002 2004 4001 4002 4003'''.split()])
 
     def __init__(self, hdr, content, client):
         super(SmartsheetAPIResponseHeader, self).__init__(hdr, content)
@@ -1539,6 +1579,14 @@ class SmartsheetAPIResponseHeader(HttpResponse):
     def setError(self, error):
         self.error_code = error.error_code
         self.error_message = error.error_message
+
+    def isTransientError(self):
+        '''
+        Return true if the header indicates a transient error.
+        A transient error is one that may not be present in a future request
+        of the same path.
+        '''
+        return (self.error_code in self.transient_errors)
 
     def __str__(self):
         if self.isOK():
