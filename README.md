@@ -22,6 +22,8 @@ work yet.  Hopefully that will change.  Here's what currently works:
 * Download attachments (from the sheet, rows, or discussion comments)
 * Upload a new version of an existing attachment
   * This is distinct from replacing the existing attachment
+* Fetch the history of a Cell
+* Access the Cells of a sheet as a 2-dimensional array
 
 # What Doesn't Work (that might surprise you)
 
@@ -152,5 +154,14 @@ list:
 # Remember that Columns are zero-indexed (the second Column has index=1).
 for row in sheet.rows:
     print row[1]
+```
+
+## Fetch the History of a Cell
+
+The full history of each Cell can be fetched.  Note that this operation is
+expensive (from a rate limiting perspective).
+```
+for cell_version in sheet[1][0].fetchHistory():
+    print cell_version
 ```
 
