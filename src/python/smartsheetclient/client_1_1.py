@@ -910,7 +910,8 @@ class Cell(ContainedThing, object):
     A Cell can be either fully (the 
     '''
     field_names = '''type value displayValue columnId link hyperlink
-                    linkInFromCell linksOutToCells formula format'''.split()
+                    linkInFromCell linksOutToCells formula format
+                    modifiedAt modifiedBy'''.split()
     max_display_len = 10
 
     def __init__(self, fields, row):
@@ -962,8 +963,25 @@ class Cell(ContainedThing, object):
         return self.fields.get('format')
 
     @property
+    def modifiedAt(self):
+        return self.fields.get('modifiedAt', None)
+
+    @property
+    def modifiedBy(self):
+        if 'modifiedBy' in self.fields:
+            return SimpleUser(self.fields.get('modifiedBy'))
+        return None
+
+    @property
     def rowId(self):
         return self.row.id
+
+    def fetchHistory(self, client=None):
+        '''
+        Fetch the history of the cell.
+        Not yet implemented.
+        '''
+        raise NotImplementedError("Fetching Cell history not supported yet.")
 
     def __str__(self):
         return '<Cell rowId:%r, columnId:%r, type:%r value=%r>' % (
