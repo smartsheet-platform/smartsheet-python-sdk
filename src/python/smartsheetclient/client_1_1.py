@@ -928,7 +928,10 @@ class Cell(ContainedThing, object):
 
     @property
     def displayValue(self):
-        return self.fields.get('displayValue', '')
+        if 'displayValue' in self.fields:
+            return self.fields.get('displayValue', '')
+        else:
+            return self.value
 
     @property
     def columnId(self):
@@ -1617,8 +1620,8 @@ def string_trim(value, max_len):
     '''
     Return a version of value that fits within max_len characters.
     '''
-    if len(value) > max_len:
-        return value[:max_len-3] + '...'
+    if len(str(value)) > max_len:
+        return str(value)[:max_len-3] + '...'
     else:
         return value
 
