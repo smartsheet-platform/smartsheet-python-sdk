@@ -1263,7 +1263,7 @@ class AttachmentDownloadInfo(ContainedThing, object):
         etag, which is an MD5 checksum of the attachment's contents (assuming
         the attachment was stored in Amazon S3 using PUT or POST Object
         operations.
-        Sadly, the Signature in the URL 
+        Sadly, the Signature in the URL this doesn't work
         '''
         path = 'sheet/%s/attachment/%s' % (str(self.sheet.id), str(self.id))
         client = client or self.client
