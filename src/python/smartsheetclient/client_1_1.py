@@ -157,7 +157,7 @@ class SmartsheetClient(object):
                 raise APIRequestError(hdr)
 
             if hdr.rateLimitExceeded():
-                self.logger.warn('Hit the rate limit, sleeping for %d.',
+                self.logger.warn('Hit the rate limit, sleeping for %f seconds.',
                         self.rate_limit_sleep)
                 time.sleep(self.rate_limit_sleep)
             elif hdr.isTransientError():
