@@ -46,6 +46,17 @@ class SheetIntegrityError(SmartsheetClientError):
     '''
     pass
 
+class UnknownColumnId(SmartsheetClientError):
+    '''
+    The specified Column ID did not correspond to a columnId on the Sheet.
+    This could occur for a valid Column ID if the Sheet was fetched with
+    only a subset of the total Columns.  Generally though, if that happens,
+    no Cell returned with the Sheet would be referring to the Column ID in
+    the first place
+    '''
+    pass
+
+
 
 
 class SmartsheetClient(object):
@@ -391,6 +402,7 @@ class Sheet(TopLevelThing, object):
         self.fields = fields
         self.client = client
         self._columns = None
+        self._column_id_map = None
         self._rows = None
         self._attachments = None
         self._discussions = None
@@ -409,6 +421,7 @@ class Sheet(TopLevelThing, object):
             self._columns = [
                     Column(c, self) for c in 
                         self.fields.get('columns', [])]
+            self._column_id_map = dict([(c.id, c) for c in self._columns])
         return self._columns
 
     @property
@@ -498,6 +511,15 @@ class Sheet(TopLevelThing, object):
             for r in self.rows:
                 acc.extend(r.discussions)
         return acc
+
+    def getColumnById(self, column_id):
+        '''
+        Return the Column that has the specified ID.
+        '''
+        try:
+            self._column_id_map[column_id]
+        except KeyError, e:
+            raise UnknownColumnId("Column ID: %r is not in current columns.")
 
     def getColumnByIndex(self, column_index):
         '''
@@ -678,6 +700,7 @@ class Row(ContainedThing, object):
         self._discussions = None
         self._attachments = None
         self._columns = None
+        self._column_id_map = None
 
     @property
     def id(self):
@@ -723,7 +746,17 @@ class Row(ContainedThing, object):
             self._columns = [
                     Column(c, self.sheet) for c in 
                         self.fields.get('columns', [])]
+            self._column_id_map = dict([(c.id, c) for c in self._columns])
         return self._columns
+
+    def getColumnById(self, column_id):
+        '''Return the Column that has the specified ID.'''
+        if self._column_id_map is None:
+            unused = self.columns
+        try:
+            self._column_id_map[column_id]
+        except KeyError, e:
+            raise UnknownColumnId("Column ID: %r is not in current columns.")
 
     @property
     def expanded(self):
@@ -924,6 +957,22 @@ class Cell(ContainedThing, object):
     @property
     def value(self):
         return self.fields.get('value', '')
+    
+    @value.setter
+    def value(self, new_value, strict=None, format=None, hyperlink=None,
+            linkInFromCell=None):
+        '''
+        Assign a new value to the Cell.
+        In order for the Sheet (on the Smartsheet server) to be updated,
+        the Cell, the Row it is on, or the Sheet it is in must have their
+        .save() method called.
+        '''
+        # TODO: Figure out a nice way to propogate dirtiness.
+        # It needs to go "up" to the Row and Sheet, but we also need for the
+        # Row and Sheet to quickly find those Cells (or Rows) that are 
+        # dirty if a_sheet.save() or a_row.save() is called.
+
+        pass
 
     @property
     def displayValue(self):
@@ -973,6 +1022,10 @@ class Cell(ContainedThing, object):
     @property
     def rowId(self):
         return self.row.id
+
+    @property
+    def column(self):
+        return self.row.getColumnById(self.columnId)
 
     def fetchHistory(self, client=None):
         '''
@@ -1293,7 +1346,7 @@ class AttachmentDownloadInfo(ContainedThing, object):
         self.logger.debug("HTTP HEAD request for attachment, resp: %r", resp)
         self.logger.debug("HTTP HEAD request for attachment, body: %r", body)
 
-    def download(self, client):
+    def download(self, client=None):
         '''
         Download the attachment, and store it in self._data
         '''
