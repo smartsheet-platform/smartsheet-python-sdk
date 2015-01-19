@@ -56,7 +56,19 @@ class UnknownColumnId(SmartsheetClientError):
     '''
     pass
 
+class InvalidRowNumber(SmartsheetClientError):
+    '''
+    The specified row number was not found in the Sheet.
+    This coud occur for a valid row number if the Sheet was fetched with
+    only a subset of the total Rows.
+    '''
+    pass
 
+class SheetHasNoRows(SmartsheetClientError):
+    '''
+    The Sheet has no Rows and a method that required rows was used.
+    '''
+    pass
 
 
 class SmartsheetClient(object):
@@ -646,34 +658,35 @@ class SheetRows(ContainedThing, object):
         Raises an IndexError exception if the Row is not found.
         '''
         if not self._rows:
-            raise Exception("Sheet has no Rows")
+            raise SheetHasNoRows(str(self.sheet))
         if row_number < 1:
-            raise Exception("Invalid row number, row numbers start at 1")
+            raise InvalidRowNumber("Row # %d invalid" % row_number)
 
-        # The ideal case is that the Sheet was fetched with all of the Rows.
+        # The ideal case is that the Sheet was fetched with either all of the
+        # Rows, or with a contiguous block of the first rows.
         # If it was, convert the row_number to a list index and return the
         # specified Row (assuming it's the correct one).
         if self._rows[0].rowNumber == 1:
             idx = row_number - 1
-            if idx >= len(self._rows):
-                raise Exception("Invalid row number, max valid is %d" %
-                        len(self._rows) -1 )
             if self._rows[idx].rowNumber == row_number:
                 return self._rows[idx]
 
-        # Have to scan for the matching row.
+        # Scan for the matching row.
         for row in self._rows:
             if row.rowNumber == row_number:
                 return row
-
-        raise IndexError("Specified row_number %d not found" % row_number)
+        raise InvalidRowNumber("Row # %d not found." % row_number)
 
     def __getitem__(self, row_number):
         '''
         Add a list-style interface to fetching a Row.
         The index is the row_number (1-based) and not a classic (0-based) index.
         '''
-        return self.getRowByRowNumber(row_number)
+        try:
+            return self.getRowByRowNumber(row_number)
+        except InvalidRowNumber, e:
+            raise IndexError("Row # %d no found." % row_number)
+        raise IndexError("Specified row_number %d not found" % row_number)
 
     def __iter__(self):
         return iter(self._rows)
