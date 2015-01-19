@@ -56,10 +56,18 @@ class UnknownColumnId(SmartsheetClientError):
     '''
     pass
 
+class InvalidColumnIndex(SmartsheetClientError):
+    '''
+    The specified column index was not found in the Sheet.
+    This could occur for a valid column index if the Sheet was fetched with
+    only a subset of the total columns.
+    '''
+    pass
+
 class InvalidRowNumber(SmartsheetClientError):
     '''
     The specified row number was not found in the Sheet.
-    This coud occur for a valid row number if the Sheet was fetched with
+    This could occur for a valid row number if the Sheet was fetched with
     only a subset of the total Rows.
     '''
     pass
@@ -69,6 +77,16 @@ class SheetHasNoRows(SmartsheetClientError):
     The Sheet has no Rows and a method that required rows was used.
     '''
     pass
+
+class InvalidOperationOnUnattachedRow(SmartsheetClientError):
+    '''
+    An operation was attempted on a Row that was not "attached" to a Sheet.
+    Rows can be fetched separately from their Sheet -- this is a problem for
+    operations that require access to Sheet attributes (such as the list of
+    columns).  Those operations will raise this exception.
+    '''
+    pass
+
 
 
 class SmartsheetClient(object):
@@ -809,41 +827,73 @@ class Row(ContainedThing, object):
         return None
 
     def getColumnByIndex(self, column_index):
-        try:
-            found = False
-            col = self.columns[column_index]
-            if col.index == column_index:
-                found = True
-            else:
-                for col in self.columns:
+        '''
+        Find the Column on this Row at the specified index.
+        This method is only defined for Rows that are "attached to" a Sheet.
+        Such Rows are those obtained by fetching a Sheet or those added to
+        a Sheet instance (even if the Row update hasn't yet been saved).
+
+        Returns the Column with the given index, or raises InvalidColumnIndex.
+
+        For unattached rows, this operation is not defined and raises a 
+        '''
+        if column_index >= 0:
+            try:
+                col_id = None
+                column = None
+                col = self.sheet.columns[column_index]
+                if col.index == column_index:
+                    return col
+                for col in self.sheet.columns:
                     if col.index == column_index:
-                        found = True
-                        break
-            if found:
-                return col
-            return None
-        except IndexError:
-            return None
+                        return col
+            except IndexError, e:
+                # This gets turned into InvalidColumnIndex below.
+                pass
+            except AttributeError, e:
+                print "Error:", type(e), e
+                raise InvalidOperationOnUnattachedRow(e)
+        raise InvalidColumnIndex("No Column at index %r." % column_index)
 
     def getCellByColumnIndex(self, column_index):
         '''
-        Get the Cell at the specified column index.
+        Get the Cell at the specified column index on this Row.
         Columns indexes start at 0.
-        Returns None if there is no Cell at the specified index.
+        Returns None if there is no Cell at the specified index on this Row.
+        Will raise InvalidOperationOnUnattachedRow if the Row is unattached.
+        May raise InvalidColumnIndex.
         '''
         # This is a bit tricky because we don't really know where to
         # get the columns data from.  It could be on the Row; it
         # could be on the Sheet -- presumably they will agree if it is
         # found on both.
         column = self.getColumnByIndex(column_index)
-        if not column:
-            column = self.sheet.getColumnByIndex(column_index)
-        if not column:
-            raise Exception("Unable to find column @ index: %r" % column_index)
+        return self.getCellByColumnId(column.id)
+
+    def getCellByColumnId(self, column_id):
+        '''
+        Get the Cell on this row at the specified Column ID.
+        Returns the Cell or None if there is no Cell at that Column ID.
+        '''
+        # If the Row has lots of columns, it probably makes sense to have a
+        # dict mapping columnId's to cells.
         for c in self.cells:
-            if c.columnId == column.id:
+            if c.columnId == column_id:
                 return c
         return None
+
+    def setCellByColumnIndex(self, column_index, cell):
+        '''
+        Assign a new cell for the specified column_index.
+        The specified column index must be valid -- either extant on the
+        Smartsheet servers or added locally.
+        '''
+        cur_cell = self.getCellByColumnIndex(column_index)
+        if cur_cell is None:
+            self.logger.debug("Replacing empty cell.")
+        else:
+            self.logger.debug("Replacing an extant cell.")
+
 
     def __getitem__(self, column_index):
         '''
