@@ -377,6 +377,28 @@ class TopLevelThing(object):
     def logger(self, logger):
         raise Exception("Only the client should set .logger")
 
+    def markDirty(self):
+        '''
+        Mark this object as having a new value that should be saved.
+        If this is a composite object, it may contain objects to be saved.
+        '''
+        self._dirty = True
+        return self
+
+    def isDirty(self):
+        '''
+        Return True if this object should be saved.
+        '''
+        # Subclasses must implement this.
+        raise NotImplementedError("Subclasses must implement isDirty().")
+
+    def markClean(self):
+        '''
+        Mark this object as clean -- it doesn't need to be saved.
+        '''
+        self._dirty = False
+        return self
+
 
 
 class ContainedThing(object):
@@ -414,6 +436,29 @@ class ContainedThing(object):
     def logger(self, logger):
         raise Exception("Can't set .logger on a ContainedThing")
 
+    def markDirty(self):
+        '''
+        Mark this object as having a new value that should be saved.
+        '''
+        self._dirty = True
+        self.parent.dirty()
+        return self
+
+    def isDirty(self):
+        '''
+        Return True if this object is dirty and should be saved.
+        '''
+        # A ContainedThing might also contain other things (that could be
+        # dirty.  So, each subclass must implement this.
+        raise NotImplementedError("Subclass must implement isDirty().")
+
+    def markClean(self):
+        '''
+        Mark this object as clean -- it doesn't need to be saved.
+        '''
+        self._dirty = False
+        return self
+
 
 
 class Sheet(TopLevelThing, object):
@@ -436,6 +481,7 @@ class Sheet(TopLevelThing, object):
         self._rows = None
         self._attachments = None
         self._discussions = None
+        self._dirty = False
 
     @property
     def id(self):
@@ -732,6 +778,7 @@ class Row(ContainedThing, object):
         self._attachments = None
         self._columns = None
         self._column_id_map = None
+        self._dirty = False
 
     @property
     def id(self):
@@ -893,6 +940,7 @@ class Row(ContainedThing, object):
             self.logger.debug("Replacing empty cell.")
         else:
             self.logger.debug("Replacing an extant cell.")
+        raise NotImplementedError("Setting Cells is not implemented yet")
 
 
     def __getitem__(self, column_index):
@@ -931,6 +979,7 @@ class Column(ContainedThing, object):
         self.fields = fields
         self.sheet = sheet
         self.parent = sheet     # The column belongs to a sheet
+        self._dirty = False
 
     @property
     def id(self):
@@ -1012,6 +1061,7 @@ class Cell(ContainedThing, object):
         self.fields = fields
         self.row = row
         self.parent = row       # The cell belongs to a row.
+        self._dirty = False
 
     @property
     def type(self):
@@ -1131,6 +1181,7 @@ class Discussion(object):
         self.sheet = sheet
         self._attachments = None
         self._comments = None
+        self._dirty = False
 
     @property
     def id(self):
@@ -1192,6 +1243,7 @@ class Attachment(ContainedThing, object):
         self.source = source
         self.parent = source
         self.sheet = sheet
+        self._dirty = False
 
     @property
     def attachmentType(self):
@@ -1515,6 +1567,7 @@ class SheetInfo(TopLevelThing, object):
     def __init__(self, fields, client):
         self.fields = fields
         self.client = client
+        self._dirty = False
 
     @property
     def id(self):
@@ -1566,6 +1619,7 @@ class UserProfile(object):
 
     def __init__(self, fields):
         self.fields = fields
+        self._dirty = False
 
     @property
     def id(self):
