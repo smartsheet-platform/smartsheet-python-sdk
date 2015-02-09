@@ -724,7 +724,8 @@ class SheetRows(ContainedThing, object):
         if not self._rows:
             raise SheetHasNoRows(str(self.sheet))
         if row_number < 1:
-            raise InvalidRowNumber("Row # %d invalid" % row_number)
+            raise InvalidRowNumber("Row # %d invalid, row numbers start at 1" %
+                    row_number)
 
         # The ideal case is that the Sheet was fetched with either all of the
         # Rows, or with a contiguous block of the first rows.
@@ -749,7 +750,7 @@ class SheetRows(ContainedThing, object):
         try:
             return self.getRowByRowNumber(row_number)
         except InvalidRowNumber, e:
-            raise IndexError("Row # %d no found." % row_number)
+            raise IndexError("Row # %d no found: %s" % row_number, str(e))
         raise IndexError("Specified row_number %d not found" % row_number)
 
     def __iter__(self):
