@@ -5,7 +5,7 @@ Python client library for version 1.1 of the Smartsheet API.
 The Smartsheet API is documented at:
 https://www.smartsheet.com/developers/api-documentation
 
-**NOTE: This library is frightenlying, terribly, and horribly incomplete at the moment.**
+**NOTE: Please note that this SDK is a pre-alpha.  It is incomplete, has not been rigorously tested, and is a work in progress.  See below for known issues, feature gaps, and a rough roadmap.  If you need a missing feature urgently, you are strongly encouraged to build it and submit a pull request.  Thanks for understanding.**
 
 # What Works
 
@@ -149,6 +149,7 @@ print sheet.rows[1][0]
 
 The rows of a sheet can be iterated over as if they were a normal Python
 list:
+
 ```
 # Print the value of the second Column of each Row in the Sheet.
 # Remember that Columns are zero-indexed (the second Column has index=1).
@@ -160,6 +161,7 @@ for row in sheet.rows:
 
 The full history of each Cell can be fetched.  Note that this operation is
 expensive (from a rate limiting perspective).
+
 ```
 for cell_version in sheet[1][0].fetchHistory():
     print cell_version
