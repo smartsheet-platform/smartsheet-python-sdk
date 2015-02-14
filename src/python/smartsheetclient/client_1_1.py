@@ -1155,12 +1155,12 @@ class Cell(ContainedThing, object):
         raise Exception("Error fetching Cell history: %s" % str(hdr))
 
     def __str__(self):
+        return str(self.displayValue)
+
+    def __repr__(self):
         return '<Cell rowId:%r, columnId:%r, type:%r value=%r>' % (
                 self.rowId, self.columnId, self.type,
                 string_trim(self.displayValue, self.max_display_len))
-
-    def __repr__(self):
-        return str(self)
 
 
 
