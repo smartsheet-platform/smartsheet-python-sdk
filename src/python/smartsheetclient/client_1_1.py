@@ -87,6 +87,24 @@ class InvalidOperationOnUnattachedRow(SmartsheetClientError):
     '''
     pass
 
+class BadCellDataTypeError(SmartsheetClientError):
+    '''
+    An attempt was made to store invalid data to a cell.
+    '''
+    pass
+
+
+class BadCellData(SmartsheetClientError):
+    '''
+    The data assigned to a Cell does not meet the default/strict format rules.
+    '''
+    pass
+
+class DeprecatedAttribute(SmartsheetClientError):
+    '''
+    A deprecated attribute of the API was used.
+    '''
+    pass
 
 
 class SmartsheetClient(object):
@@ -145,6 +163,8 @@ class SmartsheetClient(object):
             self.connect()
 
         self.logger.debug('req_url: %r', req_url)
+        if body:
+            self.logger.debug('req_body: %r', body)
         resp, content = self.handle.request(req_url, method, body=body,
                 headers=req_headers)
         self.logger.debug('resp: %r',  resp)
@@ -300,13 +320,16 @@ class SmartsheetClient(object):
         NOTE:  Does not support pagination at the moment.
         Returns the specified Sheet.
         '''
+        self.logger.info("IN fetchSheetByID()")
         path = 'sheet/' + str(sheet_id)
         path_params = []
 
         include = []
         if discussions: include.append('discussions')
         if attachments: include.append('attachments')
-        if format: include.append('format')
+        if format:
+            include.append('format')
+            self.logger.warn('SDK support for formats is MASSIVELY incomplete.')
         if filters: include.append('filters')
         path_params.append("include=" + ','.join(include))
 
@@ -389,8 +412,7 @@ class TopLevelThing(object):
         '''
         Return True if this object should be saved.
         '''
-        # Subclasses must implement this.
-        raise NotImplementedError("Subclasses must implement isDirty().")
+        return self._dirty
 
     def markClean(self):
         '''
@@ -441,16 +463,14 @@ class ContainedThing(object):
         Mark this object as having a new value that should be saved.
         '''
         self._dirty = True
-        self.parent.dirty()
+        self.parent.markDirty()
         return self
 
     def isDirty(self):
         '''
         Return True if this object is dirty and should be saved.
         '''
-        # A ContainedThing might also contain other things (that could be
-        # dirty.  So, each subclass must implement this.
-        raise NotImplementedError("Subclass must implement isDirty().")
+        return self._dirty
 
     def markClean(self):
         '''
@@ -504,7 +524,6 @@ class Sheet(TopLevelThing, object):
     def rows(self):
         if self._rows is None:
             self._rows = SheetRows(self.fields.get('rows', []), self)
-            # self._rows =  [Row(r, self) for r in self.fields.get('rows', [])]
         return self._rows
 
     @property
@@ -593,7 +612,9 @@ class Sheet(TopLevelThing, object):
         Return the Column that has the specified ID.
         '''
         try:
-            self._column_id_map[column_id]
+            if self._column_id_map is None:
+                list(self.columns)
+            return self._column_id_map[column_id]
         except KeyError, e:
             raise UnknownColumnId("Column ID: %r is not in current columns.")
 
@@ -661,6 +682,15 @@ class Sheet(TopLevelThing, object):
         if include_comments:
             raise NotImplementedError("Attachments on Comments not supported")
 
+    def replaceRow(self, row):
+        '''
+        Replace a row with a different version of it.
+        '''
+        orig_row = self.rows.getRowById(row.id)
+        self.rows.replaceRow(row)
+        orig_row.discard()
+        return self
+
     def refresh(self, client):
         '''
         Refetch the Sheet - using the original fetch options.
@@ -710,7 +740,6 @@ class SheetRows(ContainedThing, object):
         '''
         self.parent = sheet
         self.sheet = sheet
-        self._rows = []
         self._rows = [Row(r, sheet) for r in rows]
 
     def getRowByRowNumber(self, row_number):
@@ -742,6 +771,29 @@ class SheetRows(ContainedThing, object):
                 return row
         raise InvalidRowNumber("Row # %d not found." % row_number)
 
+    def getRowById(self, rowId):
+        '''
+        Fetch a Row by its ID.
+        '''
+        matches = [row for row in self._rows if row.id == rowId]
+        if len(matches) == 1:
+            return matches[0]
+        if len(matches > 1):
+            self.logger.warn("Multiple rows with ID %r", rowId)
+        else:
+            self.logger.warn("No row with ID %r", rowId)
+        raise SmartsheetClientError("Row with ID %r not found" % rowId)
+
+    def replaceRow(self, new_row):
+        replace_idx = None
+        for idx, row in enumerate(self._rows):
+            if row.id == new_row.id:
+                replace_idx = idx
+                break
+        if replace_idx is not None:
+            self._rows[replace_idx] = new_row
+        return self
+
     def __getitem__(self, row_number):
         '''
         Add a list-style interface to fetching a Row.
@@ -756,6 +808,17 @@ class SheetRows(ContainedThing, object):
     def __iter__(self):
         return iter(self._rows)
     
+
+
+class CellTypes(object):
+    # TODO: Should this be an enum class?
+    TextNumber = u'TEXT_NUMBER'
+    Picklist = u'PICKLIST'
+    Date = u'DATE'
+    ContactList = u'CONTACT_LIST'
+    Checkbox = u'CHECKBOX'
+    EmptyCell = u'EMPTY_CELL'   # This must not be sent to the server.
+
 
 
 class Row(ContainedThing, object):
@@ -780,6 +843,7 @@ class Row(ContainedThing, object):
         self._columns = None
         self._column_id_map = None
         self._dirty = False
+        self._discarded = False
 
     @property
     def id(self):
@@ -800,7 +864,8 @@ class Row(ContainedThing, object):
     @property
     def cells(self):
         if self._cells is None:
-            self._cells = [Cell(c, self) for c in self.fields.get('cells', [])]
+            self._cells = [Cell.newFromAPI(c, self) for c in 
+                    self.fields.get('cells', [])]
         return self._cells
 
     @property
@@ -865,6 +930,15 @@ class Row(ContainedThing, object):
     def filteredOut(self):
         return self.fields.get('filteredOut')
 
+    def discard(self):
+        '''
+        Mark the row and its contained objects as discarded.
+        Operations on a discarded item will raise SheetIntegrityErrors.
+        TODO: This doesn't do anything yet, it just no-ops.
+        '''
+        self._discarded = True
+
+
     def getAttachmentByFileName(self, file_name):
         '''
         Return the named Attachment object, or None if not found.
@@ -883,7 +957,8 @@ class Row(ContainedThing, object):
 
         Returns the Column with the given index, or raises InvalidColumnIndex.
 
-        For unattached rows, this operation is not defined and raises a 
+        For unattached rows, this operation is not defined and raises
+        InvalidOperationOnUnattachedRow.
         '''
         if column_index >= 0:
             try:
@@ -896,10 +971,10 @@ class Row(ContainedThing, object):
                     if col.index == column_index:
                         return col
             except IndexError, e:
-                # This gets turned into InvalidColumnIndex below.
-                pass
+                # Raising StopIteration lets list(a_row) or [x in a_row] work.
+                raise StopIteration()
             except AttributeError, e:
-                print "Error:", type(e), e
+                self.logger.error("Error: %r, %s", e, str(e))
                 raise InvalidOperationOnUnattachedRow(e)
         raise InvalidColumnIndex("No Column at index %r." % column_index)
 
@@ -911,12 +986,12 @@ class Row(ContainedThing, object):
         Will raise InvalidOperationOnUnattachedRow if the Row is unattached.
         May raise InvalidColumnIndex.
         '''
-        # This is a bit tricky because we don't really know where to
-        # get the columns data from.  It could be on the Row; it
-        # could be on the Sheet -- presumably they will agree if it is
-        # found on both.
         column = self.getColumnByIndex(column_index)
-        return self.getCellByColumnId(column.id)
+        cell = self.getCellByColumnId(column.id)
+        if cell is None:
+            cell = Cell(self, column, None, type=CellTypes.EmptyCell,
+                    isDirty=False)
+        return cell
 
     def getCellByColumnId(self, column_id):
         '''
@@ -956,6 +1031,12 @@ class Row(ContainedThing, object):
             return self.getCellByColumnIndex(column_index)
         raise Exception("Invalid column index: %r" % column_index)
 
+    def __len__(self):
+        '''
+        Calling len(a_row) will return the # of columns.
+        '''
+        return len(self.sheet.columns)
+
     def __str__(self):
         return '<Row id:%r rowNumber:%r>' % (self.id, self.rowNumber)
 
@@ -972,6 +1053,8 @@ class Column(ContainedThing, object):
     field_names = '''id index title primary type options hidden symbol
                     systemColumnType autoNumberFormat tags width format
                     filter'''.split()
+
+    default_type = CellTypes.TextNumber
 
     def __init__(self, fields, sheet):
         # Does a Column always know its sheet?
@@ -1000,7 +1083,7 @@ class Column(ContainedThing, object):
 
     @property
     def type(self):
-        return self.fields.get('type', '')  # Should this use TEXT_NUMBER
+        return self.fields.get('type', self.default_type)
 
     @property
     def options(self):
@@ -1047,91 +1130,273 @@ class Column(ContainedThing, object):
 
 
 
+class CellHyperlink(object):
+    def __init__(self, url=None, sheetId=None, reportId=None):
+        if 1 != len([x for x in (rule, sheetId, reportId) if x is not None]):
+            raise SmartsheetClientError("Must specify one of url, sheetId, " +
+                    "or reportId")
+        self.url = url
+        self.sheetId = url
+        self.reportId = reportId
+
+    def flatten(self):
+        acc = {'hyperlink': {}}
+        if self.url is not None:
+            acc['hyperlink']['url'] = self.url
+        elif self.sheetId is not None:
+            acc['hyperlink']['sheetId'] = self.sheetId
+        elif self.reportId is not None:
+            acc['hyperlink']['reportId'] = self.reportId
+        return acc
+
+    def toJSON(self):
+        '''Return as a JSON blob suitable for passing to the API server.'''
+        json.dumps(self.flatten())
+
+    def __str__(self):
+        return ('<CellHyperlink: url: %r  sheetId: %r  reportId: %r' %
+                (self.url, self.sheetId, self.reportId))
+    
+    def __repr__(self):
+        return str(self)
+
+
+
+class CellLinkIn(object):
+    def __init__(self, sheetId, rowId, columnId):
+        self.sheetId = sheetId
+        self.rowId = rowId
+        self.columnId = columnId
+
+    def flatten(self):
+        acc = { 'linkInFromCell': {
+                'sheetId': self.sheetId,
+                'rowId': self.rowId,
+                'columnId': self.columnId }}
+        return acc
+
+    def toJSON(self):
+        return json.dumps(self.flatten())
+
+    def __str__(self):
+        return ('<CellLinkIn: sheetId: %r  rowId: %r  columnId: %r' %
+                (self.sheetId, self.rowId, self.columnId))
+
+
+
+class CellChange(object):
+    '''
+    The data about a change to a Cell.
+    '''
+    def __init__(self, cell, new_value, strict=None, format=None,
+            hyperlink=None, linkInFromCell=None):
+        self.cell = cell
+        self.new_value = new_value
+        self.strict = strict
+        self.format = format
+        self.hyperlink = hyperlink
+        self.linkInFromCell = linkInFromCell
+
+    def flatten(self):
+        acc = { 'columnId': self.cell.columnId,
+                'value': self.new_value }
+        if self.strict:
+            acc['strict'] = True
+        else:
+            acc['strict'] = False
+        if self.format:
+            acc['format'] = unicode(self.format)
+        if self.hyperlink:
+            acc.update(self.hyperlink.flatten())
+        if self.linkInFromCell:
+            acc.update(self.linkInFromCell.flatten())
+        return acc
+
+    def toJSON():
+        return json.dumps(self.flatten())
+
+
+
 class Cell(ContainedThing, object):
     '''
-    A Cell in a Row of a Sheet.
-    Cells don't have a unique ID exposed via the API.  Instead, each Cell is
-    uniquely identified by the tuple of Row ID and Column ID.
+    A Cell on a Row in a Sheet.
+    A Cell consists of two types of information, the first is structural and
+    the second is value.  A Cell's structure indicates its Row and Column,
+    while its value contains its value and displayValue, as well as
+    format, formula, and links (hyperlinks and cell links).
+
+    A Cell may be empty, which would be the case in a sparse Sheet, in which
+    case the Cell would have structural data, but no value information.
+
+    A Cell does not have a unique ID, instead, each Cell is identified by the
+    tuple of (row ID, column ID).
     '''
-    field_names = '''type value displayValue columnId link hyperlink
-                    linkInFromCell linksOutToCells formula format
-                    modifiedAt modifiedBy'''.split()
     max_display_len = 10
+    # These are the valid Cell types:
+    def __init__(self, row, column, value, type=None,
+            displayValue=None, hyperlink=None, linkInFromCell=None,
+            format=None, link=None, isDirty=True, immediate=False):
+        '''
+        Initialize a new Cell.
+        Note that the library user is not able to assign all of the same
+        attributes that the API can.
+        If isDirty is True, then the Cell needs to be saved.  If immediate
+        is True, then the Cell will be saved immediately (rather than lazily
+        with the Row or Sheet).
+        '''
+        if link:
+            raise DeprecatedAttribute("'link' attribute of Cell is deprecated")
 
-    def __init__(self, fields, row):
-        self.fields = fields
+        if type is None:
+            type = column.type
+
+        if hyperlink is not None and not isinstance(hyperlink, CellHyperlink):
+            err = "hyperlink must be None or a CellHyperlink object"
+            self.logger.error("%s, got: %r", err, hyperlink)
+            raise SmartsheetClientError(err)
+
+        if (linkInFromCell is not None and 
+                not isinstance(linkInFromCell, CellLinkIn)):
+            err = "linkInFromCell must be None or a CellLinkIn object"
+            self.logger.error("%s, got: %r", err, linkInFromCell)
+            raise SmartsheetClientError(err)
+
         self.row = row
-        self.parent = row       # The cell belongs to a row.
-        self._dirty = False
+        self.parent = row
+        self.columnId = column.id
+        self._value = value
+        self._displayValue = displayValue
+        self.type = type
+        self.hyperlink = hyperlink
+        self.linkInFromCell = linkInFromCell
+        self.linksOutToCells = None # Not settable by library user.
+        self.format = format
+        self.formula = None        # Not settable by library user.
+        self.link = None
+        self.modifiedAt = None      # Not settable by library user.
+        self.modifiedBy = None      # Not settable by library user.
+        self._dirty = isDirty
+        self.change = None
+        self.isDeleted = False
 
-    @property
-    def type(self):
-        return self.fields.get('type', '')  # What should the default be?
+        if immediate:
+            # FIXME: Save this Cell right now.
+            raise NotImplementedError("immediate save of Cell not implemented")
+
+    @classmethod
+    def newFromAPI(cls, fields, row):
+        '''
+        Create a new instance from the dict of values from the API.
+        '''
+        column = row.sheet.getColumnById(fields['columnId'])
+        row.logger.info("newFromAPI: column: %r", column)
+        cell = Cell(row, column, fields['value'], type=fields['type'],
+                displayValue=fields.get('displayValue', None),
+                hyperlink=fields.get('hyperlink', None),
+                linkInFromCell=fields.get('linkInFromCell', None),
+                format=fields.get('format', None),
+                link=fields.get('link', None), isDirty=False,
+                immediate=False)
+        # Not all attributes are setable with __init__().
+        cell.formula = fields.get('formula', None)
+        cell.linksOutToCells = fields.get('linksOutToCells', None),
+        cell.modifiedAt = fields.get('modifiedAt', None)
+        if 'modifiedBy' in fields:
+            cell.modifiedBy = SimpleUser(fields.get('modifiedBy'))
+        else:
+            cell.modifiedBy = None
+        return cell
 
     @property
     def value(self):
-        return self.fields.get('value', '')
-    
+        '''
+        Return the value of the Cell.
+        If the Cell has a displayValue, then that is what is returned.
+        If the underlying value is actually needed, then that can be obtained
+        via `realValue`.
+        '''
+        # It would be really nice if this could sensibly handle the fact
+        # that a cell containing numeric data will have a string for its
+        # displayValue.  It's quite probably that the caller would rather
+        # get the numeric value as a numeric type.
+        if (self._displayValue is not None and self._value is not None and
+                isinstance(self._value, (int, long, float))):
+            return self._value
+        if self._displayValue is None and self._value is not None:
+            return self._value
+        return self._displayValue
+
     @value.setter
-    def value(self, new_value, strict=None, format=None, hyperlink=None,
-            linkInFromCell=None):
+    def value(self, new_value):
         '''
         Assign a new value to the Cell.
-        In order for the Sheet (on the Smartsheet server) to be updated,
-        the Cell, the Row it is on, or the Sheet it is in must have their
-        .save() method called.
+        The new value is presumed to be the same type as the original value,
+        and the assignment does not occur immediately.
+        If more control over the assignment process is needed, use the
+        `assign` method below.
         '''
-        # TODO: Figure out a nice way to propogate dirtiness.
-        # It needs to go "up" to the Row and Sheet, but we also need for the
-        # Row and Sheet to quickly find those Cells (or Rows) that are 
-        # dirty if a_sheet.save() or a_row.save() is called.
-
-        pass
+        return self.assign(new_value)
 
     @property
-    def displayValue(self):
-        if 'displayValue' in self.fields:
-            return self.fields.get('displayValue', '')
-        else:
-            return self.value
+    def realValue(self):
+        '''
+        Read the underlying value for the cell.
+        If the Cell contains a formula, this will return the formula, instead
+        of its computed value (which can be gotten via the `value` property).
+        '''
+        if self.formula:
+            return self.formula
+        return self._value
 
-    @property
-    def columnId(self):
-        return self.fields['columnId']
+    def assign(self, new_value, strict=True, hyperlink=None,
+            linkInFromCell=None, immediate=False, propagate=True):
+        '''
+        Assign a new value to the Cell.
+        @param new_value The new value for the Cell.
+        @param strict True to request stict processing on save.
+        @param hyperlink The CellHyperlink to set.
+        @param linkInFromCell The CellLinkIn to set.
+        @param immediate Apply this update to the sheet immediately.
+        @param propagate When saving, (if immediate), save all changes on Row.
+        '''
+        if self.formula is not None:
+            raise SmartsheetClientError("API does not permit formula changes")
+        if len(unicode(new_value)) > 4000:
+            self.logger.warn("API will truncate new cell value longer than " +
+                    "4000 chars: %r", cell)
+        self.change = CellChange(self, new_value, strict=strict,
+                hyperlink=hyperlink, linkInFromCell=linkInFromCell)
+        self._value = new_value
+        self._displayValue = unicode(new_value)
 
-    @property
-    def link(self):
-        return self.fields.get('link', '')  # Deprecated
+        # The Row is stored sparse -- we have to add formerly empty Cells.
+        if self.type == CellTypes.EmptyCell:
+            self.row.cells.append(self)
 
-    @property
-    def hyperlink(self):
-        return self.fields.get('hyperlink')
+        self.markDirty()
+        if immediate:
+            self.save(propagate=propagate)
 
-    @property
-    def linkInFromCell(self):
-        return self.fields.get('linkInFromCell')
+    def setFormat(self, format, immediate=False):
+        '''
+        Change the format of the cell.
+        '''
+        # NOTE: The save data for this requires the value, so capture it.
+        raise NotImplementedError("Setting Cell format is not implemented yet")
 
-    @property
-    def linksOutToCells(self):
-        return self.fields.get('linksOutToCells', [])
-
-    @property
-    def formula(self):
-        return self.fields.get('formula')
-
-    @property
-    def format(self):
-        return self.fields.get('format')
-
-    @property
-    def modifiedAt(self):
-        return self.fields.get('modifiedAt', None)
-
-    @property
-    def modifiedBy(self):
-        if 'modifiedBy' in self.fields:
-            return SimpleUser(self.fields.get('modifiedBy'))
-        return None
+    def delete(self, immediate=False):
+        '''
+        Delete this Cell.
+        @param immediate Apply this update to the sheet immediately.
+        '''
+        # TODO: This needs to make all of the value and links fields be None.
+        self.isDeleted = True
+        self._value = self._displayValue = self.linkInFromCell = None
+        self.linksOutToCells = self.format = self.link = self.formula = None
+        self.hyperlink = self.modifiedAt = self.modifiedBy = None
+        if immediate:
+            # TODO: Implement Cell deletion
+            raise NotImplementedError("Cell deletion is not implemented yet")
 
     @property
     def rowId(self):
@@ -1140,6 +1405,63 @@ class Cell(ContainedThing, object):
     @property
     def column(self):
         return self.row.getColumnById(self.columnId)
+
+    def addSaveData(self, rowchange):
+        '''
+        If this Cell has changed, add its change data to the RowChangeSaveData.
+        '''
+        if not self.isDirty():
+            return
+        rowchange.addCellChange(self.change)
+        return self
+
+    def save(self, client=None, propagate=True):
+        '''
+        Save the Cell if it has been changed.
+        Successfully saving any Cell on a Row results in the full
+        replacement of the Row the Cell was on.  If you are saving each
+        Cell as you change it, (either by directly calling save or with the
+        `immediate` flag in `assign`), that most likely won't result in
+        unexpected behavior.  If, on the other hand, you are "batching up"
+        Cell changes, the changes will be lost if this Cell is saved without
+        `propagate` set to True.
+
+        @param client (optional) Use a different SmartsheetClient instance.
+        @param propagate (optional) False to not save any other changes on Row.
+        @return The newly updated Row, or raises SmartsheetClientError.
+        '''
+        client = client or self.client
+        path = ('/sheet/%s/row/%s' %
+                (str(self.row.sheet.id), str(self.rowId)))
+        rc = RowChangeSaveData(self)
+        if propagate:       # Get all Cell changes on this Row.
+            for cell in self.row.cells:
+                cell.addSaveData(rc)
+            # TODO: We should probably check with the Row and see if it had
+            # other changes to make.
+        else:               # Only worry about this Cell.
+            self.addSaveData(rc)
+
+        hdr, body = client.request(path, 'PUT',
+                extra_headers={'Content-Type': 'application/json'},
+                body=rc.toJSON())
+
+        if not hdr.isOK():
+            self.logger.error("Cell.save() failed: %s", str(hdr))
+            raise SmartsheetClientError("Cell.save() failed: %s" % str(hdr))
+
+        self.logger.debug("Cell.save() succeeded")
+
+        if isinstance(body['result'], list):
+            if len(body['result']) != 1:
+                self.logger.warn("Expected 1 row, got %d", len(body['result']))
+            new_row = Row(body['result'][0], self.row.sheet)
+            self.row.sheet.replaceRow(new_row)
+            return new_row
+        else:
+            err = "Unexpected body type returned: %r" % type(body[result])
+            self.logger.error(err)
+            raise SmartsheetClientError(err)
 
     def fetchHistory(self, client=None):
         '''
@@ -1150,17 +1472,57 @@ class Cell(ContainedThing, object):
         client = client or self.client
         hdr, body = client.request(path, 'GET')
         if hdr.isOK():
-            return [Cell(c, self.row) for c in body]
+            return [Cell.newFromAPI(c, self.row) for c in body]
         self.logger.error("Unable to fetch Cell %s history: %s", cell, str(hdr))
         raise Exception("Error fetching Cell history: %s" % str(hdr))
 
     def __str__(self):
-        return str(self.displayValue)
+        if self._displayValue is not None:
+            return unicode(self._displayValue)
+        return unicode(self.value)
 
     def __repr__(self):
         return '<Cell rowId:%r, columnId:%r, type:%r value=%r>' % (
                 self.rowId, self.columnId, self.type,
-                string_trim(self.displayValue, self.max_display_len))
+                string_trim(self.value, self.max_display_len))
+
+
+
+class RowChangeSaveData(object):
+    '''
+    Captures the data about changes to a Row, sufficient for saving it.
+    The API manipulates certain data a Row at a time:
+     * Row position (obviously)
+     * Row expanded or not
+     * Format
+     * Cells
+    '''
+    # These are the potential row positions
+    toTop = 'toTop'
+    toBottom = 'toBottom'
+    toParent = 'toParent'
+    toSibling = 'toSibling'
+    position_options = (toTop, toBottom, toParent, toSibling)
+
+    def __init__(self, row):
+        self.row = row
+        self.cells = []
+        self.expanded = None
+        self.format = None
+        self.position = None
+        self.relative_to = None
+
+    def addCellChange(self, cell_data):
+        self.cells.append(cell_data)
+
+    def flatten(self):
+        acc = {}
+        if self.cells:
+            acc['cells'] = [cd.flatten() for cd in self.cells]
+        return acc
+
+    def toJSON(self):
+        return json.dumps(self.flatten())
 
 
 
@@ -1596,7 +1958,9 @@ class SheetInfo(TopLevelThing, object):
         SmartsheetClient.fetchSheetByID().
         Returns the corresponding Sheet.
         '''
-        return self.client.fetchSheetByID(self.id)
+        return self.client.fetchSheetByID(self.id, format=format,
+                filters=filters, row_ids=row_ids, column_ids=column_ids,
+                page_size=page_size, page=page)
 
     def __str__(self):
         return '<SheetInfo id:%r, name: %r, accessLevel: %r, permalink:%r>' % (
@@ -1773,8 +2137,8 @@ class SmartsheetAPIResponseHeader(HttpResponse):
         return (self.status == '500' and self.error_code == '4002')
 
     def setError(self, error):
-        self.error_code = error.error_code
-        self.error_message = error.error_message
+        self.error_code = error.code
+        self.error_message = error.message
 
     def isTransientError(self):
         '''
