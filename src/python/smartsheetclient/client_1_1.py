@@ -351,12 +351,59 @@ class SmartsheetClient(object):
             raise Exception("Unable to fetch sheet by ID" + str(hdr))
 
 
+    def createSheet(self, name, columns, location=''):
+        '''
+        Create a new sheet in Smartsheet.
+        Returns the SheetInfo object (from which the whole Sheet can be
+        loaded using the `.loadSheet()` method).
+        At least one column must be specified -- as a Column instance with
+        a None sheet value.
+        Valid location values are:
+         * '' - the default location for sheets.
+         * Folder().location - To create a sheet in a folder
+         * Workspace().location - To create a sheet in a workspace.
+        '''
+        if len(columns) < 1:
+            err = "Must specify at least 1 column"
+            self.logger.error(err)
+            raise SmartsheetClientError(err)
+        path = location + '/sheets'
+        acc = {'name': name, 
+                'columns': [col.flattenToCreationFields() for col in columns]}
+        hdr, body = self.request(path,
+                method='POST',
+                extra_headers={'Content-Type': 'application/json'},
+                body=json.dumps(acc))
+        if hdr.isOK():
+            print "Success:", body
+            return SheetInfo(body['result'], self)
+        else: 
+            print "Failure:", hdr
+            self.logger.error("Failed creating sheet: %s", str(hdr))
+
     def __str__(self):
         return '<SmartsheetClient user:%r>' % self.user
 
 
     def __repr__(self):
         return str(self)
+
+
+
+class Folder(object):
+    # FIXME:  This class is massively incomplete.
+    def __init__(self, folderId):
+        self.folderId = folderId
+        self.location = '/folder/%s' % str(self.folderId)
+
+
+
+class Workspace(object):
+    # FIXME:  This class is massively incomplete.
+    def __init__(self, workspaceId):
+        self.workspaceId = workspaceId
+        self.location = '/workspace/%s' % str(self.workspaceId)
+
 
 
 
@@ -515,7 +562,7 @@ class Sheet(TopLevelThing, object):
     def columns(self):
         if self._columns is None:
             self._columns = [
-                    Column(c, self) for c in 
+                    Column.newFromAPI(c, self) for c in 
                         self.fields.get('columns', [])]
             self._column_id_map = dict([(c.id, c) for c in self._columns])
         return self._columns
@@ -840,8 +887,8 @@ class Row(ContainedThing, object):
         self._cells = None
         self._discussions = None
         self._attachments = None
-        self._columns = None
-        self._column_id_map = None
+        # self._columns = None
+        # self._column_id_map = None
         self._dirty = False
         self._discarded = False
 
@@ -886,21 +933,15 @@ class Row(ContainedThing, object):
 
     @property
     def columns(self):
-        if self._columns is None:
-            self._columns = [
-                    Column(c, self.sheet) for c in 
-                        self.fields.get('columns', [])]
-            self._column_id_map = dict([(c.id, c) for c in self._columns])
-        return self._columns
+        return self.sheet.columns
 
     def getColumnById(self, column_id):
         '''Return the Column that has the specified ID.'''
-        if self._column_id_map is None:
-            unused = self.columns
-        try:
-            self._column_id_map[column_id]
-        except KeyError, e:
-            raise UnknownColumnId("Column ID: %r is not in current columns.")
+        return self.sheet.getColumnById(column_id)
+        # try:
+        #     self._column_id_map[column_id]
+        # except KeyError, e:
+        #     raise UnknownColumnId("Column ID: %r is not in current columns.")
 
     @property
     def expanded(self):
@@ -1016,6 +1057,7 @@ class Row(ContainedThing, object):
             self.logger.debug("Replacing empty cell.")
         else:
             self.logger.debug("Replacing an extant cell.")
+        # FIXME:  Verify that this works, and then implement __setitem__().
         raise NotImplementedError("Setting Cells is not implemented yet")
 
 
@@ -1054,72 +1096,69 @@ class Column(ContainedThing, object):
                     systemColumnType autoNumberFormat tags width format
                     filter'''.split()
 
-    default_type = CellTypes.TextNumber
-
-    def __init__(self, fields, sheet):
-        # Does a Column always know its sheet?
-        # What if a Row is fetched without knowledge of the Row's sheet?
-        # TODO:  Deal with the ambiguity surrounding Sheet awareness.
-        self.fields = fields
+    def __init__(self, title, type=CellTypes.TextNumber, primary=False,
+            symbol=None, options=None, systemColumnType=None,
+            autoNumberFormat=None, width=None, sheet=None):
+        '''
+        The Column attributes that can be set when creating a Column are
+        available via initialization.
+        '''
+        self.title = title
+        self.type = type
+        self.primary = primary
+        self.options = options or []
+        self.symbol = symbol
+        self.systemColumnType = systemColumnType
+        self.autoNumberFormat = autoNumberFormat
+        self.width = width
         self.sheet = sheet
-        self.parent = sheet     # The column belongs to a sheet
-        self._dirty = False
+        self.id = -1            # Undefined
+        self.index = None       # FIXME: can we know this at creation time?
+        self.hidden = False
+        self.tags = []
+        self.format = None
+        self.filter = None
+        self.parent = sheet
+        self.fields = {}
 
-    @property
-    def id(self):
-        return self.fields['id']
+    @classmethod
+    def newFromAPI(cls, fields, sheet):
+        col = Column(title=fields['title'], type=fields['type'],
+                primary=fields.get('primary', False),
+                symbol=fields.get('symbol', None),
+                options=fields.get('options', list()),
+                systemColumnType=fields.get('systemColumnType', None),
+                autoNumberFormat=fields.get('autoNumberFormat', None),
+                width=fields.get('width', None),
+                sheet=sheet)
+        col.id = fields['id']
+        col.index = fields['index']
+        maybeAssignFromDict(fields, col, 'hidden')
+        maybeAssignFromDict(fields, col, 'tags')
+        maybeAssignFromDict(fields, col, 'format')
+        maybeAssignFromDict(fields, col, 'filter')
+        col._dirty = False
+        col.fields = fields
+        return col
 
-    @property
-    def index(self):
-        return self.fields['index']
-
-    @property
-    def title(self):
-        return self.fields.get('title', '')
-
-    @property
-    def primary(self):
-        return self.fields.get('primary', False)
-
-    @property
-    def type(self):
-        return self.fields.get('type', self.default_type)
-
-    @property
-    def options(self):
-        return self.fields.get('options', [])
-
-    @property
-    def hidden(self):
-        return self.fields.get('hidden', False)
-
-    @property
-    def symbol(self):
-        return self.fields.get('symbol', '')
-
-    @property
-    def systemColumnType(self):
-        return self.fields.get('systemColumnType', '')
-
-    @property
-    def autoNumberFormat(self):
-        return self.fields.get('autoNumberFormat')
-
-    @property
-    def tags(self):
-        return self.fields.get('tags', [])
-
-    @property
-    def width(self):
-        return self.fields.get('width')
-
-    @property
-    def format(self):
-        return self.fields.get('format')
-
-    @property
-    def filter(self):
-        return self.fields.get('filter')
+    def flattenToCreationFields(self):
+        '''
+        Return a dict containing the fields used by the API for Column creation.
+        '''
+        acc = {'title': self.title,
+                'primary': self.primary,
+                'type': self.type }
+        if self.symbol:
+            acc['symbol'] = self.symbol
+        if self.options:
+            acc['options'] = self.options
+        if self.systemColumnType:
+            acc['systemColumnType'] = self.systemColumnType
+        if self.autoNumberFormat:
+            acc['autoNumberFormat'] = self.autonumberFormat
+        if self.width is not None:
+            acc['width'] = self.width
+        return acc
 
     def __str__(self):
         return '<Column id:%d index:%r type:%r>' % (
@@ -2181,6 +2220,17 @@ def string_trim(value, max_len):
         return str(value)[:max_len-3] + '...'
     else:
         return value
+
+
+def maybeAssignFromDict(src_dict, dst_obj, src_name, dst_name=None):
+    '''
+    If the specified src_name is in the src_dict, assign it in dst_obj.
+    If dst_name is given, use that as the attribute name rather than src_name.
+    '''
+    if src_name in src_dict:
+        attr_name = dst_name or src_name
+        setattr(dst_obj, attr_name, src_dict[src_name])
+    return
 
 
 
