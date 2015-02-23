@@ -320,7 +320,7 @@ class SmartsheetClient(object):
         NOTE:  Does not support pagination at the moment.
         Returns the specified Sheet.
         '''
-        self.logger.info("IN fetchSheetByID()")
+        self.logger.debug("IN fetchSheetByID()")
         path = 'sheet/' + str(sheet_id)
         path_params = []
 
