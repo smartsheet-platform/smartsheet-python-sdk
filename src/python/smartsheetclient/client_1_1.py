@@ -375,11 +375,10 @@ class SmartsheetClient(object):
                 extra_headers={'Content-Type': 'application/json'},
                 body=json.dumps(acc))
         if hdr.isOK():
-            print "Success:", body
             return SheetInfo(body['result'], self)
         else: 
-            print "Failure:", hdr
             self.logger.error("Failed creating sheet: %s", str(hdr))
+            raise SmartsheetClientError("Failed creating sheet: %s" % str(hdr))
 
     def __str__(self):
         return '<SmartsheetClient user:%r>' % self.user
