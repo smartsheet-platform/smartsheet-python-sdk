@@ -1352,9 +1352,15 @@ class Cell(ContainedThing, object):
     def value(self):
         '''
         Return the value of the Cell.
-        If the Cell has a displayValue, then that is what is returned.
-        If the underlying value is actually needed, then that can be obtained
-        via `realValue`.
+        The "value" of a Cell is something of a slippery concept.
+        If a Cell is a TEXT_NUMBER Cell, then the value is either a string
+        or a numeric type.  If it is a numeric type, then we return the
+        numeric type, otherwise we return the string as represented by the
+        displayValue from the API.
+
+        For more control over the value obtained from the cell, the
+        `realValue` and `displayValue` methods can be used to explicitly
+        fetch the value or the displayValue from the API.
         '''
         # It would be really nice if this could sensibly handle the fact
         # that a cell containing numeric data will have a string for its
@@ -1388,6 +1394,10 @@ class Cell(ContainedThing, object):
         if self.formula:
             return self.formula
         return self._value
+
+    @property
+    def displayValue(self):
+        return self._displayValue
 
     def assign(self, new_value, strict=True, hyperlink=None,
             linkInFromCell=None, immediate=False, propagate=True):
@@ -1521,6 +1531,50 @@ class Cell(ContainedThing, object):
         if self._displayValue is not None:
             return unicode(self._displayValue)
         return unicode(self.value)
+
+    def __int__(self):
+        '''Try to convert the value to an int.'''
+        return int(self.value)
+
+    def __long__(self):
+        '''Try to convert the value to a long.'''
+        return long(self.value)
+
+    def __float__(self):
+        '''Try to convert the value to a float.'''
+        return float(self.value)
+
+    # This is a really, quick and dirty approach to supporting math operations
+    # when the Cell happens to contain a numeric value.
+    # TODO: In particular, the division and mod operations need to be reviewed.
+    # TODO: Add support for +=, -=, etc. (__iadd__, __isub__, etc.)
+    # TODO: Consider adding support for bitwise operations.
+    # These "forward" ops support Cell + Cell or Cell + 5.
+    def __add__(self, other): return self.value + other
+    def __sub__(self, other): return self.value - other
+    def __mul__(self, other): return self.value * other
+    def __floordiv__(self, other): return self.value / other
+    def __mod__(self, other): return self.value % other
+    def __divmod__(self, other): return divmod(self.value, other)
+    def __pow__(self, other): return pow(self.value, other)
+    def __div__(self, other): return self.value / other
+
+    # The swapped numeric ops support 5 + Cell.
+    def __radd__(self, other): return other + self.value    # no-different
+    def __rsub__(self, other): return other - self.value
+    def __rmul__(self, other): return other * self.value    # no different
+    def __rfloordiv__(self, other): return other / self.value
+    def __rmod__(self, other): return other % self.value
+    def __rdivmod__(self, other): return divmod(other, self.value)
+    def __rpow__(self, other): return pow(other, self.value)
+    def __rdiv__(self, other): return other / self.value
+
+    # Unary operations
+    def __neg__(self): return (- self.value)
+    def __pos__(self): return (+ self.value)
+    def __abs__(self): return abs(self.value)
+    def __invert__(self): return ~self.value
+
 
     def __repr__(self):
         return '<Cell rowId:%r, columnId:%r, type:%r value=%r>' % (
