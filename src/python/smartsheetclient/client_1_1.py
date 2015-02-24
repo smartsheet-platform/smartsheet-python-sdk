@@ -538,6 +538,9 @@ class Sheet(TopLevelThing, object):
                     createdAt modifiedAt permalink ganttEnabled
                     dependenciesEnabled favorite showParentRowsForFilters
                     version workspace totalRowCount'''.split()
+    # TODO: Can the user supply a default value for EmptyCells?
+    # This would let the caller avoid having to deal with None values if
+    # they are "walking through" Cells.
 
     def __init__(self, fields, client):
         self.fields = fields
