@@ -294,7 +294,7 @@ class SmartsheetClient(object):
 
     def fetchSheetByPermalink(self, permalink, use_cache=False,
             discussions=False, attachments=False, format=False,
-            filters=False, row_ids=None, column_ids=None, page_size=None,
+            filters=False, rowIds=None, columnIds=None, pageSize=None,
             page=None):
         '''
         Fetch the specified Sheet.
@@ -306,13 +306,13 @@ class SmartsheetClient(object):
         si = self.fetchSheetInfoByPermalink(permalink, use_cache=use_cache)
         return self.fetchSheetByID(si.id, discussions=discussions,
                 attachments=attachments, format=format, filters=filters,
-                row_ids=row_ids, column_ids=column_ids, page_size=page_size,
+                rowIds=rowIds, columnIds=columnIds, pageSize=pageSize,
                 page=page)
 
 
     def fetchSheetByID(self, sheet_id, discussions=False, attachments=False,
-            format=False, filters=False, row_ids=None, column_ids=None,
-            page_size=None, page=None):
+            format=False, filters=False, source=None, rowNumbers=None,
+            rowIds=None, columnIds=None, pageSize=None, page=None):
         '''
         Fetch the specified Sheet.
         May optionally fetch a variety of attributes:
@@ -331,14 +331,16 @@ class SmartsheetClient(object):
             include.append('format')
             self.logger.warn('SDK support for formats is MASSIVELY incomplete.')
         if filters: include.append('filters')
+        if rowNumbers: include.append(','.join(rowNumbers))
+        # FIXME: rowNumbers support is completely untested.
         path_params.append("include=" + ','.join(include))
 
-        if row_ids:
+        if rowIds:
             path_params.append('rowIds=' + 
-                    ','.join([str(r) for r in row_ids]))
-        if column_ids:
+                    ','.join([str(r) for r in rowIds]))
+        if columnIds:
             path_params.append('columnIds=' + 
-                    ','.join([str(c) for c in column_ids]))
+                    ','.join([str(c) for c in columnIds]))
 
         if path_params:
             path += '?' + ','.join(path_params)
@@ -2044,8 +2046,8 @@ class SheetInfo(TopLevelThing, object):
         return self.fields.get('permalink', '')
 
     def loadSheet(self, discussions=False, attachments=False,
-            format=False, filters=False, row_ids=None, column_ids=None,
-            page_size=None, page=None):
+            format=False, filters=False, rowIds=None, columnIds=None,
+            pageSize=None, page=None):
 
         '''
         Load the Sheet this SheetInfo object is about.
@@ -2054,8 +2056,8 @@ class SheetInfo(TopLevelThing, object):
         Returns the corresponding Sheet.
         '''
         return self.client.fetchSheetByID(self.id, format=format,
-                filters=filters, row_ids=row_ids, column_ids=column_ids,
-                page_size=page_size, page=page)
+                filters=filters, rowIds=rowIds, columnIds=columnIds,
+                pageSize=pageSize, page=page)
 
     def __str__(self):
         return '<SheetInfo id:%r, name: %r, accessLevel: %r, permalink:%r>' % (
