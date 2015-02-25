@@ -1231,6 +1231,16 @@ class CellChange(object):
     '''
     The data about a change to a Cell.
     '''
+    # FIXME: Error 1115 says mixing link and value updates is not accepted.
+    # Is this restriction Cell-scoped or Row scoped (can I update the value
+    # of one Cell on a Row and the link in a different Cell on the same Row)?
+
+    # FIXME: Error 1109 - 1113 should probably be addressed prior to save.
+    # When changing multiple Cells on a Row, it may take multiple save
+    # operations -- that's going to be problematic since each save operation
+    # replaces the live Row on the Sheet.  We need to at least detect that
+    # we have orphaned change operations.
+
     def __init__(self, cell, new_value, strict=None, format=None,
             hyperlink=None, linkInFromCell=None):
         self.cell = cell
