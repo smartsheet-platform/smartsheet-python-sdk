@@ -808,6 +808,9 @@ class SheetRows(ContainedThing, object):
     # Having this object wrap the list of Rows helps to pave the way for
     # nice semantics for adding, moving, and removing Rows.
 
+    # TODO: Is this class actually necessary?
+    # Can we just use these same methods on the Sheet?
+
     def __init__(self, rows, sheet):
         '''
         Initialize with the specified rows.
@@ -876,7 +879,7 @@ class SheetRows(ContainedThing, object):
         try:
             return self.getRowByRowNumber(row_number)
         except InvalidRowNumber, e:
-            raise IndexError("Row # %d no found: %s" % row_number, str(e))
+            raise IndexError("Row # %d no found: %s" % (row_number, str(e)))
         raise IndexError("Specified row_number %d not found" % row_number)
 
     def __iter__(self):
@@ -984,6 +987,7 @@ class Row(ContainedThing, object):
         # self._column_id_map = None
         self._dirty = False
         self._discarded = False
+        self.change = None
 
     @property
     def id(self):
@@ -1094,6 +1098,9 @@ class Row(ContainedThing, object):
         For unattached rows, this operation is not defined and raises
         InvalidOperationOnUnattachedRow.
         '''
+        # TODO:  Is there a good reason for the Row class to implement this?
+        # Shouldn't we just use self.sheet.getColumnByIndex() wherever we
+        # would use this?
         if column_index >= 0:
             try:
                 col_id = None
@@ -1120,6 +1127,7 @@ class Row(ContainedThing, object):
         Will raise InvalidOperationOnUnattachedRow if the Row is unattached.
         May raise InvalidColumnIndex.
         '''
+        # FIXME:  This method name is too long and clunky.
         column = self.getColumnByIndex(column_index)
         cell = self.getCellByColumnId(column.id)
         if cell is None:
@@ -1132,6 +1140,7 @@ class Row(ContainedThing, object):
         Get the Cell on this row at the specified Column ID.
         Returns the Cell or None if there is no Cell at that Column ID.
         '''
+        # FIXME:  This method name is too long and clunky.
         # If the Row has lots of columns, it probably makes sense to have a
         # dict mapping columnId's to cells.
         for c in self.cells:
@@ -1139,30 +1148,29 @@ class Row(ContainedThing, object):
                 return c
         return None
 
-    def setCellByColumnIndex(self, column_index, cell):
-        '''
-        Assign a new cell for the specified column_index.
-        The specified column index must be valid -- either extant on the
-        Smartsheet servers or added locally.
-        '''
-        cur_cell = self.getCellByColumnIndex(column_index)
-        if cur_cell is None:
-            self.logger.debug("Replacing empty cell.")
-        else:
-            self.logger.debug("Replacing an extant cell.")
-        # FIXME:  Verify that this works, and then implement __setitem__().
-        raise NotImplementedError("Setting Cells is not implemented yet")
-
     def makeNewCell(self, value, strict=True,
             column_index=None, column=None, columnId=None,
             displayValue=None, hyperlink=None, linkInFromCell=None,
-            format=None, isDirty=True, immediate=False):
+            format=None, immediate=False, propagate=True):
         '''
         Create a new Cell on this Row.
         The Column for this Cell can be specified via index, id, or object.
-
-        The type of the Cell is determined by the Column.
+        The other fields are passed unchanged to Cell.assign().
+        NOTE: If immediate=True, then the caller's reference to this Row is
+        invalid by the time this call returns -- successfully saving the Row
+        causes the server to send its replacement and that replacement is
+        put in place and the Row held (potentially) by the caller is abandoned.
         '''
+        # FIXME: Is this even necessary?
+        # I think if the Row is created with knowledge of the Columns on the
+        # sheet, we can just assign to the appropriate index using
+        # __setitem__ and it will "just work".
+        # Are we willing to have a two step process, where the caller fetches
+        # the Cell and then adjusts the properties of it that they want?
+        # That would be for anything other than setting the value.  That
+        # would probably be simpler to learn to use, and it certainly would
+        # get rid of some ugly code in the library.
+
         # TODO: Can we have the Column produce a valid value?
         # This would make it handy for working with a Row prior to saving it.
         # Once saved, we get back from the API server the valid values.
@@ -1183,22 +1191,98 @@ class Row(ContainedThing, object):
         if cell.type != CellTypes.EmptyCell:
             self.logger.warn("Row.makeNewCell() overwriting an existing Cell")
 
-        cell.assign(value, strict=strict, hyperlink=hyperlink
+        cell.assign(value, displayValue=displayValue, strict=strict,
+                hyperlink=hyperlink, linkInFromCell=linkInFromCell,
+                immediate=immediate, propagate=propagate)
+        self.markDirty()
+        return cell
 
+    def addSaveData(self, rowchange):
+        '''
+        If this Row has changed, add its change data to the RowChangeSaveData.
+        '''
+        if not self.isDirty():
+            return
+        rowchange.addRowChange(self.change)
+        return self
 
+    def save(self, client=None):
+        '''
+        Save this Row to the server.
+
+        Any changes (new Cells, format, position, or expansion) on the Row
+        are saved to the API server.
+
+        Once saved, this Row is replaced by the Row constructed from the
+        data returned by the server.  The caller should not hold a reference
+        to it past calling `save()`.
+        @return The Row constructed from the data returned by the server.
+        '''
+        client = client or self.client
+        path = ('/sheet/%s/row/%s' %
+                (str(self.sheet.id), str(self.id)))
+        rc = RowChangeSaveData(self)
+        self.addSaveData(rc)
+        for cell in self.cells:
+            cell.addSaveData(rc)
+        return self.saveRowChange(rc, client=client)
+
+    def saveRowChange(self, row_change, client=None):
+        '''
+        Save a Row that has been changed (as opposed to a newly created Row).
+        @param row_change The RowChangeSaveData for the changed Row.
+        @return The Row constructed from the data returned by the server.
+        '''
+        client = client or self.client
+        path = ('/sheet/%s/row/%s' %
+                (str(self.sheet.id), str(self.id)))
+        hdr, body = client.request(path, 'PUT',
+                extra_headers=client.json_headers,
+                body=row_change.toJSON())
+
+        if not hdr.isOK():
+            err = "Row.save() failed: %s" % str(hdr)
+            self.logger.error(err)
+            raise SmartsheetClientError(err)
+
+        self.logger.debug("Row.save() succeeded")
+
+        if isinstance(body['result'], list):
+            if len(body['result']) != 1:
+                self.logger.warn("Expected 1 row, got %d", len(body['result']))
+            new_row = Row(body['result'][0], self.sheet)
+            self.sheet.replaceRow(new_row)
+            return new_row
+        else:
+            err = "Unexpected body type returned: %r" % type(body[result])
+            self.logger.error(err)
+            raise SmartsheetClientError(err)
 
     def __getitem__(self, column_index):
         '''
         Enable indexing a Row object to fetch the cell in the indicated column.
         This allows a Row to be used like a Python list.
-        Colum indexes start at 0.
+        Column indexes start at 0.
         NOTE:  Negative indexes are not supported.
         Returns the Cell at the specified column
         '''
         if column_index >= 0:
-            return self.getCellByColumnIndex(column_index)
+            return self.getCellByColumnIndex(column_index).value
         raise Exception("Invalid column index: %r" % column_index)
 
+    def __setitem__(self, column_index, value):
+        '''
+        Enable indexing a Row object to set the value in the indicated column.
+        This allows a Row to be used like a Python list.
+        Column indexes start at 0.
+        NOTE:  Negative indexes are not supported.
+        '''
+        if column_index >= 0:
+            cell = self.getCellByColumnIndex(column_index)
+            cell.assign(value)
+            self.markDirty()
+        else:
+            raise IndexError("Invalid column index: %r" % column_index)
 
     def __len__(self):
         '''
@@ -1465,7 +1549,7 @@ class Cell(ContainedThing, object):
         '''
         column = row.sheet.getColumnById(fields['columnId'])
         row.logger.info("newFromAPI: column: %r", column)
-        cell = Cell(row, column, fields['value'], type=fields['type'],
+        cell = Cell(row, column, fields.get('value', None), type=fields['type'],
                 displayValue=fields.get('displayValue', None),
                 hyperlink=fields.get('hyperlink', None),
                 linkInFromCell=fields.get('linkInFromCell', None),
@@ -1622,35 +1706,12 @@ class Cell(ContainedThing, object):
         client = client or self.client
         path = ('/sheet/%s/row/%s' %
                 (str(self.row.sheet.id), str(self.rowId)))
-        rc = RowChangeSaveData(self)
-        if propagate:       # Get all Cell changes on this Row.
-            for cell in self.row.cells:
-                cell.addSaveData(rc)
-            # TODO: We should probably check with the Row and see if it had
-            # other changes to make.
+        rc = RowChangeSaveData(self.row)
+        if propagate:       # Get all changes on this Row.
+            self.row.save()
         else:               # Only worry about this Cell.
             self.addSaveData(rc)
-
-        hdr, body = client.request(path, 'PUT',
-                extra_headers={'Content-Type': 'application/json'},
-                body=rc.toJSON())
-
-        if not hdr.isOK():
-            self.logger.error("Cell.save() failed: %s", str(hdr))
-            raise SmartsheetClientError("Cell.save() failed: %s" % str(hdr))
-
-        self.logger.debug("Cell.save() succeeded")
-
-        if isinstance(body['result'], list):
-            if len(body['result']) != 1:
-                self.logger.warn("Expected 1 row, got %d", len(body['result']))
-            new_row = Row(body['result'][0], self.row.sheet)
-            self.row.sheet.replaceRow(new_row)
-            return new_row
-        else:
-            err = "Unexpected body type returned: %r" % type(body[result])
-            self.logger.error(err)
-            raise SmartsheetClientError(err)
+        return self.row.saveRowChange(rc, client=client)
 
     def fetchHistory(self, client=None):
         '''
@@ -1747,6 +1808,10 @@ class RowChangeSaveData(object):
 
     def addCellChange(self, cell_data):
         self.cells.append(cell_data)
+
+    def addRowChange(self, row_data):
+        # TODO: Handle format, expanded, position, and relative_to.
+        pass
 
     def flatten(self):
         acc = {}
