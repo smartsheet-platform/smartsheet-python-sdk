@@ -126,6 +126,7 @@ class SmartsheetClient(object):
         self.handle = None
         self.request_count = 0
         self.request_error_count = 0
+        self.json_headers = {'Content-Type': 'application-json'}
 
 
     def connect(self):
@@ -364,6 +365,8 @@ class SmartsheetClient(object):
          * '' - the default location for sheets.
          * Folder().location - To create a sheet in a folder
          * Workspace().location - To create a sheet in a workspace.
+        Note that the Sheet starts out with no Rows.
+        Raises SmartsheetClientError if it is unable to create the Sheet.
         '''
         if len(columns) < 1:
             err = "Must specify at least 1 column"
@@ -733,10 +736,30 @@ class Sheet(TopLevelThing, object):
         if include_comments:
             raise NotImplementedError("Attachments on Comments not supported")
 
+    def addRows(self, row_wrapper, client=None):
+        '''
+        Add the Row(s) in the RowWrapper to the Sheet.
+        The RowWrapper specifies *where* in the Sheet the Row(s) should be
+        added.
+        '''
+        path = '/sheet/%s/rows' % str(self.id)
+        client = client or self.client
+        hdr, body = client.request(path, 'POST',
+                extra_headers=client.json_headers,
+                body=json.dumps(row_wrapper.flatten()))
+
+        print "Result.hdr:", hdr
+        print "Result.body:", body
+
+
+
     def replaceRow(self, row):
         '''
         Replace a row with a different version of it.
         '''
+        # FIXME:  Should this method be exposed to library users?
+        # I think it is only needed internally to handle incorporation of
+        # the updated Row from saving a Row.
         orig_row = self.rows.getRowById(row.id)
         self.rows.replaceRow(row)
         orig_row.discard()
@@ -860,6 +883,72 @@ class SheetRows(ContainedThing, object):
         return iter(self._rows)
     
 
+
+class RowWrapper(object):
+    '''
+    Specifies the expansion state and/or position of one or more Rows.
+    The Rows are contiguous.
+    '''
+    def __init__(self, sheet, position='toBottom', expanded=True, parentId=None,
+            siblingId=None, *rows):
+        '''
+        If the Rows are to be children of a parent Row, then the position is
+        relative to the parent Row (either the first children
+        (position=='toTop'), or the last children (position=='toBottom')).
+        `parentId` and `siblingId` are mutually exclusive.
+
+        @param sheet The sheet this RowWrapper is for.
+        @param position 'toBottom' (default) or 'toTop'
+        @param expanded Whether or not the Rows should be expanded.
+        @param parentId Put the Rows as children of this Row.id.
+        @param siblingId Put the Rows as the next sibling of this Row.id.
+        @param rows A list of Rows these position+expansion applies to.
+        '''
+        # TODO: Should we let the caller pass us a Row for parent or sibling?
+        # This might be less annoying for them than passing us a_row.id.
+        if position not in ('toBottom', 'toTop'):
+            err = "position must be 'toBottom' or 'toTop', got %r" % position
+            sheet.logger.error(err)
+            raise SmartsheetClientError(err)
+        if parentId is not None and siblingId is not None:
+            err = "parentId and siblingId are mutually exclusive"
+            sheet.logger.error(err)
+            raise SmartsheetClientError(err)
+
+        if parentId is not None:
+            self.parentId = parentId
+        if siblingId is not None:
+            self.siblingId = siblingId
+        if position == 'toBottom':
+            self.toBottom = True
+        else:
+            self.toTop = True
+        self.expanded = expanded
+
+    def addRow(self, row):
+        '''
+        Add a Row to this RowWrapper.
+        '''
+        self.rows.append(row)
+        return self
+
+    def flatten(self):
+        '''
+        Flatten the RowWrapper for inserting Rows.
+        '''
+        acc = {}
+        if self.toTop is not None:
+            acc['toTop'] = True
+        if self.toBottom is not None:
+            acc['toBottom'] = True
+        if self.expanded is not None:
+            acc['expanded'] = self.expanded
+        if parentId is not None:
+            acc['parentId'] = self.parentId
+        if siblingId is not None:
+            acc['siblingId'] = self.siblingId
+
+        # Add the Rows
 
 class CellTypes(object):
     # TODO: Should this be an enum class?
@@ -1077,6 +1166,9 @@ class Row(ContainedThing, object):
             return self.getCellByColumnIndex(column_index)
         raise Exception("Invalid column index: %r" % column_index)
 
+    def __setitem__(self, column_index, value):
+
+
     def __len__(self):
         '''
         Calling len(a_row) will return the # of columns.
@@ -1285,7 +1377,6 @@ class Cell(ContainedThing, object):
     tuple of (row ID, column ID).
     '''
     max_display_len = 10
-    # These are the valid Cell types:
     def __init__(self, row, column, value, type=None,
             displayValue=None, hyperlink=None, linkInFromCell=None,
             format=None, link=None, isDirty=True, immediate=False):
