@@ -1153,6 +1153,39 @@ class Row(ContainedThing, object):
         # FIXME:  Verify that this works, and then implement __setitem__().
         raise NotImplementedError("Setting Cells is not implemented yet")
 
+    def makeNewCell(self, value, strict=True,
+            column_index=None, column=None, columnId=None,
+            displayValue=None, hyperlink=None, linkInFromCell=None,
+            format=None, isDirty=True, immediate=False):
+        '''
+        Create a new Cell on this Row.
+        The Column for this Cell can be specified via index, id, or object.
+
+        The type of the Cell is determined by the Column.
+        '''
+        # TODO: Can we have the Column produce a valid value?
+        # This would make it handy for working with a Row prior to saving it.
+        # Once saved, we get back from the API server the valid values.
+        # TODO: The API docs make it look like linkInFromCell is not supported
+        # for Cells on a new Row.  Is that the case, or is it an oversight?
+        colum_specifiers = (column_index, column, columnId)
+        if 1 != len([x for x in column_specifiers if x is not None]):
+            raise SmartsheetClientError('Must specify one of "column_index, ' +
+                    'column, columnId" when making a new Cell')
+        # First, get a Cell at the specified location.  This may be an
+        # empty Cell.
+        if column_index is not None:
+            cell = self.getCellByColumnIndex(column_index)
+        elif columnId is not None:
+            cell = self.getCellByColumnId(columnId)
+        else:
+            cell = self.getCellByColumnId(column.id)
+        if cell.type != CellTypes.EmptyCell:
+            self.logger.warn("Row.makeNewCell() overwriting an existing Cell")
+
+        cell.assign(value, strict=strict, hyperlink=hyperlink
+
+
 
     def __getitem__(self, column_index):
         '''
@@ -1165,8 +1198,6 @@ class Row(ContainedThing, object):
         if column_index >= 0:
             return self.getCellByColumnIndex(column_index)
         raise Exception("Invalid column index: %r" % column_index)
-
-    def __setitem__(self, column_index, value):
 
 
     def __len__(self):
@@ -1502,11 +1533,12 @@ class Cell(ContainedThing, object):
     def displayValue(self):
         return self._displayValue
 
-    def assign(self, new_value, strict=True, hyperlink=None,
+    def assign(self, new_value, displayValue=None, strict=True, hyperlink=None,
             linkInFromCell=None, immediate=False, propagate=True):
         '''
         Assign a new value to the Cell.
         @param new_value The new value for the Cell.
+        @param displayValue The string value of the Cell prior to save().
         @param strict True to request stict processing on save.
         @param hyperlink The CellHyperlink to set.
         @param linkInFromCell The CellLinkIn to set.
@@ -1521,7 +1553,10 @@ class Cell(ContainedThing, object):
         self.change = CellChange(self, new_value, strict=strict,
                 hyperlink=hyperlink, linkInFromCell=linkInFromCell)
         self._value = new_value
-        self._displayValue = unicode(new_value)
+        if displayValue is None:
+            self._displayValue = unicode(new_value)
+        else:
+            self._displayValue = displayValue
 
         # The Row is stored sparse -- we have to add formerly empty Cells.
         if self.type == CellTypes.EmptyCell:
