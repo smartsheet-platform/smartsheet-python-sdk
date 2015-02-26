@@ -576,8 +576,13 @@ class Sheet(TopLevelThing, object):
 
     @property
     def rows(self):
+        # TODO: On the first access of any Row, all of the Rows get built.
+        # It might be nicer to do a more on-demand construction of the rows.
+        # TODO: Should we keep SheetRows?
+        # I don't know that there's really a point to it anymore.
         if self._rows is None:
-            self._rows = SheetRows(self.fields.get('rows', []), self)
+            self._rows = [Row.newFromAPI(r, self) for r in 
+                    self.fields.get('rows', [])]
         return self._rows
 
     @property
@@ -736,32 +741,156 @@ class Sheet(TopLevelThing, object):
         if include_comments:
             raise NotImplementedError("Attachments on Comments not supported")
 
-    def addRows(self, row_wrapper, client=None):
+    def getRowByRowNumber(self, row_number):
+        '''
+        Fetch the Row with the specified row number.
+        The numbering for rows starts at 1.
+        This is distinct from Columns which have indexes that start at 0.
+        Returns the Row.
+        Raises an IndexError exception if the Row is not found.
+        '''
+        if not self.rows:
+            err = "Sheet %r has no Rows" % self
+            self.logger.error(err)
+            raise IndexError(err)
+        if row_number < 1:
+            err = ("Row # %d invalid for Sheet %r, row numbers start at 1" %
+                    (row_number, self))
+            self.logger.error(err)
+            raise IndexError(err)
+
+        # Optimize for having all of the Rows and them being in order.
+        if self.rows[0].rowNumber == 1:
+            idx = row_number - 1
+            if idx <= len(self.rows):
+                if self.rows[idx].rowNumber == row_number:
+                    return self.rows[idx]
+
+        for row in self.rows:
+            if row.rowNumber == row_number:
+                return row
+        raise IndexError("Row # %d not found." % row_number)
+
+    def getRowById(self, rowId):
+        '''
+        Fetch a Row by its ID.
+        '''
+        matches = [row for row in self.rows if row.id == rowId]
+        if len(matches) == 1:
+            return matches[0]
+        if len(matches) > 1:
+            err = "Sheet.getRowById(): Multiple rows with ID %r" % rowId
+        else:
+            err = "Sheet.getRowById(): No row with ID %r" % rowId
+        self.logger.warn(err)
+        raise SmartsheetClientError(err)
+
+    def _replaceRow(self, new_row):
+        replace_idx = None
+        for idx, row in enumerate(self.rows):
+            if row.id == new_row.id:
+                replace_idx = idx
+                break
+        if replace_idx is not None:
+            self.rows[replace_idx] = new_row
+        return self
+
+    def __getitem__(self, row_number):
+        '''
+        Add a list-style interface to fetching a Row.
+        The index is the row_number (1-based) and not a classic (0-based) index.
+        '''
+        return self.getRowByRowNumber(row_number)
+
+    def __iter__(self):
+        return iter(self._rows)
+
+    def makeRow(self):
+        '''
+        Create a new Row.
+
+        The Row uses the Sheet (for column information), but is not
+        "attached" to the Sheet (it isn't found in Sheet.rows()).
+        In order to attach the Row to the Sheet, it must be placed in a
+        RowWrapper and the RowWrapper passed to the `addRows()` method on
+        the Sheet.
+        '''
+        return Row(self)
+
+    def addRow(self, row, position='toBottom', parentId=None, siblingId=None,
+            client=None, strict=True):
+        '''
+        Add a single Row to the Sheet.
+
+        See the documentation for the RowWrapper class for details on the
+        placement arguments: 'position', 'parentId', and 'siblingId'.
+        
+        @param row The Row to add - the Row may be empty.
+        @param position Where to insert the Row ('toTop' or 'toBottom')
+        @param parentId ID of the parent Row to insert `row` under.
+        @param siblingID ID of the Row to insert `row` next to 
+        @param client The client to use (if not using sheet.client).
+        @param strict True for the API server to do strict Cell parsing.
+        @return The Sheet.
+        '''
+        row_wrapper = RowWrapper(self, position=position, parentId=parentId,
+                siblingId=siblingId)
+        row_wrapper.addRow(row)
+        return self.addRows(row_wrapper, client=client, strict=strict) 
+
+    def addRows(self, row_wrapper, client=None, strict=True):
         '''
         Add the Row(s) in the RowWrapper to the Sheet.
         The RowWrapper specifies *where* in the Sheet the Row(s) should be
         added.
+        @param row_wrapper The Rows with their position information.
+        @param client The client to use (if not using sheet.client).
+        @param strict True for the API server to do strict Cell parsing.
+        @return The Sheet.
         '''
         path = '/sheet/%s/rows' % str(self.id)
         client = client or self.client
         hdr, body = client.request(path, 'POST',
                 extra_headers=client.json_headers,
-                body=json.dumps(row_wrapper.flatten()))
+                body=json.dumps(row_wrapper.flattenForInsert()))
 
-        print "Result.hdr:", hdr
-        print "Result.body:", body
+        if not hdr.isOK():
+            err = "Sheet.addRows() failed: %s" % str(hdr)
+            self.logger.error(err)
+            raise SmartsheetClientError(err)
 
+        self.logger.debug("Sheet.addRows() succeeded")
+        row_wrapper.discard()
+        if isinstance(body['result'], list):
+            for row_fields in body['result']:
+                new_row = Row.newFromAPI(row_fields, self)
+                # It's worth noting that the order of the .rows array can get
+                # all out of whack with respect to Row.rowNumber as we add
+                # and move and remove Rows this way.  Perhaps there should
+                # be a periodic resorting of it.
+                self.rows.append(new_row)
+        else:
+            err = ("Unexpected body type returned: %r, %s" % 
+                    (type(body['result']), body))
+            self.logger.error(err)
+            raise SmartsheetClientError(err)
+        return self
 
-
-    def replaceRow(self, row):
+    def _replaceRow(self, new_row):
         '''
         Replace a row with a different version of it.
         '''
         # FIXME:  Should this method be exposed to library users?
         # I think it is only needed internally to handle incorporation of
         # the updated Row from saving a Row.
-        orig_row = self.rows.getRowById(row.id)
-        self.rows.replaceRow(row)
+        replace_idx = None
+        orig_row = self.getRowById(new_row.id)
+        for idx, row in enumerate(self.rows):
+            if row.id == new_row.id:
+                replace_idx = idx
+                break
+        if replace_idx is not None:
+            self.rows[replace_idx] = new_row
         orig_row.discard()
         return self
 
@@ -787,104 +916,11 @@ class Sheet(TopLevelThing, object):
         Add a list-style interface to fetching a Row from the sheet.
         The index is the row_number (1-based) and not a classic (0-based) index.
         '''
-        return self.rows.getRowByRowNumber(row_number)
+        return self.getRowByRowNumber(row_number)
 
     def __iter__(self):
         return iter(self.rows)
  
-
-
-class SheetRows(ContainedThing, object):
-    '''
-    The set of Rows on a Sheet object.
-    The SheetRow supports accessing the rows of the Sheet with list-style
-    syntax.  That combined with a similar support on the individual Rows
-    allows individual Cells to be accessed via [][] as if the sheet were
-    a two-dimensional array.  It is important to remember that Rows are
-    numbered starting at 1, but Columns are numbered starting at 0.  
-    '''
-    # This supports a partial set of Rows (such as when the Sheet is fetched
-    # using the rowIds parameter).
-    # Having this object wrap the list of Rows helps to pave the way for
-    # nice semantics for adding, moving, and removing Rows.
-
-    # TODO: Is this class actually necessary?
-    # Can we just use these same methods on the Sheet?
-
-    def __init__(self, rows, sheet):
-        '''
-        Initialize with the specified rows.
-        '''
-        self.parent = sheet
-        self.sheet = sheet
-        self._rows = [Row(r, sheet) for r in rows]
-
-    def getRowByRowNumber(self, row_number):
-        '''
-        Fetch the Row with the specified row number.
-        The numbering for rows starts at 1.
-        This is distinct from Columns which have indexes that start at 0.
-        Returns the Row.
-        Raises an IndexError exception if the Row is not found.
-        '''
-        if not self._rows:
-            raise SheetHasNoRows(str(self.sheet))
-        if row_number < 1:
-            raise InvalidRowNumber("Row # %d invalid, row numbers start at 1" %
-                    row_number)
-
-        # The ideal case is that the Sheet was fetched with either all of the
-        # Rows, or with a contiguous block of the first rows.
-        # If it was, convert the row_number to a list index and return the
-        # specified Row (assuming it's the correct one).
-        if self._rows[0].rowNumber == 1:
-            idx = row_number - 1
-            if self._rows[idx].rowNumber == row_number:
-                return self._rows[idx]
-
-        # Scan for the matching row.
-        for row in self._rows:
-            if row.rowNumber == row_number:
-                return row
-        raise InvalidRowNumber("Row # %d not found." % row_number)
-
-    def getRowById(self, rowId):
-        '''
-        Fetch a Row by its ID.
-        '''
-        matches = [row for row in self._rows if row.id == rowId]
-        if len(matches) == 1:
-            return matches[0]
-        if len(matches > 1):
-            self.logger.warn("Multiple rows with ID %r", rowId)
-        else:
-            self.logger.warn("No row with ID %r", rowId)
-        raise SmartsheetClientError("Row with ID %r not found" % rowId)
-
-    def replaceRow(self, new_row):
-        replace_idx = None
-        for idx, row in enumerate(self._rows):
-            if row.id == new_row.id:
-                replace_idx = idx
-                break
-        if replace_idx is not None:
-            self._rows[replace_idx] = new_row
-        return self
-
-    def __getitem__(self, row_number):
-        '''
-        Add a list-style interface to fetching a Row.
-        The index is the row_number (1-based) and not a classic (0-based) index.
-        '''
-        try:
-            return self.getRowByRowNumber(row_number)
-        except InvalidRowNumber, e:
-            raise IndexError("Row # %d no found: %s" % (row_number, str(e)))
-        raise IndexError("Specified row_number %d not found" % row_number)
-
-    def __iter__(self):
-        return iter(self._rows)
-    
 
 
 class RowWrapper(object):
@@ -918,15 +954,12 @@ class RowWrapper(object):
             sheet.logger.error(err)
             raise SmartsheetClientError(err)
 
-        if parentId is not None:
-            self.parentId = parentId
-        if siblingId is not None:
-            self.siblingId = siblingId
-        if position == 'toBottom':
-            self.toBottom = True
-        else:
-            self.toTop = True
+        self.position = position
+        self.parentId = parentId
+        self.siblingId = siblingId
         self.expanded = expanded
+        self.rows = []
+        self.rows.extend(rows)
 
     def addRow(self, row):
         '''
@@ -935,23 +968,47 @@ class RowWrapper(object):
         self.rows.append(row)
         return self
 
-    def flatten(self):
+    def flatten(self, strict=True):
         '''
-        Flatten the RowWrapper for inserting Rows.
+        Flatten the RowWrapper.
         '''
         acc = {}
-        if self.toTop is not None:
+        if self.position == 'toTop':
             acc['toTop'] = True
-        if self.toBottom is not None:
+        else:
             acc['toBottom'] = True
         if self.expanded is not None:
             acc['expanded'] = self.expanded
-        if parentId is not None:
+        if self.parentId is not None:
             acc['parentId'] = self.parentId
-        if siblingId is not None:
+        if self.siblingId is not None:
             acc['siblingId'] = self.siblingId
 
-        # Add the Rows
+        acc['rows'] = []
+        for row in self.rows:
+            acc['rows'].append(row.flattenForInsert(strict=strict))
+        return acc
+
+    def flattenForInsert(self, strict=True):
+        '''
+        Flatten the RowWrapper for inserting Rows.
+        When inserting Rows, the 'expanded' parameter is not permitted.
+        '''
+        acc = self.flatten(strict=strict)
+        if 'expanded' in acc:
+            del acc['expanded']
+        return acc
+
+    def discard(self):
+        '''
+        Mark each of the Rows as discarded.
+        This is called after the RowWrapper has been used and the Rows are 
+        now incorporated into the Sheet.
+        '''
+        for row in self.rows:
+            row.discard()
+
+
 
 class CellTypes(object):
     # TODO: Should this be an enum class?
@@ -972,101 +1029,161 @@ class Row(ContainedThing, object):
                     discussions attachments columns expanded createdAt
                     modifiedAt accessLevel version format filteredOut'''.split()
 
-    def __init__(self, fields, sheet):
-        # Does a Row always know its sheet?
-        # I think that in the updated API, that the caller MUST know the
-        # Sheet.id at least.
-        # FIXME: Figure out how to resolve the sheet awareness issue(s).
-        self.fields = fields
+    def __init__(self, sheet):
+        '''
+        Create a new Row object.
+
+        A newly created Row is empty.
+        Cells can be added to it prior to saving it, but other objects that
+        are "hung off" the Row (such as discussions and attachments) must be
+        added after the Row has been saved to the Sheet.
+        '''
+        # TODO: Make discarding a Row actually matter.
+        self._id = -1           # Invalid ID
         self.sheet = sheet
-        self.parent = sheet     # The row belongs to the sheet.
-        self._cells = None
-        self._discussions = None
-        self._attachments = None
-        # self._columns = None
-        # self._column_id_map = None
-        self._dirty = False
+        self.parent = sheet
+        self._rowNumber = -1    # Invalid row number
+        self._parentRowNumber = 0   # Initially, no parent Row.
+        self._cells = []
+        self._discussions = []
+        self._attachments = []
+        self._columns = None
+        self._column_id_map = None
+        self._expanded = True
+        self._createdAt = None
+        self._modifiedAt = None
+        self._accessLevel = None
+        self._version = None
+        self._format = ''
+        self._filters = None
+        self._filteredOut = None
+        self._dirty = True      # Rows created this way need to be saved.
         self._discarded = False
         self.change = None
 
+    @classmethod
+    def newFromAPI(cls, fields, sheet):
+        row = Row(sheet)
+        row.fields = fields
+        row.sheet = sheet
+        row.parent = sheet     # The Row belongs to the Sheet.
+
+        row._id = fields['id']
+        row._rowNumber = fields['rowNumber']
+        row._parentRowNumber = fields.get('parentRowNumber', 0)
+        row._cells = [Cell.newFromAPI(c, row) for c in fields.get('cells', [])]
+
+        # When a Row is fetched directly, the caller can choose to get
+        # the Columns with the Row.  Use them if they show up.
+        row._columns = [
+                Column.newFromAPI(c, row) for c in fields.get('columns', [])
+        ]
+        row._column_id_map = dict([(c.id, c) for c in row._columns])
+
+        # When a Sheet is fetched or a Row is fetched directly, the caller
+        # can have the API include the Discussions along with the Row.
+        row._discussions = [
+                Discussion(d, 
+                    AncillaryObjectSourceRow(sheet, row), sheet)
+                for d in fields.get('discussions', [])
+        ]
+
+        # When a Sheet is fetched or a Row is fetched directly, the caller
+        # can have the API include the Attachments along with the Row.
+        row._attachments = [
+                Attachment(a,
+                    AncillaryObjectSourceRow(sheet, row), sheet)
+                for a in fields.get('attachments', [])
+                ]
+
+        if 'expanded' in fields:
+            row._expanded = fields['expanded']
+        if 'version' in fields:
+            row._version = fields['version']
+        if 'format' in fields:
+            row._format = fields['format']
+        if 'createdAt' in fields:
+            row._createdAt = fields['createdAt']
+        if 'modifiedAt' in fields:
+            row._modifiedAt = fields['modifiedAt']
+        if 'accessLevel' in fields:
+            row._accessLevel = fields['accessLevel']
+        if 'filteredOut' in fields:
+            row._filteredOut = fields['filteredOut']
+
+        # Rows from the API don't start out dirty.
+        row._dirty = False
+        return row
+
+
     @property
     def id(self):
-        return self.fields['id']
+        return self._id
 
     @property
     def sheetId(self):
-        return self.fields['sheetId']
+        return self.sheet.id
 
     @property
     def rowNumber(self):
-        return self.fields['rowNumber']
+        return self._rowNumber
 
     @property
     def parentRowNumber(self):
-        return self.fields.get('parentRowNumber', 0)
+        return self._parentRowNumber
 
     @property
     def cells(self):
-        if self._cells is None:
-            self._cells = [Cell.newFromAPI(c, self) for c in 
-                    self.fields.get('cells', [])]
         return self._cells
 
     @property
     def discussions(self):
-        if self._discussions is None:
-            self._discussions = [Discussion(d,
-                AncillaryObjectSourceRow(self.sheet, self), self.sheet) for d
-                    in self.fields.get('discussions', []) ]
         return self._discussions
 
     @property
     def attachments(self):
-        if self._attachments is None:
-            self._attachments = [
-                    Attachment(a, AncillaryObjectSourceRow(self.sheet, self),
-                        self.sheet) for a in self.fields.get('attachments', [])]
         return self._attachments
 
     @property
     def columns(self):
+        if self._columns:
+            return self._columns
         return self.sheet.columns
 
     def getColumnById(self, column_id):
         '''Return the Column that has the specified ID.'''
+        # Use the local columns info if it exists, otherwise use the Sheet.
+        if self._columns:
+            return self._column_id_map[column_id]
         return self.sheet.getColumnById(column_id)
-        # try:
-        #     self._column_id_map[column_id]
-        # except KeyError, e:
-        #     raise UnknownColumnId("Column ID: %r is not in current columns.")
 
     @property
     def expanded(self):
-        return self.fields.get('expanded')
+        return self._expanded
 
     @property
     def createdAt(self):
-        return self.fields.get('createdAt')
+        return self._createdAt
 
     @property
     def modifiedAt(self):
-        return self.fields.get('modifiedAt')
+        return self._modifiedAt
 
     @property
     def accessLevel(self):
-        return self.fields.get('accessLevel')
+        return self._accessLevel
 
     @property
     def version(self):
-        return self.fields.get('version')
+        return self._version
 
     @property
     def format(self):
-        return self.fields.get('format')
+        return self._format
 
     @property
     def filteredOut(self):
-        return self.fields.get('filteredOut')
+        return self._filteredOut
 
     def discard(self):
         '''
@@ -1086,49 +1203,50 @@ class Row(ContainedThing, object):
                 return a
         return None
 
-    def getColumnByIndex(self, column_index):
+    def getColumnByIndex(self, idx):
         '''
         Find the Column on this Row at the specified index.
-        This method is only defined for Rows that are "attached to" a Sheet.
-        Such Rows are those obtained by fetching a Sheet or those added to
-        a Sheet instance (even if the Row update hasn't yet been saved).
+        Returns the Column with the given index or raises IndexError.
 
-        Returns the Column with the given index, or raises InvalidColumnIndex.
-
-        For unattached rows, this operation is not defined and raises
-        InvalidOperationOnUnattachedRow.
+        This method is only defined for Rows that either have a valid
+        Sheet reference or were fetched with their columns information.
+        @param idx
         '''
-        # TODO:  Is there a good reason for the Row class to implement this?
-        # Shouldn't we just use self.sheet.getColumnByIndex() wherever we
-        # would use this?
-        if column_index >= 0:
-            try:
-                col_id = None
-                column = None
-                col = self.sheet.columns[column_index]
-                if col.index == column_index:
+        if not self._columns:
+            return self.sheet.getColumnByIndex(idx)
+
+        if idx < 0:
+            raise IndexError("Negative column indexes are not supported.")
+
+        # Short circuit for when all the columns were fetched with the Row.
+        # Theoretically, this should be the common case.
+        if idx < len(self.columns):
+            col = self.columns[idx]
+            if col.index == idx:
+                return col
+
+        try:
+            for col in self._columns:
+                if col.index == idx:
                     return col
-                for col in self.sheet.columns:
-                    if col.index == column_index:
-                        return col
-            except IndexError, e:
-                # Raising StopIteration lets list(a_row) or [x in a_row] work.
-                raise StopIteration()
-            except AttributeError, e:
-                self.logger.error("Error: %r, %s", e, str(e))
-                raise InvalidOperationOnUnattachedRow(e)
-        raise InvalidColumnIndex("No Column at index %r." % column_index)
+        except IndexError, e:
+            # We raise StopIteration so list(a_row) and [x in a_row) work.
+            raise StopIteration
+        err = "Column index %r not found on Row: %r" % (idx, self)
+        self.logger.error(err)
+        raise IndexError(err)
 
-    def getCellByColumnIndex(self, column_index):
+    def getCellByIndex(self, idx):
         '''
-        Get the Cell at the specified column index on this Row.
+        Get the Cell at the specified index on this Row.
         Columns indexes start at 0.
-        Returns None if there is no Cell at the specified index on this Row.
-        Will raise InvalidOperationOnUnattachedRow if the Row is unattached.
-        May raise InvalidColumnIndex.
+        If the index is valid but there is no Cell there on this Row,
+        an empty Cell is returned.
+        Raises IndexError if the index is invalid.
         '''
-        # FIXME:  This method name is too long and clunky.
-        column = self.getColumnByIndex(column_index)
+        column = self.getColumnByIndex(idx)
+        if column is None:
+            raise IndexError
         cell = self.getCellByColumnId(column.id)
         if cell is None:
             cell = Cell(self, column, None, type=CellTypes.EmptyCell,
@@ -1140,62 +1258,11 @@ class Row(ContainedThing, object):
         Get the Cell on this row at the specified Column ID.
         Returns the Cell or None if there is no Cell at that Column ID.
         '''
-        # FIXME:  This method name is too long and clunky.
-        # If the Row has lots of columns, it probably makes sense to have a
-        # dict mapping columnId's to cells.
+        # TODO: Consider having a map of columnId to Cell
         for c in self.cells:
             if c.columnId == column_id:
                 return c
         return None
-
-    def makeNewCell(self, value, strict=True,
-            column_index=None, column=None, columnId=None,
-            displayValue=None, hyperlink=None, linkInFromCell=None,
-            format=None, immediate=False, propagate=True):
-        '''
-        Create a new Cell on this Row.
-        The Column for this Cell can be specified via index, id, or object.
-        The other fields are passed unchanged to Cell.assign().
-        NOTE: If immediate=True, then the caller's reference to this Row is
-        invalid by the time this call returns -- successfully saving the Row
-        causes the server to send its replacement and that replacement is
-        put in place and the Row held (potentially) by the caller is abandoned.
-        '''
-        # FIXME: Is this even necessary?
-        # I think if the Row is created with knowledge of the Columns on the
-        # sheet, we can just assign to the appropriate index using
-        # __setitem__ and it will "just work".
-        # Are we willing to have a two step process, where the caller fetches
-        # the Cell and then adjusts the properties of it that they want?
-        # That would be for anything other than setting the value.  That
-        # would probably be simpler to learn to use, and it certainly would
-        # get rid of some ugly code in the library.
-
-        # TODO: Can we have the Column produce a valid value?
-        # This would make it handy for working with a Row prior to saving it.
-        # Once saved, we get back from the API server the valid values.
-        # TODO: The API docs make it look like linkInFromCell is not supported
-        # for Cells on a new Row.  Is that the case, or is it an oversight?
-        colum_specifiers = (column_index, column, columnId)
-        if 1 != len([x for x in column_specifiers if x is not None]):
-            raise SmartsheetClientError('Must specify one of "column_index, ' +
-                    'column, columnId" when making a new Cell')
-        # First, get a Cell at the specified location.  This may be an
-        # empty Cell.
-        if column_index is not None:
-            cell = self.getCellByColumnIndex(column_index)
-        elif columnId is not None:
-            cell = self.getCellByColumnId(columnId)
-        else:
-            cell = self.getCellByColumnId(column.id)
-        if cell.type != CellTypes.EmptyCell:
-            self.logger.warn("Row.makeNewCell() overwriting an existing Cell")
-
-        cell.assign(value, displayValue=displayValue, strict=strict,
-                hyperlink=hyperlink, linkInFromCell=linkInFromCell,
-                immediate=immediate, propagate=propagate)
-        self.markDirty()
-        return cell
 
     def addSaveData(self, rowchange):
         '''
@@ -1250,15 +1317,28 @@ class Row(ContainedThing, object):
         if isinstance(body['result'], list):
             if len(body['result']) != 1:
                 self.logger.warn("Expected 1 row, got %d", len(body['result']))
-            new_row = Row(body['result'][0], self.sheet)
-            self.sheet.replaceRow(new_row)
+            new_row = Row.newFromAPI(body['result'][0], self.sheet)
+            self.sheet._replaceRow(new_row)
             return new_row
         else:
-            err = "Unexpected body type returned: %r" % type(body[result])
+            err = ("Unexpected body type returned: %r, %s" % 
+                    (type(body['result']), body))
             self.logger.error(err)
             raise SmartsheetClientError(err)
 
-    def __getitem__(self, column_index):
+    def flattenForInsert(self, strict=True):
+        '''
+        Flatten this Row's data so it can be inserted (as opposed to saved).
+        '''
+        acc = {'cells': []}
+        for cell in self.cells:
+            self.logger.debug("flatten Cell: %r", cell)
+            if cell.type != CellTypes.EmptyCell or cell.value is not None:
+                self.logger.debug("Adding Cell")
+                acc['cells'].append(cell.flattenForInsert(strict=strict))
+        return acc
+
+    def __getitem__(self, idx):
         '''
         Enable indexing a Row object to fetch the cell in the indicated column.
         This allows a Row to be used like a Python list.
@@ -1266,23 +1346,24 @@ class Row(ContainedThing, object):
         NOTE:  Negative indexes are not supported.
         Returns the Cell at the specified column
         '''
-        if column_index >= 0:
-            return self.getCellByColumnIndex(column_index).value
-        raise Exception("Invalid column index: %r" % column_index)
+        if idx >= 0:
+            self.logger.info('Row.__getitem__(%d)', idx)
+            return self.getCellByIndex(idx).value
+        raise Exception("Invalid column index: %r" % idx)
 
-    def __setitem__(self, column_index, value):
+    def __setitem__(self, idx, value):
         '''
         Enable indexing a Row object to set the value in the indicated column.
         This allows a Row to be used like a Python list.
         Column indexes start at 0.
         NOTE:  Negative indexes are not supported.
         '''
-        if column_index >= 0:
-            cell = self.getCellByColumnIndex(column_index)
+        if idx >= 0:
+            cell = self.getCellByIndex(idx)
             cell.assign(value)
             self.markDirty()
         else:
-            raise IndexError("Invalid column index: %r" % column_index)
+            raise IndexError("Invalid column index: %r" % idx)
 
     def __len__(self):
         '''
@@ -1386,17 +1467,17 @@ class CellHyperlink(object):
             raise SmartsheetClientError("Must specify one of url, sheetId, " +
                     "or reportId")
         self.url = url
-        self.sheetId = url
+        self.sheetId = sheetId
         self.reportId = reportId
 
     def flatten(self):
-        acc = {'hyperlink': {}}
+        acc = {}
         if self.url is not None:
-            acc['hyperlink']['url'] = self.url
+            acc['url'] = self.url
         elif self.sheetId is not None:
-            acc['hyperlink']['sheetId'] = self.sheetId
+            acc['sheetId'] = self.sheetId
         elif self.reportId is not None:
-            acc['hyperlink']['reportId'] = self.reportId
+            acc['reportId'] = self.reportId
         return acc
 
     def toJSON(self):
@@ -1419,10 +1500,9 @@ class CellLinkIn(object):
         self.columnId = columnId
 
     def flatten(self):
-        acc = { 'linkInFromCell': {
-                'sheetId': self.sheetId,
+        acc = { 'sheetId': self.sheetId,
                 'rowId': self.rowId,
-                'columnId': self.columnId }}
+                'columnId': self.columnId }
         return acc
 
     def toJSON(self):
@@ -1467,9 +1547,9 @@ class CellChange(object):
         if self.format:
             acc['format'] = unicode(self.format)
         if self.hyperlink:
-            acc.update(self.hyperlink.flatten())
+            acc['hyperlink'] = self.hyperlink.flatten()
         if self.linkInFromCell:
-            acc.update(self.linkInFromCell.flatten())
+            acc['linkInFromCell'] = self.linkInFromCell.flatten()
         return acc
 
     def toJSON():
@@ -1548,7 +1628,7 @@ class Cell(ContainedThing, object):
         Create a new instance from the dict of values from the API.
         '''
         column = row.sheet.getColumnById(fields['columnId'])
-        row.logger.info("newFromAPI: column: %r", column)
+        row.logger.info("row: %d Cell.newFromAPI: column: %r", row.rowNumber, column.index)
         cell = Cell(row, column, fields.get('value', None), type=fields['type'],
                 displayValue=fields.get('displayValue', None),
                 hyperlink=fields.get('hyperlink', None),
@@ -1643,8 +1723,19 @@ class Cell(ContainedThing, object):
             self._displayValue = displayValue
 
         # The Row is stored sparse -- we have to add formerly empty Cells.
+        # A Column may only appear once on the Row, make sure we don't add
+        # a duplicate.
+        # TODO: Consider making Row.cells a dict.
         if self.type == CellTypes.EmptyCell:
-            self.row.cells.append(self)
+            replace_idx = None
+            for idx, cell in enumerate(self.row.cells):
+                if self.columnId == cell.columnId:
+                    replace_idx = idx
+                    break
+            if replace_idx is not None:
+                self.row.cells[replace_idx] = self
+            else:
+                self.row.cells.append(self)
 
         self.markDirty()
         if immediate:
@@ -1713,10 +1804,33 @@ class Cell(ContainedThing, object):
             self.addSaveData(rc)
         return self.row.saveRowChange(rc, client=client)
 
+    def flattenForInsert(self, strict=True):
+        '''
+        Return a flattened form of this Cell for Row insertion.
+        '''
+        # TODO: consider using this approach for saving changed Cells.
+        acc = {}
+        if self.type == CellTypes.EmptyCell and self.value is None:
+            return acc
+        acc['columnId'] = self.columnId
+        acc['value'] = self.value
+        acc['strict'] = strict
+        if self.format is not None:
+            acc['format'] = self.format
+        if self.hyperlink is not None:
+            acc['hyperlink'] = self.hyperlink.flatten()
+        # FIXME: What about linkInFromCell?
+        # Is that supported for Row insertion, or only as a change to an
+        # existing Cell?
+        return acc
+        
     def fetchHistory(self, client=None):
         '''
         Fetch the history of the Cell.
         '''
+        # TODO: Consider making Cell.__getitem__ operate over Cell history.
+        # That would let a Sheet be treated as a cube rows x columns x history
+        # That operational model might give rise to some interesting uses.
         path = '/sheet/%s/row/%s/column/%s/history' % (
                 str(self.row.sheet.id), str(self.rowId), str(self.columnId))
         client = client or self.client
