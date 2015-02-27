@@ -12,6 +12,7 @@ import os
 import copy
 import time
 import logging
+import collections
 
 # Things that I know need to be fixed.
 # TODO:  Create exception classes and use them to pass errors to the caller.
@@ -107,6 +108,61 @@ class DeprecatedAttribute(SmartsheetClientError):
     pass
 
 
+class HttpRequestInfo(object):
+    '''
+    A log entry of information about an HTTP request.
+    '''
+    def __init__(self, method, url, headers, body=''):
+        self.start_time = time.time()
+        self.method = method
+        self.url = url
+        self.request_headers = headers
+        self.request_body = body
+        self.try_count = 0
+        self.end_time = None
+
+    def markRequestAttempt(self):
+        self.try_count += 1
+        return self
+
+    def addResponse(self, hdr, body):
+        self.response_header = hdr
+        self.response_body = body
+        return self
+
+    def end(self):
+        self.end_time = time.time()
+        return self
+
+    @property
+    def duration(self):
+        return self.end_time - self.start_time
+
+
+def join_url_path(base_url, path):
+    '''
+    Join the base URL and path
+    '''
+    # if path.startswith('/'):
+        # path = path[1:]
+
+    if path:
+        if base_url.endswith('/'):
+            if path.startswith('/'):
+                full_url = base_url + path[1:]
+            else:
+                full_url = base_url + path
+        else:
+            if path.startswith('/'):
+                full_url = base_url + path
+            else:
+                full_url = base_url + '/' + path
+    else:
+        full_url = url
+    return full_url
+
+
+
 class SmartsheetClient(object):
     '''
     Simple client for interacting with Smartsheet sheets using the API v1.1.
@@ -115,7 +171,17 @@ class SmartsheetClient(object):
     version = '1.1'
 
     def __init__(self, token=None, rate_limit_sleep=10, logger=None,
-            read_only=False, retry_limit=3):
+            read_only=False, retry_limit=3, request_log_len=20):
+        '''
+        Create a new SmartsheetClient.
+
+        @param token The API Access token.
+        @param rate_limit_sleep Number of seconds to sleep when rate-limited.
+        @param logger the logger to log to.
+        @param read_only True to prevent any write/update/delete operations.
+        @param retry_limit Number of times to retry queries.
+        @param request_log_len Store the last N queries' HttpRequestInfo.
+        '''
         self.token = token
         self.rate_limit_sleep = rate_limit_sleep
         self.logger = logger or logging.getLogger('SmartsheetClient')
@@ -127,6 +193,7 @@ class SmartsheetClient(object):
         self.request_count = 0
         self.request_error_count = 0
         self.json_headers = {'Content-Type': 'application-json'}
+        self.request_log = collections.deque(maxlen=request_log_len)
 
 
     def connect(self):
@@ -149,19 +216,13 @@ class SmartsheetClient(object):
         Returns the response header and body.
         '''
         req_headers = headers or {}
-        if path.startswith('/'):
-            path = path[1:]
-
-        if path:
-            if url.endswith('/'):
-                req_url = url + path
-            else:
-                req_url = url + '/' + path
-        else:
-            req_url = url
+        req_url = join_url_path(url, path)
 
         if not self.handle:
             self.connect()
+            # FIXME: There's a bit of conflation here.
+            # raw_request is also used to talk to other servers, and connect()
+            # contacts the API server.
 
         self.logger.debug('req_url: %r', req_url)
         if body:
@@ -185,9 +246,10 @@ class SmartsheetClient(object):
         headers = self.default_headers()
         if extra_headers:
             headers.update(extra_headers)
-
-        request_try_count = 0
-        request_start_time = time.time()
+    
+        req_info = HttpRequestInfo(method, join_url_path(self.base_url,path),
+                headers, body)
+        self.request_log.append(req_info)
 
         if self.read_only and (method != 'GET' or method != 'HEAD'):
             self.logger.error("Client is read only, request (%s %s %s) " +
@@ -196,24 +258,22 @@ class SmartsheetClient(object):
                     "(%s %s %s) not permitted.") %(method, self.base_url, path))
 
         while True:
-            self.request_count += 1
-            request_try_count += 1
-            request_try_start_time = time.time()
+            req_info.markRequestAttempt()
             (resp, content) = self.raw_request(self.base_url, path, method,
                     headers=headers, body=body)
-            request_try_end_time = time.time()
-            request_try_duration = request_try_end_time - request_try_start_time
+            req_info.addResponse(resp, content)
             hdr = SmartsheetAPIResponseHeader(resp, content, self)
             body = {}
 
             if hdr.isOK():
+                req_info.end()      # Request succeeded.
                 if content:
                     body = json.loads(content)
                 else:
                     self.logger.warn('Request succeeded, with no response body')
                 break
             self.request_error_count += 1
-            if request_try_count > self.retry_limit:
+            if req_info.try_count > self.retry_limit:
                 self.logger.error(('Retry limit %d reached, abandoning ' +
                         'request for %r'), self.retry_limit, path)
                 raise APIRequestError(hdr)
@@ -229,10 +289,8 @@ class SmartsheetClient(object):
             else:
                 self.logger.error("Request error: %r", hdr)
                 raise APIRequestError(hdr)
-        request_end_time = time.time()
-        request_duration = request_end_time - request_start_time
         self.logger.info("Request for %r took: %d tries and %f seconds",
-                path, request_try_count, request_duration)
+                path, req_info.try_count, req_info.duration)
         return hdr, body
 
 
@@ -305,13 +363,13 @@ class SmartsheetClient(object):
         Returns the Sheet with the specified permalink.
         '''
         si = self.fetchSheetInfoByPermalink(permalink, use_cache=use_cache)
-        return self.fetchSheetByID(si.id, discussions=discussions,
+        return self.fetchSheetById(si.id, discussions=discussions,
                 attachments=attachments, format=format, filters=filters,
                 rowIds=rowIds, columnIds=columnIds, pageSize=pageSize,
                 page=page)
 
 
-    def fetchSheetByID(self, sheet_id, discussions=False, attachments=False,
+    def fetchSheetById(self, sheet_id, discussions=False, attachments=False,
             format=False, filters=False, source=None, rowNumbers=None,
             rowIds=None, columnIds=None, pageSize=None, page=None):
         '''
@@ -321,7 +379,6 @@ class SmartsheetClient(object):
         NOTE:  Does not support pagination at the moment.
         Returns the specified Sheet.
         '''
-        self.logger.debug("IN fetchSheetByID()")
         path = 'sheet/' + str(sheet_id)
         path_params = []
 
@@ -348,7 +405,11 @@ class SmartsheetClient(object):
 
         hdr, body = self.request(path, 'GET')
         if hdr.isOK():
-            sheet = Sheet(body, self)
+            request_parameters = {
+                    'discussions': discussions, 'attachments': attachments,
+                    'format': format, 'filters': filters, 'rowIds': rowIds,
+                    'columnIds': columnIds, 'pageSize': pageSize, 'page': page}
+            sheet = Sheet(body, self, request_parameters)
             return sheet
         else:
             raise Exception("Unable to fetch sheet by ID" + str(hdr))
@@ -547,9 +608,10 @@ class Sheet(TopLevelThing, object):
     # This would let the caller avoid having to deal with None values if
     # they are "walking through" Cells.
 
-    def __init__(self, fields, client):
+    def __init__(self, fields, client, request_parameters=None):
         self.fields = fields
         self.client = client
+        self.request_parameters = request_parameters or {}
         self._columns = None
         self._column_id_map = None
         self._rows = None
@@ -785,16 +847,6 @@ class Sheet(TopLevelThing, object):
         self.logger.warn(err)
         raise SmartsheetClientError(err)
 
-    def _replaceRow(self, new_row):
-        replace_idx = None
-        for idx, row in enumerate(self.rows):
-            if row.id == new_row.id:
-                replace_idx = idx
-                break
-        if replace_idx is not None:
-            self.rows[replace_idx] = new_row
-        return self
-
     def __getitem__(self, row_number):
         '''
         Add a list-style interface to fetching a Row.
@@ -894,16 +946,14 @@ class Sheet(TopLevelThing, object):
         orig_row.discard()
         return self
 
-    def refresh(self, client):
+    def refetch(self, client=None):
         '''
         Refetch the Sheet - using the original fetch options.
         Returns a new instance of the Sheet.
         It unfortunately does not do an in-place refresh.
         '''
-        # This means the sheet needs to preserve the original options.
-        # Maybe fetching a sheet should be a classmethod that the client
-        # calls?
-        pass
+        client = client or self.client
+        return client.fetchSheetById(self.id, **self.request_parameters)
 
     def __str__(self):
         return '<Sheet id:%r, name:%r>' % (self.id, self.name)
@@ -1332,9 +1382,7 @@ class Row(ContainedThing, object):
         '''
         acc = {'cells': []}
         for cell in self.cells:
-            self.logger.debug("flatten Cell: %r", cell)
             if cell.type != CellTypes.EmptyCell or cell.value is not None:
-                self.logger.debug("Adding Cell")
                 acc['cells'].append(cell.flattenForInsert(strict=strict))
         return acc
 
@@ -1347,7 +1395,6 @@ class Row(ContainedThing, object):
         Returns the Cell at the specified column
         '''
         if idx >= 0:
-            self.logger.info('Row.__getitem__(%d)', idx)
             return self.getCellByIndex(idx).value
         raise Exception("Invalid column index: %r" % idx)
 
@@ -1628,7 +1675,6 @@ class Cell(ContainedThing, object):
         Create a new instance from the dict of values from the API.
         '''
         column = row.sheet.getColumnById(fields['columnId'])
-        row.logger.info("row: %d Cell.newFromAPI: column: %r", row.rowNumber, column.index)
         cell = Cell(row, column, fields.get('value', None), type=fields['type'],
                 displayValue=fields.get('displayValue', None),
                 hyperlink=fields.get('hyperlink', None),
@@ -2367,10 +2413,10 @@ class SheetInfo(TopLevelThing, object):
         '''
         Load the Sheet this SheetInfo object is about.
         The optional parameters are the same as those for
-        SmartsheetClient.fetchSheetByID().
+        SmartsheetClient.fetchSheetById().
         Returns the corresponding Sheet.
         '''
-        return self.client.fetchSheetByID(self.id, format=format,
+        return self.client.fetchSheetById(self.id, format=format,
                 filters=filters, rowIds=rowIds, columnIds=columnIds,
                 pageSize=pageSize, page=page)
 
@@ -2381,7 +2427,23 @@ class SheetInfo(TopLevelThing, object):
     def __repr__(self):
         return str(self)
 
+    def __eq__(self, other):
+        '''
+        Enable == comparisons between SheetInfo objects.
+        '''
+        return (self.id == other.id and
+                self.name == other.name and
+                self.accessLevel == other.accessLevel and
+                self.permalink == other.permalink)
 
+    def __ne__(self, other):
+        '''
+        Enable != comparisons between SheetInfo objects.
+        '''
+        return (self.id != other.id or
+                self.name != other.name or
+                self.accessLevel != other.accessLevel or
+                self.permalink != other.permalink)
 
 class UserProfile(object):
     '''
