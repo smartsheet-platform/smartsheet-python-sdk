@@ -857,6 +857,9 @@ class Sheet(TopLevelThing, object):
     def __iter__(self):
         return iter(self._rows)
 
+    def __len__(self):
+        return len(self.rows)
+
     def makeRow(self):
         '''
         Create a new Row.
