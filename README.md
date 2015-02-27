@@ -18,12 +18,22 @@ work yet.  Hopefully that will change.  Here's what currently works:
 * Fetch the list of sheets available
 * Fetch a Sheet (by its permalink or ID)
   * Specify whether or not to include discussions, attachments, formats, or filters in the returned Sheet
-  * Access cell data in the returned Sheet
+  * Read/write access to the Cells in the Sheet
+    * The Sheet can be treated as a 2-dimensional array:
+      * Read access: `print sheet[rowNumber][columnIndex]`
+      * Write access: `sheet[rowNumber][columnIndex] = "Some value"`
+  * Add Rows (one at a time) to a Sheet.
+* Row.save() to save any changes made to the Row
+* Create new Sheets
+* Refetch a Sheet
+  * Needed because the SDK doesn't currently renumber the Rows of a Sheet after adding a Row
+  * The Sheet is refetched using the same parameters it was fetched with originally
 * Download attachments (from the sheet, rows, or discussion comments)
 * Upload a new version of an existing attachment
   * This is distinct from replacing the existing attachment
 * Fetch the history of a Cell
-* Access the Cells of a sheet as a 2-dimensional array
+* Operate in read-only mode
+  * Prevents any changes from being made to the Sheet on the server
 
 # What Doesn't Work (that might surprise you)
 
@@ -33,18 +43,22 @@ that are covered here.
 
 * When fetching a Sheet, pagination isn't supported
 * Replacing an attachment doesn't work, only uploading a new version
-* Adding new data (other than new attachment versions) to a Sheet
+* Adding a Row above any other rows requires refetching the Sheet
+  * Because the local Rows don't get renumbered
+* Deletion of Rows, Columns, Cells, or Sheets
 * Can't issue HEAD requests on the S3 link used to download attachments
   * These result in a 403 error even thought the S3 docs say that GET and HEAD use the same permissions object
 
 # TODO
 
-* Add unit tests
-  * Probably using the unittest standard library
+* Add more test cases
+  * There are some empty test cases as placeholders
 * Continue adding support for more of the version 1.1 API
-  * Change Cell content
-  * Add Rows (including new content in their Cells)
-  * Add Columns (including new content in their Cells)
+  * Delete Rows from a Sheet
+  * Delete Cells
+    * This can effectively be done today by assigning None
+  * Add/Delete Columns to/from a Sheet
+  * Delete Sheets
   * Bare minimum support for Workspaces and Folders
   * Bare minimum support for Reports
   * Bare minimum support for Search
@@ -52,17 +66,22 @@ that are covered here.
     * Manage users and groups
     * Backup sheets
   * Lots more
-* Add the ability to operate in read-only mode
-  * This would prevent any changes from being made to the Sheet
+* Make sheet.save() save any local changes to the server
+* Reorder and renumber the local Rows after certain (add, move, delete) changes to the Rows of a Sheet
+  * This will make Sheet.refresh() less necessary
 
 # Roadmap
 
-Eventually, the client should provide something of an ActiveRecord-like
+Eventually, the client should provide something of a relaxed ActiveRecord-like
 interface.  In this model, changes could be made to a local copy of the
 Sheet, and then synchronized with the Smartsheet servers by calling
 a .save() method on either the Sheet or whatever object was changed. In
 this model, calling .save() on the Sheet (or any object that can contain
-other objects) would result in the saving of any "contained" objects.
+other objects) would result in the saving of changes to any "contained" objects.
+There are scenarios where it would be preferable to have all changes immediately
+applied to the Sheet on the Smartsheet servers (instead of waiting until .save()
+is called).  At present, certain operations (such as Sheet.addRow() are applied
+to the on-server Sheet immediately, while others remain local until saved).
 
 That's the goal, it may take a while to get there.
 
@@ -133,28 +152,72 @@ sheet = sheet_info.loadSheet()
 ## Access the Rows and Cells in a Sheet
 
 This example assumes that you are working with a fetched sheet.  The Rows
-of a Sheet are available via `sheet.rows`.  In addition, the Sheet supports
-certain list-style access patterns.  In particular, you can access the Cells
-of the Sheet as if the Sheet were a 2-dimensional array.  When doing so, it
-is important to remember that Rows start at 1, and Columns start at 0.
+of a Sheet are available by treating the Sheet as a list, or via `sheet.rows`.
+You can access the Cells of a Sheet as if the Sheet were a 2-dimensional array.
+When doing so, it is important to remember that Rows start at 1 and Columns
+start at 0.
 
 ```
-# Print the value of the top left-hand Cell of a sheet:
-print sheet[1][0].value
+# Print the value of the top, left-hand Cell of a Sheet:
+print sheet[1][0]
 
-# This 2-dimensional access pattern is also available via `sheet.rows`:
-# This is equivalent ot the prior print statement.
-print sheet.rows[1][0]
+# Assign "blue" to the top, left-hand Cell of a Sheet:
+sheet[1][0] = "blue"
+
+# Save the change, either by saving the Row, which will store any changed
+# Cells on the Row.
+sheet[1].save()
+
+# Or, save the change by saving the specific Cell.
+sheet[1].getCellByIndex(0).save()
 ```
 
-The rows of a sheet can be iterated over as if they were a normal Python
-list:
+The Rows of a Sheet are available by treating the Sheet as a Python list,
+or directly at Sheet.rows:
 
 ```
 # Print the value of the second Column of each Row in the Sheet.
 # Remember that Columns are zero-indexed (the second Column has index=1).
+
 for row in sheet.rows:
     print row[1]
+
+# Or,
+for row in sheet:
+    print row[1]
+```
+
+The number of Rows in a Sheet and the number of Columns on a Row are 
+available in the normal list-like way:
+
+```
+print "Number of Rows in Sheet:", len(sheet)
+print "Number of Columns on Row 1:", len(sheet[1])
+```
+
+## Add Rows to a Sheet.
+
+This example assumes you are working with a fetched Sheet.
+
+To add a Row to a Sheet, first create the Row from the Sheet, and then 
+add it to the Sheet.  The Row may have values set in its Cells prior to
+adding it to the Sheet:
+
+```
+# Add a Row to the bottom of the Sheet (the default position).
+row_1 = sheet.makeRow()
+sheet.addRow(row_1)
+
+# Add a Row to the top of the Sheet.
+row_2 = sheet.makeRow()
+sheet.addRow(row_2, position='toTop')
+
+# Add a Row to the bottom of the sheet with Cells in Columns 0 and 3 set.
+# Columns are indexed starting at 0 - these are the first and fourth Columns.
+row_3 = sheet.makeRow()
+row_3[0] = "blue"
+row_3[3] = 42.0
+sheet.addRow(row_3, position='toBottom')
 ```
 
 ## Fetch the History of a Cell
