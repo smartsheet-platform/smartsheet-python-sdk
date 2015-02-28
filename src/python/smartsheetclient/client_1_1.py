@@ -348,25 +348,10 @@ class SmartsheetClient(object):
         if len(matches) > 1:
             raise SheetIntegrityError("Multiple sheets had the same " +
                     "permalink: %r" % [str(si) for si in matches])
-        return matches[0]
-
-
-    def fetchSheetByPermalink(self, permalink, use_cache=False,
-            discussions=False, attachments=False, format=False,
-            filters=False, rowIds=None, columnIds=None, pageSize=None,
-            page=None):
-        '''
-        Fetch the specified Sheet.
-        May optionally fetch a variety of attributes:
-            discussions, attachments, format, filters, rowIds, and columnIds
-        NOTE:  Does not support pagination at the moment.
-        Returns the Sheet with the specified permalink.
-        '''
-        si = self.fetchSheetInfoByPermalink(permalink, use_cache=use_cache)
-        return self.fetchSheetById(si.id, discussions=discussions,
-                attachments=attachments, format=format, filters=filters,
-                rowIds=rowIds, columnIds=columnIds, pageSize=pageSize,
-                page=page)
+        if len(matches) == 1:
+            return matches[0]
+        else:
+            return None
 
 
     def fetchSheetById(self, sheet_id, discussions=False, attachments=False,
@@ -374,9 +359,26 @@ class SmartsheetClient(object):
             rowIds=None, columnIds=None, pageSize=None, page=None):
         '''
         Fetch the specified Sheet.
-        May optionally fetch a variety of attributes:
-            discussions, attachments, format, filters, rowIds, and columnIds
-        NOTE:  Does not support pagination at the moment.
+
+        May optionally fetch a variety of Sheet attributes:
+            Discussions, Attachments, Format, Filters
+        In order to get Attachments to Discussion Comments, both 'discussions'
+        and 'attachments' must be True.
+
+        Optionally, a subset of the Rows and Columns of the Sheet can be
+        fetched by specifying the desired values as lists:
+            rowNumbers = List of Row numbers (Row numbers start at 1)
+            rowIds = List of Row identifiers (typically big numbers)
+            columnIds = List of Column identfiers (typically big numbers)
+
+        Pagination is not currently supported by the SDK -- the 'pageSize'
+        and 'page' parameters are ignored.
+
+        @param sheetId The ID of the Sheet to fetch
+        @param discussions True to fetch Discussions on the Sheet (and its Rows)
+        @param attachments True to fetch Attachments on the Sheet (and its Rows)
+        @param format 
+
         Returns the specified Sheet.
         '''
         path = 'sheet/' + str(sheet_id)
@@ -387,8 +389,10 @@ class SmartsheetClient(object):
         if attachments: include.append('attachments')
         if format:
             include.append('format')
-            self.logger.warn('SDK support for formats is MASSIVELY incomplete.')
-        if filters: include.append('filters')
+            self.logger.warn('SDK support for formats is incomplete.')
+        if filters:
+            include.append('filters')
+            self.logger.warn('SDK support for filters is incomplete.') 
         if rowNumbers: include.append(','.join(rowNumbers))
         # FIXME: rowNumbers support is completely untested.
         path_params.append("include=" + ','.join(include))
@@ -412,7 +416,31 @@ class SmartsheetClient(object):
             sheet = Sheet(body, self, request_parameters)
             return sheet
         else:
-            raise Exception("Unable to fetch sheet by ID" + str(hdr))
+            err = ("Unable to fetch sheet by ID: %s: %s" % 
+                    (str(sheet_id), str(hdr)))
+            self.logger.error(err)
+            raise SmartsheetClientError(err)
+
+
+    def fetchSheetByPermalink(self, permalink, use_cache=False,
+            discussions=False, attachments=False, format=False,
+            filters=False, source=None, rowNumbers=None, rowIds=None,
+            columnIds=None, pageSize=None, page=None):
+        '''
+        Fetch the specified Sheet.
+        See `.fetchSheetById()` for an explanation of the optional parameters
+        that control how the Sheet is fetched and what additional attributes
+        are fetched along with it.
+
+        @param permalink The permalink of the Sheet to fetch.
+        @param use_cache True to avoid refetching the SheetList.
+        @returns the Sheet with the specified permalink
+        '''
+        si = self.fetchSheetInfoByPermalink(permalink, use_cache=use_cache)
+        return self.fetchSheetById(si.id, discussions=discussions,
+                attachments=attachments, format=format, filters=filters,
+                source=source, rowNumbers=rowNumbers, rowIds=rowIds,
+                columnIds=columnIds, pageSize=pageSize, page=page)
 
 
     def createSheet(self, name, columns, location=''):
@@ -618,6 +646,7 @@ class Sheet(TopLevelThing, object):
         self._attachments = None
         self._discussions = None
         self._dirty = False
+        self._discarded = False
 
     @property
     def id(self):
@@ -739,18 +768,24 @@ class Sheet(TopLevelThing, object):
         except KeyError, e:
             raise UnknownColumnId("Column ID: %r is not in current columns.")
 
-    def getColumnByIndex(self, column_index):
+    def getColumnByIndex(self, idx):
         '''
         Get the Column at the specified index, or return None if not found.
+        Negative index values return the Columns from the right:
+          idx == -1  ->  The last Column on the right
+          idx == -2  ->  The second last Column on the right
         '''
+        if idx < 0:
+            return self.columns[idx]
+
         try:
             found = False
-            col = self.columns[column_index]
-            if col.index == column_index:
+            col = self.columns[idx]
+            if col.index == idx:
                 found = True
             else:
                 for col in self.columns:
-                    if col.index == column_index:
+                    if col.index == idx:
                         found = True
                         break
             if found:
@@ -809,17 +844,22 @@ class Sheet(TopLevelThing, object):
         The numbering for rows starts at 1.
         This is distinct from Columns which have indexes that start at 0.
         Returns the Row.
+        Negative row_numbers fetch Rows from the bottom of the Sheet:
+          row_number == -1  ->  The last Row of the Sheet
+          row_number == -2  ->  The second last Row of the Sheet
         Raises an IndexError exception if the Row is not found.
         '''
         if not self.rows:
             err = "Sheet %r has no Rows" % self
             self.logger.error(err)
             raise IndexError(err)
-        if row_number < 1:
+        if row_number == 0:
             err = ("Row # %d invalid for Sheet %r, row numbers start at 1" %
                     (row_number, self))
             self.logger.error(err)
             raise IndexError(err)
+        if row_number < 1:
+            return self.rows[row_number]
 
         # Optimize for having all of the Rows and them being in order.
         if self.rows[0].rowNumber == 1:
@@ -860,6 +900,13 @@ class Sheet(TopLevelThing, object):
     def __len__(self):
         return len(self.rows)
 
+    def makeRowWrapper(self, position=None, parentId=None, siblingId=None):
+        '''
+        Create a RowWrapper for this Sheet.
+        '''
+        return RowWrapper(self, position=position, parentId=parentId,
+                siblingId=siblingId)
+
     def makeRow(self):
         '''
         Create a new Row.
@@ -872,7 +919,7 @@ class Sheet(TopLevelThing, object):
         '''
         return Row(self)
 
-    def addRow(self, row, position='toBottom', parentId=None, siblingId=None,
+    def addRow(self, row, position=None, parentId=None, siblingId=None,
             client=None, strict=True):
         '''
         Add a single Row to the Sheet.
@@ -888,6 +935,8 @@ class Sheet(TopLevelThing, object):
         @param strict True for the API server to do strict Cell parsing.
         @return The Sheet.
         '''
+        if self._discarded:
+            raise OperationOnDiscardedSheetError()
         row_wrapper = RowWrapper(self, position=position, parentId=parentId,
                 siblingId=siblingId)
         row_wrapper.addRow(row)
@@ -903,6 +952,8 @@ class Sheet(TopLevelThing, object):
         @param strict True for the API server to do strict Cell parsing.
         @return The Sheet.
         '''
+        if self._discarded:
+            raise OperationOnDiscardedSheetError()
         path = '/sheet/%s/rows' % str(self.id)
         client = client or self.client
         hdr, body = client.request(path, 'POST',
@@ -917,13 +968,21 @@ class Sheet(TopLevelThing, object):
         self.logger.debug("Sheet.addRows() succeeded")
         row_wrapper.discard()
         if isinstance(body['result'], list):
-            for row_fields in body['result']:
-                new_row = Row.newFromAPI(row_fields, self)
-                # It's worth noting that the order of the .rows array can get
-                # all out of whack with respect to Row.rowNumber as we add
-                # and move and remove Rows this way.  Perhaps there should
-                # be a periodic resorting of it.
-                self.rows.append(new_row)
+            new_rows = [
+                    Row.newFromAPI(fields, self) for 
+                    fields in body.get('result', [])
+            ]
+            self.logger.debug('Sheet.addRows(): new_rows: %r', new_rows)
+            ins_idx = None
+            for idx, row in enumerate(self.rows):
+                if new_rows[0].rowNumber <= row.rowNumber:
+                    ins_idx = idx
+                    break
+            if ins_idx is not None:
+                self._rows[ins_idx:ins_idx] = new_rows
+            else:
+                self._rows.extend(new_rows)
+            self._fixupRowNumbers()
         else:
             err = ("Unexpected body type returned: %r, %s" % 
                     (type(body['result']), body))
@@ -949,14 +1008,92 @@ class Sheet(TopLevelThing, object):
         orig_row.discard()
         return self
 
+    def deleteRowById(self, rowId, client=None):
+        '''
+        Delete the Row (and any of its children) from the Sheet.
+        The "children" of the Row include any Rows for whom this Row
+        is an ancestor, as well as any Attachments, Formats, and
+        Dicussions attached to this Row.
+        This method (like all structural methods) results in an immediate
+        update of the Sheet.  Any unsaved changes to the Row (Cell values,
+        format, etc.) will be lost.
+        @param rowId The ID of the Row to delete.
+        @param client The client to use, (if not using sheet.client).
+        @return The Sheet.
+        '''
+        if self._discarded:
+            raise OperationOnDiscardedSheetError()
+        path = '/sheet/%s/row/%s' % (str(self.id), str(rowId))
+        client = client or self.client
+        hdr, body = client.request(path, 'DELETE')
+        if not hdr.isOK():
+            err = "Sheet.deleteRowById(%s) failed: %s" % (str(rowId), str(hdr))
+            self.logger.error(err)
+            raise SmartsheetClientError(err)
+
+        self.logger.debug("Deleted Row id:%s", str(rowId))
+
+        # If this Sheet has this Row loaded, remove it.
+        del_idx = None
+        for idx, r in enumerate(self._rows):
+            if r.id == rowId:
+                del_idx = idx
+                break
+        if del_idx is not None:
+            row = self._rows.pop(del_idx)
+            row.discard()
+            self._fixupRowNumbers() 
+        return self
+
+    def _fixupRowNumbers(self):
+        '''
+        Correct the rowNumber values on Rows of this Sheet.
+        This method is needed after adding or deleting Rows from the Sheet.
+        This method assumes that the Sheet._rows list is in the correct order.
+        '''
+        for idx, row in enumerate(self._rows):
+            row._rowNumber = idx + 1
+        return self
+
     def refetch(self, client=None):
         '''
         Refetch the Sheet - using the original fetch options.
         Returns a new instance of the Sheet.
         It unfortunately does not do an in-place refresh.
         '''
+        if self._discarded:
+            raise OperationOnDiscardedSheetError()
         client = client or self.client
         return client.fetchSheetById(self.id, **self.request_parameters)
+
+    def discard(self):
+        '''
+        Mark this Sheet as discarded.
+        Operations on it after this should fail.
+        '''
+        self._discarded = True
+        for row in self.rows:
+            row.discard()
+
+    def delete(self, client=None):
+        '''
+        Delete the Sheet.
+        Returns True on success, raise SmartsheetClientError otherwise.
+        '''
+        if self._discarded:
+            raise OperationOnDiscardedSheetError()
+        path = '/sheet/%s' % str(self.id)
+        client = client or self.client
+        hdr, body = client.request(path, 'DELETE')
+
+        if not hdr.isOK():
+            err = "%s.delete() failed: %s" % (str(self), str(hdr))
+            self.logger.error(err)
+            raise SmartsheetClientError(err)
+        self.discard()
+        return True
+
+
 
     def __str__(self):
         return '<Sheet id:%r, name:%r>' % (self.id, self.name)
@@ -981,7 +1118,9 @@ class RowWrapper(object):
     Specifies the expansion state and/or position of one or more Rows.
     The Rows are contiguous.
     '''
-    def __init__(self, sheet, position='toBottom', expanded=True, parentId=None,
+    # By default, Add rows to the bottom of a Sheet.
+    default_position = 'toBottom'
+    def __init__(self, sheet, position=None, expanded=True, parentId=None,
             siblingId=None, *rows):
         '''
         If the Rows are to be children of a parent Row, then the position is
@@ -998,8 +1137,10 @@ class RowWrapper(object):
         '''
         # TODO: Should we let the caller pass us a Row for parent or sibling?
         # This might be less annoying for them than passing us a_row.id.
-        if position not in ('toBottom', 'toTop'):
-            err = "position must be 'toBottom' or 'toTop', got %r" % position
+        # Handle the vagaries of position. :(
+        if position not in ('toBottom', 'toTop', None):
+            err = ("position, if specified,  must be 'toBottom' or 'toTop', " +
+                    "got %r")  % position
             sheet.logger.error(err)
             raise SmartsheetClientError(err)
         if parentId is not None and siblingId is not None:
@@ -1007,12 +1148,41 @@ class RowWrapper(object):
             sheet.logger.error(err)
             raise SmartsheetClientError(err)
 
-        self.position = position
-        self.parentId = parentId
-        self.siblingId = siblingId
-        self.expanded = expanded
+        self.sheet = sheet
+        self.parentId = None
+        self.siblingId = None
+        self.position = None
+        self.expanded = None
         self.rows = []
         self.rows.extend(rows)
+
+        if parentId is not None:
+            if position == 'toTop':
+                # This is redundant when specifying a parent Row.
+                # TODO: Determine if sending 'toTop' and parentId is an error.
+                position = None
+            if position == 'toBottom':
+                self.position == position
+            self.parentId = parentId
+
+        if siblingId is not None:
+            if position is not None:
+                err = "position not used when specifying a siblingId."
+                sheet.logger.error(err)
+                raise SmartsheetClientError(err)
+            self.siblingId = siblingId
+
+        if parentId is None and siblingId is None and position is not None:
+            self.position = position
+
+        if not (self.position or self.parentId or self.siblingId):
+            self.position = self.default_position
+
+    def makeRow(self):
+        '''
+        Make an empty Row object that is suitable for use with this RowWrapper.
+        '''
+        return self.sheet.makeRow()
 
     def addRow(self, row):
         '''
@@ -1028,7 +1198,7 @@ class RowWrapper(object):
         acc = {}
         if self.position == 'toTop':
             acc['toTop'] = True
-        else:
+        elif self.position == 'toBottom':
             acc['toBottom'] = True
         if self.expanded is not None:
             acc['expanded'] = self.expanded
@@ -1238,6 +1408,16 @@ class Row(ContainedThing, object):
     def filteredOut(self):
         return self._filteredOut
 
+    def delete(self):
+        '''
+        Delete this Row.
+        This method executes immediately against the API server (like all
+        actions that affect the structure of a Sheet).
+        The Row should not be used after deleting it.
+        The Rows remaining after the deletion are renumbered accordingly.
+        '''
+        return self.sheet.deleteRowById(self.id)
+
     def discard(self):
         '''
         Mark the row and its contained objects as discarded.
@@ -1269,7 +1449,7 @@ class Row(ContainedThing, object):
             return self.sheet.getColumnByIndex(idx)
 
         if idx < 0:
-            raise IndexError("Negative column indexes are not supported.")
+            return self.columns[idx]
 
         # Short circuit for when all the columns were fetched with the Row.
         # Theoretically, this should be the common case.
@@ -1295,6 +1475,9 @@ class Row(ContainedThing, object):
         Columns indexes start at 0.
         If the index is valid but there is no Cell there on this Row,
         an empty Cell is returned.
+        Negative indexes return the Cells from the right:
+          idx == -1  ->  The last Cell (from the right) of the Row
+          idx == -2  ->  The second last Cell (from the right) of the Row
         Raises IndexError if the index is invalid.
         '''
         column = self.getColumnByIndex(idx)
@@ -1333,11 +1516,20 @@ class Row(ContainedThing, object):
         Any changes (new Cells, format, position, or expansion) on the Row
         are saved to the API server.
 
+        If this Row has been discarded, it will not be saved and None will
+        be returned.
+
         Once saved, this Row is replaced by the Row constructed from the
         data returned by the server.  The caller should not hold a reference
         to it past calling `save()`.
-        @return The Row constructed from the data returned by the server.
+
+        @param client The optional Client to use (instead the Sheet's).
+        @return The Row returned by the server or None.
         '''
+        if self._discarded:
+            self.logger.error("Attempted to save a discarded Row: %r", self)
+            return None
+
         client = client or self.client
         path = ('/sheet/%s/row/%s' %
                 (str(self.sheet.id), str(self.id)))
@@ -1350,9 +1542,17 @@ class Row(ContainedThing, object):
     def saveRowChange(self, row_change, client=None):
         '''
         Save a Row that has been changed (as opposed to a newly created Row).
+
+        If this Row has been discarded, it will not be saved and None will
+        be returned.
+
         @param row_change The RowChangeSaveData for the changed Row.
-        @return The Row constructed from the data returned by the server.
+        @return The Row returned by the Server, or None.
         '''
+        if self._discarded:
+            self.logger.error("Attempted to save a discarded Row: %r", sel)
+            return None
+
         client = client or self.client
         path = ('/sheet/%s/row/%s' %
                 (str(self.sheet.id), str(self.id)))
@@ -1372,6 +1572,7 @@ class Row(ContainedThing, object):
                 self.logger.warn("Expected 1 row, got %d", len(body['result']))
             new_row = Row.newFromAPI(body['result'][0], self.sheet)
             self.sheet._replaceRow(new_row)
+            self.discard()
             return new_row
         else:
             err = ("Unexpected body type returned: %r, %s" % 
@@ -1393,27 +1594,24 @@ class Row(ContainedThing, object):
         '''
         Enable indexing a Row object to fetch the cell in the indicated column.
         This allows a Row to be used like a Python list.
-        Column indexes start at 0.
-        NOTE:  Negative indexes are not supported.
-        Returns the Cell at the specified column
+        Column indexes start at 0; negative indexes work as normal for Python.
+        Returns the value of the Cell at the specified column
         '''
-        if idx >= 0:
-            return self.getCellByIndex(idx).value
-        raise Exception("Invalid column index: %r" % idx)
+        return self.getCellByIndex(idx).value
 
     def __setitem__(self, idx, value):
         '''
         Enable indexing a Row object to set the value in the indicated column.
         This allows a Row to be used like a Python list.
-        Column indexes start at 0.
-        NOTE:  Negative indexes are not supported.
+        Column indexes start at 0; negative indexes work as normal for Python.
+        @param idx The Column-index of the Cell to assign to.
+        @param value The value to assign to the Cell.
+        @return the value assigned to the Cell.
         '''
-        if idx >= 0:
-            cell = self.getCellByIndex(idx)
-            cell.assign(value)
-            self.markDirty()
-        else:
-            raise IndexError("Invalid column index: %r" % idx)
+        cell = self.getCellByIndex(idx)
+        cell.assign(value)
+        self.markDirty()
+        return value
 
     def __len__(self):
         '''
@@ -2410,8 +2608,8 @@ class SheetInfo(TopLevelThing, object):
         return self.fields.get('permalink', '')
 
     def loadSheet(self, discussions=False, attachments=False,
-            format=False, filters=False, rowIds=None, columnIds=None,
-            pageSize=None, page=None):
+            format=False, filters=False, source=None, rowNumbers=None,
+            rowIds=None, columnIds=None, pageSize=None, page=None):
 
         '''
         Load the Sheet this SheetInfo object is about.
@@ -2419,9 +2617,10 @@ class SheetInfo(TopLevelThing, object):
         SmartsheetClient.fetchSheetById().
         Returns the corresponding Sheet.
         '''
-        return self.client.fetchSheetById(self.id, format=format,
-                filters=filters, rowIds=rowIds, columnIds=columnIds,
-                pageSize=pageSize, page=page)
+        return self.client.fetchSheetById(self.id, discussions=discussions,
+                attachments=attachments, format=format, filters=filters,
+                source=source, rowNumbers=rowNumbers, rowIds=rowIds,
+                columnIds=columnIds, pageSize=pageSize, page=page)
 
     def __str__(self):
         return '<SheetInfo id:%r, name: %r, accessLevel: %r, permalink:%r>' % (
