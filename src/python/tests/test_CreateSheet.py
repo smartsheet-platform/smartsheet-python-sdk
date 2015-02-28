@@ -1,7 +1,7 @@
 import sys
 import datetime
 import unittest
-from smartsheetclient import SmartsheetClient, SheetInfo, Column, CellTypes
+from smartsheetclient import SmartsheetClient, SheetInfo, Column, CellTypes, SmartsheetClientError
 import logging
 logging.basicConfig(filename='tests.log', level=logging.DEBUG)
 
@@ -16,7 +16,7 @@ class CreateSheetTest(unittest.TestCase):
         self.client = SmartsheetClient(api_token, logger=self.logger)
 
         time_str = str(datetime.datetime.utcnow())
-        self.new_sheet_name = 'test-new-sheet-%s' % time_str
+        self.new_sheet_name = 'testSheetCreateDelete-%s' % time_str
 
         col_1 = Column("Col 1 - TextNumber", type=CellTypes.TextNumber,
                 primary=True)
@@ -30,9 +30,9 @@ class CreateSheetTest(unittest.TestCase):
         self.logger.info("########### Test uses Sheet: %s ############",
                                 self.new_sheet_name)
 
-    def test_create_sheet(self):
+    def test_create_and_delete_sheet(self):
         '''
-        Test the creation of a new sheet.
+        Test the creation of a new Sheet and the deletion of it.
         '''
         si = self.client.createSheet(self.new_sheet_name, self.columns,
                 location='')
@@ -59,7 +59,17 @@ class CreateSheetTest(unittest.TestCase):
         for sheet_col, src_col in zip(sheet.columns, self.columns):
             self.assertEqual(sheet_col.title, src_col.title)
 
-    
+        # Delete the sheet and make sure it is gone.
+        sheet_id = sheet.id
+        sheet_permalink = sheet.permalink
+        sheet.delete()
+        with self.assertRaises(SmartsheetClientError):
+            self.client.fetchSheetById(sheet_id)
+        sheet_list = self.client.fetchSheetInfoByName(self.new_sheet_name)
+        self.assertTrue(len(sheet_list) == 0)
+        sheet_info = self.client.fetchSheetInfoByPermalink(sheet_permalink)
+        self.assertTrue(sheet_info is None)
+
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
