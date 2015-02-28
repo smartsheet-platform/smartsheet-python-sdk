@@ -18,22 +18,25 @@ work yet.  Hopefully that will change.  Here's what currently works:
 * Fetch the list of sheets available
 * Fetch a Sheet (by its permalink or ID)
   * Specify whether or not to include discussions, attachments, formats, or filters in the returned Sheet
-  * Read/write access to the Cells in the Sheet
-    * The Sheet can be treated as a 2-dimensional array:
-      * Read access: `print sheet[rowNumber][columnIndex]`
-      * Write access: `sheet[rowNumber][columnIndex] = "Some value"`
-  * Add Rows (one at a time) to a Sheet.
+* Read/write access to the Cells in the Sheet
+* The Sheet can be treated as a 2-dimensional array:
+  * Read access: `print sheet[rowNumber][columnIndex]`
+  * Write access: `sheet[rowNumber][columnIndex] = "Some value"`
+* Add Rows (one at a time or multiple-at-a-time) to a Sheet.
+* Delete Rows (one at a time)
 * Row.save() to save any changes made to the Row
-* Create new Sheets
+* Create and Delete Sheets
 * Refetch a Sheet
-  * Needed because the SDK doesn't currently renumber the Rows of a Sheet after adding a Row
-  * The Sheet is refetched using the same parameters it was fetched with originally
+  * This might not be needed anymore
 * Download attachments (from the sheet, rows, or discussion comments)
 * Upload a new version of an existing attachment
   * This is distinct from replacing the existing attachment
 * Fetch the history of a Cell
 * Operate in read-only mode
   * Prevents any changes from being made to the Sheet on the server
+
+The tests in the `tests/` directory are starting to become a decent set of
+examples of how the library can be used.
 
 # What Doesn't Work (that might surprise you)
 
@@ -42,10 +45,11 @@ hasn't been implemented yet.  However, there are some surprising gaps
 that are covered here.
 
 * When fetching a Sheet, pagination isn't supported
+* Adding/Deleting Columns to/from an existing Sheet
+* Moving Rows
+* Expanding or collapsing Rows
+* Hyperlinks and Cell links are not supported
 * Replacing an attachment doesn't work, only uploading a new version
-* Adding a Row above any other rows requires refetching the Sheet
-  * Because the local Rows don't get renumbered
-* Deletion of Rows, Columns, Cells, or Sheets
 * Can't issue HEAD requests on the S3 link used to download attachments
   * These result in a 403 error even thought the S3 docs say that GET and HEAD use the same permissions object
 
@@ -54,21 +58,20 @@ that are covered here.
 * Add more test cases
   * There are some empty test cases as placeholders
 * Continue adding support for more of the version 1.1 API
-  * Delete Rows from a Sheet
-  * Delete Cells
-    * This can effectively be done today by assigning None
   * Add/Delete Columns to/from a Sheet
-  * Delete Sheets
   * Bare minimum support for Workspaces and Folders
   * Bare minimum support for Reports
   * Bare minimum support for Search
   * Administrative operations
     * Manage users and groups
     * Backup sheets
+  * Formats
+  * Filters
+  * Discussions
+  * Discussion Comments
   * Lots more
 * Make sheet.save() save any local changes to the server
-* Reorder and renumber the local Rows after certain (add, move, delete) changes to the Rows of a Sheet
-  * This will make Sheet.refresh() less necessary
+* Make sure write-operations to discarded Rows, Sheets, and Cells fail
 
 # Roadmap
 
@@ -94,6 +97,8 @@ or less.
 There's really only one hard rule:  do not use tabs for indentation.
 
 # Examples
+
+Please see the test cases in `tests/` for more examples.
 
 ## Connect to the API
 
