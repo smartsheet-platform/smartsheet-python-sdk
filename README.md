@@ -200,6 +200,54 @@ print "Number of Rows in Sheet:", len(sheet)
 print "Number of Columns on Row 1:", len(sheet[1])
 ```
 
+### Direct Access to Rows, Columns, and Cells
+
+In addition to the list-like mechanisms for accessing a Sheet, the
+individual Rows, Columns, and Cells can be accessed using the methods
+shown below
+
+```
+# Just list-like syntax:
+print sheet[1][0] 
+
+# Just method syntax:
+row_1 = sheet.getRowByRowNumber(1)
+cell = row_1.getCellByIndex(0)
+print cell.value
+
+# Method syntax without intermediate values:
+print sheet.getRowByRowNumber(1).getCellByIndex(0).value
+
+# Mixed method and list index approaches
+cell = sheet[1].getCellByIndex(0)
+print cell.value
+# Or, 
+row_1 = sheet.getRowByRowNumber(1)
+print row_1[0]
+```
+
+The list-like syntax is clearly simpler for scenarios where you only
+need access (read or write) to the value of the Cells.  The other
+approaches are important because they enable richer access.
+
+For example, in order to assign a Hyperlink to a Cell, the Cell object
+must be accessed explicitly (not implicitly via the list-like syntax).
+
+```
+cell = sheet[1].getCellByIndex(0)
+link = CellHyperlink(url="http://www.smartsheet.com")
+cell.assign("Home", hyperlink=link)
+
+print cell.value            # "Home"
+print cell.hyperlink.url    # "http://www.smartsheet.com"
+print sheet[1][0]           # "Home"
+print sheet[1].getCellByIndex(0).hyperlink.url  # "http://www.smartsheet.com"
+
+# Update the Sheet on the API servers.
+cell.save()
+```
+
+
 ## Add Rows to a Sheet.
 
 This example assumes you are working with a fetched Sheet.
