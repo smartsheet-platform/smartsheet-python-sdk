@@ -219,10 +219,7 @@ class SmartsheetClient(object):
         req_url = join_url_path(url, path)
 
         if not self.handle:
-            self.connect()
-            # FIXME: There's a bit of conflation here.
-            # raw_request is also used to talk to other servers, and connect()
-            # contacts the API server.
+            self.handle = httplib2.Http()
 
         self.logger.debug('req_url: %r', req_url)
         if body:
