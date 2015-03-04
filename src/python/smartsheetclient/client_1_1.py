@@ -1752,20 +1752,33 @@ class CellHyperlink(object):
 
 
 
+class CellLinkStatus(object):
+    OK = 'OK'
+    BROKEN = 'BROKEN'
+    INACCESSIBLE = 'INACCESSIBLE'
+    NOT_SHARED = 'NOT_SHARED'
+    BLOCKED = 'BLOCKED'
+    CIRCULAR = 'CIRCULAR'
+    INVALID = 'INVALID'
+    DISABLED = 'DISABLED'
+
+
+
 class CellLinkIn(object):
-    def __init__(self, sheetId, rowId, columnId):
+
+    def __init__(self, sheetId, rowId, columnId, status):
         self.sheetId = sheetId
         self.rowId = rowId
         self.columnId = columnId
+        self.status = status
         self.fields = {}
 
     @classmethod
     def newFromAPI(cls, fields):
-        link = CellLinkIn(fields['sheetId'], fields['rowId'],fields['columnId'])
+        link = CellLinkIn(fields['sheetId'], fields['rowId'],
+                fields['columnId'], fields['status'])
         link.fields = fields
         return link
-
-
 
     def flatten(self):
         acc = { 'sheetId': self.sheetId,
@@ -1777,8 +1790,8 @@ class CellLinkIn(object):
         return json.dumps(self.flatten())
 
     def __str__(self):
-        return ('<CellLinkIn: sheetId: %r  rowId: %r  columnId: %r' %
-                (self.sheetId, self.rowId, self.columnId))
+        return ('<CellLinkIn: sheetId: %r  rowId: %r  columnId: %r status: %r' %
+                (self.sheetId, self.rowId, self.columnId, self.status))
 
     def __repr__(self):
         return str(self)
