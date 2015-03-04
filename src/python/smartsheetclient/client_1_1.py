@@ -57,14 +57,6 @@ class UnknownColumnId(SmartsheetClientError):
     '''
     pass
 
-class InvalidColumnIndex(SmartsheetClientError):
-    '''
-    The specified column index was not found in the Sheet.
-    This could occur for a valid column index if the Sheet was fetched with
-    only a subset of the total columns.
-    '''
-    pass
-
 class InvalidRowNumber(SmartsheetClientError):
     '''
     The specified row number was not found in the Sheet.
@@ -767,29 +759,24 @@ class Sheet(TopLevelThing, object):
 
     def getColumnByIndex(self, idx):
         '''
-        Get the Column at the specified index, or return None if not found.
+        Get the Column at the specified index, or
+        return None if not found.
         Negative index values return the Columns from the right:
           idx == -1  ->  The last Column on the right
           idx == -2  ->  The second last Column on the right
+        Raises IndexError if the index is not valid.
         '''
         if idx < 0:
             return self.columns[idx]
 
-        try:
-            found = False
-            col = self.columns[idx]
-            if col.index == idx:
-                found = True
-            else:
-                for col in self.columns:
-                    if col.index == idx:
-                        found = True
-                        break
-            if found:
-                return col
-            return None
-        except IndexError:
-            return None
+        if idx < len(self.columns):
+            if self.columns[idx].index == idx:
+                return self.columns[idx]
+        else:
+            for col in self.columns:
+                if col.index == idx:
+                    return col
+        raise IndexError
 
     def allAttachments(self, include_rows=True, include_discussions=False):
         '''
@@ -1089,8 +1076,6 @@ class Sheet(TopLevelThing, object):
             raise SmartsheetClientError(err)
         self.discard()
         return True
-
-
 
     def __str__(self):
         return '<Sheet id:%r, name:%r>' % (self.id, self.name)
@@ -1439,7 +1424,7 @@ class Row(ContainedThing, object):
         Returns the Column with the given index or raises IndexError.
 
         This method is only defined for Rows that either have a valid
-        Sheet reference or were fetched with their columns information.
+        Sheet reference or were fetched with their Column information.
         @param idx
         '''
         if not self._columns:
@@ -1448,20 +1433,17 @@ class Row(ContainedThing, object):
         if idx < 0:
             return self.columns[idx]
 
-        # Short circuit for when all the columns were fetched with the Row.
+        # Short circuit for when all the Columns were fetched with the Row.
         # Theoretically, this should be the common case.
         if idx < len(self.columns):
             col = self.columns[idx]
             if col.index == idx:
                 return col
 
-        try:
-            for col in self._columns:
-                if col.index == idx:
-                    return col
-        except IndexError, e:
-            # We raise StopIteration so list(a_row) and [x in a_row) work.
-            raise StopIteration
+        for col in self._columns:
+            if col.index == idx:
+                return col
+
         err = "Column index %r not found on Row: %r" % (idx, self)
         self.logger.error(err)
         raise IndexError(err)
@@ -1477,14 +1459,17 @@ class Row(ContainedThing, object):
           idx == -2  ->  The second last Cell (from the right) of the Row
         Raises IndexError if the index is invalid.
         '''
-        column = self.getColumnByIndex(idx)
-        if column is None:
+        try:
+            column = self.getColumnByIndex(idx)
+            return self.getCellByColumnId(column.id)
+        except UnknownColumnId:
             raise IndexError
-        cell = self.getCellByColumnId(column.id)
-        if cell is None:
-            cell = Cell(self, column, None, type=CellTypes.EmptyCell,
-                    isDirty=False)
-        return cell
+        except IndexError:
+            raise
+        except Exception, e:
+            err = "Error getting Cell %r[%s]: %s" % (self, str(idx), e)
+            self.logger.error(err)
+            raise IndexError(err)
 
     def getCellByColumnId(self, column_id):
         '''
@@ -1495,7 +1480,12 @@ class Row(ContainedThing, object):
         for c in self.cells:
             if c.columnId == column_id:
                 return c
-        return None
+        column = self.getColumnById(column_id)
+        if column is None:
+            err = "Column ID: %s is unknown" % column_id
+            self.logger.error(err)
+            raise UnknownColumnId(err)
+        return Cell(self, column, None, type=CellTypes.EmptyCell, isDirty=False)
 
     def addSaveData(self, rowchange):
         '''
@@ -1547,7 +1537,7 @@ class Row(ContainedThing, object):
         @return The Row returned by the Server, or None.
         '''
         if self._discarded:
-            self.logger.error("Attempted to save a discarded Row: %r", sel)
+            self.logger.error("Attempted to save a discarded Row: %r", self)
             return None
 
         client = client or self.client
@@ -2007,6 +1997,8 @@ class Cell(ContainedThing, object):
                     "4000 chars: %r", cell)
         self.change = CellChange(self, new_value, strict=strict,
                 hyperlink=hyperlink, linkInFromCell=linkInFromCell)
+        self.hyperlink = hyperlink
+        self.linkInFromCell = linkInFromCell
         self._value = new_value
         if displayValue is None:
             self._displayValue = unicode(new_value)
@@ -2690,6 +2682,8 @@ class SheetInfo(TopLevelThing, object):
                 self.name != other.name or
                 self.accessLevel != other.accessLevel or
                 self.permalink != other.permalink)
+
+
 
 class UserProfile(object):
     '''
