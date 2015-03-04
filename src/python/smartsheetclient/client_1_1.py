@@ -1711,12 +1711,23 @@ class Column(ContainedThing, object):
 
 class CellHyperlink(object):
     def __init__(self, url=None, sheetId=None, reportId=None):
-        if 1 != len([x for x in (rule, sheetId, reportId) if x is not None]):
+        if 1 != len([x for x in (url, sheetId, reportId) if x is not None]):
             raise SmartsheetClientError("Must specify one of url, sheetId, " +
                     "or reportId")
         self.url = url
         self.sheetId = sheetId
         self.reportId = reportId
+        self.fields = {}
+
+    @classmethod
+    def newFromAPI(cls, fields):
+        link = CellHyperlink(
+                url=fields.get('url', None),
+                sheetId=fields.get('sheetId', None),
+                reportId=fields.get('reportId', None))
+        link.fields = fields
+        return link
+
 
     def flatten(self):
         acc = {}
@@ -1746,6 +1757,15 @@ class CellLinkIn(object):
         self.sheetId = sheetId
         self.rowId = rowId
         self.columnId = columnId
+        self.fields = {}
+
+    @classmethod
+    def newFromAPI(cls, fields):
+        link = CellLinkIn(fields['sheetId'], fields['rowId'],fields['columnId'])
+        link.fields = fields
+        return link
+
+
 
     def flatten(self):
         acc = { 'sheetId': self.sheetId,
@@ -1759,6 +1779,9 @@ class CellLinkIn(object):
     def __str__(self):
         return ('<CellLinkIn: sheetId: %r  rowId: %r  columnId: %r' %
                 (self.sheetId, self.rowId, self.columnId))
+
+    def __repr__(self):
+        return str(self)
 
 
 
@@ -1831,8 +1854,9 @@ class Cell(ContainedThing, object):
         is True, then the Cell will be saved immediately (rather than lazily
         with the Row or Sheet).
         '''
+        self.parent = row
         if link:
-            raise DeprecatedAttribute("'link' attribute of Cell is deprecated")
+            self.logger.warn("Got a 'link' attribute for a Cell")
 
         if type is None:
             type = column.type
@@ -1849,7 +1873,6 @@ class Cell(ContainedThing, object):
             raise SmartsheetClientError(err)
 
         self.row = row
-        self.parent = row
         self.columnId = column.id
         self._value = value
         self._displayValue = displayValue
@@ -1859,11 +1882,12 @@ class Cell(ContainedThing, object):
         self.linksOutToCells = None # Not settable by library user.
         self.format = format
         self.formula = None        # Not settable by library user.
-        self.link = None
+        self.link = link            # Deprecated, but can be set by API server.
         self.modifiedAt = None      # Not settable by library user.
         self.modifiedBy = None      # Not settable by library user.
         self._dirty = isDirty
         self.change = None
+        self.fields = {}            # Only set by newFromAPI()
         self.isDeleted = False
 
         if immediate:
@@ -1876,14 +1900,24 @@ class Cell(ContainedThing, object):
         Create a new instance from the dict of values from the API.
         '''
         column = row.sheet.getColumnById(fields['columnId'])
+        if fields.get('hyperlink', None) is not None:
+            hyperlink = CellHyperlink.newFromAPI(fields['hyperlink'])
+        else:
+            hyperlink = None
+        if fields.get('linkInFromCell', None) is not None:
+            linkInFromCell = CellLinkIn.newFromAPI(fields['linkInFromCell'])
+        else:
+            linkInFromCell = None
+
         cell = Cell(row, column, fields.get('value', None), type=fields['type'],
                 displayValue=fields.get('displayValue', None),
-                hyperlink=fields.get('hyperlink', None),
-                linkInFromCell=fields.get('linkInFromCell', None),
+                hyperlink=hyperlink,
+                linkInFromCell=linkInFromCell,
                 format=fields.get('format', None),
                 link=fields.get('link', None), isDirty=False,
                 immediate=False)
         # Not all attributes are setable with __init__().
+        cell.fields = fields
         cell.formula = fields.get('formula', None)
         cell.linksOutToCells = fields.get('linksOutToCells', None),
         cell.modifiedAt = fields.get('modifiedAt', None)
