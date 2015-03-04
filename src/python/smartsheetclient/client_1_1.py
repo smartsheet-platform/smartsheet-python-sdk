@@ -206,11 +206,11 @@ class SmartsheetClient(object):
         return self
 
 
-    def default_headers(self):
+    def defaultHeaders(self):
         return {'Authorization': 'Bearer %s' % self.token}
 
 
-    def raw_request(self, url, path, method='GET', headers=None, body=None):
+    def rawRequest(self, url, path, method='GET', headers=None, body=None):
         '''
         Make a request with no API headers added.
         Returns the response header and body.
@@ -240,7 +240,7 @@ class SmartsheetClient(object):
         Returns a SmartsheetAPIResponseHeader and a body (typically a dict).
         On failure raises the APIRequestError exception.
         '''
-        headers = self.default_headers()
+        headers = self.defaultHeaders()
         if extra_headers:
             headers.update(extra_headers)
     
@@ -256,7 +256,7 @@ class SmartsheetClient(object):
 
         while True:
             req_info.markRequestAttempt()
-            (resp, content) = self.raw_request(self.base_url, path, method,
+            (resp, content) = self.rawRequest(self.base_url, path, method,
                     headers=headers, body=body)
             req_info.addResponse(resp, content)
             hdr = SmartsheetAPIResponseHeader(resp, content, self)
@@ -2523,7 +2523,7 @@ class AttachmentDownloadInfo(ContainedThing, object):
         '''
         path = 'sheet/%s/attachment/%s' % (str(self.sheet.id), str(self.id))
         client = client or self.client
-        resp, body = client.raw_request(self.url, '', 'HEAD')
+        resp, body = client.rawRequest(self.url, '', 'HEAD')
         self.logger.debug("HTTP HEAD request for attachment, resp: %r", resp)
         self.logger.debug("HTTP HEAD request for attachment, body: %r", body)
 
@@ -2533,7 +2533,7 @@ class AttachmentDownloadInfo(ContainedThing, object):
         '''
         path = 'sheet/%s/attachment/%s' % (str(self.sheet.id), str(self.id))
         client = client or self.client
-        resp, self._data = client.raw_request(self.url, '', 'GET')
+        resp, self._data = client.rawRequest(self.url, '', 'GET')
         self._download_resp = resp
         resp = HttpResponse(resp)
         if resp.isOK():
