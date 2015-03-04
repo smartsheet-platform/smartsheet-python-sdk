@@ -1044,6 +1044,9 @@ class Sheet(TopLevelThing, object):
         Refetch the Sheet - using the original fetch options.
         Returns a new instance of the Sheet.
         It unfortunately does not do an in-place refresh.
+        NOTE: May only fetch a subset of the Sheet (depending on original fetch)
+        (in terms of rowIds, columnIds, or
+        rowNumbers
         '''
         if self._discarded:
             raise OperationOnDiscardedSheetError()
