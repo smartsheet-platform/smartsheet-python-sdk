@@ -2880,6 +2880,7 @@ class SmartsheetAPIResponseHeader(HttpResponse):
         return str(self)
 
 
+
 class SmartsheetAPIErrorMessage(object):
     '''
     Wrap the error message for all non-2xx status code responses from the API.
