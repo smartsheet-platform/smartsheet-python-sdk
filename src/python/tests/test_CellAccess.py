@@ -100,6 +100,7 @@ class CellAccessTest(unittest.TestCase):
         '''Test adding a CellHyperlink to an existing Row.'''
         link_target = 'http://www.smartsheet.com/developers/api-documentation'
         link = CellHyperlink(url=link_target)
+        self.sheet.enableCache()
         cell = self.sheet[1].getCellByIndex(0)
         self.assertTrue(cell.value == "one")
         cell.assign("API Docs", hyperlink=link)
@@ -131,7 +132,11 @@ class CellAccessTest(unittest.TestCase):
         self.assertTrue(r.getCellByIndex(0).value == 'Smartsheet Blog')
         self.assertTrue(r.getCellByIndex(0).hyperlink.url == link_target)
 
-   
+
+    def test_save_with_vs_without_strict(self):
+        '''Test assignments with and without 'strict' setting.'''
+        raise NotImplementedError
+
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:

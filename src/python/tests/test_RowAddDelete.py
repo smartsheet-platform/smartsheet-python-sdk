@@ -148,7 +148,7 @@ class RowAddDeleteTest(unittest.TestCase):
         self.sheet.addRow(r, position='toBottom')
         r = self.sheet.makeRow()
 
-        self.assertTrue(len(self.sheet.rows) == 1)
+        self.assertTrue(len(self.sheet) == 1)
         self.assertTrue(self.sheet[1][0] == "one")
 
         rw = self.sheet.makeRowWrapper(position='toTop')
@@ -161,7 +161,7 @@ class RowAddDeleteTest(unittest.TestCase):
 
         self.sheet.addRows(rw)
 
-        self.assertTrue(len(self.sheet.rows) == 3)
+        self.assertTrue(len(self.sheet) == 3)
         self.assertTrue(self.sheet[1][0] == "New Top Row")
         self.assertTrue(self.sheet[2][0] == "Second Row From Top")
         self.assertTrue(self.sheet[3][0] == "one")
@@ -174,9 +174,8 @@ class RowAddDeleteTest(unittest.TestCase):
         r = self.sheet.makeRow()
         r[0] = "one"
         self.sheet.addRow(r, position='toBottom')
-        r = self.sheet.makeRow()
 
-        self.assertTrue(len(self.sheet.rows) == 1)
+        self.assertTrue(len(self.sheet) == 1)
         self.assertTrue(self.sheet[1][0] == "one")
 
         rw = self.sheet.makeRowWrapper(siblingId=self.sheet[1].id)
@@ -189,7 +188,7 @@ class RowAddDeleteTest(unittest.TestCase):
 
         self.sheet.addRows(rw)
 
-        self.assertTrue(len(self.sheet.rows) == 3)
+        self.assertTrue(len(self.sheet) == 3)
         self.assertTrue(self.sheet[1][0] == "one")
         self.assertTrue(self.sheet[2][0] == "Second Row From Top")
         self.assertTrue(self.sheet[3][0] == "Third Row From Top")
@@ -212,7 +211,7 @@ class RowAddDeleteTest(unittest.TestCase):
 
         self.sheet.addRows(rw)
 
-        self.assertTrue(len(self.sheet.rows) == 3)
+        self.assertTrue(len(self.sheet) == 3)
         self.assertTrue(self.sheet[1][0] == "one")
         self.assertTrue(self.sheet[2][0] == "two")
         self.assertTrue(self.sheet[3][0] == "three")
@@ -226,7 +225,7 @@ class RowAddDeleteTest(unittest.TestCase):
         rw.addRow(r)
 
         res = self.sheet.addRows(rw)
-        self.assertTrue(len(self.sheet.rows) == 5)
+        self.assertTrue(len(self.sheet) == 5)
         self.assertTrue(res is not None)
         self.assertTrue(self.sheet[1][0] == "one")
         self.assertTrue(self.sheet[2][0] == "one-one")
@@ -249,7 +248,7 @@ class RowAddDeleteTest(unittest.TestCase):
 
         self.sheet.addRows(rw)
 
-        self.assertTrue(len(self.sheet.rows) == 3)
+        self.assertTrue(len(self.sheet) == 3)
         self.assertTrue(self.sheet[1][0] == "one")
         self.assertTrue(self.sheet[2][0] == "two")
         self.assertTrue(self.sheet[3][0] == "three")
@@ -263,7 +262,7 @@ class RowAddDeleteTest(unittest.TestCase):
         rw.addRow(r)
 
         res = self.sheet.addRows(rw)
-        self.assertTrue(len(self.sheet.rows) == 5)
+        self.assertTrue(len(self.sheet) == 5)
         self.assertTrue(res is not None)
         self.assertTrue(self.sheet[1][0] == "one")
         self.assertTrue(self.sheet[2][0] == "two")
@@ -278,12 +277,12 @@ class RowAddDeleteTest(unittest.TestCase):
         r[0] = "only"
         self.sheet.addRow(r)
 
-        self.assertTrue(len(self.sheet.rows) == 1)
+        self.assertTrue(len(self.sheet) == 1)
         self.assertTrue(self.sheet[1][0] == "only")
 
         res = self.sheet[1].delete()
 
-        self.assertTrue(len(self.sheet.rows) == 0)
+        self.assertTrue(len(self.sheet) == 0)
 
     def test_delete_rows_in_sheet_with_multiple_rows(self):
         '''Delete Rows from a Sheet with multiple Rows.'''
