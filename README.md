@@ -72,6 +72,11 @@ that are covered here.
   * Lots more
 * Make sheet.save() save any local changes to the server
 * Make sure write-operations to discarded Rows, Sheets, and Cells fail
+* Add mechanism to tune the aggressiveness of cached reads.
+  * Right now, a Row read will fetch only that Row.
+    * That's the least aggressive policy.
+    * The most aggressive would be to fetch all of the Rows in the Sheet
+  * Refetching the entire Sheet when doing cache refills is probably the way to go
 
 # Roadmap
 
@@ -95,6 +100,44 @@ the Python Style Guide.  Try valiantly to limit lines to 80 characters
 or less.
 
 There's really only one hard rule:  do not use tabs for indentation.
+
+# Caching
+
+It might be tempting to skip over this section.  _Don't._  Making sense of
+how the SDK handles caching is going to influence the way you use the SDK.
+
+Whe working with the Smartsheet API, the authoratative data for the sheet
+resides on a remote server accessed via calls to the API server.  To greater
+or lesser extents, this SDK attemts to insulate its users from that reality.
+It does so by fetching the Sheet from the server and letting you work with the
+Sheet locally.  For read-only access to a Sheet, that works pretty well --
+provided you are willing to accept that the Sheet data you are reading might
+have been changed on the server since it was fetched.
+
+Where caching becomes something tricky is when writing to the Sheet -- either
+by adding Columns, or Rows, or by changing the values of Cells.  Each of these
+changes can result in a change to the structure (order and number of Rows and
+Columns) of the Sheet.  Changes to Cells that are referenced by formulas can
+result in the autoratative Sheet (on the server) having changed Cells on Rows
+that your change did not touch.  As a result, in the current SDK, when a write
+is done to the Sheet, the cached sheet data is discarded.
+
+The SDK provides two distinct interfaces to the Sheet data.  The first is a
+straightforward OO approach where methods are used to access the consitituent
+members (Rows, Columns, Cells, etc.) of the Sheet.  The second is a more
+"pythonic" approach where the Sheet can be treated as a two-dimensional array.
+
+When using the OO interface to the Sheet, no caching is done by the SDK.  Each
+read of data from the Sheet will fetch the latest data for the corresponding
+object from the API server.
+
+When using the pythonic, 2-d array interface to the Sheet, the SDK uses
+caching to avoid typically unnecessary queries to the API server.
+
+You can manually override the caching policy on a Sheet-by-Sheet basis so
+that, for example, the OO interface will use caching and the 2-d array
+interface will not use caching.
+
 
 # Examples
 
@@ -133,7 +176,7 @@ directly from its corresponding `SheetInfo` object, or directly via the
 client.  Both methods are show below.
 
 ```
-# Full list of available sheets.
+# Full list of available Sheets.
 sheet_list = client.fetchSheetList()
 
 # Find SheetInfo objects by name
@@ -154,6 +197,7 @@ sheet = client.fetchSheetByPermalink(sheet_info.permalink)
 sheet = sheet_info.loadSheet()
 ```
 
+
 ## Access the Rows and Cells in a Sheet
 
 This example assumes that you are working with a fetched sheet.  The Rows
@@ -162,18 +206,33 @@ You can access the Cells of a Sheet as if the Sheet were a 2-dimensional array.
 When doing so, it is important to remember that Rows start at 1 and Columns
 start at 0.
 
+Unless otherwise noted, each of these examples shows both the 2-d list
+interface and OO interface mechanism to accomplish the stated intent.
+
 ```
 # Print the value of the top, left-hand Cell of a Sheet:
+print sheet.getRowByRowNumber(1).getCellByIndex(0).value
+
 print sheet[1][0]
 
 # Assign "blue" to the top, left-hand Cell of a Sheet:
+sheet.getRowByRowNumber(1).getCellByIndex(0).assign("blue")
+cell = sheet.getRowByRowNumber(1).getCellByIndex(0)
+cell.assign("blue")
 sheet[1][0] = "blue"
 
-# Save the change, either by saving the Row, which will store any changed
-# Cells on the Row.
+# Save the change, by saving the Row, which stores any changed Cells on the Row.
+# If other Rows have been changed but not saved, they will be lost, because a
+# save of the Sheet invalidates the locally cached Sheet.
+sheet.getRowByRowNumber(1).save()
 sheet[1].save()
 
 # Or, save the change by saving the specific Cell.
+# This discards any other Cell changes that may have been made on the Row, in
+# addition to any Cell changes made on  other Rows.
+sheet.getRowByRowNumber(1).getCellByIndex(0).save()
+
+# There is no purely list-oriented way to save a specific Cell instead of the Row
 sheet[1].getCellByIndex(0).save()
 ```
 
@@ -185,50 +244,35 @@ or directly at Sheet.rows:
 # Remember that Columns are zero-indexed (the second Column has index=1).
 
 for row in sheet.rows:
-    print row[1]
-
-# Or,
-for row in sheet:
+    print row.getCellByIndex(1).value
     print row[1]
 ```
 
-The number of Rows in a Sheet and the number of Columns on a Row are 
-available in the normal list-like way:
-
+The value of all of the Cells in a Row can be gotten conveinently using the
+list-style interface:
 ```
+# All the Cells on Row 1.
+values = list(sheet.getRowByRowNumber(1))
+values = list(sheet[1])
+```
+
+The number of Rows in a Sheet is available in the normal list-like way, or as
+an attribute of the Sheet:
+```
+print "Number of Rows in Sheet:", sheet.totalRowCount
 print "Number of Rows in Sheet:", len(sheet)
+```
+
+The number of Columns on a Row is available in the normal list-like way as
+well, or as the length of the `columns` attribute of the Row:
+```
+print "Number of Columns on Row 1:", len(sheet.getRowByRowNumber(1).columns)
 print "Number of Columns on Row 1:", len(sheet[1])
-```
-
-### Direct Access to Rows, Columns, and Cells
-
-In addition to the list-like mechanisms for accessing a Sheet, the
-individual Rows, Columns, and Cells can be accessed using the methods
-shown below
-
-```
-# Just list-like syntax:
-print sheet[1][0] 
-
-# Just method syntax:
-row_1 = sheet.getRowByRowNumber(1)
-cell = row_1.getCellByIndex(0)
-print cell.value
-
-# Method syntax without intermediate values:
-print sheet.getRowByRowNumber(1).getCellByIndex(0).value
-
-# Mixed method and list index approaches
-cell = sheet[1].getCellByIndex(0)
-print cell.value
-# Or, 
-row_1 = sheet.getRowByRowNumber(1)
-print row_1[0]
-```
+``
 
 The list-like syntax is clearly simpler for scenarios where you only
-need access (read or write) to the value of the Cells.  The other
-approaches are important because they enable richer access.
+need access (read or write) to the value of the Cells.  The other OO interface
+is important because it enables richer access.
 
 For example, in order to assign a Hyperlink to a Cell, the Cell object
 must be accessed explicitly (not implicitly via the list-like syntax).
@@ -276,7 +320,8 @@ sheet.addRow(row_3, position='toBottom')
 ## Fetch the History of a Cell
 
 The full history of each Cell can be fetched.  Note that this operation is
-expensive (from a rate limiting perspective).
+expensive (from a rate limiting perspective) and the API currently does not
+support pagination of Cell history records.
 
 ```
 for cell_version in sheet[1][0].fetchHistory():
