@@ -3,7 +3,9 @@ import datetime
 import unittest
 from smartsheetclient import SmartsheetClient, SheetInfo, RowWrapper, Column, CellTypes
 import logging
-logging.basicConfig(filename='tests.log', level=logging.DEBUG)
+log_format = '%(module)s.%(funcName)s[%(lineno)d] %(levelname)s - %(message)s'
+logging.basicConfig(filename='tests.log', level=logging.DEBUG, format=log_format)
+
 
 api_token = 'UNSET'
 
@@ -61,11 +63,11 @@ class ColumnAddDeleteTest(unittest.TestCase):
         # col_4 = Column("Col 4 - Checkbox", type=CellTypes.Checkbox)
         # col_5 = Column("Col 5 - ContactList", type=CellTypes.ContactList)
 
-        print 'Before: Columns: %r' % self.sheet.columns
+        self.logger.debug('Before: Columns: %r', self.sheet.columns)
         self.sheet.insertColumn(col_3)
-        print 'After Append: Columns: %r' % self.sheet.columns
+        self.logger.debug('After Append: Columns: %r', self.sheet.columns)
         self.sheet.insertColumn(col_2, index=1)
-        print 'After Insert @ idx 1: Columns: %r' % self.sheet.columns
+        self.logger.debug('After Insert @ idx 1: Columns: %r', self.sheet.columns)
 
 
         self.assertTrue(self.sheet.getColumnByIndex(0).title == "Col 1 - TextNumber")

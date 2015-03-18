@@ -3,7 +3,9 @@ import datetime
 import unittest
 from smartsheetclient import SmartsheetClient, SheetInfo, RowWrapper, Column, CellTypes
 import logging
-logging.basicConfig(filename='tests.log', level=logging.DEBUG)
+log_format = '%(module)s.%(funcName)s[%(lineno)d] %(levelname)s - %(message)s'
+logging.basicConfig(filename='tests.log', level=logging.DEBUG, format=log_format)
+
 
 api_token = 'UNSET'
 

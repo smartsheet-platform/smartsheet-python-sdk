@@ -3,7 +3,8 @@ import datetime
 import unittest
 from smartsheetclient import SmartsheetClient, SheetInfo, RowWrapper, Column, CellTypes, CellHyperlink
 import logging
-logging.basicConfig(filename='tests.log', level=logging.DEBUG)
+log_format = '%(module)s.%(funcName)s[%(lineno)d] %(levelname)s - %(message)s'
+logging.basicConfig(filename='tests.log', level=logging.DEBUG, format=log_format)
 
 api_token = 'UNSET'
 
@@ -43,6 +44,8 @@ class CellAccessTest(unittest.TestCase):
             err = "Unable to load newly created sheet: %s" % self.new_sheet_name
             self.logger.error(err)
             raise Exception(err)
+
+        self.logger.info("######### Adding Rows to new Sheet ############")
 
         rw = self.sheet.makeRowWrapper()
         r = rw.makeRow()
@@ -95,7 +98,6 @@ class CellAccessTest(unittest.TestCase):
         self.assertTrue(self.sheet[3].getCellByIndex(5).value == "three.five")
 
 
-
     def test_add_hyperlink_to_existing_row(self):
         '''Test adding a CellHyperlink to an existing Row.'''
         link_target = 'http://www.smartsheet.com/developers/api-documentation'
@@ -113,6 +115,7 @@ class CellAccessTest(unittest.TestCase):
         self.assertTrue(self.sheet[1][0] == "API Docs")
         self.assertTrue(self.sheet[1].getCellByIndex(0).value == "API Docs")
         self.assertTrue(self.sheet[1].getCellByIndex(0).hyperlink.url == link_target)
+
 
     def test_add_hyperlink_to_new_row(self):
         '''Test adding a CellHyperlink to a new Row.'''
@@ -133,7 +136,52 @@ class CellAccessTest(unittest.TestCase):
         self.assertTrue(r.getCellByIndex(0).hyperlink.url == link_target)
 
 
-    def test_save_with_vs_without_strict(self):
+    def test_changing_multiple_cells_on_a_row_list_sytle(self):
+        self.sheet[1][0] = "blue"
+        self.sheet[1][5] = "green"
+        self.sheet[1].save()
+
+        self.assertTrue(self.sheet[1][0] == "blue")
+        self.assertTrue(self.sheet[1][5] == "green")
+
+
+    def test_changing_multiple_cells_on_a_row_oo_style_cache_enabled(self):
+        # Have to enable cache to be able to change multiple Cells on a Row.
+        self.sheet.enableCache()
+        self.sheet.getRowByRowNumber(1).getCellByIndex(0).assign("blue")
+        self.sheet.getRowByRowNumber(1).getCellByIndex(5).assign("green")
+        self.sheet.getRowByRowNumber(1).save()
+
+        self.assertTrue(self.sheet[1][0] == "blue")
+        self.assertTrue(self.sheet[1][5] == "green")
+
+    def test_changing_multiple_cells_on_a_row_oo_style_without_cache_enabled(self):
+        row = self.sheet.getRowByRowNumber(1)
+        row.getCellByIndex(0).assign("blue")
+        row.getCellByIndex(5).assign("green")
+        row.save()
+
+        self.assertTrue(self.sheet[1][0] == "blue")
+        self.assertTrue(self.sheet[1][5] == "green")
+
+    def test_changing_multiple_cells_on_a_row_but_oo_no_cache_loses_all_but_last_write(self):
+        '''
+        In OO access mode, the Row is refetched on each access, as a result,
+        changes to multiple Cells on the Row will lose all but the first one.
+        Unless the Row is fetched and then used without refetching (as in the
+        test case test_changing_multiple_cells_on_a_row_oo_style_without_cache_enabled).
+        '''
+        self.sheet.getRowByRowNumber(1).getCellByIndex(0).assign("blue")
+        self.sheet.getRowByRowNumber(1).getCellByIndex(5).assign("green")
+        prior_cache_state = self.sheet.forceCache()
+        self.sheet.getRowByRowNumber(1).save()
+        self.sheet.restoreCache(prior_cache_state)
+
+        self.assertTrue(self.sheet[1][0] == "one")
+        self.assertTrue(self.sheet[1][5] == "green")
+
+
+    def notest_save_with_vs_without_strict(self):
         '''Test assignments with and without 'strict' setting.'''
         raise NotImplementedError
 
