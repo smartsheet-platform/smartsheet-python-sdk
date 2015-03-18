@@ -297,6 +297,7 @@ class SmartsheetClient(object):
         # FIXME: Should only raise SmartsheetClientError instances.
         # That will involve rewrapping APIRequestError, as well as any of
         # the socket and/or httplib2 exceptions.
+        self.logger.debug("Issuing request: %s", str(name))
         try:
             hdr, body = self.request(path, method=method,
                     extra_headers=extra_headers, body=body)
@@ -743,6 +744,14 @@ class Sheet(TopLevelThing, object):
                 return self.column_index_map[idx]
             raise IndexError
 
+        def copy(self):
+            '''
+            Return a copy of the ColumnsInfo instance.
+            '''
+            ci = self.__class__()
+            ci.initFully(self.version, self.parent, self.columns)
+            return ci
+
         def __str__(self):
             return '<ColumnInfo version:%r>' % self.version
 
@@ -995,6 +1004,7 @@ class Sheet(TopLevelThing, object):
                 cache_miss = True
 
         if cache_miss:
+            self.logger.debug("%s.getColumnById() refreshing columnsInfo", self)
             self.refreshColumnsInfo()
         try:
             return self.columnsInfo.getColumnById(column_id)
@@ -1027,6 +1037,7 @@ class Sheet(TopLevelThing, object):
                 cache_miss = True
 
         if cache_miss:
+            self.logger.debug("%s.getColumnByIndex() refreshing columnsInfo", self)
             self.refreshColumnsInfo()
         return self.columnsInfo.getColumnByIndex(idx)
 
@@ -1049,6 +1060,7 @@ class Sheet(TopLevelThing, object):
         '''
         Refresh the cached Columns information.
         '''
+        self.logger.debug("%s.refreshColumnsInfo() calling fetchColumnsInfo()", self)
         self.columnsInfo = self.fetchColumnsInfo()
         return self
 
@@ -1186,7 +1198,7 @@ class Sheet(TopLevelThing, object):
         @return The current total Row count
         @raises SmartsheetClientError
         '''
-        path = '/sheet/%s' % str(self.id)
+        path = '/sheet/%s?pageSize=1&page=1' % str(self.id)
         name = "%s.fetchTotalRowCount()" % self
         body = self.client.GET(path, name=name)
         return body['totalRowCount']
@@ -1211,8 +1223,14 @@ class Sheet(TopLevelThing, object):
         '''
         Add a list-style interface to fetching a Row.
         The index is the row_number (1-based) and not a classic (0-based) index.
+        This forces the use of caching.
         '''
-        return self.getRowByRowNumber(row_number)
+
+
+        prior_cache = self.forceCache()
+        row = self.getRowByRowNumber(row_number)
+        self.restoreCache(prior_cache)
+        return row
 
     def __iter__(self):
         # TODO:  Make sure this still works now that Rows are stored in a dict.
@@ -1336,15 +1354,13 @@ class Sheet(TopLevelThing, object):
         '''
         Create a new Row.
 
-        The Row uses the Sheet (for column information), but is not
-        "attached" to the Sheet (it isn't found in Sheet.rows()).
-        In order to attach the Row to the Sheet, it must be placed in a
-        RowWrapper and the RowWrapper passed to the `addRows()` method on
-        the Sheet.
+        The Row is given a copy of the current ColumnsInfo for the Sheet,
+        but is not "attached" to the Sheet (it isn't found in Sheet.rows).
+        In order to attach the Row to the Sheet, it must be passed to
+        sheet.addRow() or placed in a RowWrapper and passed to sheet.addRows().
+        @returns The new Row
         '''
-        # FIXME:  The Row needs to be given a reference to the Columns Info
-        # cache that is current as of right now.
-        return Row(self)
+        return Row(self, self.columnsInfo.copy())
 
     def addRow(self, row, position=None, parentId=None, siblingId=None,
             strict=True):
@@ -1458,6 +1474,7 @@ class Sheet(TopLevelThing, object):
                 body=json.dumps[col_fields])
 
         # Structure changed, update it.
+        self.logger.debug("%s.insertColumn() refreshing columns_info", self)
         self.refreshColumnsInfo()
         return self
 
@@ -1480,6 +1497,7 @@ class Sheet(TopLevelThing, object):
         path = '/sheet/%s/column/%s' % (str(self.id), str(column_id))
         name = "%s.deleteColumnById(%s)" % str(column_id)
         body = self.DELETE(path, name=name)
+        self.logger.debug("%s.deleteColumnById() refreshing columns_info", self)
         self.refreshColumnsInfo()
         return self
 
@@ -1497,6 +1515,7 @@ class Sheet(TopLevelThing, object):
         '''
         Mark this Sheet as discarded.
         Operations on it after this should fail.
+
         TODO: Make this actually occur.
         '''
         self._discarded = True
@@ -1595,15 +1614,14 @@ class RowWrapper(object):
             self.position = self.default_position
 
         # Get the current Columns information.
-        self.sheet.refreshColumnsInfo()
+        self.sheet.logger.debug("%s.__init__() calling refresh columns_info", self)
+        self._columns_info = self.sheet.fetchColumnsInfo()
 
     def makeRow(self):
         '''
         Make an empty Row object that is suitable for use with this RowWrapper.
         '''
-        prior_cache_state = self.sheet.forceCache()
-        row = self.sheet.makeRow()
-        self.sheet.restoreCache(prior_cache_state)
+        row = Row(self.sheet, self._columns_info)
         return row
 
     def addRow(self, row):
@@ -1677,7 +1695,7 @@ class Row(ContainedThing, object):
                     discussions attachments columns expanded createdAt
                     modifiedAt accessLevel version format filteredOut'''.split()
 
-    def __init__(self, sheet):
+    def __init__(self, sheet, columns_info=None):
         '''
         Create a new Row object.
 
@@ -1690,7 +1708,7 @@ class Row(ContainedThing, object):
         self._id = -1           # Invalid ID
         self.sheet = sheet
         self.parent = sheet
-        self._columns_info = None
+        self._columns_info = columns_info
         self._rowNumber = -1    # Invalid row number
         self._parentRowNumber = 0   # Initially, no parent Row.
         self._cells = []
@@ -1804,13 +1822,17 @@ class Row(ContainedThing, object):
         '''Return the Column that has the specified ID.'''
         # Use the local columns info if it exists, otherwise use the Sheet.
         if self._columns_info:
+            self.logger.debug("%s.getColumnById() Using Row.local columns_info", self)
             return self._columns_info.getColumnById(column_id)
+        self.logger.debug("%s.getColumnById() Using Sheet columns_info", self)
         return self.sheet.getColumnById(column_id)
 
     def getColumnByIndex(self, idx):
         '''Return the Column that has the specified index.'''
         if self._columns_info:
+            self.logger.debug("%s.getColumnByIndex(%r) using Row.local columns_info", self, idx)
             return self._columns_info.getColumnByIndex(idx)
+        self.logger.debug("%s.getColumnByIndex(%r) using sheet columns_info", self, idx)
         return self.sheet.getColumnByIndex(idx)
 
     @property
@@ -1910,6 +1932,7 @@ class Row(ContainedThing, object):
         for c in self.cells:
             if c.columnId == column_id:
                 return c
+        self.logger.debug("%s.getCellByColumnId(%r) calling row.getColumnById()", self, column_id)
         column = self.getColumnById(column_id)
         return Cell(self, column, None, type=CellTypes.EmptyCell, isDirty=False)
 
@@ -2001,7 +2024,6 @@ class Row(ContainedThing, object):
         @param value The value to assign to the Cell.
         @return the value assigned to the Cell.
         '''
-        self.logger.info("Cell.__setitem__(idx=%d, value=%r)", idx, value)
         cell = self.getCellByIndex(idx)
         cell.assign(value)
         self.markDirty()
@@ -2011,7 +2033,7 @@ class Row(ContainedThing, object):
         '''
         Calling len(a_row) will return the # of columns.
         '''
-        return len(self.sheet.columns)
+        return len(self.columns)
 
     def __str__(self):
         return '<Row id:%r rowNumber:%r>' % (self.id, self.rowNumber)
@@ -2313,6 +2335,7 @@ class Cell(ContainedThing, object):
         '''
         Create a new instance from the dict of values from the API.
         '''
+        row.logger.debug("Cell.newFromAPI(row:%s) calling row.getColumnById(%r", row, fields['columnId'])
         column = row.getColumnById(fields['columnId'])
         if fields.get('hyperlink', None) is not None:
             hyperlink = CellHyperlink.newFromAPI(fields['hyperlink'])
@@ -2465,6 +2488,7 @@ class Cell(ContainedThing, object):
 
     @property
     def column(self):
+        self.logger.debug("%s.column calling self.row.getColumnById()", repr(self))
         return self.row.getColumnById(self.columnId)
 
     def addSaveData(self, rowchange):
