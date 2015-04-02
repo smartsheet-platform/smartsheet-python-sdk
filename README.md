@@ -45,7 +45,6 @@ hasn't been implemented yet.  However, there are some surprising gaps
 that are covered here.
 
 * When fetching a Sheet, pagination isn't supported
-* Adding/Deleting Columns to/from an existing Sheet
 * Moving Rows
 * Expanding or collapsing Rows
 * Hyperlinks and Cell links are not supported
@@ -58,7 +57,9 @@ that are covered here.
 * Add more test cases
   * There are some empty test cases as placeholders
 * Continue adding support for more of the version 1.1 API
-  * Add/Delete Columns to/from a Sheet
+  * Move Rows (individually or a contigous block)
+  * Change Row indentation (individually or in a group)
+  * Change column type
   * Bare minimum support for Workspaces and Folders
   * Bare minimum support for Reports
   * Bare minimum support for Search
@@ -77,6 +78,7 @@ that are covered here.
     * That's the least aggressive policy.
     * The most aggressive would be to fetch all of the Rows in the Sheet
   * Refetching the entire Sheet when doing cache refills is probably the way to go
+    * Maybe only when caching is enabled
 
 # Roadmap
 
