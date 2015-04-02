@@ -190,7 +190,7 @@ print matching_sheet_info_list
 sheet_info = client.fetchSheetInfoByPermalink('https://app.smartsheet.com/b/home?lx=8LBckEZmSx8n6a1om0WXKw')
 
 # Load Sheet by ID.
-sheet = client.fetchSheetByID(sheet_info.id)
+sheet = client.fetchSheetById(sheet_info.id)
 
 # Load Sheet by permalink.
 sheet = client.fetchSheetByPermalink(sheet_info.permalink)
