@@ -1082,7 +1082,7 @@ class Sheet(TopLevelThing, object):
         @raises SmartsheetClientError Communication error.
         '''
         if row_number == 0:
-            err = "%s.getRowByRowNumber(%d) 0 is not a valid Row number" % self
+            err = "%s.getRowByRowNumber() 0 is not a valid Row number" % (self)
             self.logger.error(err)
             raise IndexError(err)
         if isinstance(row_number, slice):
