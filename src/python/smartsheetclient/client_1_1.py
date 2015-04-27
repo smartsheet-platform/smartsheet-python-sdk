@@ -6,7 +6,7 @@ This is HORRIBLY incomplete at the moment.
 Author:  Scott Wimer <scott.wimer@smartsheet.com>
 '''
 
-import httplib2
+# import httplib2
 import json
 import os
 import copy
@@ -16,6 +16,7 @@ import collections
 import operator
 import datetime
 import traceback
+import requests
 
 # Things that I know need to be fixed.
 # TODO:  Create exception classes and use them to pass errors to the caller.
@@ -184,7 +185,7 @@ class SmartsheetClient(object):
         self.retry_limit = retry_limit
         self._sheet_list_cache = []
         self.user = None
-        self.handle = None
+        # self.handle = None
         self.request_count = 0
         self.request_error_count = 0
         self.json_headers = {'Content-Type': 'application-json'}
@@ -196,7 +197,7 @@ class SmartsheetClient(object):
         Connect to the Smartsheet API, verifying that the token works.
         This fetches the profile for the current user.
         '''
-        self.handle = httplib2.Http()
+        # self.handle = httplib2.Http()
         self.user = self.fetchUserProfile()
         return self
 
@@ -213,14 +214,27 @@ class SmartsheetClient(object):
         req_headers = headers or {}
         req_url = join_url_path(url, path)
 
-        if not self.handle:
-            self.handle = httplib2.Http()
+        # if not self.handle:
+        #     self.handle = httplib2.Http()
 
         self.logger.debug('req_url: %r', req_url)
         if body:
             self.logger.debug('req_body: %r', body)
-        resp, content = self.handle.request(req_url, method, body=body,
-                headers=req_headers)
+        # resp, content = self.handle.request(req_url, method, body=body,
+        #         headers=req_headers)
+        resp = None
+        if method == 'GET':
+            resp = requests.get(req_url, data=body, headers=req_headers)
+        elif method == 'PUT':
+            resp = requests.put(req_url, data=body, headers=req_headers)
+        elif method == 'POST':
+            resp = requests.post(req_url, data=body, headers=req_headers)
+        elif method == 'DELETE':
+            resp = requests.DELETE(req_url, data=body, headers=req_headers)
+        else:
+            raise Exception("Http method '{0}' not supported".format(method))
+
+        content = resp.text
         self.logger.debug('resp: %r',  resp)
         self.logger.debug('content: %r', content)
         return (resp, content)
@@ -3214,7 +3228,8 @@ class HttpResponse(object):
 
     @property
     def status(self):
-        return self.hdr.get('status', self.unknown_status_code)
+        # return self.hdr.get('status', self.unknown_status_code)
+        return str(self.hdr.status_code)
 
     @property
     def statusMessage(self):
