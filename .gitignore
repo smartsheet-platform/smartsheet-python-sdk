@@ -1,0 +1,6 @@
+#
+build/
+dist/
+smartsheetclient.egg-info/
+*.pyc
+*.log
