@@ -87,7 +87,7 @@ class ColumnAddDeleteTest(unittest.TestCase):
         col = Column(17, type=CellTypes.TextNumber)
         self.sheet.insertColumn(col)
 
-        self.assertTrue(self.sheet.getColumnByIndex(1).title == 17)
+        self.assertTrue(self.sheet.getColumnByIndex(1).title == "17")
         self.assertTrue(self.sheet.getColumnByIndex(1).type == CellTypes.TextNumber)
 
 

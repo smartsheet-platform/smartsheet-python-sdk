@@ -230,7 +230,7 @@ class SmartsheetClient(object):
         elif method == 'POST':
             resp = requests.post(req_url, data=body, headers=req_headers)
         elif method == 'DELETE':
-            resp = requests.DELETE(req_url, data=body, headers=req_headers)
+            resp = requests.delete(req_url, data=body, headers=req_headers)
         else:
             raise Exception("Http method '{0}' not supported".format(method))
 
@@ -1485,7 +1485,7 @@ class Sheet(TopLevelThing, object):
         col_fields['index'] = ins_index
         
         body = self.client.POST(path, extra_headers=self.client.json_headers,
-                body=json.dumps[col_fields])
+                body=json.dumps(col_fields))
 
         # Structure changed, update it.
         self.logger.debug("%s.insertColumn() refreshing columns_info", self)
