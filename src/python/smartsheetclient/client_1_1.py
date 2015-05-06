@@ -1761,8 +1761,7 @@ class Row(ContainedThing, object):
         # When a Sheet is fetched or a Row is fetched directly, the caller
         # can have the API include the Attachments along with the Row.
         row._attachments = [
-                Attachment(a,
-                    AncillaryObjectSourceRow(sheet, row), sheet)
+                Attachment(a, sheet)
                 for a in fields.get('attachments', [])
                 ]
 
