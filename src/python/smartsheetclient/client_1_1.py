@@ -1472,7 +1472,7 @@ class Sheet(TopLevelThing, object):
         col_fields['index'] = ins_index
         
         body = self.client.POST(path, extra_headers=self.client.json_headers,
-                body=json.dumps[col_fields])
+                body=json.dumps(col_fields))
 
         # Structure changed, update it.
         self.logger.debug("%s.insertColumn() refreshing columns_info", self)
@@ -2259,7 +2259,7 @@ class CellChange(object):
             acc['linkInFromCell'] = self.linkInFromCell.flatten()
         return acc
 
-    def toJSON():
+    def toJSON(self):
         return json.dumps(self.flatten())
 
 
