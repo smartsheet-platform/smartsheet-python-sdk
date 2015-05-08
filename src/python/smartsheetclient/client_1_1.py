@@ -2259,7 +2259,7 @@ class CellChange(object):
             acc['linkInFromCell'] = self.linkInFromCell.flatten()
         return acc
 
-    def toJSON():
+    def toJSON(self):
         return json.dumps(self.flatten())
 
 
