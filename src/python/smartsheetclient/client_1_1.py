@@ -1382,9 +1382,19 @@ class Sheet(TopLevelThing, object):
         if self._discarded:
             raise OperationOnDiscardedSheetError()
         row_wrapper = RowWrapper(self, position=position, parentId=parentId,
-                siblingId=siblingId)
-        row_wrapper.addRow(row)
-        return self.addRows(row_wrapper, strict=strict) 
+                                 siblingId=siblingId)
+        if isinstance(row, list):
+            r = self.rowFromList(row)
+            row_wrapper.addRow(r)
+        else:
+            row_wrapper.addRow(row)
+        return self.addRows(row_wrapper, strict=strict)
+
+    def rowFromList(self, lst):
+        r = self.makeRow()
+        for i, v in enumerate(lst):
+            r[i] = v
+        return r
 
     def addRows(self, row_wrapper, strict=True):
         '''
@@ -1405,9 +1415,14 @@ class Sheet(TopLevelThing, object):
         # and while that is a "solution", it doesn't seem like a "good" one.
         if self._discarded:
             raise OperationOnDiscardedSheetError()
+        if isinstance(row_wrapper, list):
+            wrapper = RowWrapper(self)
+            for i in row_wrapper:
+                if isinstance(i, list):
+                    wrapper.addRow(self.rowFromList(i))
+            row_wrapper = wrapper
         path = '/sheet/%s/rows' % str(self.id)
         name = "%s.addRows(%s,strict=%r)" % (self, str(row_wrapper), strict)
-
         body = self.client.POST(path, extra_headers=self.client.json_headers,
                 body=json.dumps(row_wrapper.flattenForInsert()))
         self.clearRowCache()
@@ -2437,7 +2452,7 @@ class Cell(ContainedThing, object):
         self.hyperlink = hyperlink
         self.linkInFromCell = linkInFromCell
         self._value = new_value
-        if displayValue is None:
+        if displayValue is None and new_value is not None:
             self._displayValue = unicode(new_value)
         else:
             self._displayValue = displayValue
@@ -2456,7 +2471,12 @@ class Cell(ContainedThing, object):
                 self.row.cells[replace_idx] = self
             else:
                 self.row.cells.append(self)
-
+        elif self.type == CellTypes.Date:
+            if self._value in ['', u'']:
+                self._value = None
+                self._displayValue = None
+                self.change = CellChange(self, None, strict=strict,
+                        hyperlink=hyperlink, linkInFromCell=linkInFromCell)
         self.markDirty()
         if immediate:
             self.save(propagate=propagate)
