@@ -9,37 +9,31 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 import json
 import os
 
-from smartsheet_exceptions import SmartsheetClientError
-from base import ContainedThing
-
-def slicedict(src_dict, keys, include_missing_keys=True, default_value=None):
-    '''
-    Create a new dict from the specified keys in src_dict.
-    If a key is not found in src_dict, it will not be included in the output
-    unless include_missing_keys is True.  When including a missing key, the
-    value of default is used for the key's value.
-
-    @param src_dict The source dict to copy from.
-    @param keys The list of keys to copy.
-    @param include_missing_keys True to include them, False otherwise.
-    @param default_value The value to use with keys that were not found.
-    @return A dict of the selected keys from src_dict.
-    '''
-    acc = {}
-    for key in keys:
-        if key in src_dict:
-            acc[key] = src_dict[key]
-        else:
-            if include_missing_keys:
-                acc[key] = default_value
-    return acc
-
+from smartsheet_exceptions import (SmartsheetClientError,
+        OperationOnDiscardedObject)
+from base import ContainedThing, slicedict
+from client import HttpResponse, SimpleUser
 
 
 class Attachment(ContainedThing, object):
     '''
     Information about an attachment.
     There is no reason for an SDK user to create instances of this class.
+
+    Not all instances of Attachment objects are "complete."  In particular,
+    if a FILE attachment is not fetched directly then it does not contain the
+    url and urlExpiresMillis attributes.  As a result, when fetching a Sheet
+    with attachements=True, an additional request to the server is needed to
+    get the URL to use to fetch the actual file that was attached to the
+    Sheet (or Row or Discussion Comment).
+
+    To handle this, the download() method fetches the latest version of the
+    Attachement object prior to downloading the underlying attached file.
+
+    At present, no verification is performed to ensure that the latest version
+    of the attachment is materially "the same" (e.g. same name and file type)
+    as the version that the caller called .download() on.  In practice, this
+    is not expected to be a significant issue.
     '''
     # TODO: Consider renaming this class:  AttachmentInfo or AttachmentMetadata
     # TODO: Check the Example Response secton from Get Row Attachments.
@@ -74,64 +68,96 @@ class Attachment(ContainedThing, object):
         self._urlExpiresMillis = urlExpiresMillis   # probably doesn't belong
         self._sizeInKb = sizeInKb
         self._fields = {}       # For consistency with newFromAPI().
+        self._data  = None              # The downloaded data goes here.
+        self._download_response = None  # The HttpResponse from the download.
+        self._discarded = False
 
     @classmethod
-    def newFromAPI(self, fields, sheet):
-        params = slicedict(fields, self.field_names, include_missing_keys=True)
-        att = Attachment(sheet, **params)
-        self._fields = fields
+    def newFromAPI(cls, fields, sheet):
+        params = slicedict(fields, cls.field_names, include_missing_keys=True)
+        att = cls(sheet, **params)
+        att._fields = fields
+        return att
 
     @property
     def id(self):
+        self.errorIfDiscarded()
         return self._id
 
     @property
     def name(self):
+        self.errorIfDiscarded()
         return self._name
 
     @property
     def attachmentType(self):
+        self.errorIfDiscarded()
         return self._attachmentType
 
     @property
     def attachmentSubType(self):
+        self.errorIfDiscarded()
         return self._attachmentSubType
 
     @property
     def createdAt(self):
+        self.errorIfDiscarded()
         return self._createdAt
 
     @property
     def createdBy(self):
+        self.errorIfDiscarded()
         return SimpleUser(self._createdBy)
 
     @property
     def parentType(self):
+        self.errorIfDiscarded()
         return self._parentType
 
     @property
     def parentId(self):
+        self.errorIfDiscarded()
         return self._parentId
 
     @property
     def mimeType(self):
+        self.errorIfDiscarded()
         return self._mimeType
 
-   @property
+    @property
     def url(self):
+        self.errorIfDiscarded()
         return self._url
 
     @property
     def urlExpiresMillis(self):
+        self.errorIfDiscarded()
         return self._urlExpiresMillis
 
     @property
     def sizeInKb(self):
+        self.errorIfDiscarded()
         return self._sizeInKb
  
     @property
-    def fetchPath(self):
+    def fields(self):
+        self.errorIfDiscarded()
+        return self._fields
+
+    @property
+    def path(self):
+        self.errorIfDiscarded()
         return '/sheet/%s/attachment/%s' % (str(self.sheet.id), str(self.id))
+
+    @property
+    def data(self):
+        self.errorIfDiscarded()
+        return self._data
+
+    @property
+    def download_response(self):
+        self.errorIfDiscarded()
+        return self._download_response
 
     @property
     def replacePath(self):
@@ -144,12 +170,13 @@ class Attachment(ContainedThing, object):
 
     @property
     def newVersionPath(self):
-        # TODO:  Support limiitiations on where a new version can be uploaded
+        # TODO:  Support limiitiations on where a new version can be uploaded.
         # Attachments on Discussion Comments can not have new versions uploaded
         # for them.  If we don't detect that in the SDK, it will result in an
         # error from the server.
         # A new version is only supported for FILE attachments to Sheets or
         # Rows, at least according to the current API docs (I haven't checked).
+        self.errorIfDiscarded()
         return '/sheet/%s/attachment/%s/versions' % (str(self.sheet.id),
                 str(self.id))
 
@@ -160,47 +187,86 @@ class Attachment(ContainedThing, object):
         '''
         raise NotImplementedError("Attachment.sourceInfo not implemented.")
 
-    def getVersionList(self):
+    def discard(self):
         '''
-        Get a list of all versions of the attachment.
+        Mark this Attachment as discarded, further operations on it will fail.
+        '''
+        self._discarded = True
+        return
+
+    def getVersionList(self, client=None):
+        '''
+        Get a list of all versions of the Attachment.
         Returns the list of Attachment objects.
         NOTE:  these Attachment objects have additional fields that regular
         Attachment objects don't: 'parentType' and 'parentId'
         '''
-        path = 'sheet/%s/attachment/%s/versions' % (str(self.sheet.id),
+        self.errorIfDiscarded()
+        path = '/sheet/%s/attachment/%s/versions' % (str(self.sheet.id),
                 str(self.id))
         name = "%s.getVersionList()" % self
-        body = self.client.GET(path, name=name)
+        client = client or self.client
+        body = client.GET(path, name=name)
         return [Attachment(a, self.sheet) for a in body]
 
-    def getDownloadInfo(self):
+    def getFullInfo(self, client=None):
         '''
-        Fetch the AttachmentDownloadInfo for this Attachment.
-        Return the URL used to fetch the attachment.
-        '''
-        path = 'sheet/%s/attachment/%s' % (str(self.sheet.id), str(self.id))
-        name = "%s.getDownloadInfo()" % self
-        body = self.client.GET(path, name=name)
-        return AttachmentDownloadInfo(body, self.sheet)
+        Fetch the full Attachment information for this Attachment.
+        This call is only necessary for FILE attachments, all other
+        attachmentTypes already contain the complete information about the
+        attachment.  This call is optional for other attachment types.
 
-    def download(self):
+        @return Fully populated Attachment object.
+        @param client Optional SmartsheetClient instance to use.
         '''
-        Download the attachment, into a populated AttachmentDownloadInfo object.
-        The attachment contents are available at .data on the returned object.
-        '''
-        di = self.getDownloadInfo()
-        di.download()
-        return di
+        self.errorIfDiscarded()
+        name = "%s.getFullInfo()" % self
+        client = client or self.client
+        body = client.GET(self.path, name=name)
+        return Attachment(body, self.sheet)
 
-    def downloadAndStore(self, base_path=''):
+    def download(self, client=None):
+        '''
+        Download the file/data from the Attachment's URL.
+        The data fetched from the URL is placed in the .data attribute of
+        the returned Attachment object.
+
+        @param client Optional SmartsheetClient instance to use.
+        @return Attachment object with a populated .data attribute.
+        '''
+        self.errorIfDiscarded()
+        att = self.getFullInfo()
+        client = client or att.client
+        if not att.url:
+            err = ("%s.download() attempted without a 'url' "
+                    "attribute" % att)
+            self.logger.error(err)
+            raise SmartsheetClientError(err)
+        resp, att._data = client.rawRequest(att.url, '', 'GET')
+        att._download_response = HttpResponse(resp)
+        if att.download_resonse.isOK():
+            return att
+        err = ("%s.download() failed: %s" % (att, resp.hdr))
+        self.logger.error(err)
+        raise SmartsheetClientError(err)
+
+
+    def downloadAndStore(self, base_path='', client=None):
         '''
         Download and store an attachment.
         The attachment contents are also available at .data on the returned
-        AttachmentDownloadInfo object.
+        Attachment object.
+
+        @param base_path The path to store the downloaded file at.
+        @param client Optional SmartsheetClient instance to use.
+        @return Attachment object with a populated .data attribute.
         '''
-        di = self.download()
-        di.save(base_path)
-        return di
+        self.errorIfDiscarded()
+        att = self.download(client=client)
+        path = os.path.join(base_path, att.name)
+        with file(path, 'w') as fh:
+            fh.write(att.data)
+        return att
 
     def uploadNewVersion(self, content, content_type=None):
         '''
@@ -214,12 +280,13 @@ class Attachment(ContainedThing, object):
         permitted per minute, and uploading an attachment counts as 10
         operations.
         '''
+        self.errorIfDiscarded()
         if self.attachmentType != 'FILE':
             err = ("Attachment.uploadNewVersion() Can only replace 'FILE' " +
                     "Attachment types")
             self.logger.error(err)
             raise SmartsheetClientError(err)
-        path = 'sheet/%s/attachment/%s/versions' % (
+        path = '/sheet/%s/attachment/%s/versions' % (
                 str(self.sheet.id), str(self.id))
         headers = {'Content-Type': self.mimeType,
                     'Content-Length': str(len(content)),
@@ -231,119 +298,19 @@ class Attachment(ContainedThing, object):
                 name=name)
         return Attachment(body['result'], sheet=self.sheet)
                  
+    def errorIfDiscarded(self):
+        if self._discarded:
+            raise OperationOnDiscardedObject("Attachment was discarded.")
     def __str__(self):
+        self.errorIfDiscarded()
         return '<Attachment id:%r, name:%r, type:%r:%r created:%r>' % (
                 self.id, self.name, self.attachmentType, self.mimeType,
                 self.createdAt)
 
     def __repr__(self):
+        self.errorIfDiscarded()
         return str(self)
 
-
-
-class AttachmentDownloadInfo(ContainedThing, object):
-    '''
-    Information about downloading an attachment.
-    '''
-    field_names = '''name url attachmentType mimeType id
-                    urlExpiresInMillis'''.split()
-    # NOTE: Presently (January, 2015), the API only supports Attachments that
-    #       are attached to a Sheet directly or indirectly (Row or
-    #       Discussion comment).  The application supports Workspace-level
-    #       attachments.  It may be that the AttachmentDownloadInfo object
-    #       will need to take an AncillarySourceObject in the future if the
-    #       API expands to support other Attachments.
-
-    def __init__(self, fields, sheet):
-        self.fields = fields
-        self.sheet = sheet
-        self.parent = sheet     # Owned by a sheet.
-        self._data = None   # The downloaded attachment.
-        self._download_response = None
-
-    @property
-    def name(self):
-        return self.fields['name']
-
-    @property
-    def url(self):
-        return self.fields['url']
-
-    @property
-    def attachmentType(self):
-        return self.fields['attachmentType']
-
-    @property
-    def mimeType(self):
-        return self.fields['mimeType']
-
-    @property
-    def id(self):
-        return self.fields['id']
-
-    @property
-    def urlExpiresInMillis(self):
-        return self.fields.get('urlExpiresInMillis')
-
-    @property
-    def data(self):
-        return self._data
-    
-    def checkAttachment(self, client=None):
-        '''
-        Issue a HEAD request on the attachment -- this will let us get the
-        etag, which is an MD5 checksum of the attachment's contents (assuming
-        the attachment was stored in Amazon S3 using PUT or POST Object
-        operations.
-        Sadly, the Signature in the URL this doesn't work
-        '''
-        path = 'sheet/%s/attachment/%s' % (str(self.sheet.id), str(self.id))
-        client = client or self.client
-        resp, body = client.rawRequest(self.url, '', 'HEAD')
-        self.logger.debug("HTTP HEAD request for attachment, resp: %r", resp)
-        self.logger.debug("HTTP HEAD request for attachment, body: %r", body)
-
-    def download(self, client=None):
-        '''
-        Download the attachment, and store it in self._data
-        '''
-        path = 'sheet/%s/attachment/%s' % (str(self.sheet.id), str(self.id))
-        client = client or self.client
-        resp, self._data = client.rawRequest(self.url, '', 'GET')
-        self._download_resp = resp
-        resp = HttpResponse(resp)
-        if resp.isOK():
-            return True
-        err = ("AttachmentDownloadInfo.download(%s) failed: %s" %
-                (self, resp.hdr))
-        self.logger.error(err)
-        raise SmartsheetClientError(err)
-
-    def save(self, base_path=''):
-        '''
-        Write the download attachment to disk.
-        '''
-        path = os.path.join(base_path, self.name)
-        with file(path, 'w') as fh:
-            fh.write(self.data)
-        return True
-
-    def getEtag(self):
-        '''
-        After the attachment has been downloaded, we can get the etag, which
-        contains the MD5 hash (as of December 2014).
-        Returns the etag , or ''.
-        '''
-        if self._download_response:
-            return self._download_response.get('etag', '')
-        return ''
-
-    def __str__(self):
-        return ('<AttachmentDownloadInfo id:%r, name:%r, url:%r, has_data:%r>' %
-                (self.id, self.name, self.url, (not self._data is None)))
-
-    def __repr__(self):
-        return str(self)
 
 
 
