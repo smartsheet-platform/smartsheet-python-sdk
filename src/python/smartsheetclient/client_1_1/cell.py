@@ -204,7 +204,7 @@ class Cell(ContainedThing, object):
         self._linkInFromCell = linkInFromCell
         self._linksOutToCells = None # Not settable by library user.
         self.format = format
-        self._formula = Nonei       # Not settable by library user.
+        self._formula = None        # Not settable by library user.
         self.link = link            # Deprecated, but can be set by API server.
         self._modifiedAt = None     # Not settable by library user.
         self._modifiedBy = None    # Not settable by library user.
@@ -242,7 +242,7 @@ class Cell(ContainedThing, object):
                 link=fields.get('link', None), isDirty=False,
                 immediate=False)
         # Set the attributes that can't be set by __init__().
-        cell.fields = fields
+        cell._fields = fields
         cell._formula = fields.get('formula', None)
         cell._linksOutToCells = fields.get('linksOutToCells', None),
         cell._modifiedAt = fields.get('modifiedAt', None)
@@ -598,6 +598,7 @@ class Cell(ContainedThing, object):
 
     def __repr__(self):
         self.errorIfDiscarded()
+        # TODO:  It would be nice if this specified the Column index also.
         return '<Cell rowId:%r, columnId:%r, type:%r value=%r>' % (
                 self.rowId, self.columnId, self.type,
                 string_trim(self.value, self.Max_Display_Len))
