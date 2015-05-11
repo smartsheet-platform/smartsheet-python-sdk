@@ -8,7 +8,7 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 
 import json
 from smartsheet_exceptions import (SmartsheetClientError, BadCellData,
-        DeprecatedAttribute)
+        DeprecatedAttribute, OperationOnDiscardedObject)
 from base import ContainedThing
 
 
@@ -59,10 +59,6 @@ class CellHyperlink(object):
             acc['reportId'] = self.reportId
         return acc
 
-    def toJSON(self):
-        '''Return as a JSON blob suitable for passing to the API server.'''
-        json.dumps(self.flatten())
-
     def __str__(self):
         return ('<CellHyperlink: url: %r  sheetId: %r  reportId: %r' %
                 (self.url, self.sheetId, self.reportId))
@@ -102,7 +98,7 @@ class CellLinkIn(object):
                     status)
         self.sheetId = sheetId
         self.rowId = rowId
-        self.columnId = columnId
+        self._columnId = columnId
         self.status = status
         self.fields = {}
 
@@ -120,59 +116,12 @@ class CellLinkIn(object):
                 'columnId': self.columnId }
         return acc
 
-    def toJSON(self):
-        return json.dumps(self.flatten())
-
     def __str__(self):
         return ('<CellLinkIn: sheetId: %r  rowId: %r  columnId: %r status: %r' %
                 (self.sheetId, self.rowId, self.columnId, self.status))
 
     def __repr__(self):
         return str(self)
-
-
-
-class CellChange(object):
-    '''
-    The data about a change to a Cell.
-    '''
-    # FIXME: Error 1115 says mixing link and value updates is not accepted.
-    # Is this restriction Cell-scoped or Row scoped (can I update the value
-    # of one Cell on a Row and the link in a different Cell on the same Row)?
-
-    # FIXME: Error 1109 - 1113 should probably be addressed prior to save.
-    # When changing multiple Cells on a Row, it may take multiple save
-    # operations -- that's going to be problematic since each save operation
-    # replaces the live Row on the Sheet.  We need to at least detect that
-    # we have orphaned change operations.
-
-    def __init__(self, cell, new_value, strict=None, format=None,
-            hyperlink=None, linkInFromCell=None):
-        self.cell = cell
-        self.new_value = new_value
-        self.strict = strict
-        self.format = format
-        self.hyperlink = hyperlink
-        self.linkInFromCell = linkInFromCell
-
-    def flatten(self):
-        '''"Flatten" the object into a dict.'''
-        acc = { 'columnId': self.cell.columnId,
-                'value': self.new_value }
-        if self.strict:
-            acc['strict'] = True
-        else:
-            acc['strict'] = False
-        if self.format:
-            acc['format'] = unicode(self.format)
-        if self.hyperlink:
-            acc['hyperlink'] = self.hyperlink.flatten()
-        if self.linkInFromCell:
-            acc['linkInFromCell'] = self.linkInFromCell.flatten()
-        return acc
-
-    def toJSON():
-        return json.dumps(self.flatten())
 
 
 
@@ -247,7 +196,7 @@ class Cell(ContainedThing, object):
 
         self._row = row
         self._column = column
-        self.columnId = column.id
+        self._columnId = column.id
         self._value = value
         self._displayValue = displayValue
         self.type = type
@@ -259,13 +208,15 @@ class Cell(ContainedThing, object):
         self.link = link            # Deprecated, but can be set by API server.
         self._modifiedAt = None     # Not settable by library user.
         self._modifiedBy = None    # Not settable by library user.
-        self._dirty = isDirty
+        self._isDirty = isDirty
         self.change = None
         self._fields = {}            # Only set by newFromAPI()
         self.isDeleted = False
+        self._discarded = False
 
         if immediate:
             # FIXME: Save this Cell right now.
+            # Add propagate and strict parameters.
             raise NotImplementedError("immediate save of Cell not implemented")
 
     @classmethod
@@ -273,7 +224,6 @@ class Cell(ContainedThing, object):
         '''
         Create a new instance from the dict of values from the API.
         '''
-        row.logger.debug("Cell.newFromAPI(row:%s) calling row.getColumnById(%r", row, fields['columnId'])
         column = row.getColumnById(fields['columnId'])
         if fields.get('hyperlink', None) is not None:
             hyperlink = CellHyperlink.newFromAPI(fields['hyperlink'])
@@ -302,12 +252,25 @@ class Cell(ContainedThing, object):
             cell._modifiedBy = None
         return cell
 
+    @classmethod
+    def makeEmptyCell(cls, row, column):
+        '''
+        Creat a new, empty Cell at the specified position.
+
+        @param row The Row this Cell is on.
+        @param column The Column this Cell is in.
+        @return A new, empty Cell.
+        '''
+        return Cell(row, column, None, type=CellTypes.EmptyCell, isDirty=False)
+
     @property
     def row(self):
+        self.errorIfDiscarded()
         return self._row
 
     @property
     def column(self):
+        self.errorIfDiscarded()
         return self._column
 
     @property
@@ -324,6 +287,7 @@ class Cell(ContainedThing, object):
         `realValue` and `displayValue` methods can be used to explicitly
         fetch the value or the displayValue from the API.
         '''
+        self.errorIfDiscarded()
         # It would be really nice if this could sensibly handle the fact
         # that a cell containing numeric data will have a string for its
         # displayValue.  It's quite probably that the caller would rather
@@ -344,6 +308,7 @@ class Cell(ContainedThing, object):
         If more control over the assignment process is needed, use the
         `assign` method below.
         '''
+        self.errorIfDiscarded()
         self.assign(new_value)
         return
 
@@ -354,22 +319,27 @@ class Cell(ContainedThing, object):
         If the Cell contains a formula, this will return the formula, instead
         of its computed value (which can be gotten via the `value` property).
         '''
+        self.errorIfDiscarded()
         if self.formula:
             return self.formula
         return self._value
 
     @property
     def displayValue(self):
+        self.errorIfDiscarded()
         return self._displayValue
 
-    """
-    def assignInPlace(self, new_value, displayValue=None, strict=True, hyperlink=None,
-            linkInFromCell=None, immediate=False, propagate=True):
+    def assign(self, new_value, displayValue=None, hyperlink=None,
+            linkInFromCell=None, immediate=False, propagate=True, strict=True):
         '''
         Assign a new value to the Cell.
 
         On the server, Cell data is changed a Row-at-a-time.  To save just the
         changes to this Cell, set immediate to True and propagate to False.
+
+        A linkInFromCell can only be set on a Cell in a Row that already
+        exists on the server.  Attempting to do so on a new Row raises a
+        SheetIntegrityError.
 
         @param new_value The new value for the Cell.
         @param displayValue The string value of the Cell prior to save().
@@ -378,64 +348,10 @@ class Cell(ContainedThing, object):
         @param linkInFromCell The CellLinkIn to set.
         @param immediate Apply this update to the sheet immediately.
         @param propagate When saving, (if immediate), save all changes on Row.
+        @param strict True to request strict Cell-data validation by the server.
+        @raises SheetIntegrityError
         '''
-        if self.formula is not None:
-            raise SmartsheetClientError("API does not permit formula changes")
-        if (isinstance(new_value, (string, unicode)) and
-                len(unicode(new_value)) > self.Max_Cell_Size):
-            self.logger.warn("API will truncate new cell value longer than " +
-                    "%d chars: %r new value: >>>%r<<<", self.Max_Cell_Size,
-                    cell, new_value)
-        # Store the information aboujt the change of value so it can be sent to
-        # the server (without having to send the data for all of the Cells on
-        # the Row).
-        self.change = CellChange(self, new_value, strict=strict,
-                hyperlink=hyperlink, linkInFromCell=linkInFromCell)
-        self.hyperlink = hyperlink
-        self.linkInFromCell = linkInFromCell
-        self._value = new_value
-        if displayValue is None:
-            self._displayValue = unicode(new_value)
-        else:
-            self._displayValue = displayValue
-
-        # The Row is stored sparse -- we have to add formerly empty Cells.
-        # A Column may only appear once on the Row, make sure we don't add
-        # a duplicate.
-        # TODO: Consider making Row.cells a dict.
-        # TODO:  This block of code probably belongs in the Row class.
-        if self.type == CellTypes.EmptyCell:
-            replace_idx = None
-            for idx, cell in enumerate(self.row.cells):
-                if self.columnId == cell.columnId:
-                    replace_idx = idx
-                    break
-            if replace_idx is not None:
-                self.row.cells[replace_idx] = self
-            else:
-                self.row.cells.append(self)
-
-        self.markDirty()
-        if immediate:
-            self.save(propagate=propagate)
-    """
-
-    def assign(self, new_value, displayValue=None, strict=True, hyperlink=None,
-            linkInFromCell=None, immediate=False, propagate=True):
-        '''
-        Assign a new value to the Cell.
-
-        On the server, Cell data is changed a Row-at-a-time.  To save just the
-        changes to this Cell, set immediate to True and propagate to False.
-
-        @param new_value The new value for the Cell.
-        @param displayValue The string value of the Cell prior to save().
-        @param strict True to request stict processing on save.
-        @param hyperlink The CellHyperlink to set.
-        @param linkInFromCell The CellLinkIn to set.
-        @param immediate Apply this update to the sheet immediately.
-        @param propagate When saving, (if immediate), save all changes on Row.
-        '''
+        self.errorIfDiscarded()
         # Should Cells be immutable?
         # If we make them immutable, then assignment creates a new Cell to
         # replace the original one and the original one is discarded.
@@ -446,16 +362,25 @@ class Cell(ContainedThing, object):
         # on the Row somewhere -- a dict of changed Cells (maybe keyed by the
         # Column ID of the Cell).
 
+        # TODO:  Treat new_value==None as a delete
+        # TODO:  Should a deleted Cell have an attribute indicating that?
+
+        if linkInFromCell and self.row.isNew:
+            err = ("%s.assign() linkInFromCell can only be set in a Cell "
+                    "on a Row that has been saved to the server, not on a "
+                    "new Row." % self)
+            self.logger.error(err)
+            raise SheetIntegrityError(err)
+
         new_cell = Cell(self.row, self.column, new_value, type=self.type,
                 displayValue=displayValue, hyperlink=hyperlink,
                 linkInFromCell=linkInFromCell, format=self.format,
                 isDirty=True)
-        # This will mark self as discarded.
-        # FIXME:  What about new_cell having linkInFromCell on a new Row?
-        # The replaceCell() method could, and should, catch that.
+
         new_cell.row.replaceCell(self, new_cell)
+        self.discard()
         if immediate:
-            new_cell.save(propagate=propagate)
+            new_cell.save(propagate=propagate, strict=strict)
         return
 
     def setFormat(self, format, immediate=False, propagate=True):
@@ -465,49 +390,71 @@ class Cell(ContainedThing, object):
         # NOTE: The save data for this requires the value, so capture it.
         raise NotImplementedError("Setting Cell format is not implemented yet")
 
-    def delete(self, immediate=False, propagate=True):
+    def discard(self):
+        '''
+        Mark this Cell as discarded, further operations on it will fail.
+        '''
+        self._discarded = True
+        return
+
+    def delete(self, immediate=False, propagate=True, strict=True):
         '''
         Delete this Cell.
         @param immediate Apply this update to the sheet immediately.
+        @param propagate True to save other changed Cells on this Row.
+        @param strict True to request strict Cell-data validation by the server.
         '''
-        # Deletion works by sending the server an empty/blank Cell.
-        emptyCell = Cell(self.row, self.column, None)
-        # This will mark self as discarded.
-        emptyCell.row.replaceCell(self, emptyCell)
+        self.errorIfDiscarded()
+        # Deletion works by sending the server a blank Cell.
+        blank_cell = Cell(self.row, self.column, None)
+        blank_cell.row.replaceCell(self, blank_cell)
         if immediate:
-            new_cell.save(propagate=propagate)
+            blank_cell.save(propagate=propagate, strict=strict)
+        self.discard()
         return
 
     @property
     def rowId(self):
+        self.errorIfDiscarded()
         return self.row.id
 
     @property
     def columnId(self):
-        return self.column.id
+        self.errorIfDiscarded()
+        return self._column.id
 
     @property
     def linkInFromCell(self):
+        self.errorIfDiscarded()
         return self._linkInFromCell
 
     @property
     def linksOutToCells(self):
+        self.errorIfDiscarded()
         return self._linksOutToCells
 
     @property
     def formula(self):
+        self.errorIfDiscarded()
         return self._formula
 
     @property
     def modifiedAt(self):
+        self.errorIfDiscarded()
         return self._modifiedAt
 
     @property
     def modifiedBy(self):
+        self.errorIfDiscarded()
         return self._modifiedBy
 
     @property
+    def isDirty(self):
+        return self._isDirty
+
+    @property
     def fields(self):
+        self.errorIfDiscarded()
         return self._fields
 
     def save(self, propagate=True, strict=True):
@@ -531,6 +478,7 @@ class Cell(ContainedThing, object):
         @param propagate True to save any other change Cells on the Row.
         @param strict True to request strict validation by server.
         '''
+        self.errorIfDiscarded()
         if propagate:
             self.row.save(strict=strict)
         else:
@@ -545,8 +493,9 @@ class Cell(ContainedThing, object):
 
         @param strict True to request strict validation by server.
         '''
+        self.errorIfDiscarded()
         acc = {}
-        if self.type == CellTypes.EmptyCell and self.value is None:
+        if self.type == CellTypes.EmptyCell:
             return acc
 
         acc['columnId'] = self.columnId
@@ -565,11 +514,13 @@ class Cell(ContainedThing, object):
         Return a flattened form of this Cell for Row insertion.
         @param strict True to request strict validation by server.
         '''
+        self.errorIfDiscarded()
         acc = self.flatten(strict=strict)
         if 'linkInFromCell' in acc:
             self.logger.warn("linkInFromCell attribute not supported on Cell "
                     "when inserting a new Row, expect an error.  Cell: %s",
                     str(self))
+            del acc['linkInFromCell']
         return acc
        
     def fetchHistory(self):
@@ -582,27 +533,36 @@ class Cell(ContainedThing, object):
         # TODO: Consider making Cell.__getitem__ operate over Cell history.
         # That would let a Sheet be treated as a cube: rows x columns x history
         # That operational model might give rise to some interesting uses.
+        self.errorIfDiscarded()
         path = '/sheet/%s/row/%s/column/%s/history' % (
                 str(self.row.sheet.id), str(self.rowId), str(self.columnId))
         name = "%r.fetchHistory()" % self
         body = self.client.GET(path, name=name)
         return [Cell.newFromAPI(c, self.row) for c in body]
 
+    def errorIfDiscarded(self):
+        if self._discarded:
+            raise OperationOnDiscardedObject("Cell was discarded.")
+
     def __str__(self):
+        self.errorIfDiscarded()
         if self._displayValue is not None:
             return self._displayValue
         return unicode(self.value)
 
     def __int__(self):
         '''Try to convert the value to an int.'''
+        self.errorIfDiscarded()
         return int(self.value)
 
     def __long__(self):
         '''Try to convert the value to a long.'''
+        self.errorIfDiscarded()
         return long(self.value)
 
     def __float__(self):
         '''Try to convert the value to a float.'''
+        self.errorIfDiscarded()
         return float(self.value)
 
     # This is a really, quick and dirty approach to supporting math operations
@@ -636,8 +596,8 @@ class Cell(ContainedThing, object):
     def __abs__(self): return abs(self.value)
     def __invert__(self): return ~self.value
 
-
     def __repr__(self):
+        self.errorIfDiscarded()
         return '<Cell rowId:%r, columnId:%r, type:%r value=%r>' % (
                 self.rowId, self.columnId, self.type,
                 string_trim(self.value, self.Max_Display_Len))
