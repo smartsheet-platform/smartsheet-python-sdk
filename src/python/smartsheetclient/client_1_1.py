@@ -185,26 +185,28 @@ class SmartsheetClient(object):
         self.retry_limit = retry_limit
         self._sheet_list_cache = []
         self.user = None
-        # self.handle = None
+        self.__handle = None
         self.request_count = 0
         self.request_error_count = 0
         self.json_headers = {'Content-Type': 'application-json'}
         self.request_log = collections.deque(maxlen=request_log_len)
 
+    @property
+    def handle(self):
+        if self.__handle is None:
+            self.__handle = requests.session()
+        return self.__handle
 
     def connect(self):
         '''
         Connect to the Smartsheet API, verifying that the token works.
         This fetches the profile for the current user.
         '''
-        # self.handle = httplib2.Http()
         self.user = self.fetchUserProfile()
         return self
 
-
     def defaultHeaders(self):
         return {'Authorization': 'Bearer %s' % self.token}
-
 
     def rawRequest(self, url, path, method='GET', headers=None, body=None):
         '''
@@ -214,9 +216,6 @@ class SmartsheetClient(object):
         req_headers = headers or {}
         req_url = join_url_path(url, path)
 
-        # if not self.handle:
-        #     self.handle = httplib2.Http()
-
         self.logger.debug('req_url: %r', req_url)
         if body:
             self.logger.debug('req_body: %r', body)
@@ -224,13 +223,13 @@ class SmartsheetClient(object):
         #         headers=req_headers)
         resp = None
         if method == 'GET':
-            resp = requests.get(req_url, data=body, headers=req_headers)
+            resp = self.handle.get(req_url, data=body, headers=req_headers)
         elif method == 'PUT':
-            resp = requests.put(req_url, data=body, headers=req_headers)
+            resp = self.handle.put(req_url, data=body, headers=req_headers)
         elif method == 'POST':
-            resp = requests.post(req_url, data=body, headers=req_headers)
+            resp = self.handle.post(req_url, data=body, headers=req_headers)
         elif method == 'DELETE':
-            resp = requests.delete(req_url, data=body, headers=req_headers)
+            resp = self.handle.delete(req_url, data=body, headers=req_headers)
         else:
             raise Exception("Http method '{0}' not supported".format(method))
 
