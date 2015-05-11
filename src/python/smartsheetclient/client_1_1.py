@@ -1082,7 +1082,8 @@ class Sheet(TopLevelThing, object):
         @raises SmartsheetClientError Communication error.
         '''
         if row_number == 0:
-            err = "%s.getRowByRowNumber(%d) 0 is not a valid Row number" % self
+            err = ("%s.getRowByRowNumber(%d) 0 is not a valid Row number" %
+                    (self, 0))
             self.logger.error(err)
             raise IndexError(err)
         if isinstance(row_number, slice):
@@ -1471,7 +1472,7 @@ class Sheet(TopLevelThing, object):
         col_fields['index'] = ins_index
         
         body = self.client.POST(path, extra_headers=self.client.json_headers,
-                body=json.dumps[col_fields])
+                body=json.dumps(col_fields))
 
         # Structure changed, update it.
         self.logger.debug("%s.insertColumn() refreshing columns_info", self)
@@ -1760,8 +1761,7 @@ class Row(ContainedThing, object):
         # When a Sheet is fetched or a Row is fetched directly, the caller
         # can have the API include the Attachments along with the Row.
         row._attachments = [
-                Attachment(a,
-                    AncillaryObjectSourceRow(sheet, row), sheet)
+                Attachment(a, sheet)
                 for a in fields.get('attachments', [])
                 ]
 
@@ -2259,7 +2259,7 @@ class CellChange(object):
             acc['linkInFromCell'] = self.linkInFromCell.flatten()
         return acc
 
-    def toJSON():
+    def toJSON(self):
         return json.dumps(self.flatten())
 
 
