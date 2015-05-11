@@ -11,7 +11,16 @@ import copy
 import operator
 import datetime
 
-from base import maybeAssignFromDict
+import sys
+
+print "Import path"
+print "\n".join(sys.path)
+
+from base import maybeAssignFromDict, TopLevelThing
+from column import Column
+from row import (Row, RowWrapper)
+from attachment import Attachment
+from discussion import Discussion
 
 
 class Sheet(TopLevelThing, object):
@@ -30,6 +39,7 @@ class Sheet(TopLevelThing, object):
             self.version = None
             self._columns = None
             self.parent = None
+            self._max_index = 0
             self.column_id_map = {}
             self.column_index_map = {}
 
@@ -43,6 +53,8 @@ class Sheet(TopLevelThing, object):
             for column in columns:
                 ci.column_id_map[column.id] = column
                 ci.column_index_map[column.index] = column
+                if column.index > ci._max_index:
+                    ci._max_index = column.index
             return ci
 
         def initFully(self, version, parent, columns):
@@ -58,9 +70,12 @@ class Sheet(TopLevelThing, object):
             self.parent = parent
             self._column_id_map = {}
             self.column_index_map = {}
+            self._max_index = 0
             for column in columns:
                 self.column_id_map[column.id] = column
                 self.column_index_map[column.index] = column
+                if column.index > self._max_index:
+                    self._max_index = column.index
             return self
 
         @property
@@ -96,6 +111,10 @@ class Sheet(TopLevelThing, object):
             if idx in self.column_index_map:
                 return self.column_index_map[idx]
             raise IndexError
+
+        @property
+        def maxIndex(self):
+            return self._max_index
 
         def copy(self):
             '''
