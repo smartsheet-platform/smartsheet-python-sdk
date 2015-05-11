@@ -11,70 +11,6 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 import json
 import time
 
-# Things that I know need to be fixed.
-# TODO:  Create exception classes and use them to pass errors to the caller.
-# TODO:  Log when deprecated things (attributes and paths) are used.
-# TODO:  Add OAuth support.
-
-
-class HttpRequestInfo(object):
-    '''
-    A log entry of information about an HTTP request.
-    '''
-    def __init__(self, method, url, headers, body=''):
-        self.start_time = time.time()
-        self.method = method
-        self.url = url
-        self.request_headers = headers
-        self.request_body = body
-        self.try_count = 0
-        self.end_time = None
-
-    def markRequestAttempt(self):
-        self.try_count += 1
-        return self
-
-    def addResponse(self, hdr, body):
-        self.response_header = hdr
-        self.response_body = body
-        return self
-
-    def end(self):
-        self.end_time = time.time()
-        return self
-
-    @property
-    def duration(self):
-        return self.end_time - self.start_time
-
-
-def join_url_path(base_url, path):
-    '''
-    Join the base URL and path
-    '''
-    # if path.startswith('/'):
-        # path = path[1:]
-
-    if path:
-        if base_url.endswith('/'):
-            if path.startswith('/'):
-                full_url = base_url + path[1:]
-            else:
-                full_url = base_url + path
-        else:
-            if path.startswith('/'):
-                full_url = base_url + path
-            else:
-                full_url = base_url + '/' + path
-    else:
-        full_url = url
-    return full_url
-
-
-
-
-
-
 class TopLevelThing(object):
     '''
     Some objects in the Smartsheet API more "naturally" have a client
@@ -274,5 +210,28 @@ def maybeAssignFromDict(src_dict, dst_obj, src_name, dst_name=None):
         attr_name = dst_name or '_' + src_name
         setattr(dst_obj, attr_name, src_dict[src_name])
     return
+
+
+def slicedict(src_dict, keys, include_missing_keys=True, default_value=None):
+    '''
+    Create a new dict from the specified keys in src_dict.
+    If a key is not found in src_dict, it will not be included in the output
+    unless include_missing_keys is True.  When including a missing key, the
+    value of default is used for the key's value.
+
+    @param src_dict The source dict to copy from.
+    @param keys The list of keys to copy.
+    @param include_missing_keys True to include them, False otherwise.
+    @param default_value The value to use with keys that were not found.
+    @return A dict of the selected keys from src_dict.
+    '''
+    acc = {}
+    for key in keys:
+        if key in src_dict:
+            acc[key] = src_dict[key]
+        else:
+            if include_missing_keys:
+                acc[key] = default_value
+    return acc
 
 
