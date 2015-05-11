@@ -15,6 +15,7 @@ import collections
 
 
 from smartsheet_exceptions import (SmartsheetClientError)
+from sheet import (Sheet, SheetInfo)
 
 
 class HttpRequestInfo(object):
