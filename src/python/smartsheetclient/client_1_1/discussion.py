@@ -6,7 +6,7 @@ This is HORRIBLY incomplete at the moment.
 Author:  Scott Wimer <scott.wimer@smartsheet.com>
 '''
 
-from client import SimpleUser
+import client
 from base import (ContainedThing, slicedict)
 from attachment import Attachment
 from smartsheet_exceptions import OperationOnDiscardedObject
@@ -60,7 +60,7 @@ class Discussion(ContainedThing):
                 fields.get('commentAttachments', [])]
         params['comments'] = [Comment(c, sheet) for c in
                 fields.get('comments', [])]
-        params['createdBy'] = SimpleUser(fields['createdBy'])
+        params['createdBy'] = client.SimpleUser(fields['createdBy'])
         disc = cls(sheet, **params)
         disc._fields = fields
         return disc

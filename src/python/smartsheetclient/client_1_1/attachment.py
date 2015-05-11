@@ -12,7 +12,7 @@ import os
 from smartsheet_exceptions import (SmartsheetClientError,
         OperationOnDiscardedObject)
 from base import ContainedThing, slicedict
-from client import HttpResponse, SimpleUser
+import client
 
 
 class Attachment(ContainedThing, object):
@@ -107,7 +107,7 @@ class Attachment(ContainedThing, object):
     @property
     def createdBy(self):
         self.errorIfDiscarded()
-        return SimpleUser(self._createdBy)
+        return client.SimpleUser(self._createdBy)
 
     @property
     def parentType(self):
@@ -243,7 +243,7 @@ class Attachment(ContainedThing, object):
             self.logger.error(err)
             raise SmartsheetClientError(err)
         resp, att._data = client.rawRequest(att.url, '', 'GET')
-        att._download_response = HttpResponse(resp)
+        att._download_response = client.HttpResponse(resp)
         if att.download_resonse.isOK():
             return att
         err = ("%s.download() failed: %s" % (att, resp.hdr))
