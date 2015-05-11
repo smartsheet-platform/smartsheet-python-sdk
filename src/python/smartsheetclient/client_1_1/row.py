@@ -373,6 +373,13 @@ class Row(ContainedThing, object):
             return self._columns_info.columns
         return self.sheet.columns
 
+    @property
+    def maxColumnIndex(self):
+        self.errorIfDiscarded()
+        if self._columns_info:
+            return self._columns_info.maxIndex
+        return self.sheet.getColumnsInfo().maxIndex
+
     def getColumnById(self, column_id):
         '''Return the Column that has the specified ID.'''
         self.errorIfDiscarded()
@@ -486,8 +493,9 @@ class Row(ContainedThing, object):
         try:
             column = self.getColumnByIndex(idx)
         except IndexError:
-            self.logger.error("%s.getCellByIndex(%r) index is invalid.",
-                    self, idx)
+            if idx > self.maxColumnIndex + 1:
+                self.logger.error("%s.getCellByIndex(%r) index is invalid.",
+                        self, idx)
             raise
         except Exception, e:
             err = "%s.getCellByIndex(%r) failed: %s" % (self, idx, str(e))
@@ -685,10 +693,10 @@ class Row(ContainedThing, object):
         sheet = self.sheet
 
         acc = { 'cells': [cell.flatten(strict=strict) for cell in self.cells] }
-        if self.new_position:
-            acc.update(self.new_position.flatten())
-        if self.new_expanded:
-            acc['expanded'] = self.new_expanded
+        if self._new_position:
+            acc.update(self._new_position.flatten())
+        if self._new_expanded:
+            acc['expanded'] = self._new_expanded
 
         body = self.client.PUT(path, extra_headers=self.client.json_headers,
                 body=json.dumps(acc))
