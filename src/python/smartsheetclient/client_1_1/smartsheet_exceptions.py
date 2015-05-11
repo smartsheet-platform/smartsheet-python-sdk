@@ -34,6 +34,12 @@ class SheetIntegrityError(SmartsheetClientError):
     '''
     pass
 
+class OperationOnDiscardedObject(SmartsheetClientError):
+    '''
+    An operation on a discarded object was attempted.
+    '''
+    pass
+
 class UnknownColumnId(SmartsheetClientError):
     '''
     The specified Column ID did not correspond to a columnId on the Sheet.
