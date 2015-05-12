@@ -1,7 +1,7 @@
 import sys
 import datetime
 import unittest
-from smartsheetclient import SmartsheetClient, SheetInfo, RowWrapper, Column, CellTypes
+from smartsheetclient import SmartsheetClient, SheetInfo, Column, CellTypes
 import logging
 log_format = '%(module)s.%(funcName)s[%(lineno)d] %(levelname)s - %(message)s'
 logging.basicConfig(filename='tests.log', level=logging.DEBUG, format=log_format)
@@ -52,6 +52,15 @@ class RowAddDeleteTest(unittest.TestCase):
         sheet_name = self.sheet.name
         self.sheet.delete()
         self.logger.info("Sheet %s deleted", sheet_name)
+
+
+    def test_add_one_row_to_top_of_sheet(self):
+        '''Add a single Row to the top of the blank Sheet.'''
+        r = self.sheet.makeRow()
+        r[0] = "one"
+        self.sheet.addRow(r, position='toTop')
+        self.assertTrue(len(self.sheet) == 1)
+        self.assertTrue(self.sheet[1][0] == "one")
 
 
     def test_add_rows_to_top_of_sheet(self):
@@ -131,7 +140,7 @@ class RowAddDeleteTest(unittest.TestCase):
         row_2 = self.sheet.makeRow()
         row_2[0] = 'two'
 
-        rw = RowWrapper(self.sheet, position='toTop')
+        rw = self.sheet.makeRowWrapper(position='toTop')
         rw.addRow(row_1)
         rw.addRow(row_2)
 
