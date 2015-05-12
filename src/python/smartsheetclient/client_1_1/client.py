@@ -14,7 +14,7 @@ import logging
 import collections
 
 
-from smartsheet_exceptions import (SmartsheetClientError)
+from smartsheet_exceptions import (SmartsheetClientError, APIRequestError, SheetIntegrityError, ReadOnlyClientError)
 from sheet import (Sheet, SheetInfo)
 
 
@@ -196,8 +196,8 @@ class SmartsheetClient(object):
             else:
                 self.logger.error("Request error: %r", hdr)
                 raise APIRequestError(hdr)
-        self.logger.info("Request for %r took: %d tries and %f seconds",
-                path, req_info.try_count, req_info.duration)
+        self.logger.info("%s Request for %r took: %d tries and %f seconds",
+                method, path, req_info.try_count, req_info.duration)
         return hdr, body
 
 
@@ -212,7 +212,7 @@ class SmartsheetClient(object):
         # FIXME: Should only raise SmartsheetClientError instances.
         # That will involve rewrapping APIRequestError, as well as any of
         # the socket and/or httplib2 exceptions.
-        self.logger.debug("Issuing request: %s", str(name))
+        self.logger.debug("Issuing %s request: %s", method, str(name))
         try:
             hdr, body = self.request(path, method=method,
                     extra_headers=extra_headers, body=body)
@@ -416,7 +416,7 @@ class SmartsheetClient(object):
             raise SmartsheetClientError(err)
         path = location + '/sheets'
         acc = {'name': name, 
-                'columns': [col.flattenToCreationFields() for col in columns]}
+                'columns': [col.flattenForInsert() for col in columns]}
         hdr, body = self.request(path,
                 method='POST',
                 extra_headers={'Content-Type': 'application/json'},
