@@ -66,13 +66,8 @@ class RowAddDeleteTest(unittest.TestCase):
         '''Add a Row that has multiple values in multiple Columns.'''
         r = self.sheet.makeRow()
         r[0] = "one"
-        self.logger.info("@@@@@@@@@@@@@@@ Row after r[0]: %r", list(r))
         r[1] = "2015-05-05"
-        self.logger.info("############### Row before save: %r", list(r))
         self.sheet.addRow(r)
-
-        self.logger.info("############### Row after save: %r", list(self.sheet[1]))
-
 
         self.assertTrue(len(self.sheet) == 1)
         self.assertTrue(self.sheet[1][0] == "one")
