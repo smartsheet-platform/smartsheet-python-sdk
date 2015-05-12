@@ -190,7 +190,7 @@ class RowWrapper(object):
         self.rows.append(row)
         return self
 
-    def flattenForInsert(self, strict=True):
+    def flattenForInsert(self, strict=None):
         '''
         Flatten the RowWrapper for inserting Rows.
         When inserting Rows, the 'expanded' parameter is not permitted.
@@ -630,7 +630,7 @@ class Row(ContainedThing, object):
                 enumerate([col.id for col in self.columns])])
         self._cells.sort(key=lambda c: col_id_order[c.columnId])
 
-    def save(self, cell=None, strict=True, client=None):
+    def save(self, cell=None, strict=None, client=None):
         '''
         Save this Row to the server.
 
@@ -689,7 +689,7 @@ class Row(ContainedThing, object):
             cell.discard()
         return sheet
 
-    def saveUpdate(self, client=None, strict=True):
+    def saveUpdate(self, client=None, strict=None):
         '''
         Update this Row on the server.
 
@@ -736,7 +736,7 @@ class Row(ContainedThing, object):
         # the Sheet -- we need to update this from Sheet.addRows().
         return sheet
 
-    def flattenForInsert(self, strict=True):
+    def flattenForInsert(self, strict=None):
         '''
         Flatten this Row's data so it can be inserted (as opposed to saved).
         '''

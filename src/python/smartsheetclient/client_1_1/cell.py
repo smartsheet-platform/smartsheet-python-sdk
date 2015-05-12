@@ -144,7 +144,7 @@ class Cell(ContainedThing, object):
 
     def __init__(self, row, column, value, type=None,
             displayValue=None, hyperlink=None, linkInFromCell=None,
-            format=None, link=None, isDirty=True, immediate=False):
+            format=None, link=None, isDirty=True, strict=True):
         '''
         Initialize a new Cell.
         Note that the library user is not able to assign all of the same
@@ -163,6 +163,12 @@ class Cell(ContainedThing, object):
         is True, then the Cell will be saved immediately (rather than lazily
         with the Row or Sheet).
 
+        By default, Cells request that the server perform strict validation on
+        their value when saved.  This can be overriden by setting strict=False,
+        or by specifying strict=False when saving the Cell (or updating, saving
+        or adding the Row that the Cell is on).
+
+
         @param row The Row this Cell is on.
         @param column The Column this Cell is on.
         @param value The value for this Cell.
@@ -173,7 +179,7 @@ class Cell(ContainedThing, object):
         @param format The format code for this Cell's displayValue.
         @param link Deprecated cell linking attribute.
         @param isDirty True if this Cell's value is not from the server.
-        @param immediate True if this cell should be saved right now.
+        @param strict True to request strict Cell-data validation by the server.
         '''
         self.parent = row
         if link:
@@ -204,6 +210,7 @@ class Cell(ContainedThing, object):
         self._linkInFromCell = linkInFromCell
         self._linksOutToCells = None # Not settable by library user.
         self.format = format
+        self._strict = strict;
         self._formula = None        # Not settable by library user.
         self.link = link            # Deprecated, but can be set by API server.
         self._modifiedAt = None     # Not settable by library user.
@@ -213,11 +220,6 @@ class Cell(ContainedThing, object):
         self._fields = {}            # Only set by newFromAPI()
         self.isDeleted = False
         self._discarded = False
-
-        if immediate:
-            # FIXME: Save this Cell right now.
-            # Add propagate and strict parameters.
-            raise NotImplementedError("immediate save of Cell not implemented")
 
     @classmethod
     def newFromAPI(cls, fields, row):
@@ -239,9 +241,8 @@ class Cell(ContainedThing, object):
                 hyperlink=hyperlink,
                 linkInFromCell=linkInFromCell,
                 format=fields.get('format', None),
-                link=fields.get('link', None), isDirty=False,
-                immediate=False)
-        # Set the attributes that can't be set by __init__().
+                link=fields.get('link', None), isDirty=False)
+        # Set the attributes that are not exposed by __init__().
         cell._fields = fields
         cell._formula = fields.get('formula', None)
         cell._linksOutToCells = fields.get('linksOutToCells', None),
@@ -330,7 +331,7 @@ class Cell(ContainedThing, object):
         return self._displayValue
 
     def assign(self, new_value, displayValue=None, hyperlink=None,
-            linkInFromCell=None, immediate=False, propagate=True, strict=True):
+            linkInFromCell=None, strict=True):
         '''
         Assign a new value to the Cell.
 
@@ -346,21 +347,14 @@ class Cell(ContainedThing, object):
         @param strict True to request stict processing on save.
         @param hyperlink The CellHyperlink to set.
         @param linkInFromCell The CellLinkIn to set.
-        @param immediate Apply this update to the sheet immediately.
-        @param propagate When saving, (if immediate), save all changes on Row.
         @param strict True to request strict Cell-data validation by the server.
-        @return The new Cell (unless saving immediately, in which case nothing).
+        @return The new Cell.
         @raises SheetIntegrityError
         '''
         self.errorIfDiscarded()
 
         # TODO:  Treat new_value==None as a delete
         # TODO:  Should a deleted Cell have an attribute indicating that?
-
-        # TODO:  Consider elimination of the immediate save functionality here.
-        # It just makes the interface more confusing.  If we get rid of that,
-        # then Cell assignment can always just work sorta naturally:
-        #    cell = cell.assign(value).
 
         if linkInFromCell and self.row.isNew:
             err = ("%s.assign() linkInFromCell can only be set in a Cell "
@@ -379,9 +373,6 @@ class Cell(ContainedThing, object):
 
         new_cell.row.replaceCell(self, new_cell)
         self.discard()
-        if immediate:
-            new_cell.save(propagate=propagate, strict=strict)
-            return
         return new_cell
 
     def setFormat(self, format, immediate=False, propagate=True):
@@ -450,6 +441,11 @@ class Cell(ContainedThing, object):
         return self._modifiedBy
 
     @property
+    def strict(self):
+        self.errorIfDiscarded()
+        return self._strict
+
+    @property
     def isDirty(self):
         return self._isDirty
 
@@ -458,7 +454,7 @@ class Cell(ContainedThing, object):
         self.errorIfDiscarded()
         return self._fields
 
-    def save(self, propagate=True, strict=True):
+    def save(self, propagate=True, strict=None):
         '''
         Save the Cell, and potentially any other change Cells on its Row.
 
@@ -477,7 +473,7 @@ class Cell(ContainedThing, object):
         will be saved (any other local changes to the Cell's Row will be lost.
 
         @param propagate True to save any other change Cells on the Row.
-        @param strict True to request strict validation by server.
+        @param strict True to request strict Cell-data validation by server.
         '''
         self.errorIfDiscarded()
         if propagate:
@@ -486,13 +482,13 @@ class Cell(ContainedThing, object):
             self.row.save(cell=self, strict=strict)
         return
 
-    def flatten(self, strict=True):
+    def flatten(self, strict=None):
         '''
         Return a flattened form of this Cell, suitable for saving.
         Note that if the Cell has a linkInFromCell, it can't be saved to a new
         Row, it can only be saved into an existing Row.
 
-        @param strict True to request strict validation by server.
+        @param strict True to request strict Cell-data validation by server.
         '''
         self.errorIfDiscarded()
         acc = {}
@@ -501,7 +497,10 @@ class Cell(ContainedThing, object):
 
         acc['columnId'] = self.columnId
         acc['value'] = self.value
-        acc['strict'] = strict
+        if strict is not None:
+            acc['strict'] = strict
+        else:
+            acc['strict'] = self.strict
         if self.format is not None:
             acc['format'] = self.format
         if self.hyperlink is not None:
@@ -510,10 +509,10 @@ class Cell(ContainedThing, object):
             acc['linkInFromCell'] = self.linkInFromCell.flatten()
         return acc
 
-    def flattenForInsert(self, strict=True):
+    def flattenForInsert(self, strict=None):
         '''
         Return a flattened form of this Cell for Row insertion.
-        @param strict True to request strict validation by server.
+        @param strict True to request strict Cell-data validation by server.
         '''
         self.errorIfDiscarded()
         acc = self.flatten(strict=strict)
