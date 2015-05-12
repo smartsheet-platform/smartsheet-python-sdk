@@ -9,7 +9,7 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 import json
 
 from base import maybeAssignFromDict
-from cell import Cell
+from cell import (Cell, CellTypes)
 from attachment import Attachment
 from discussion import Discussion
 from smartsheet_exceptions import (SmartsheetClientError, UnknownColumnId,
@@ -32,6 +32,7 @@ class RowPositionProperties(object):
     Bottom = 'toBottom'
     Parent = 'parentId'
     Sibling = 'siblingId'
+    Default_Position = Bottom
 
     def __init__(self, sheet, position='toBottom', parent=None, parentId=None,
             sibling=None, siblingId=None):
@@ -58,6 +59,10 @@ class RowPositionProperties(object):
         @returns True if the combination is valid.
         @raises SmartsheetClientError
         '''
+        self.position = None
+        self.parentId = None
+        self.siblingId = None
+
         if position not in (self.Top, self.Bottom, None):
             err = ("position, if specified,  must be '%s' or '%s' got %r" % 
                     (self.Top, self.Bottom, position))
@@ -86,12 +91,29 @@ class RowPositionProperties(object):
         else:
             self.siblingId = siblingId
 
-        if parentId is not None and siblingId is not None:
+        if self.parentId is not None and self.siblingId is not None:
             err = "parentId and siblingId are mutually exclusive"
             sheet.logger.error(err)
             raise SmartsheetClientError(err)
 
-        self.position = position
+        if self.siblingId is not None:
+            if position is not None:
+                err = "siblingId and position are mutually exclusive"
+                sheet.logger.error(err)
+                raise SmartsheetClientError(err)
+
+        if self.parentId is not None:
+            if position not in (None, self.Bottom):
+                err = ("parentId specified, position must be %s or None." %
+                        self.Bottom)
+                sheet.logger.error(err)
+                raise SmartsheetClientError(err)
+
+        if position is None:
+            if self.siblingId is None and self.parentId is None:
+                self.position = self.Default_Position
+        else:
+            self.position = position
 
     def flatten(self):
         '''
@@ -112,7 +134,7 @@ class RowPositionProperties(object):
 
     def __str__(self):
         return ('<RowPositionProperties %r  parent: %r  sibling: %r>' %
-                (self.position, self.parentId or '', self.siglingId or ''))
+                (self.position, self.parentId or '', self.siblingId or ''))
 
 
 
@@ -131,7 +153,7 @@ class RowWrapper(object):
     "current" ColumnsInfo data.
     '''
 
-    def __init__(self, sheet, positionProperties, expanded=True, *rows):
+    def __init__(self, sheet, positionProperties, expanded=True, rows=None):
         '''
         Make a RowWrapper suitable for adding one or more Rows to the Sheet.
 
@@ -147,7 +169,8 @@ class RowWrapper(object):
         self.positionProperties = positionProperties
         self.expanded = None
         self.rows = []
-        self.rows.extend(rows)
+        if rows:
+            self.rows.extend(rows)
         self._columns_info = self.sheet.getColumnsInfo()
         self._discarded = False
 
@@ -578,7 +601,7 @@ class Row(ContainedThing, object):
                 return
         # There wasn't a match in the current Cells, add the new one.
         # This is odd (unless original_cell was empty).
-        if original.cell.type != CellTypes.EmptyCell:
+        if original_cell.type != CellTypes.EmptyCell:
             self.logger.warn("%s.replaceCell() expected to find a matching "
                     "Cell and didn't; appending it to the list of Cells for "
                     "the Row.  %r", self, new_cell)
@@ -692,7 +715,8 @@ class Row(ContainedThing, object):
         client = client or self.client
         sheet = self.sheet
 
-        acc = { 'cells': [cell.flatten(strict=strict) for cell in self.cells] }
+        acc = { 'cells': [cell.flatten(strict=strict) for cell in 
+            self.cells if cell.type != CellTypes.EmptyCell] }
         if self._new_position:
             acc.update(self._new_position.flatten())
         if self._new_expanded:

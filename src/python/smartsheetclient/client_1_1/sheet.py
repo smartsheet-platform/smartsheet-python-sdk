@@ -16,9 +16,10 @@ import sys
 print "Import path"
 print "\n".join(sys.path)
 
+from smartsheet_exceptions import OperationOnDiscardedObject
 from base import maybeAssignFromDict, TopLevelThing
 from column import Column
-from row import (Row, RowWrapper)
+from row import (Row, RowWrapper, RowPositionProperties)
 from attachment import Attachment
 from discussion import Discussion
 
@@ -242,6 +243,11 @@ class Sheet(TopLevelThing, object):
     @property
     def rows(self):
         self.errorIfDiscarded()
+        return sorted(self._row_id_map.values(),
+                key=operator.attrgetter('rowNumber'))
+
+    @property
+    def _rows(self):
         return sorted(self._row_id_map.values(),
                 key=operator.attrgetter('rowNumber'))
 
@@ -782,8 +788,9 @@ class Sheet(TopLevelThing, object):
         Create a RowWrapper for this Sheet.
         '''
         self.errorIfDiscarded()
-        return RowWrapper(self, position=position, parentId=parentId,
-                siblingId=siblingId)
+        rpprops = RowPositionProperties(self, position=position,
+                parentId=parentId, siblingId=siblingId)
+        return RowWrapper(self, rpprops)
 
     def makeRow(self):
         '''
@@ -815,9 +822,9 @@ class Sheet(TopLevelThing, object):
         @raises SmartsheetClientError for Communications errors
         '''
         self.errorIfDiscarded()
-        row_wrapper = RowWrapper(self, position=position, parentId=parentId,
-                siblingId=siblingId)
-        row_wrapper.addRow(row)
+        rpprops = RowPositionProperties(self, position=position,
+                parentId=parentId, siblingId=siblingId)
+        row_wrapper = RowWrapper(self, rpprops, rows=[row])
         return self.addRows(row_wrapper, strict=strict) 
 
     def addRows(self, row_wrapper, strict=True):
@@ -847,7 +854,7 @@ class Sheet(TopLevelThing, object):
         name = "%s.addRows(%s,strict=%r)" % (self, str(row_wrapper), strict)
 
         body = self.client.POST(path, extra_headers=self.client.json_headers,
-                body=json.dumps(row_wrapper.flattenForInsert()))
+                body=json.dumps(row_wrapper.flattenForInsert()), name=name)
         self.clearRowCache()
         row_wrapper.discard()
         self.clearRowCache()
@@ -970,11 +977,11 @@ class Sheet(TopLevelThing, object):
         '''
         self._discarded = True
         self.client = None      # Not very nice, but it'll work for now.
-        for row in self.rows:
+        for row in self._rows:
             row.discard()
-        for attachment in self.attachments:
+        for attachment in self._attachments:
             attachment.discard()
-        for discussion in self.discussions:
+        for discussion in self._discussions:
             discussion.discard()
 
     def delete(self):
@@ -991,7 +998,7 @@ class Sheet(TopLevelThing, object):
 
     def errorIfDiscarded(self):
         if self._discarded:
-            raise OperationOnDiscardedSheetError()
+            raise OperationOnDiscardedObject("Sheet was discarded.")
 
     def __str__(self):
         return '<Sheet id:%r, name:%r>' % (self.id, self.name)
