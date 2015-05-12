@@ -342,6 +342,38 @@ class RowAddDeleteTest(unittest.TestCase):
         self.assertTrue(len(self.sheet) == 0)
 
 
+    def test_add_row_from_list_of_items(self):
+        rw = self.sheet.makeRowWrapper(position='toBottom')
+        row = rw.makeRow('one', '2015-05-05', 'Maybe')
+        rw.addRow(row)
+        rw.addRow(rw.makeRow(['two', '2015-05-06', 'Yes']))
+        def value_generator():
+            vals = ['three', '2015-05-07', 'No']
+            for item in vals:
+                yield item
+
+        rw.addRow(rw.makeRow(value_generator()))
+
+        rw.addRow(rw.makeRow('four', None, 'Maybe'))
+        self.sheet.addRows(rw)
+
+        self.assertTrue(len(self.sheet) == 4)
+        self.assertTrue(self.sheet[1][0] == 'one')
+        self.assertTrue(self.sheet[1][1] == '2015-05-05')
+        self.assertTrue(self.sheet[1][2] == 'Maybe')
+
+        self.assertTrue(self.sheet[2][0] == 'two')
+        self.assertTrue(self.sheet[2][1] == '2015-05-06')
+        self.assertTrue(self.sheet[2][2] == 'Yes')
+
+        self.assertTrue(self.sheet[3][0] == 'three')
+        self.assertTrue(self.sheet[3][1] == '2015-05-07')
+        self.assertTrue(self.sheet[3][2] == 'No')
+
+        self.assertTrue(self.sheet[4][0] == 'four')
+        self.assertTrue(self.sheet[4][1] == None)
+        self.assertTrue(self.sheet[4][2] == 'Maybe')
+
 
    
 
