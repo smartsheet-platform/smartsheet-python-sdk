@@ -357,6 +357,11 @@ class Cell(ContainedThing, object):
         # TODO:  Treat new_value==None as a delete
         # TODO:  Should a deleted Cell have an attribute indicating that?
 
+        # TODO:  Consider elimination of the immediate save functionality here.
+        # It just makes the interface more confusing.  If we get rid of that,
+        # then Cell assignment can always just work sorta naturally:
+        #    cell = cell.assign(value).
+
         if linkInFromCell and self.row.isNew:
             err = ("%s.assign() linkInFromCell can only be set in a Cell "
                     "on a Row that has been saved to the server, not on a "
