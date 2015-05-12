@@ -10,11 +10,7 @@ import json
 import copy
 import operator
 import datetime
-
 import sys
-
-print "Import path"
-print "\n".join(sys.path)
 
 from smartsheet_exceptions import OperationOnDiscardedObject
 from base import maybeAssignFromDict, TopLevelThing
