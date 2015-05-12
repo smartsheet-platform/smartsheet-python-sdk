@@ -38,9 +38,9 @@ class Column(ContainedThing, object):
     # We might then have different flatten() implementations for new Columns
     # and Column change requests.
 
-    def __init__(self, sheet, title, index=-1, type=CellTypes.TextNumber,
+    def __init__(self, title, index=-1, type=CellTypes.TextNumber,
             primary=False, symbol=None, options=None, systemColumnType=None,
-            autoNumberFormat=None, width=None):
+            autoNumberFormat=None, width=None, sheet=None):
         '''
         The Column attributes that can be set when creating a Column are
         available via initialization.
@@ -66,13 +66,13 @@ class Column(ContainedThing, object):
 
     @classmethod
     def newFromAPI(cls, fields, sheet):
-        col = Column(sheet, title=fields['title'], type=fields['type'],
+        col = Column(title=fields['title'], type=fields['type'],
                 primary=fields.get('primary', False),
                 symbol=fields.get('symbol', None),
                 options=fields.get('options', list()),
                 systemColumnType=fields.get('systemColumnType', None),
                 autoNumberFormat=fields.get('autoNumberFormat', None),
-                width=fields.get('width', None))
+                width=fields.get('width', None), sheet=sheet)
         col._id = fields['id']
         col._index = fields['index']
         maybeAssignFromDict(fields, col, 'hidden')
@@ -159,7 +159,7 @@ class Column(ContainedThing, object):
         '''
         self.errorIfDiscarded()
         acc = {'title': self.title, 'type': self.type }
-        if self.index:
+        if self.index > 0:
             acc['index'] = self.index
         if self.primary:
             acc['primary'] = True
