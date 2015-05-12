@@ -8,7 +8,7 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 
 import json
 
-from base import maybeAssignFromDict
+from base import (maybeAssignFromDict, isList, isScalar, isGenerator)
 from cell import (Cell, CellTypes)
 from attachment import Attachment
 from discussion import Discussion
@@ -174,13 +174,101 @@ class RowWrapper(object):
         self._columns_info = self.sheet.getColumnsInfo()
         self._discarded = False
 
-    def makeRow(self):
+    def makeRow(self, *values_list, **values_dict):
+        '''
+        Make a Row in this RowWrapper, with (optionally), initial Cell values.
+        
+        Call with either values_list (which collects positional parameters),
+        or values_dict (which collects keyword parameters), but not both.
+
+        @param values_list A list of new Cell values
+        @param values_dict A dict of new {(column.title|column.index): value}
+        '''
+
+        self.errorIfDiscarded()
+        if values_list and values_dict:
+            err = ("%s.makeRow() can only have list or dict/key-word values, "
+                    "not both" % self)
+            self.sheet.logger.error(err)
+            raise SmartsheetClientError(err)
+        if values_list:
+            return self.makeRowFromList(*values_list)
+        elif values_dict:
+            return self.makeRowFromDict(**values_dict)
+        else:
+            return self.makeEmptyRow()
+
+    def makeEmptyRow(self):
         '''
         Make an empty Row object that is suitable for use with this RowWrapper.
         '''
         self.errorIfDiscarded()
         row = Row(self.sheet, self._columns_info)
         return row
+
+    def makeRowFromList(self, *values):
+        '''
+        Make a partially filled Row from a list of values.
+        If values is a one-element list containing a list, the contained list
+        is expanded and used as the list of values.
+
+        If values is a generator, it is assumed to produce a list of items
+        when passed to list as:  list(values).
+
+        To insert an empty value in a Cell, use None in that position.
+
+        The values are assumed to be in Column.index order.
+        NOTE:  this might not be 0 - max Column index
+        If the RowWrapper's ColumnsInfo contains only a subset of the Columns
+        of the Sheet, then any Cells created will correspond to the indexes
+        of those Columns.  In most cases that will be 0 - max Column index,
+        but not always.
+        The Column indexes used for the assignment are those from the
+        RowWrapper's ColumnsInfo.   
+
+        @param values A list of values, or a 1-element list containing a list.
+        @return A newly created Row in this RowWrapper (but not yet saved).
+        '''
+        self.errorIfDiscarded()
+        if len(values) == 1:
+            if isList(values[0]):
+                # If the origignal call was with a really deeply nested list,
+                # we will blow the call stack. :(
+                return self.makeRowFromList(*values[0])
+            if isGenerator(values[0]):
+                return self.makeRowFromList(*list(values[0]))
+            if not isScalar(values[0]):
+                err = ("%s.makeRowFromList() can't understand: %r" % 
+                        (self, values))
+                self.sheet.logger.error(err)
+                raise SmartsheetClientError(err)
+
+        columns = self._columns_info.columns
+        if len(values) > len(columns):
+            err = ("%s.makeRowFromList() len(values): %d > len(columns): %d" %
+                    (self, len(values), len(columns)))
+            self.sheet.logger.error(err)
+            raise SmartsheetClientError(err)
+
+        row = self.makeRow()
+        for column, value in zip (columns, values):
+            row[column.index] = value
+        return row
+        
+    def makeRowFromDict(self, **kwargs):
+        '''
+        Make a partially filled Row from a dict of values (either given as
+        key-value pairs as arguments or as a dict.
+        The keys can be either Column titles or Column indexes.
+        '''
+        self.errorIfDiscarded()
+        if len(kwargs) == 1:
+            if isMapping(kwargs[kwargs.keys()[0]]):
+                # If the original call was with a deeply nested dict/mapping,
+                # we will blow the call stack. :(
+                return self.makeRowFromDict(**kwargs[ kwargs.keys()[0] ])
+        raise NotImplementedError("%s.makeRowFromDict() not done" % self)
+
 
     def addRow(self, row):
         '''
@@ -190,7 +278,7 @@ class RowWrapper(object):
         self.rows.append(row)
         return self
 
-    def flattenForInsert(self, strict=True):
+    def flattenForInsert(self, strict=None):
         '''
         Flatten the RowWrapper for inserting Rows.
         When inserting Rows, the 'expanded' parameter is not permitted.
@@ -630,7 +718,7 @@ class Row(ContainedThing, object):
                 enumerate([col.id for col in self.columns])])
         self._cells.sort(key=lambda c: col_id_order[c.columnId])
 
-    def save(self, cell=None, strict=True, client=None):
+    def save(self, cell=None, strict=None, client=None):
         '''
         Save this Row to the server.
 
@@ -689,7 +777,7 @@ class Row(ContainedThing, object):
             cell.discard()
         return sheet
 
-    def saveUpdate(self, client=None, strict=True):
+    def saveUpdate(self, client=None, strict=None):
         '''
         Update this Row on the server.
 
@@ -736,7 +824,7 @@ class Row(ContainedThing, object):
         # the Sheet -- we need to update this from Sheet.addRows().
         return sheet
 
-    def flattenForInsert(self, strict=True):
+    def flattenForInsert(self, strict=None):
         '''
         Flatten this Row's data so it can be inserted (as opposed to saved).
         '''

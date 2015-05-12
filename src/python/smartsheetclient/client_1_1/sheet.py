@@ -39,6 +39,7 @@ class Sheet(TopLevelThing, object):
             self._max_index = 0
             self.column_id_map = {}
             self.column_index_map = {}
+            self.column_title_map = {}
 
         @classmethod
         def newFromDict(cls, sheet, fields):
@@ -50,6 +51,7 @@ class Sheet(TopLevelThing, object):
             for column in columns:
                 ci.column_id_map[column.id] = column
                 ci.column_index_map[column.index] = column
+                ci.column_title_map[column.title] = column
                 if column.index > ci._max_index:
                     ci._max_index = column.index
             return ci
@@ -71,6 +73,7 @@ class Sheet(TopLevelThing, object):
             for column in columns:
                 self.column_id_map[column.id] = column
                 self.column_index_map[column.index] = column
+                self.column_title_map[column.title] = column
                 if column.index > self._max_index:
                     self._max_index = column.index
             return self
@@ -108,6 +111,17 @@ class Sheet(TopLevelThing, object):
             if idx in self.column_index_map:
                 return self.column_index_map[idx]
             raise IndexError
+
+        def getColumnByTitle(self, title):
+            '''
+            Get the Column with the specified title.
+
+            @param title The title of the Column to return.
+            @return The Column with the specified title.
+            @raises KeyError if the specified title is not valid.
+            '''
+            return self.column_title_map[title]
+
 
         @property
         def maxIndex(self):
