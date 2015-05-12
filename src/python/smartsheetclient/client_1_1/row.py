@@ -600,6 +600,9 @@ class Row(ContainedThing, object):
         # There wasn't a match in the current Cells, add the new one.
         # This is odd (unless original_cell was empty).
         if original_cell.type != CellTypes.EmptyCell:
+            self.logger.warn("%s.replaceCell() expected to find a matching "
+                    "Cell and didn't; appending it to the list of Cells for "
+                    "the Row.  %r", self, new_cell)
         self.insertCell(new_cell)
         return self
 
