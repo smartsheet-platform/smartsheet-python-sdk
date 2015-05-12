@@ -349,6 +349,7 @@ class Cell(ContainedThing, object):
         @param immediate Apply this update to the sheet immediately.
         @param propagate When saving, (if immediate), save all changes on Row.
         @param strict True to request strict Cell-data validation by the server.
+        @return The new Cell (unless saving immediately, in which case nothing).
         @raises SheetIntegrityError
         '''
         self.errorIfDiscarded()
@@ -375,7 +376,8 @@ class Cell(ContainedThing, object):
         self.discard()
         if immediate:
             new_cell.save(propagate=propagate, strict=strict)
-        return
+            return
+        return new_cell
 
     def setFormat(self, format, immediate=False, propagate=True):
         '''
