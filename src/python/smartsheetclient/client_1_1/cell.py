@@ -352,15 +352,6 @@ class Cell(ContainedThing, object):
         @raises SheetIntegrityError
         '''
         self.errorIfDiscarded()
-        # Should Cells be immutable?
-        # If we make them immutable, then assignment creates a new Cell to
-        # replace the original one and the original one is discarded.
-        # The only downside to that is we need a decent way to detect use of
-        # discarded Cells.  Preferably, a mechanism that doesn't require gobs
-        # of code.  We also have to deal with *where* to keep track of the
-        # changed Cells that haven't yet been saved. That should probably be
-        # on the Row somewhere -- a dict of changed Cells (maybe keyed by the
-        # Column ID of the Cell).
 
         # TODO:  Treat new_value==None as a delete
         # TODO:  Should a deleted Cell have an attribute indicating that?
@@ -372,7 +363,10 @@ class Cell(ContainedThing, object):
             self.logger.error(err)
             raise SheetIntegrityError(err)
 
-        new_cell = Cell(self.row, self.column, new_value, type=self.type,
+        new_type = self.type
+        if new_type == CellTypes.EmptyCell:
+            new_type = self.column.type
+        new_cell = Cell(self.row, self.column, new_value, type=new_type,
                 displayValue=displayValue, hyperlink=hyperlink,
                 linkInFromCell=linkInFromCell, format=self.format,
                 isDirty=True)
