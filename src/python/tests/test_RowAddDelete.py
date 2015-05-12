@@ -62,6 +62,23 @@ class RowAddDeleteTest(unittest.TestCase):
         self.assertTrue(len(self.sheet) == 1)
         self.assertTrue(self.sheet[1][0] == "one")
 
+    def test_add_row_with_multiple_columns(self):
+        '''Add a Row that has multiple values in multiple Columns.'''
+        r = self.sheet.makeRow()
+        r[0] = "one"
+        self.logger.info("@@@@@@@@@@@@@@@ Row after r[0]: %r", list(r))
+        r[1] = "2015-05-05"
+        self.logger.info("############### Row before save: %r", list(r))
+        self.sheet.addRow(r)
+
+        self.logger.info("############### Row after save: %r", list(self.sheet[1]))
+
+
+        self.assertTrue(len(self.sheet) == 1)
+        self.assertTrue(self.sheet[1][0] == "one")
+        self.assertTrue(self.sheet[1][1] == "2015-05-05")
+
+
 
     def test_add_rows_to_top_of_sheet(self):
         '''Add Rows, one at a time, to the top of an initially blank Sheet.'''
@@ -295,6 +312,7 @@ class RowAddDeleteTest(unittest.TestCase):
 
         self.assertTrue(len(self.sheet) == 0)
 
+
     def test_delete_rows_in_sheet_with_multiple_rows(self):
         '''Delete Rows from a Sheet with multiple Rows.'''
         rw = self.sheet.makeRowWrapper(position='toTop')
@@ -327,7 +345,6 @@ class RowAddDeleteTest(unittest.TestCase):
 
         self.sheet[-1].delete()
         self.assertTrue(len(self.sheet) == 0)
-
 
 
 
