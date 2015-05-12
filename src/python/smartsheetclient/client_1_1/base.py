@@ -10,6 +10,8 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 
 import json
 import time
+import collections
+import inspect
 
 class TopLevelThing(object):
     '''
@@ -235,3 +237,29 @@ def slicedict(src_dict, keys, include_missing_keys=True, default_value=None):
     return acc
 
 
+def isList(items):
+    '''
+    Return True if items a list or something that is iterable like a list.
+    In particular, a string is not a list, even if it is iterable.
+    '''
+    if isScalar(items):
+        return False
+    if isinstance(items, collections.Mapping):
+        return False
+    return isinstance(items, (collections.Sequence))
+
+def isGenerator(items):
+    '''
+    Return True if items is a generator.
+    '''
+    return inspect.isgenerator(items)
+
+def isScalar(item):
+    '''
+    Return True if item is a scalar (number or string, bytes).
+    False otherwise.
+    '''
+    if isinstance(item, (int, long, float, str, unicode, basestring,
+        bool, bytes)):
+        return True
+    return False

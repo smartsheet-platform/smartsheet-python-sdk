@@ -9,7 +9,7 @@ from smartsheet_exceptions import (SmartsheetClientError, ReadOnlyClientError,
         DeprecatedAttribute)
 
 from base import (TopLevelThing, ContainedThing, string_trim,
-        maybeAssignFromDict, slicedict)
+        maybeAssignFromDict, slicedict, isList, isScalar, isGenerator)
 
 from client import (HttpRequestInfo, SmartsheetClient, UserProfile, SimpleUser,
         HttpResponse, SmartsheetAPIResponseHeader, SmartsheetAPIErrorMessage)
