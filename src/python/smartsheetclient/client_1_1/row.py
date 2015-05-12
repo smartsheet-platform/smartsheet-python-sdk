@@ -591,10 +591,8 @@ class Row(ContainedThing, object):
             self.logger.error(err)
             raise SheetIntegrityError(err)
 
-        # * Mark this Row as needing to be saved (so that the Sheet can tell
-        #   easily which Rows need to be saved when the Sheet is saved).
         for idx, cell in enumerate(self.cells):
-            if cell.columnId == cell.columnId:
+            if cell.columnId == new_cell.columnId:
                 self.cells[idx] = new_cell
                 self.markDirty()
                 # We don't need to sort the Cells when just replacing a Cell.
@@ -602,9 +600,6 @@ class Row(ContainedThing, object):
         # There wasn't a match in the current Cells, add the new one.
         # This is odd (unless original_cell was empty).
         if original_cell.type != CellTypes.EmptyCell:
-            self.logger.warn("%s.replaceCell() expected to find a matching "
-                    "Cell and didn't; appending it to the list of Cells for "
-                    "the Row.  %r", self, new_cell)
         self.insertCell(new_cell)
         return self
 
@@ -630,11 +625,6 @@ class Row(ContainedThing, object):
 
         col_id_order = dict([(column_id, order_pos) for order_pos, column_id in
                 enumerate([col.id for col in self.columns])])
-
-        # Functional style, I think it's harder to follow.
-        # col_id_order = dict(map(lambda t: (t[1], t[0]),
-        #         enumerate(map(lambda c: c.columnId, self.columns))))
-
         self._cells.sort(key=lambda c: col_id_order[c.columnId])
 
     def save(self, cell=None, strict=True, client=None):
