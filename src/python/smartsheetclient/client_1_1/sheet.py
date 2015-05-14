@@ -16,11 +16,11 @@ from smartsheet_exceptions import OperationOnDiscardedObject
 from base import maybeAssignFromDict, TopLevelThing
 from column import Column
 from row import (Row, RowWrapper, RowPositionProperties)
-from attachment import Attachment
+from attachment import Attachment, AttachPoint
 from discussion import Discussion
 
 
-class Sheet(TopLevelThing, object):
+class Sheet(AttachPoint, TopLevelThing, object):
     '''
     The Sheet, it may or may not be fully populated.
     When a Sheet is first fetched, the Rows in it are not fully populated.
@@ -1016,6 +1016,11 @@ class Sheet(TopLevelThing, object):
     def __repr__(self):
         return str(self)
 
+    def get_attach_path(self):
+        self.errorIfDiscarded()
+        sheet_id = self.id
+        path = 'sheet/{0}/attachments'.format(sheet_id)
+        return path
 
 
 class SheetInfo(TopLevelThing, object):
@@ -1083,6 +1088,4 @@ class SheetInfo(TopLevelThing, object):
                 self.name != other.name or
                 self.accessLevel != other.accessLevel or
                 self.permalink != other.permalink)
-
-
 
