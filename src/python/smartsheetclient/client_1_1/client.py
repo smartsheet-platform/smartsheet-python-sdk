@@ -6,12 +6,13 @@ This is HORRIBLY incomplete at the moment.
 Author:  Scott Wimer <scott.wimer@smartsheet.com>
 '''
 
-import httplib2
+import logging
+logging.captureWarnings(True)
 import json
 import copy
 import time
-import logging
 import collections
+import requests
 
 
 from smartsheet_exceptions import (SmartsheetClientError, APIRequestError, SheetIntegrityError, ReadOnlyClientError)
@@ -99,11 +100,18 @@ class SmartsheetClient(object):
         self.retry_limit = retry_limit
         self._sheet_list_cache = []
         self.user = None
-        self.handle = None
+        self.__handle = None
         self.request_count = 0
         self.request_error_count = 0
         self.json_headers = {'Content-Type': 'application-json'}
         self.request_log = collections.deque(maxlen=request_log_len)
+
+
+    @property
+    def handle(self):
+        if self.__handle is None:
+            self.__handle = requests.session()
+        return self.__handle
 
 
     def connect(self):
@@ -111,7 +119,6 @@ class SmartsheetClient(object):
         Connect to the Smartsheet API, verifying that the token works.
         This fetches the profile for the current user.
         '''
-        self.handle = httplib2.Http()
         self.user = self.fetchUserProfile()
         return self
 
@@ -128,15 +135,13 @@ class SmartsheetClient(object):
         req_headers = headers or {}
         req_url = join_url_path(url, path)
 
-        if not self.handle:
-            self.handle = httplib2.Http()
-
-        self.logger.debug('req_url: %r', req_url)
+        self.logger.debug('request: %r %r', method, req_url)
         if body:
-            self.logger.debug('req_body: %r', body)
-        resp, content = self.handle.request(req_url, method, body=body,
+            self.logger.debug('request_body: %r', body)
+        resp = self.handle.request(method, req_url, data=body,
                 headers=req_headers)
-        self.logger.debug('resp: %r',  resp)
+        content = resp.text
+        self.logger.debug('response: %r',  resp)
         self.logger.debug('content: %r', content)
         return (resp, content)
 
@@ -158,7 +163,7 @@ class SmartsheetClient(object):
                 headers, body)
         self.request_log.append(req_info)
 
-        if self.read_only and (method != 'GET' or method != 'HEAD'):
+        if self.read_only and method not in ('GET', 'HEAD'):
             self.logger.error("Client is read only, request (%s %s %s) " +
                     "not permitted.", method, self.base_url, path)
             raise ReadOnlyClientError(("Client is read only, request " +
@@ -526,7 +531,7 @@ class HttpResponse(object):
     The response contains a header and content object.  The content may be
     empty (None).
     '''
-    status_codes = {
+    Status_Codes = {
         '200': 'OK',
         '400': 'BAD REQUEST',
         '401': 'NOT AUTHORIZED',
@@ -536,8 +541,7 @@ class HttpResponse(object):
         '500': 'INTERNAL SERVER ERROR',
         '503': 'SERVICE UNAVAILABLE'
     }
-    unknown_status_code = '999'
-    unknown_status_message = 'UNKNOWN STATUS CODE'
+    Unknown_Status_Message = 'UNKNOWN STATUS CODE'
 
     def __init__(self, hdr, content=''):
         self.hdr = hdr
@@ -545,11 +549,11 @@ class HttpResponse(object):
 
     @property
     def status(self):
-        return self.hdr.get('status', self.unknown_status_code)
+        return str(self.hdr.status_code)
 
     @property
     def statusMessage(self):
-        return self.status_codes.get(self.status, self.unknown_status_message)
+        return self.Status_Codes.get(self.status, self.Unknown_Status_Message)
 
     def isOK(self):
         return self.status == '200'
