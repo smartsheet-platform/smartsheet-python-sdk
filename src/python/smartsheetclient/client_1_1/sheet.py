@@ -209,9 +209,9 @@ class Sheet(AttachPoint, TopLevelThing, object):
             row = Row.newFromAPI(row_fields, self, self.columnsInfo)
             self._addRowToCache(row)
 
-        self._attachments = [Attachment(a, self) for a in
+        self._attachments = [Attachment.newFromAPI(a, self) for a in
                 fields.get('attachments', [])]
-        self._discussions = [Discussion(d,self) for d in 
+        self._discussions = [Discussion.newFromAPI(d,self) for d in 
                 fields.get('discussions', [])]
         maybeAssignFromDict(fields, self, 'effectiveAttachmentOptions')
         maybeAssignFromDict(fields, self, 'readOnly')
@@ -813,6 +813,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
         @returns The new Row
         '''
         self.errorIfDiscarded()
+        # TODO:  This needs to work the same way as RowWrapper.makeRow().
         return Row(self, self.columnsInfo.copy())
 
     def addRow(self, row, position=None, parentId=None, siblingId=None,
