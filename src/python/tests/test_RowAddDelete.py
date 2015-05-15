@@ -62,6 +62,7 @@ class RowAddDeleteTest(unittest.TestCase):
         self.assertTrue(len(self.sheet) == 1)
         self.assertTrue(self.sheet[1][0] == "one")
 
+
     def test_add_row_with_multiple_columns(self):
         '''Add a Row that has multiple values in multiple Columns.'''
         r = self.sheet.makeRow()
@@ -72,7 +73,6 @@ class RowAddDeleteTest(unittest.TestCase):
         self.assertTrue(len(self.sheet) == 1)
         self.assertTrue(self.sheet[1][0] == "one")
         self.assertTrue(self.sheet[1][1] == "2015-05-05")
-
 
 
     def test_add_rows_to_top_of_sheet(self):
@@ -97,6 +97,7 @@ class RowAddDeleteTest(unittest.TestCase):
         self.assertTrue(self.sheet[1][0] == "three")
         self.assertTrue(self.sheet[2][0] == "two")
         self.assertTrue(self.sheet[3][0] == "one")
+
 
     def test_add_rows_to_bottom_of_sheet(self):
         r = self.sheet.makeRow()
