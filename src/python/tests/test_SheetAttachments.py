@@ -36,7 +36,7 @@ class SheetAttachmentsTest(unittest.TestCase):
         ]
         self.sheet_info = self.client.createSheet(
             self.sheet_name, columns)
-        self.sheet = self.sheet_info.loadSheet()
+        self.sheet = self.sheet_info.loadSheet(attachments=True, discussions=True)
         while len(self.sheet) < 10:
             now = datetime.datetime.now()
             h = hashlib.sha256()
@@ -58,12 +58,12 @@ class SheetAttachmentsTest(unittest.TestCase):
         LINK_NAME = 'Google Search'
         LINK_URL = 'https://google.com'
         self.sheet[1].attachUrl(LINK_URL, LINK_NAME)
+        sheet = self.sheet_info.loadSheet(attachments=True, discussions=True)
 
         # should this be empty?
-        # print self.sheet[1].attachments
+        print sheet[1].attachments
 
-        path = 'sheet/{0}/row/{1}/attachments'.format(self.sheet.id,
-                                                      self.sheet[1].id)
+        path = 'sheet/{0}/row/{1}/attachments'.format(sheet.id, sheet[1].id)
         headers, response = self.client.request(path)
         self.assertTrue(len(response) > 0)
         self.assertTrue(response[0]['attachmentType'] == u'LINK')
@@ -71,12 +71,20 @@ class SheetAttachmentsTest(unittest.TestCase):
         self.assertTrue(response[0]['name'] == LINK_NAME)
         self.assertTrue(response[0]['url'] == LINK_URL)
 
+        print dir(sheet[1].attachments[0])
+        self.assertTrue(len(sheet[1].attachments) > 0)
+        self.assertTrue(sheet[1].attachments[0].name == LINK_NAME)
+        self.assertTrue(sheet[1].attachments[0].url == LINK_URL)
+        self.assertTrue(sheet[1].attachments[0].attachmentType == u'LINK')
+        self.assertTrue(sheet[1].attachments[0].parentType == u'ROW')
+
     def test_row_file_attachment(self):
         filename = 'test_SheetAttachments.py'
         self.sheet[2].attachFile(filename)
+        sheet = self.sheet_info.loadSheet(attachments=True, discussions=True)
 
         # Should this be empty?
-        # print self.sheet[2].attachments
+        print sheet[2].attachments
 
         path = 'sheet/{0}/row/{1}/attachments'.format(self.sheet.id,
                                                       self.sheet[2].id)
@@ -86,11 +94,16 @@ class SheetAttachmentsTest(unittest.TestCase):
         self.assertTrue(response[0]['parentType'] == u'ROW')
         self.assertTrue(response[0]['name'] == filename)
 
+        print dir(sheet[2].attachments[0])
+        self.assertTrue(len(sheet[2].attachments)>0)
+        self.assertTrue(sheet[2].attachments[0].name == filename)
+
     def test_sheet_file_attachment(self):
         filename = 'test_SheetAttachments.py'
         self.sheet.attachFile(filename)
-        # attachments = self.sheet.attachments
-        # print attachments
+        sheet = self.sheet_info.loadSheet(attachments=True, discussions=True)
+        attachments = self.sheet.attachments
+        print attachments
 
         path = 'sheet/{0}/attachments'.format(self.sheet.id)
 
@@ -104,8 +117,9 @@ class SheetAttachmentsTest(unittest.TestCase):
         LINK_NAME = 'Google Search'
         LINK_URL = 'https://google.com'
         self.sheet.attachUrl(LINK_URL, LINK_NAME)
-        # attachments = self.sheet.attachments
-        # print attachments
+        sheet = self.sheet_info.loadSheet(attachments=True, discussions=True)
+        attachments = self.sheet.attachments
+        print attachments
 
         path = 'sheet/{0}/attachments'.format(self.sheet.id)
 
