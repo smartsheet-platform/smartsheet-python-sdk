@@ -54,11 +54,11 @@ class Discussion(ContainedThing):
         self._discarded = False
 
     @classmethod
-    def NewFromAPI(cls, fields, sheet):
+    def newFromAPI(cls, fields, sheet):
         params = slicedict(fields, cls.field_names, include_missing_keys=True)
-        params['commentAttachments'] = [Attachment(a, sheet) for a in
+        params['commentAttachments'] = [Attachment.newFromAPI(a, sheet) for a in
                 fields.get('commentAttachments', [])]
-        params['comments'] = [Comment(c, sheet) for c in
+        params['comments'] = [Comment.newFromAPI(c, sheet) for c in
                 fields.get('comments', [])]
         params['createdBy'] = client.SimpleUser(fields['createdBy'])
         disc = cls(sheet, **params)
@@ -165,7 +165,7 @@ class Comment(ContainedThing):
     @classmethod
     def newFromAPI(cls, fields, sheet):
         params = slicedict(fields, cls.field_names, include_missing_keys=True)
-        params['attachments'] = [Attachment(a, sheet) for a in 
+        params['attachments'] = [Attachment.newFromAPI(a, sheet) for a in 
                 fields.get('attachments', [])]
         comment = Comment(sheet, **params)
         comment._fields = fields
