@@ -802,19 +802,30 @@ class Sheet(AttachPoint, TopLevelThing, object):
                 parentId=parentId, siblingId=siblingId)
         return RowWrapper(self, rpprops)
 
-    def makeRow(self):
+    def makeRow(self, *values_list, **values_dict):
         '''
-        Create a new Row.
+        Create a new Row for this Sheet -- with optional intitial Cell values.
 
-        The Row is given a copy of the current ColumnsInfo for the Sheet,
-        but is not "attached" to the Sheet (it isn't found in Sheet.rows).
+        Call with either a list of values (as positional parameters or single
+        list of values), or a dict of values (as keyword parameters or a
+        single dict of values), or neither, but not both.
+
+        The Row uses the current ColumnsInfo for the Sheet, but it is not
+        "attached" to the Sheet (it isn't found in Sheet.rows).
         In order to attach the Row to the Sheet, it must be passed to
         sheet.addRow() or placed in a RowWrapper and passed to sheet.addRows().
         @returns The new Row
         '''
         self.errorIfDiscarded()
-        # TODO:  This needs to work the same way as RowWrapper.makeRow().
-        return Row(self, self.columnsInfo.copy())
+        # Enable caching so that the RowWrapper uses the ColumnProperties
+        # of the Sheet, instead of fetching the current one from the server.
+        cache_state = self.forceCache()
+        rpprops = RowPositionProperties(self)
+        rw = RowWrapper(self, rpprops)
+        row = rw.makeRow(*values_list, **values_dict)
+        rw.discard()
+        self.restoreCache(cache_state)
+        return row
 
     def addRow(self, row, position=None, parentId=None, siblingId=None,
             strict=True):

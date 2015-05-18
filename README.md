@@ -5,7 +5,7 @@ Python client library for version 1.1 of the Smartsheet API.
 The Smartsheet API is documented at:
 https://www.smartsheet.com/developers/api-documentation
 
-**NOTE: Please note that this SDK is a pre-alpha.  It is incomplete, has not been rigorously tested, and is a work in progress.  See below for known issues, feature gaps, and a rough roadmap.  If you need a missing feature urgently, you are strongly encouraged to build it and submit a pull request.  Thanks for understanding.**
+**NOTE: Please note that this SDK is pre-alpha.  It is incomplete, has not been rigorously tested, and is a work in progress.  See below for known issues, feature gaps, and a rough roadmap.  If you need a missing feature urgently, you are strongly encouraged to build it and submit a pull request.  If you need a feature and can't or don't want to build it, please create an issue for it.  Thanks for understanding.**
 
 # What Works
 
@@ -24,10 +24,7 @@ work yet.  Hopefully that will change.  Here's what currently works:
   * Write access: `sheet[rowNumber][columnIndex] = "Some value"`
 * Add Rows (one at a time or multiple-at-a-time) to a Sheet.
 * Delete Rows (one at a time)
-* Row.save() to save any changes made to the Row
 * Create and Delete Sheets
-* Refetch a Sheet
-  * This might not be needed anymore
 * Download attachments (from the sheet, rows, or discussion comments)
 * Upload a new version of an existing attachment
   * This is distinct from replacing the existing attachment
@@ -47,7 +44,6 @@ that are covered here.
 * When fetching a Sheet, pagination isn't supported
 * Moving Rows
 * Expanding or collapsing Rows
-* Hyperlinks and Cell links are not supported
 * Replacing an attachment doesn't work, only uploading a new version
 * Can't issue HEAD requests on the S3 link used to download attachments
   * These result in a 403 error even thought the S3 docs say that GET and HEAD use the same permissions object
@@ -72,7 +68,6 @@ that are covered here.
   * Discussion Comments
   * Lots more
 * Make sheet.save() save any local changes to the server
-* Make sure write-operations to discarded Rows, Sheets, and Cells fail
 * Add mechanism to tune the aggressiveness of cached reads.
   * Right now, a Row read will fetch only that Row.
     * That's the least aggressive policy.
@@ -108,7 +103,7 @@ There's really only one hard rule:  do not use tabs for indentation.
 It might be tempting to skip over this section.  _Don't._  Making sense of
 how the SDK handles caching is going to influence the way you use the SDK.
 
-Whe working with the Smartsheet API, the authoratative data for the sheet
+Whe working with the Smartsheet API, the authoratative data for the Sheet
 resides on a remote server accessed via calls to the API server.  To greater
 or lesser extents, this SDK attemts to insulate its users from that reality.
 It does so by fetching the Sheet from the server and letting you work with the
@@ -127,7 +122,7 @@ is done to the Sheet, the cached sheet data is discarded.
 The SDK provides two distinct interfaces to the Sheet data.  The first is a
 straightforward OO approach where methods are used to access the consitituent
 members (Rows, Columns, Cells, etc.) of the Sheet.  The second is a more
-"pythonic" approach where the Sheet can be treated as a two-dimensional array.
+"Pythonic" approach where the Sheet can be treated as a two-dimensional array.
 
 When using the OO interface to the Sheet, no caching is done by the SDK.  Each
 read of data from the Sheet will fetch the latest data for the corresponding
@@ -169,11 +164,11 @@ print client
 
 ## List and Load Sheets
 
-These few lines list the sheets available to the your client.  In the
-listing, each sheet is represented by a `smartsheetclient.SheetInfo`
+These few lines list the Sheets available to the your client.  In the
+listing, each Sheet is represented by a `smartsheetclient.SheetInfo`
 object.  Specific SheetInfo objects can be fetched by name (which may match
-multiple sheets) or permalink (which will match at most one sheet).  Once
-the sheet you are interested in has been found, it can be fetched, either
+multiple Sheets) or permalink (which will match at most one Sheet).  Once
+the Sheet you are interested in has been found, it can be fetched, either
 directly from its corresponding `SheetInfo` object, or directly via the
 client.  Both methods are show below.
 
@@ -202,7 +197,7 @@ sheet = sheet_info.loadSheet()
 
 ## Access the Rows and Cells in a Sheet
 
-This example assumes that you are working with a fetched sheet.  The Rows
+This example assumes that you are working with a fetched Sheet.  The Rows
 of a Sheet are available by treating the Sheet as a list, or via `sheet.rows`.
 You can access the Cells of a Sheet as if the Sheet were a 2-dimensional array.
 When doing so, it is important to remember that Rows start at 1 and Columns
@@ -225,18 +220,30 @@ sheet[1][0] = "blue"
 
 # Save the change, by saving the Row, which stores any changed Cells on the Row.
 # If other Rows have been changed but not saved, they will be lost, because a
-# save of the Sheet invalidates the locally cached Sheet.
+# save of any Row on the Sheet discards the local Row cache.
 sheet.getRowByRowNumber(1).save()
 sheet[1].save()
+```
 
-# Or, save the change by saving the specific Cell.
+Saving the change to a specific Cell can be done by calling `save()` on the
+Cell instance.  However, by default, save on a Cell will also save any changes
+made to other Cells on the same Row.  If you have changed multiple Cells on a
+Row, but only want the changes to a specific Cell to be applied to the Row
+on the Server, then pass `propagate=False` to the Cell's `save()` method.
+This is shown in the examples below.  The SDK does not presently provide a
+mechanism to explicitly save more than one, but less than all, of the changed
+Cells on a Row.
+
+```
 # This discards any other Cell changes that may have been made on the Row, in
 # addition to any Cell changes made on  other Rows.
-sheet.getRowByRowNumber(1).getCellByIndex(0).save()
+```
+sheet.getRowByRowNumber(1).getCellByIndex(0).save(propagate=False)
 
 # There is no purely list-oriented way to save a specific Cell instead of the Row
-sheet[1].getCellByIndex(0).save()
+sheet[1].getCellByIndex(0).save(propagate=False)
 ```
+
 
 The Rows of a Sheet are available by treating the Sheet as a Python list,
 or directly at Sheet.rows:
@@ -250,31 +257,80 @@ for row in sheet.rows:
     print row[1]
 ```
 
+
 The value of all of the Cells in a Row can be gotten conveinently using the
 list-style interface:
+
 ```
 # All the Cells on Row 1.
 values = list(sheet.getRowByRowNumber(1))
 values = list(sheet[1])
 ```
 
+
+A new Row can be created from the Sheet directly, or using a RowWrapper
+created by the Sheet.  New Rows are not attached to the Sheet until they
+have been added to it via the `addRow()` or `addRows()` method of the Sheet.
+New Rows can be created empty, or with a list of values that will be used
+as the values for the Cells in the Row.  See the examples below:
+
+```
+# Make an empty Row from the Sheet
+row = sheet.makeRow()
+
+# Make a Row with three Cells.
+row = sheet.makeRow("one", "two", "three")
+row = sheet.makeRow(["one", two", "three"])
+# Or, the same thing from a generator.
+row = sheet.makeRow((x for x in "one two three".split()))
+
+# Do the same thing using a RowWrapper.
+rw = sheet.makeRowWrapper()
+row = rw.makeRow("one", "two", "three")
+row = rw.makeRow(["one", two", "three"])
+row = rw.makeRow((x for x in "one two three".split()))
+
+# The result is such that:
+row[0] == "one"
+
+# Add the Row to the Sheet.
+sheet.addRow(row)
+
+# NOTE:  After adding to a Sheet, the Row object is discarded.
+# Access to the newly added Row is through the Sheet.
+# Assuming the Sheet has only the added Row:
+sheet[1][0] == "one"
+sheet[1][2] == "three"
+```
+
+
 The number of Rows in a Sheet is available in the normal list-like way, or as
-an attribute of the Sheet:
+an attribute of the Sheet.  Note that the number of Rows in a Sheet is not
+necessarily the same thing as the number of Rows of the Sheet that were
+fetched -- the Sheet can be fetched with a subset of the Rows.
+
 ```
 print "Number of Rows in Sheet:", sheet.totalRowCount
 print "Number of Rows in Sheet:", len(sheet)
+print "Number of Rows fetched locally:", len(sheet.rows)
 ```
 
 The number of Columns on a Row is available in the normal list-like way as
-well, or as the length of the `columns` attribute of the Row:
+well, or as the length of the `columns` attribute of the Row.  The number
+of Columns in the Sheet will typically be the same as the number of Columns
+on the Row.  But, if the Sheet or Row were fetched with a subset of
+Columns, then it will differ.
+
 ```
 print "Number of Columns on Row 1:", len(sheet.getRowByRowNumber(1).columns)
 print "Number of Columns on Row 1:", len(sheet[1])
-``
+print "Number of Columns on Sheet:", len(sheet.columns)
+```
+
 
 The list-like syntax is clearly simpler for scenarios where you only
-need access (read or write) to the value of the Cells.  The other OO interface
-is important because it enables richer access.
+need access (read or write) to the value of the Cells.  The object-oriented
+interface, on the other hand, allows much richer access.
 
 For example, in order to assign a Hyperlink to a Cell, the Cell object
 must be accessed explicitly (not implicitly via the list-like syntax).

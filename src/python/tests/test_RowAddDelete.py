@@ -62,6 +62,7 @@ class RowAddDeleteTest(unittest.TestCase):
         self.assertTrue(len(self.sheet) == 1)
         self.assertTrue(self.sheet[1][0] == "one")
 
+
     def test_add_row_with_multiple_columns(self):
         '''Add a Row that has multiple values in multiple Columns.'''
         r = self.sheet.makeRow()
@@ -73,6 +74,63 @@ class RowAddDeleteTest(unittest.TestCase):
         self.assertTrue(self.sheet[1][0] == "one")
         self.assertTrue(self.sheet[1][1] == "2015-05-05")
 
+
+    def test_make_a_row_from_a_list_of_values(self):
+        '''Make a Row from a list of values.'''
+        row_1_value_list = ["one", "2015-05-05", "Yes", True,
+                "scott.wimer@smartsheet.com"]
+        row_2_value_list = ["two", "2015-05-06", "No", False,
+                "scott.wimer@smartsheet.com"] 
+
+        row = self.sheet.makeRow(row_1_value_list)
+
+        for i in range(len(row_1_value_list)):
+            self.assertTrue(row[i] == row_1_value_list[i])
+
+        self.sheet.addRow(row)
+
+        for i in range(len(row_1_value_list)):
+            self.assertTrue(self.sheet[1][i] == row_1_value_list[i])
+
+        rw = self.sheet.makeRowWrapper(position='toBottom')
+        row = rw.makeRow(row_2_value_list)
+
+        for i in range(len(row_2_value_list)):
+            self.assertTrue(row[i] == row_2_value_list[i])
+
+        self.sheet.addRow(row)
+
+        for i in range(len(row_2_value_list)):
+            self.assertTrue(self.sheet[2][i] == row_2_value_list[i])
+
+
+    def test_make_a_row_from_positional_parameters(self):
+        '''Make a Row from a list of positional parameters.'''
+        row_1_value_list = ["one", "2015-05-05", "Yes", True,
+                "scott.wimer@smartsheet.com"]
+        row_2_value_list = ["two", "2015-05-06", "No", False,
+                "scott.wimer@smartsheet.com"] 
+
+        row = self.sheet.makeRow(*row_1_value_list)
+
+        for i in range(len(row_1_value_list)):
+            self.assertTrue(row[i] == row_1_value_list[i])
+
+        self.sheet.addRow(row)
+
+        for i in range(len(row_1_value_list)):
+            self.assertTrue(self.sheet[1][i] == row_1_value_list[i])
+
+        rw = self.sheet.makeRowWrapper(position='toBottom')
+        row = rw.makeRow(*row_2_value_list)
+
+        for i in range(len(row_2_value_list)):
+            self.assertTrue(row[i] == row_2_value_list[i])
+
+        self.sheet.addRow(row)
+
+        for i in range(len(row_2_value_list)):
+            self.assertTrue(self.sheet[2][i] == row_2_value_list[i])
 
 
     def test_add_rows_to_top_of_sheet(self):
@@ -97,6 +155,7 @@ class RowAddDeleteTest(unittest.TestCase):
         self.assertTrue(self.sheet[1][0] == "three")
         self.assertTrue(self.sheet[2][0] == "two")
         self.assertTrue(self.sheet[3][0] == "one")
+
 
     def test_add_rows_to_bottom_of_sheet(self):
         r = self.sheet.makeRow()
