@@ -1,0 +1,13 @@
+.sw[op]
+.*.sw[op]
+*.pyc
+# Ignore setup.py artifacts
+build/
+dist/
+sdist/
+smartsheetclient.egg-info/
+
+# Ignore the test cases log files
+*.log
+
+

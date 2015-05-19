@@ -105,7 +105,7 @@ class CellAccessTest(unittest.TestCase):
         self.sheet.enableCache()
         cell = self.sheet[1].getCellByIndex(0)
         self.assertTrue(cell.value == "one")
-        cell.assign("API Docs", hyperlink=link)
+        cell = cell.assign("API Docs", hyperlink=link)
 
         self.assertTrue(self.sheet[1][0] == "API Docs")
         self.assertTrue(self.sheet[1].getCellByIndex(0).value == "API Docs")
@@ -131,9 +131,11 @@ class CellAccessTest(unittest.TestCase):
 
         self.sheet.addRow(r, position='toTop')
 
-        self.assertTrue(r[0] == 'Smartsheet Blog')
-        self.assertTrue(r.getCellByIndex(0).value == 'Smartsheet Blog')
-        self.assertTrue(r.getCellByIndex(0).hyperlink.url == link_target)
+        self.assertTrue(self.sheet[1][0] == 'Smartsheet Blog')
+        self.assertTrue(self.sheet[1].getCellByIndex(0).value ==
+                'Smartsheet Blog')
+        self.assertTrue(self.sheet[1].getCellByIndex(0).hyperlink.url ==
+                link_target)
 
 
     def test_changing_multiple_cells_on_a_row_list_sytle(self):
