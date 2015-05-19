@@ -175,10 +175,10 @@ class RowWrapper(object):
 
     def makeRow(self, *values_list, **values_dict):
         '''
-        Make a Row in this RowWrapper, with (optionally), initial Cell values.
-
-        Call with either values_list (which collects positional parameters),
-        or values_dict (which collects keyword parameters), but not both.
+        Make a Row in this RowWrapper -- with optional initial Cell values.
+        Call with either a list of values (as positional parameters or single
+        list of values), or a dict of values (as keyword parameters or a
+        single dict of values), or neither, but not both.
 
         @param values_list A list of new Cell values
         @param values_dict A dict of new {(column.title|column.index): value}
