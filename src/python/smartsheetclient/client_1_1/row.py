@@ -10,7 +10,7 @@ import json
 
 from base import (maybeAssignFromDict, isList, isScalar, isGenerator)
 from cell import (Cell, CellTypes)
-from attachment import Attachment
+from attachment import Attachment, AttachPoint
 from discussion import Discussion
 from smartsheet_exceptions import (SmartsheetClientError, UnknownColumnId,
         OperationOnDiscardedObject, SheetIntegrityError)
@@ -45,7 +45,7 @@ class RowPositionProperties(object):
         relative to the parent Row:
           * position == self.Top     ->  relative to the first child
           * position == self.Bottom  ->  relative to the last child
-        
+
         The parent or sibling Rows are mutually exclusive and can be specified
         either by passing a Row object or the ID of the desired parent or
         sibling Row.
@@ -64,7 +64,7 @@ class RowPositionProperties(object):
         self.siblingId = None
 
         if position not in (self.Top, self.Bottom, None):
-            err = ("position, if specified,  must be '%s' or '%s' got %r" % 
+            err = ("position, if specified,  must be '%s' or '%s' got %r" %
                     (self.Top, self.Bottom, position))
             sheet.logger.error(err)
             raise SmartsheetClientError(err)
@@ -135,7 +135,6 @@ class RowPositionProperties(object):
     def __str__(self):
         return ('<RowPositionProperties %r  parent: %r  sibling: %r>' %
                 (self.position, self.parentId or '', self.siblingId or ''))
-
 
 
 class RowWrapper(object):
@@ -224,7 +223,7 @@ class RowWrapper(object):
         of those Columns.  In most cases that will be 0 - max Column index,
         but not always.
         The Column indexes used for the assignment are those from the
-        RowWrapper's ColumnsInfo.   
+        RowWrapper's ColumnsInfo.
 
         @param values A list of values, or a 1-element list containing a list.
         @return A newly created Row in this RowWrapper (but not yet saved).
@@ -238,7 +237,7 @@ class RowWrapper(object):
             if isGenerator(values[0]):
                 return self.makeRowFromList(*list(values[0]))
             if not isScalar(values[0]):
-                err = ("%s.makeRowFromList() can't understand: %r" % 
+                err = ("%s.makeRowFromList() can't understand: %r" %
                         (self, values))
                 self.sheet.logger.error(err)
                 raise SmartsheetClientError(err)
@@ -254,7 +253,7 @@ class RowWrapper(object):
         for column, value in zip (columns, values):
             row[column.index] = value
         return row
-        
+
     def makeRowFromDict(self, **kwargs):
         '''
         Make a partially filled Row from a dict of values (either given as
@@ -302,7 +301,7 @@ class RowWrapper(object):
     def discard(self):
         '''
         Mark each of the Rows as discarded.
-        This is called after the RowWrapper has been used and the Rows are 
+        This is called after the RowWrapper has been used and the Rows are
         now incorporated into the Sheet.
         '''
         for row in self.rows:
@@ -323,7 +322,7 @@ class RowWrapper(object):
         self.errorIfDiscarded()
         return str(self)
 
-class Row(ContainedThing, object):
+class Row(AttachPoint, ContainedThing, object):
     '''
     A Row from a sheet.
 
@@ -350,7 +349,7 @@ class Row(ContainedThing, object):
     # TODO:  Keep track of how the Row or Sheet was fetched.
     # In order to do equivalent refresh of the Row or Sheet, we need to know
     # what includes it was fetched with.
-    
+
     # Eventually, it would be nice to be able to tell the server which
     # version we are at and have it send us just the changes between our
     # version and the current version.
@@ -405,7 +404,7 @@ class Row(ContainedThing, object):
         row._isNew = False      # Rows from the server are not new.
         row._columns_info = columns_info
 
-        row.sheet.logger.debug("Row.newFromAPI(# %d)", fields['rowNumber']) 
+        row.sheet.logger.debug("Row.newFromAPI(# %d)", fields['rowNumber'])
         row._id = fields['id']
         row._rowNumber = fields['rowNumber']
         row._parentRowNumber = fields.get('parentRowNumber', 0)
@@ -616,7 +615,7 @@ class Row(ContainedThing, object):
         try:
             return self.getCellByColumnId(column.id)
         except KeyError:
-            err = ("%s.getCellByIndexFailed(%s) %s => unknown Column ID %r" % 
+            err = ("%s.getCellByIndexFailed(%s) %s => unknown Column ID %r" %
                     (self, str(idx), str(idx), column.id))
             self.logger.error(err)
             raise IndexError
@@ -626,7 +625,7 @@ class Row(ContainedThing, object):
         Get the Cell on this Row at the specified Column ID.
         Returns the Cell at the Column ID, or an empty Cell.
         Raises UnknownColumnId if column_id is unknown.
-        
+
         @param column_id The ID of the Column
         @param use_cache True to use the Columns cache; False to refetch it
         @return The Cell on the Row at the specified Column
@@ -654,13 +653,13 @@ class Row(ContainedThing, object):
         #   * Cells have matching Columns
         #   * Cells are on a Column that exists
         if self.id != original_cell.rowId:
-            err ("%s.replaceCell() original_cell on wrong Row:  %r" % 
+            err ("%s.replaceCell() original_cell on wrong Row:  %r" %
                     (self, original_cell))
             self.logger.error(err)
             raise SheetIntegrityError(err)
 
         if self.id != new_cell.rowId:
-            err ("%s.replaceCell() new_cell on wrong Row:  %r" % 
+            err ("%s.replaceCell() new_cell on wrong Row:  %r" %
                     (self, new_cell))
             self.logger.error(err)
             raise SheetIntegrityError(err)
@@ -796,7 +795,7 @@ class Row(ContainedThing, object):
         client = client or self.client
         sheet = self.sheet
 
-        acc = { 'cells': [cell.flatten(strict=strict) for cell in 
+        acc = { 'cells': [cell.flatten(strict=strict) for cell in
             self.cells if cell.type != CellTypes.EmptyCell] }
         if self._new_position:
             acc.update(self._new_position.flatten())
@@ -880,6 +879,9 @@ class Row(ContainedThing, object):
         self.errorIfDiscarded()
         return str(self)
 
-
-
-
+    def get_attach_path(self):
+        self.errorIfDiscarded()
+        sheet_id = self.sheet._id
+        row_id = self._id
+        path = 'sheet/{0}/row/{1}/attachments'.format(sheet_id, row_id)
+        return path

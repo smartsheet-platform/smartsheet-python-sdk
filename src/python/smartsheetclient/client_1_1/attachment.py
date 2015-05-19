@@ -50,9 +50,10 @@ class Attachment(ContainedThing, object):
                     url urlExpiresMillis'''.split()
 
 
-    def __init__(self, sheet, id, name, attachmentType, attachmentSubType,
-            createdAt, createdBy, parentType, parentId, mimeType=None,
-            url=None, urlExpiresMillis=None, sizeInKb=None):
+    def __init__(self, sheet, id=-1, name='Unamed Attachment',
+            attachmentType=None, attachmentSubType=None,
+            createdAt=None, createdBy=None, parentType=None, parentId=-1,
+            mimeType=None, url=None, urlExpiresMillis=None, sizeInKb=None):
         self.sheet = sheet
         self.parent = sheet
         self._id = id
@@ -207,7 +208,7 @@ class Attachment(ContainedThing, object):
         name = "%s.getVersionList()" % self
         client = client or self.client
         body = client.GET(path, name=name)
-        return [Attachment(a, self.sheet) for a in body]
+        return [Attachment.newFromAPI(a, self.sheet) for a in body]
 
     def getFullInfo(self, client=None):
         '''
@@ -223,7 +224,7 @@ class Attachment(ContainedThing, object):
         name = "%s.getFullInfo()" % self
         client = client or self.client
         body = client.GET(self.path, name=name)
-        return Attachment(body, self.sheet)
+        return Attachment.newFromAPI(body, self.sheet)
 
     def download(self, client=None):
         '''
@@ -296,7 +297,7 @@ class Attachment(ContainedThing, object):
         name = "%s.uploadNewVersion()" % self
         body = self.client.POST(path, extra_headers=headers, body=content,
                 name=name)
-        return Attachment(body['result'], sheet=self.sheet)
+        return Attachment.newFromAPI(body['result'], sheet=self.sheet)
                  
     def errorIfDiscarded(self):
         if self._discarded:
@@ -312,5 +313,49 @@ class Attachment(ContainedThing, object):
         return str(self)
 
 
+class AttachPoint(object):
+    def __init__(self):
+        pass
 
+    def get_attach_path(self):
+        raise NotImplementedError("Classes using the AttachPoint mixin must "
+                                  "define a get_attach_path() call that "
+                                  "returns a string URL path")
 
+    def attachFile(self, filename, client=None):
+        self.errorIfDiscarded()
+        with open(filename, 'rb') as f:
+            buf = f.read()
+        return self.attachBytes(filename, buf, client=client)
+
+    def attachBytes(self, attachment_name, data, client=None):
+        self.errorIfDiscarded()
+        headers = {
+            'Content-Disposition':
+                'attachment; filename="{0}"'.format(attachment_name),
+            'Content-Type': 'application/octest-stream',
+            'Content-Length': str(len(data)),
+        }
+        obj = client or self.client
+        result = obj.request(self.get_attach_path(),
+                             "POST",
+                             headers,
+                             data)
+        return result
+
+    def attachUrl(self, url, link_name=None, link_description=None,
+                  client=None):
+        self.errorIfDiscarded()
+        data = {}
+        data['name'] = link_name
+        data['description'] = link_description
+        data['url'] = url
+        data['attachmentType'] = 'LINK'
+        data['attachmentSubType'] = None
+        body = json.dumps(data)
+        obj = client or self.client
+        result = obj.request(self.get_attach_path(),
+                             "POST",
+                             None,
+                             body)
+        return result
