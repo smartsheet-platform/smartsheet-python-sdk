@@ -96,6 +96,8 @@ class SheetAttachmentsTest(unittest.TestCase):
         self.assertTrue(response[0]['parentType'] == u'ROW')
         self.assertTrue(response[0]['name'] == filename)
 
+        self.logger.debug("parentType={0}".format(sheet[2].attachments[0].parentType))
+
         self.logger.debug(dir(sheet[2].attachments[0]))
         self.logger.debug('row.hyperlink.parentType: {0}'.format(sheet[2].attachments[0].parentType))
         self.assertTrue(len(sheet[2].attachments) > 0)
