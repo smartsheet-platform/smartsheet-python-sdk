@@ -154,7 +154,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
         self._use_cache = False
         self._discarded = False
         self.columnsInfo = None   # The most recently acquired ColumnsInfo.
-        # Columns and Rows can be cached 
+        # Columns and Rows can be cached
         self._column_id_map = {}
         self._column_index_map = {}
         self._max_cached_index = -1
@@ -211,7 +211,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
 
         self._attachments = [Attachment.newFromAPI(a, self) for a in
                 fields.get('attachments', [])]
-        self._discussions = [Discussion.newFromAPI(d,self) for d in 
+        self._discussions = [Discussion.newFromAPI(d,self) for d in
                 fields.get('discussions', [])]
         maybeAssignFromDict(fields, self, 'effectiveAttachmentOptions')
         maybeAssignFromDict(fields, self, 'readOnly')
@@ -300,7 +300,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
     def permalink(self):
         self.errorIfDiscarded()
         return self._permalink
- 
+
     @property
     def ganttEnabled(self):
         self.errorIfDiscarded()
@@ -404,7 +404,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
     def getColumnById(self, column_id):
         '''
         Return the Column that has the specified ID.
-        
+
         @param column_id The ID of the Column to get
         @return The Column with the specified ID
         @raises UnknownColumnId If a matching Column is not found
@@ -424,7 +424,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
         try:
             return self.columnsInfo.getColumnById(column_id)
         except KeyError:
-            err = ("%s.getColumnById(%r): Column ID not found" % 
+            err = ("%s.getColumnById(%r): Column ID not found" %
                     (self, column_id))
             self.logger.error(err)
             raise UnknownColumnId(err)
@@ -569,12 +569,12 @@ class Sheet(AttachPoint, TopLevelThing, object):
             if row_id in self._row_id_map:
                 return self._row_id_map[row_id]
             cache_miss = True
-        
+
         if cache_miss:
             row = self.fetchRowById(row_id)
             self._addRowToCache(row)
             return row
-        
+
     def fetchRowByNumber(self, row_number):
         '''
         Fetch the specified Row from the server.
@@ -720,7 +720,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
         @raises SmartsheetClientError Communication error
         '''
         self.errorIfDiscarded()
-        return [a for a in 
+        return [a for a in
                 self.getAllAttachments(use_cache=use_cache, client=client)
                 if a.name == name]
 
@@ -777,7 +777,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
     def fetchAllAttachments(self):
         '''
         Fetch the Attachment objects for each Attachment on this Sheet.
-        
+
         This also fetches the Attachments that are on the Rows and Discussions
         of the Sheet.
         @param client The client to use instead of sheet.client if not use_cache
@@ -834,11 +834,11 @@ class Sheet(AttachPoint, TopLevelThing, object):
 
         See the documentation for the RowWrapper class for details on the
         placement arguments: 'position', 'parentId', and 'siblingId'.
-        
+
         @param row The Row to add - the Row may be empty.
         @param position Where to insert the Row ('toTop' or 'toBottom')
         @param parentId ID of the parent Row to insert `row` under.
-        @param siblingID ID of the Row to insert `row` next to 
+        @param siblingID ID of the Row to insert `row` next to
         @param strict True for the API server to do strict Cell parsing.
         @return The Sheet.
         @raises SmartsheetClientError for Communications errors
@@ -847,7 +847,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
         rpprops = RowPositionProperties(self, position=position,
                 parentId=parentId, siblingId=siblingId)
         row_wrapper = RowWrapper(self, rpprops, rows=[row])
-        return self.addRows(row_wrapper, strict=strict) 
+        return self.addRows(row_wrapper, strict=strict)
 
     def addRows(self, row_wrapper, strict=True):
         '''
@@ -866,7 +866,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
         # I don't have a good solution to this problem today, I'm not sure
         # there is one short of essentially reimplementing the web client,
         # and while that is a "solution", it doesn't seem like a "good" one.
-        # 
+        #
         # If the Sheet was fetched with a subset of Rows, then we should add
         # these newly inserted Rows to that subset.  This way, when the Sheet
         # is refreshed, it will contain the Rows the caller just added to it.
@@ -946,7 +946,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
             tmp_col = self.getColumnByIndex(index)
             ins_index = tmp_col.index + 1
         col_fields['index'] = ins_index
-        
+
         body = self.client.POST(path, extra_headers=self.client.json_headers,
                 body=json.dumps(col_fields))
 
@@ -1033,6 +1033,30 @@ class Sheet(AttachPoint, TopLevelThing, object):
         sheet_id = self.id
         path = 'sheet/{0}/attachments'.format(sheet_id)
         return path
+
+    def addDiscussion(self, title, initial_comment):
+        self.errorIfDiscarded()
+        # this is woefully incomplete
+        body = {}
+        body['title'] = title
+        body['comment'] = {'text': initial_comment}
+        path = 'sheet/{0}/discussions'.format(self.id)
+        headers, response = self.client.request(path,
+                                                'POST',
+                                                extra_headers=None,
+                                                body=json.dumps(body))
+        return Discussion.newFromAPI(response['result'], self)
+
+    def fetchDiscussionById(self, discussion_id):
+        self.errorIfDiscarded()
+        pass
+
+    def fetchAllDiscussions(self):
+        self.errorIfDiscarded()
+        path = 'sheet/{0}/discussions'.format(self.id)
+        headers, response = self.client.request(path)
+        a = [Discussion.newFromAPI(i, self) for i in response]
+        return a
 
 
 class SheetInfo(TopLevelThing, object):
