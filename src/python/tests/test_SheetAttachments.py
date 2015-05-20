@@ -4,6 +4,7 @@ import datetime
 import logging
 import sys
 import hashlib
+import json
 
 log_format = '%(module)s.%(funcName)s[%(lineno)d] %(levelname)s - %(message)s'
 logging.basicConfig(filename='tests.log', level=logging.DEBUG,
@@ -157,6 +158,49 @@ class SheetAttachmentsTest(unittest.TestCase):
         self.assertTrue(sheet.attachments[0].name == LINK_NAME)
         self.assertTrue(sheet.attachments[0].url == LINK_URL)
         self.logger.debug("exiting test_sheet_hyperlink_attachment")
+
+    def test_sheet_discussion_file_attachment(self):
+        self.logger.debug('entered test_sheet_discussion_file_attachment')
+        # test constants
+        filename = 'test_SheetAttachments.py'
+        DISCUSSION_TITLE = 'Test Discussion'
+        COMMENT_TEXT = 'My first discussion comment'
+
+        # Create discussion and one comment
+        # path = 'sheet/{0}/discussions'.format(self.sheet.id)
+        # body = {}
+        # body['title'] = DISCUSSION_TITLE
+        # body['comment'] = {'text': COMMENT_TEXT}
+        # headers, response = self.client.request(path, 'POST', extra_headers=None, body=json.dumps(body))
+        # self.assertTrue('id' in response['result'])
+        # # comment_id = response['result']['id']
+        discussion = self.sheet.addDiscussion(DISCUSSION_TITLE, COMMENT_TEXT)
+        self.assertTrue(discussion is not None)
+        self.assertTrue(len(discussion.comments) > 0)
+
+        # create a new sheet object with the attachments and discussions
+        sheet = self.sheet_info.loadSheet(attachments=True, discussions=True)
+
+        # self.logger.debug('Headers: {0}'.format(headers))
+        # self.logger.debug('Response: {0}'.format(response))
+        self.logger.debug("Discussions: {0}".format(sheet.discussions))
+        self.logger.debug("Comments: {0}".format(sheet.discussions[0].comments))
+        self.logger.debug("Attachments: {0}".format(sheet.discussions[0].commentAttachments))
+
+        sheetds = sheet.fetchAllDiscussions()
+        self.assertTrue(len(sheetds) > 0)
+        sheetds[0].refreshComments()
+        self.assertTrue(len(sheetds[0].comments) > 0)
+        sheetds[0].comments[0].attachFile(filename)
+
+        # Do we need an updated sheet object here, or will the existing copy
+        # know about the attachment?
+
+        self.logger.debug('exit test_sheet_discussion_file_attachment')
+
+    def test_sheet_discussion_hyperlink_attachment(self):
+        self.logger.debug('entered test_sheet_discussion_hyperlink_attachment')
+        self.logger.debug('exit test_sheet_discussion_hyperlink_attachment')
 
 
 def main():

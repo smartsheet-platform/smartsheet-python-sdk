@@ -8,8 +8,9 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 
 import client
 from base import (ContainedThing, slicedict)
-from attachment import Attachment
+from attachment import Attachment, AttachPoint
 from smartsheet_exceptions import OperationOnDiscardedObject
+import json
 
 class Discussion(ContainedThing):
     '''
@@ -18,7 +19,7 @@ class Discussion(ContainedThing):
     contain the Comments and Attachments from the Discussion.
     '''
     field_names = '''id title comments createdBy lastCommentedAt
-                lastCommentedUser commentAttachments'''.split()
+                lastCommentedUser commentAttachments parentType'''.split()
     # The same sort of incompletely specified situation that exists for
     # Attachments is present for Discussions.  If the Discussion's parent,
     # or the Discussion itself was not fetched with an include option that
@@ -100,6 +101,11 @@ class Discussion(ContainedThing):
         self.errorIfDiscarded()
         return self._createdBy
 
+    @property
+    def parentType(self):
+        self.errorIfDiscarded()
+        return self._parentType
+
     def getAttachmentsByName(self, name):
         '''
         Return a list of Attachments that match the specified name.
@@ -129,8 +135,32 @@ class Discussion(ContainedThing):
         self.errorIfDiscarded()
         return str(self)
 
+    def addComment(self, text, client=None):
+        self.errorIfDiscarded()
+        client = client or self.client
+        # headers = {
+        #     'Content-Type': 'application/json',
+        # }
+        body = json.dumps({'text': text})
+        path = 'sheet/{0}/discussion/{1}/comments'.format(
+                self.sheet.id,
+                self.id)
+        response = client.POST(
+                path,
+                extra_headers=client.json_headers,
+                body=body)
+        return Comment.newFromAPI(response['result'], self.sheet)
 
-class Comment(ContainedThing):
+    def refreshComments(self, client=None):
+        self.errorIfDiscarded()
+        client = client or self.client
+        path = 'sheet/{0}/discussion/{1}'.format(self.sheet.id, self.id)
+        response = client.GET(path)
+        self._comments = [Comment.newFromAPI(i, self.sheet) for i in
+                response['comments']]
+
+
+class Comment(AttachPoint, ContainedThing):
     '''
     A Comment on a Discussion.
     '''
@@ -214,7 +244,7 @@ class Comment(ContainedThing):
     def discard(self):
         for att in self.attachments:
             att.discard()
-        self._discarded = False
+        self._discarded = True
 
     def getFullInfo(self, client=None):
         '''
@@ -222,7 +252,7 @@ class Comment(ContainedThing):
         The complete version will include any Attachments and should include
         the discussionId for the Discussion this comment is part of.
 
-        @param client Optional SmartsheetClient instance to use.  
+        @param client Optional SmartsheetClient instance to use.
         @return Fully-populated Comment object.
         '''
         self.errorIfDiscarded()
@@ -230,7 +260,7 @@ class Comment(ContainedThing):
         client = client or self.client
         body = client.get(path, name='Comment.getFullInfo(%s)' % str(self.id))
         return self.__class__.newFromAPI(body, self.sheet)
-    
+
     def addAttachment(self, attachment):
         raise NotImplementedError("Support for adding attachments to "
                 "comments is not implemented.")
@@ -239,3 +269,9 @@ class Comment(ContainedThing):
         if self._discarded:
             raise OperationOnDiscardedObject("Comment was discarded.")
 
+    def get_attach_path(self):
+        self.errorIfDiscarded()
+        sheet_id = self.sheet.id
+        comment_id = self.id
+        path = 'sheet/{0}/comment/{1}/attachments'.format(sheet_id, comment_id)
+        return path
