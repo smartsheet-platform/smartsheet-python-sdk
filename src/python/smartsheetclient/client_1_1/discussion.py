@@ -135,26 +135,30 @@ class Discussion(ContainedThing):
         self.errorIfDiscarded()
         return str(self)
 
-    def addComment(self, text):
+    def addComment(self, text, client=None):
         self.errorIfDiscarded()
-        headers = {
-            'Content-Type': 'application/json',
-        }
+        client = client or self.client
+        # headers = {
+        #     'Content-Type': 'application/json',
+        # }
         body = json.dumps({'text': text})
-        path = 'sheet/{0}/discussion/{1}/comments'.format(self.sheet.id,
-                                                          self.id)
-        headers, response = self.client.request(path,
-                                                'POST',
-                                                extra_headers=headers,
-                                                body=body)
+        path = 'sheet/{0}/discussion/{1}/comments'.format(
+                self.sheet.id,
+                self.id)
+        response = client.POST(
+                path,
+                extra_headers=client.json_headers,
+                body=body)
         return Comment.newFromAPI(response['result'], self.sheet)
 
-    def refreshComments(self):
+    def refreshComments(self, client=None):
         self.errorIfDiscarded()
+        client = client or self.client
         idlist = [c.id for c in self.comments]
         path = 'sheet/{0}/discussion/{1}'.format(self.sheet.id, self.id)
-        headers, response = self.client.request(path)
-        lst = [Comment.newFromAPI(i, self.sheet) for i in response['comments'] if i['id'] not in idlist]
+        response = client.GET(path)
+        lst = [Comment.newFromAPI(i, self.sheet) for i in
+                        response['comments'] if i['id'] not in idlist]
         self._comments.extend(lst)
 
 
@@ -242,7 +246,7 @@ class Comment(AttachPoint, ContainedThing):
     def discard(self):
         for att in self.attachments:
             att.discard()
-        self._discarded = False
+        self._discarded = True
 
     def getFullInfo(self, client=None):
         '''

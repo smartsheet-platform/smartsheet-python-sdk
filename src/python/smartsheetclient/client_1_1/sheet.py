@@ -1034,27 +1034,29 @@ class Sheet(AttachPoint, TopLevelThing, object):
         path = 'sheet/{0}/attachments'.format(sheet_id)
         return path
 
-    def addDiscussion(self, title, initial_comment):
+    def addDiscussion(self, title, initial_comment, client=None):
         self.errorIfDiscarded()
         # this is woefully incomplete
+        client = client or self.client
         body = {}
         body['title'] = title
         body['comment'] = {'text': initial_comment}
         path = 'sheet/{0}/discussions'.format(self.id)
-        headers, response = self.client.request(path,
-                                                'POST',
-                                                extra_headers=None,
-                                                body=json.dumps(body))
+        body = json.dumps(body)
+        response = client.POST(path,
+                extra_headers=None,
+                body=body)
         return Discussion.newFromAPI(response['result'], self)
 
-    def fetchDiscussionById(self, discussion_id):
+    def fetchDiscussionById(self, discussion_id, client=None):
         self.errorIfDiscarded()
         pass
 
-    def fetchAllDiscussions(self):
+    def fetchAllDiscussions(self, client=None):
         self.errorIfDiscarded()
+        client = client or self.client
         path = 'sheet/{0}/discussions'.format(self.id)
-        headers, response = self.client.request(path)
+        response = client.GET(path)
         a = [Discussion.newFromAPI(i, self) for i in response]
         return a
 
