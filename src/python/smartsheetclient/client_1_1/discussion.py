@@ -154,12 +154,10 @@ class Discussion(ContainedThing):
     def refreshComments(self, client=None):
         self.errorIfDiscarded()
         client = client or self.client
-        idlist = [c.id for c in self.comments]
         path = 'sheet/{0}/discussion/{1}'.format(self.sheet.id, self.id)
         response = client.GET(path)
-        lst = [Comment.newFromAPI(i, self.sheet) for i in
-                        response['comments'] if i['id'] not in idlist]
-        self._comments.extend(lst)
+        self._comments = [Comment.newFromAPI(i, self.sheet) for i in
+                response['comments']]
 
 
 class Comment(AttachPoint, ContainedThing):
