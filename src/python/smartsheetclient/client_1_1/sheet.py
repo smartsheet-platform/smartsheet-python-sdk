@@ -1046,7 +1046,9 @@ class Sheet(AttachPoint, TopLevelThing, object):
         response = client.POST(path,
                 extra_headers=None,
                 body=body)
-        return Discussion.newFromAPI(response['result'], self)
+        tmp = Discussion.newFromAPI(response['result'], self)
+        self.discussions.append(tmp)
+        return tmp
 
     def fetchDiscussionById(self, discussion_id, client=None):
         self.errorIfDiscarded()
@@ -1057,8 +1059,8 @@ class Sheet(AttachPoint, TopLevelThing, object):
         client = client or self.client
         path = 'sheet/{0}/discussions'.format(self.id)
         response = client.GET(path)
-        a = [Discussion.newFromAPI(i, self) for i in response]
-        return a
+        self._discussions = [Discussion.newFromAPI(i, self) for i in response]
+        return self.discussions
 
 
 class SheetInfo(TopLevelThing, object):

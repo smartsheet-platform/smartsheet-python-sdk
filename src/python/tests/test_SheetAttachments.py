@@ -178,27 +178,22 @@ class SheetAttachmentsTest(unittest.TestCase):
         self.assertTrue(discussion is not None)
         self.assertTrue(len(discussion.comments) > 0)
 
-        # create a new sheet object with the attachments and discussions
-        sheet = self.sheet_info.loadSheet(attachments=True, discussions=True)
+        self.logger.debug("Discussions: {0}".format(self.sheet.discussions))
+        self.logger.debug("Comments: {0}".format(self.sheet.discussions[0].comments))
+        self.logger.debug("Attachments: {0}".format(self.sheet.discussions[0].commentAttachments))
 
-        # self.logger.debug('Headers: {0}'.format(headers))
-        # self.logger.debug('Response: {0}'.format(response))
-        self.logger.debug("Discussions: {0}".format(sheet.discussions))
-        self.logger.debug("Comments: {0}".format(sheet.discussions[0].comments))
-        self.logger.debug("Attachments: {0}".format(sheet.discussions[0].commentAttachments))
-
-        sheetds = sheet.fetchAllDiscussions()
-        self.assertTrue(len(sheetds) > 0)
-        sheetds[0].refreshComments()
-        self.assertTrue(len(sheetds[0].comments) > 0)
-        sheetds[0].comments[0].attachFile(filename)
-        for i in sheetds:
+        self.sheet.fetchAllDiscussions()
+        self.assertTrue(len(self.sheet.discussions) > 0)
+        self.sheet.discussions[0].refreshComments()
+        self.assertTrue(len(self.sheet.discussions[0].comments) > 0)
+        self.sheet.discussions[0].comments[0].attachFile(filename)
+        for i in self.sheet.discussions:
             i.refreshAttachments()
 
-        self.logger.debug("sheetds: {0}".format(sheetds))
-        self.logger.debug("Attachments: {0}".format(sheetds[0].commentAttachments))
-        self.assertTrue(len(sheetds[0].commentAttachments) > 0)
-        self.assertTrue(sheetds[0].commentAttachments[0].name == filename)
+        self.logger.debug("self.sheet.discussions: {0}".format(self.sheet.discussions))
+        self.logger.debug("Attachments: {0}".format(self.sheet.discussions[0].commentAttachments))
+        self.assertTrue(len(self.sheet.discussions[0].commentAttachments) > 0)
+        self.assertTrue(self.sheet.discussions[0].commentAttachments[0].name == filename)
 
         self.logger.debug('exit test_sheet_discussion_file_attachment')
 
