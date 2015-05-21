@@ -194,11 +194,32 @@ class SheetAttachmentsTest(unittest.TestCase):
         self.logger.debug("Attachments: {0}".format(self.sheet.discussions[0].commentAttachments))
         self.assertTrue(len(self.sheet.discussions[0].commentAttachments) > 0)
         self.assertTrue(self.sheet.discussions[0].commentAttachments[0].name == filename)
+        self.assertTrue(self.sheet.discussions[0].commentAttachments[0].attachmentType == u'FILE')
 
         self.logger.debug('exit test_sheet_discussion_file_attachment')
 
     def test_sheet_discussion_hyperlink_attachment(self):
         self.logger.debug('entered test_sheet_discussion_hyperlink_attachment')
+        LINK_NAME = 'Google Search'
+        LINK_URL = 'https://google.com'
+        DISCUSSION_TITLE = 'Hyperlink Test Discussion'
+        COMMENT_TEXT = 'My hyperlink attachment comment text'
+
+        discussion = self.sheet.addDiscussion(DISCUSSION_TITLE, COMMENT_TEXT)
+        self.assertTrue(discussion is not None)
+        self.assertTrue(len(discussion.comments) > 0)
+
+        self.assertTrue(len(self.sheet.discussions) > 0)
+        self.assertTrue(len(self.sheet.discussions[0].comments) > 0)
+
+        self.sheet.discussions[0].comments[0].attachUrl(LINK_URL, LINK_NAME)
+        for i in self.sheet.discussions:
+            i.refreshAttachments()
+
+        self.assertTrue(len(self.sheet.discussions[0].commentAttachments) > 0)
+        self.assertTrue(self.sheet.discussions[0].commentAttachments[0].name == LINK_NAME)
+        self.assertTrue(self.sheet.discussions[0].commentAttachments[0].url == LINK_URL)
+
         self.logger.debug('exit test_sheet_discussion_hyperlink_attachment')
 
 
