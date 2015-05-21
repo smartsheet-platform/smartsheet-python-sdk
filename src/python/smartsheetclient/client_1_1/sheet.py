@@ -11,6 +11,7 @@ import copy
 import operator
 import datetime
 import sys
+import collections
 
 from smartsheet_exceptions import OperationOnDiscardedObject
 from base import maybeAssignFromDict, TopLevelThing
@@ -1050,9 +1051,29 @@ class Sheet(AttachPoint, TopLevelThing, object):
         self.discussions.append(tmp)
         return tmp
 
+    def removeDiscussion(self, obj, client=None):
+        self.errorIfDiscarded()
+        client = client or self.client
+        if not isinstance(obj, Discussion):
+            raise TypeError("The first argument of Sheet.removeDiscussion"
+                    " must be a Discussion")
+        self._discussions.remove(obj)
+        path = 'sheet/{0}/discussion/{1}'.format(self.id, obj.id)
+        self.client.DELETE(path)
+
     def fetchDiscussionById(self, discussion_id, client=None):
         self.errorIfDiscarded()
-        pass
+        client = client or self.client
+        path = 'sheet/{0}/discussion/{1}'.format(self.id, discussion_id)
+        response = client.GET(path)
+        d = Discussion.newFromAPI(response, self)
+        for i, j in enumerate(self.discussions):
+            if j.id == d.id:
+                self.discussions[i] == d
+                break
+        else:
+            self.discussions.append(d)
+        return d
 
     def fetchAllDiscussions(self, client=None):
         self.errorIfDiscarded()

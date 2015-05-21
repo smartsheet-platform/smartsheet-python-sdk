@@ -151,6 +151,16 @@ class Discussion(ContainedThing):
                 body=body)
         return Comment.newFromAPI(response['result'], self.sheet)
 
+    def removeComment(self, obj, client=None):
+        self.errorIfDiscarded()
+        client = client or self.client
+        if not isinstance(obj, Comment):
+            raise TypeError("The first argument of Discussion.removeComment"
+                    " must be a Comment")
+        self._comments.remove(obj)
+        path = 'sheet/{0}/comment/{1}'.format(self.sheet.id, obj.id)
+        self.client.DELETE(path)
+
     def refreshComments(self, client=None):
         self.errorIfDiscarded()
         client = client or self.client
