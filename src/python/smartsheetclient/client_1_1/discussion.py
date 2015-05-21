@@ -159,6 +159,17 @@ class Discussion(ContainedThing):
         self._comments = [Comment.newFromAPI(i, self.sheet) for i in
                 response['comments']]
 
+    def refreshAttachments(self, client=None):
+        self.errorIfDiscarded()
+        client = client or self.client
+        sheet_id = self.sheet.id
+        discussion_id = self.id
+        path = 'sheet/{0}/discussion/{1}/attachments'.format(
+                sheet_id, discussion_id)
+        response = client.GET(path)
+        self.logger.debug('discussion attachments: {0}'.format(response))
+        self._commentAttachments = [Attachment.newFromAPI(i, self.sheet)
+                for i in response]
 
 class Comment(AttachPoint, ContainedThing):
     '''

@@ -192,9 +192,13 @@ class SheetAttachmentsTest(unittest.TestCase):
         sheetds[0].refreshComments()
         self.assertTrue(len(sheetds[0].comments) > 0)
         sheetds[0].comments[0].attachFile(filename)
+        for i in sheetds:
+            i.refreshAttachments()
 
-        # Do we need an updated sheet object here, or will the existing copy
-        # know about the attachment?
+        self.logger.debug("sheetds: {0}".format(sheetds))
+        self.logger.debug("Attachments: {0}".format(sheetds[0].commentAttachments))
+        self.assertTrue(len(sheetds[0].commentAttachments) > 0)
+        self.assertTrue(sheetds[0].commentAttachments[0].name == filename)
 
         self.logger.debug('exit test_sheet_discussion_file_attachment')
 
