@@ -368,6 +368,8 @@ class Row(AttachPoint, ContainedThing, object):
         added after the Row has been saved to the Sheet.
         Cells with linkInFromCell can't be saved to a new Row either.
         '''
+        AttachPoint.__init__(self, sheet)
+        ContainedThing.__init__(self)
         self._id = -1           # Invalid ID
         self.sheet = sheet
         self.parent = sheet
@@ -376,7 +378,7 @@ class Row(AttachPoint, ContainedThing, object):
         self._parentRowNumber = 0   # Initially, no parent Row.
         self._cells = []
         self._discussions = []
-        self._attachments = []
+        # self._attachments = []
         self._expanded = True
         self._createdAt = None
         self._modifiedAt = None
@@ -424,10 +426,11 @@ class Row(AttachPoint, ContainedThing, object):
 
         # When a Sheet is fetched or a Row is fetched directly, the caller
         # can have the server include the Attachments along with the Row.
-        row._attachments = [
-                Attachment.newFromAPI(a, sheet) for a in
-                    fields.get('attachments', [])
-                ]
+        # row._attachments = [
+        #         Attachment.newFromAPI(a, sheet) for a in
+        #             fields.get('attachments', [])
+        #         ]
+        row._populate_attachments(fields.get('attachments', []))
 
         # Set the attributes that can't be set in __init__().
         maybeAssignFromDict(fields, row, 'expanded')
@@ -471,10 +474,10 @@ class Row(AttachPoint, ContainedThing, object):
         self.errorIfDiscarded()
         return self._discussions
 
-    @property
-    def attachments(self):
-        self.errorIfDiscarded()
-        return self._attachments
+    # @property
+    # def attachments(self):
+    #     self.errorIfDiscarded()
+    #     return self._attachments
 
     @property
     def columns(self):
@@ -566,7 +569,7 @@ class Row(AttachPoint, ContainedThing, object):
         '''
         # We can't access these collections via their properties, because to
         # to so would not be safe if this Row was already discarded.
-        for att in self._attachments:
+        for att in self.attachments:
             att.discard()
         for disc in self._discussions:
             disc.discard()
@@ -879,9 +882,12 @@ class Row(AttachPoint, ContainedThing, object):
         self.errorIfDiscarded()
         return str(self)
 
-    def get_attach_path(self):
+    def _get_create_attachment_path(self):
         self.errorIfDiscarded()
         sheet_id = self.sheet._id
         row_id = self._id
         path = 'sheet/{0}/row/{1}/attachments'.format(sheet_id, row_id)
         return path
+
+    def _get_refresh_attachment_path(self):
+        return self._get_create_attachment_path()

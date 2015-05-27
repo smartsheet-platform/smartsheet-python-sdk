@@ -80,7 +80,7 @@ class RowAddDeleteTest(unittest.TestCase):
         row_1_value_list = ["one", "2015-05-05", "Yes", True,
                 "scott.wimer@smartsheet.com"]
         row_2_value_list = ["two", "2015-05-06", "No", False,
-                "scott.wimer@smartsheet.com"] 
+                "scott.wimer@smartsheet.com"]
 
         row = self.sheet.makeRow(row_1_value_list)
 
@@ -109,7 +109,7 @@ class RowAddDeleteTest(unittest.TestCase):
         row_1_value_list = ["one", "2015-05-05", "Yes", True,
                 "scott.wimer@smartsheet.com"]
         row_2_value_list = ["two", "2015-05-06", "No", False,
-                "scott.wimer@smartsheet.com"] 
+                "scott.wimer@smartsheet.com"]
 
         row = self.sheet.makeRow(*row_1_value_list)
 
@@ -222,7 +222,7 @@ class RowAddDeleteTest(unittest.TestCase):
         self.assertTrue(self.sheet[1][0] == 'one')
         self.assertTrue(self.sheet[2][0] == 'two')
 
-   
+
     def test_add_multiple_rows_to_top_of_one_row_sheet(self):
         '''Add multiple Rows at once to the top of a one-row Sheet.'''
         r = self.sheet.makeRow()
@@ -434,7 +434,7 @@ class RowAddDeleteTest(unittest.TestCase):
         self.assertTrue(self.sheet[4][2] == 'Maybe')
 
 
-   
+
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
@@ -444,6 +444,5 @@ if __name__ == '__main__':
     with file(api_token_file, 'r') as fh:
         api_token = fh.read()
         api_token = api_token.strip()
-    del sys.argv[1] 
+    del sys.argv[1]
     unittest.main()
-

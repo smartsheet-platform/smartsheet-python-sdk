@@ -139,7 +139,7 @@ class Attachment(ContainedThing, object):
     def sizeInKb(self):
         self.errorIfDiscarded()
         return self._sizeInKb
- 
+
     @property
     def fields(self):
         self.errorIfDiscarded()
@@ -291,17 +291,18 @@ class Attachment(ContainedThing, object):
                 str(self.sheet.id), str(self.id))
         headers = {'Content-Type': self.mimeType,
                     'Content-Length': str(len(content)),
-                    'Content-Disposition': 
+                    'Content-Disposition':
                             'attachment; filename="%s"' % (self.name),
                   }
         name = "%s.uploadNewVersion()" % self
         body = self.client.POST(path, extra_headers=headers, body=content,
                 name=name)
         return Attachment.newFromAPI(body['result'], sheet=self.sheet)
-                 
+
     def errorIfDiscarded(self):
         if self._discarded:
             raise OperationOnDiscardedObject("Attachment was discarded.")
+
     def __str__(self):
         self.errorIfDiscarded()
         return '<Attachment id:%r, name:%r, type:%r:%r created:%r>' % (
@@ -314,13 +315,37 @@ class Attachment(ContainedThing, object):
 
 
 class AttachPoint(object):
-    def __init__(self):
-        pass
+    def __init__(self, sheet):
+        self.__attachments = []
+        self.__sheet = sheet
 
-    def get_attach_path(self):
+    @property
+    def attachments(self):
+        self.errorIfDiscarded()
+        return self.__attachments
+
+    def _set_attachments(self, value):
+        self.__attachments = value
+
+    def _populate_attachments(self, json_list):
+        self.__attachments = [Attachment.newFromAPI(i, self.__sheet) for i in
+                json_list]
+
+    def _get_create_attachment_path(self):
         raise NotImplementedError("Classes using the AttachPoint mixin must "
-                                  "define a get_attach_path() call that "
-                                  "returns a string URL path")
+                                  "define a _get_create_attachment_path() "
+                                  "call that returns a string URL path")
+
+    def _get_remove_attachment_path(self, attachment_id):
+        # raise NotImplementedError("Classes using the AttachPoint mixin must "
+        #                           "implment a getRemoveAttachPath() call that "
+        #                           "returns a string URL path")
+        return 'sheet/{0}/attachment/{1}'.format(self.__sheet.id, attachment_id)
+
+    def _get_refresh_attachment_path(self):
+        raise NotImplementedError("Classes using the AttachPoint mixin must "
+                                  "implment a _get_refresh_attachment_path() "
+                                  "call that returns a string URL path")
 
     def attachFile(self, filename, client=None):
         self.errorIfDiscarded()
@@ -336,16 +361,16 @@ class AttachPoint(object):
             'Content-Type': 'application/octest-stream',
             'Content-Length': str(len(data)),
         }
-        obj = client or self.client
-        result = obj.request(self.get_attach_path(),
-                             "POST",
-                             headers,
-                             data)
-        return result
+        client = client or self.client
+        result = client.POST(self._get_create_attachment_path(), headers, data)
+        a = Attachment.newFromAPI(result, self.__sheet)
+        self.attachments.append(a)
+        return a
 
     def attachUrl(self, url, link_name=None, link_description=None,
                   client=None):
         self.errorIfDiscarded()
+        client = client or self.client
         data = {}
         data['name'] = link_name
         data['description'] = link_description
@@ -353,9 +378,27 @@ class AttachPoint(object):
         data['attachmentType'] = 'LINK'
         data['attachmentSubType'] = None
         body = json.dumps(data)
-        obj = client or self.client
-        result = obj.request(self.get_attach_path(),
-                             "POST",
-                             None,
-                             body)
+        result = client.POST(self._get_create_attachment_path(), None, body)
+        a = Attachment.newFromAPI(result, self.__sheet)
+        self.attachments.append(a)
+        return a
+
+    def removeAttachment(self, obj, client=None):
+        self.errorIfDiscarded()
+        client = client or self.client
+        if not isinstance(obj, Attachment):
+            raise TypeError("obj must be a valid Attachment object.")
+        for i in self.attachments:
+            if i.id == obj.id:
+                self.attachments.remove(i)
+                break
+        result = client.POST(self._get_remove_attachment_path(obj.id))
         return result
+
+    def refreshAttachments(self, client=None):
+        self.errorIfDiscarded()
+        client = client or self.client
+        print self._get_refresh_attachment_path()
+        result = client.GET(self._get_refresh_attachment_path())
+        self.__attachments = [Attachment.newFromAPI(i, self.__sheet) for i in
+                result]

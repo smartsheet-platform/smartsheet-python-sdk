@@ -147,6 +147,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
                     version workspace totalRowCount'''.split()
 
     def __init__(self, sheetId, name, logger=None):
+        AttachPoint.__init__(self, self)
         self._id = sheetId
         self._name = name
         self.fields = {}
@@ -1029,11 +1030,14 @@ class Sheet(AttachPoint, TopLevelThing, object):
     def __repr__(self):
         return str(self)
 
-    def get_attach_path(self):
+    def _get_create_attachment_path(self):
         self.errorIfDiscarded()
         sheet_id = self.id
         path = 'sheet/{0}/attachments'.format(sheet_id)
         return path
+
+    def _get_refresh_attachment_path(self):
+        return self._get_create_attachment_path()
 
     def addDiscussion(self, title, initial_comment, client=None):
         self.errorIfDiscarded()
