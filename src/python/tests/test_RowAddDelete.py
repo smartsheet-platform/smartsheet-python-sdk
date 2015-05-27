@@ -78,9 +78,9 @@ class RowAddDeleteTest(unittest.TestCase):
     def test_make_a_row_from_a_list_of_values(self):
         '''Make a Row from a list of values.'''
         row_1_value_list = ["one", "2015-05-05", "Yes", True,
-                "scott.wimer@smartsheet.com"]
+                "scott.wimer@example.com"]
         row_2_value_list = ["two", "2015-05-06", "No", False,
-                "scott.wimer@smartsheet.com"]
+                "scott.wimer@example.com"]
 
         row = self.sheet.makeRow(row_1_value_list)
 
@@ -107,9 +107,9 @@ class RowAddDeleteTest(unittest.TestCase):
     def test_make_a_row_from_positional_parameters(self):
         '''Make a Row from a list of positional parameters.'''
         row_1_value_list = ["one", "2015-05-05", "Yes", True,
-                "scott.wimer@smartsheet.com"]
+                "scott.wimer@example.com"]
         row_2_value_list = ["two", "2015-05-06", "No", False,
-                "scott.wimer@smartsheet.com"]
+                "scott.wimer@example.com"]
 
         row = self.sheet.makeRow(*row_1_value_list)
 
