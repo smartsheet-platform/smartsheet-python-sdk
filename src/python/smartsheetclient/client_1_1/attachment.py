@@ -331,6 +331,10 @@ class AttachPoint(object):
         self.__attachments = [Attachment.newFromAPI(i, self.__sheet) for i in
                 json_list]
 
+    def _force_discard_attachments(self):
+        for i in self.__attachments:
+            i.discard()
+
     def _get_create_attachment_path(self):
         raise NotImplementedError("Classes using the AttachPoint mixin must "
                                   "define a _get_create_attachment_path() "
@@ -392,13 +396,12 @@ class AttachPoint(object):
             if i.id == obj.id:
                 self.attachments.remove(i)
                 break
-        result = client.POST(self._get_remove_attachment_path(obj.id))
+        result = client.DELETE(self._get_remove_attachment_path(obj.id))
         return result
 
     def refreshAttachments(self, client=None):
         self.errorIfDiscarded()
         client = client or self.client
-        print self._get_refresh_attachment_path()
         result = client.GET(self._get_refresh_attachment_path())
-        self.__attachments = [Attachment.newFromAPI(i, self.__sheet) for i in
-                result if i['parentId'] == self.id]
+        self.__attachments = [] or [Attachment.newFromAPI(i, self.__sheet) for
+                i in result if i['parentId'] == self.id]

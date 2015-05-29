@@ -162,7 +162,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
         self._max_cached_index = -1
         self._row_id_map = {}
         self._row_number_map = {}
-        self._attachments = []
+        # self._attachments = []
         self._discussions = []
         self._effectiveAttachmentOptions = []
         self._readOnly = False
@@ -211,8 +211,8 @@ class Sheet(AttachPoint, TopLevelThing, object):
             row = Row.newFromAPI(row_fields, self, self.columnsInfo)
             self._addRowToCache(row)
 
-        self._attachments = [Attachment.newFromAPI(a, self) for a in
-                fields.get('attachments', [])]
+        self._set_attachments([Attachment.newFromAPI(a, self) for a in
+                fields.get('attachments', [])])
         self._discussions = [Discussion.newFromAPI(d,self) for d in
                 fields.get('discussions', [])]
         maybeAssignFromDict(fields, self, 'effectiveAttachmentOptions')
@@ -273,10 +273,10 @@ class Sheet(AttachPoint, TopLevelThing, object):
         self.errorIfDiscarded()
         return self._discussions
 
-    @property
-    def attachments(self):
-        self.errorIfDiscarded()
-        return self._attachments
+    # @property
+    # def attachments(self):
+    #     self.errorIfDiscarded()
+    #     return self._attachments
 
     @property
     def effectiveAttachmentOptions(self):
@@ -746,7 +746,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
         '''
         self.errorIfDiscarded()
         if use_cache:
-            acc = [a for a in self._attachments if a.id == attachment_id]
+            acc = [a for a in self.attachments if a.id == attachment_id]
             if acc:
                 return acc[0]
             return None
@@ -755,7 +755,8 @@ class Sheet(AttachPoint, TopLevelThing, object):
             # for all Attachments.  since we're caching the info, we'll get
             # the info for all of them.
             attachments = self.fetchAllAttachments(client=client)
-            self._attachments = attachments
+            self._set_attachments(attachments)
+            # self._attachments = attachments
 
     def getAllAttachments(self, use_cache=True, client=None):
         '''
@@ -770,10 +771,11 @@ class Sheet(AttachPoint, TopLevelThing, object):
         '''
         self.errorIfDiscarded()
         if use_cache:
-            return copy.copy(self._attachments)
+            return copy.copy(self.attachments)
         else:
             attachments = self.fetchAllAttachments(client=client)
-            self._attachments = attachments
+            self._set_attachments(attachments)
+            # self._attachments = attachments
             return self.getAllAttachments(use_cache=True)
 
     def fetchAllAttachments(self):
@@ -1003,8 +1005,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
         self.client = None      # Not very nice, but it'll work for now.
         for row in self._rows:
             row.discard()
-        for attachment in self._attachments:
-            attachment.discard()
+        self._force_discard_attachments()
         for discussion in self._discussions:
             discussion.discard()
 
