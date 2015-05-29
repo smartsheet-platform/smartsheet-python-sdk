@@ -69,7 +69,7 @@ class Attachment(ContainedThing, object):
         self._urlExpiresMillis = urlExpiresMillis   # probably doesn't belong
         self._sizeInKb = sizeInKb
         self._fields = {}       # For consistency with newFromAPI().
-        self._data  = None              # The downloaded data goes here.
+        self._data = None              # The downloaded data goes here.
         self._download_response = None  # The HttpResponse from the download.
         self._discarded = False
 
@@ -77,7 +77,7 @@ class Attachment(ContainedThing, object):
     def newFromAPI(cls, fields, sheet):
         params = slicedict(fields, cls.field_names, include_missing_keys=True)
         att = cls(sheet, **params)
-        att._fields = fields
+        att._fields = params
         return att
 
     @property
@@ -363,7 +363,7 @@ class AttachPoint(object):
         }
         client = client or self.client
         result = client.POST(self._get_create_attachment_path(), headers, data)
-        a = Attachment.newFromAPI(result, self.__sheet)
+        a = Attachment.newFromAPI(result['result'], self.__sheet)
         self.attachments.append(a)
         return a
 
@@ -379,7 +379,7 @@ class AttachPoint(object):
         data['attachmentSubType'] = None
         body = json.dumps(data)
         result = client.POST(self._get_create_attachment_path(), None, body)
-        a = Attachment.newFromAPI(result, self.__sheet)
+        a = Attachment.newFromAPI(result['result'], self.__sheet)
         self.attachments.append(a)
         return a
 
@@ -401,4 +401,4 @@ class AttachPoint(object):
         print self._get_refresh_attachment_path()
         result = client.GET(self._get_refresh_attachment_path())
         self.__attachments = [Attachment.newFromAPI(i, self.__sheet) for i in
-                result]
+                result if i['parentId'] == self.id]

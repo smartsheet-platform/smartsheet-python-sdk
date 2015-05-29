@@ -13,6 +13,7 @@ from smartsheet_exceptions import OperationOnDiscardedObject
 import json
 import copy
 
+
 class Discussion(ContainedThing):
     '''
     Information about a Discussion.
@@ -57,14 +58,18 @@ class Discussion(ContainedThing):
 
     @classmethod
     def newFromAPI(cls, fields, sheet):
+        def _fixup_comment(comment_dict):
+            comment_dict['discussionId'] = fields['id']
+            return comment_dict
         params = slicedict(fields, cls.field_names, include_missing_keys=True)
         params['commentAttachments'] = [Attachment.newFromAPI(a, sheet) for a in
                 fields.get('commentAttachments', [])]
-        params['comments'] = [Comment.newFromAPI(c, sheet) for c in
-                fields.get('comments', [])]
+        params['comments'] = [Comment.newFromAPI(_fixup_comment(c), sheet) for
+                c in fields.get('comments', [])]
         params['createdBy'] = client.SimpleUser(fields['createdBy'])
         disc = cls(sheet, **params)
-        disc._fields = fields
+        # disc._fields = fields
+        disc._fields = params
         return disc
 
     @property
@@ -162,19 +167,17 @@ class Discussion(ContainedThing):
         path = 'sheet/{0}/comment/{1}'.format(self.sheet.id, obj.id)
         self.client.DELETE(path)
 
+    def _fixup_comment(self, comment_dict):
+        comment_dict['discussion_id'] = self._id
+        return comment_dict
+
     def refreshComments(self, client=None):
         self.errorIfDiscarded()
         client = client or self.client
         path = 'sheet/{0}/discussion/{1}'.format(self.sheet.id, self.id)
         response = client.GET(path)
-        # Now Comment.refreshAttachments won't throw a 404 due to having a
-        # discussionId of None
-        tmp = copy.deepcopy(response['comments'])
-        for i in tmp:
-            i['discussionId'] = self._id
-        self._comments = [Comment.newFromAPI(i, self.sheet) for i in tmp]
-        # self._comments = [Comment.newFromAPI(i, self.sheet) for i in
-        #         response['comments']]
+        self._comments = [Comment.newFromAPI(self._fixup_comment(i),
+            self.sheet) for i in response['comments']]
 
     def refreshAttachments(self, client=None):
         self.errorIfDiscarded()
@@ -229,7 +232,8 @@ class Comment(AttachPoint, ContainedThing):
         params['attachments'] = [Attachment.newFromAPI(a, sheet) for a in
                 fields.get('attachments', [])]
         comment = Comment(sheet, **params)
-        comment._fields = fields
+        # comment._fields = fields
+        comment._fields = params
         return comment
 
     @property

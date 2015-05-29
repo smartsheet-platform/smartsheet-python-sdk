@@ -166,14 +166,6 @@ class SheetAttachmentsTest(unittest.TestCase):
         DISCUSSION_TITLE = 'Test Discussion'
         COMMENT_TEXT = 'My first discussion comment'
 
-        # Create discussion and one comment
-        # path = 'sheet/{0}/discussions'.format(self.sheet.id)
-        # body = {}
-        # body['title'] = DISCUSSION_TITLE
-        # body['comment'] = {'text': COMMENT_TEXT}
-        # headers, response = self.client.request(path, 'POST', extra_headers=None, body=json.dumps(body))
-        # self.assertTrue('id' in response['result'])
-        # # comment_id = response['result']['id']
         discussion = self.sheet.addDiscussion(DISCUSSION_TITLE, COMMENT_TEXT)
         self.assertTrue(discussion is not None)
         self.assertTrue(len(discussion.comments) > 0)
@@ -186,13 +178,16 @@ class SheetAttachmentsTest(unittest.TestCase):
         self.assertTrue(len(self.sheet.discussions) > 0)
         self.sheet.discussions[0].refreshComments()
         self.assertTrue(len(self.sheet.discussions[0].comments) > 0)
-        self.sheet.discussions[0].comments[0].attachFile(filename)
+        a = self.sheet.discussions[0].comments[0].attachFile(filename)
+        self.assertTrue(a.parentId not in [None, 0], "Attachment Id was invalid value {0}".format(a.parentId))
+        self.assertTrue(a.parentId == self.sheet.discussions[0].comments[0].id, "Attachment's parentId did not match owning Comment's Id")
+        self.assertTrue(a in self.sheet.discussions[0].comments[0].attachments, "Attachment was not in Comment's list of attachments")
         for i in self.sheet.discussions:
             i.refreshAttachments()
 
         self.logger.debug("self.sheet.discussions: {0}".format(self.sheet.discussions))
         self.logger.debug("Attachments: {0}".format(self.sheet.discussions[0].commentAttachments))
-        self.assertTrue(len(self.sheet.discussions[0].commentAttachments) > 0)
+        self.assertTrue(len(self.sheet.discussions[0].commentAttachments) > 0, "Discussion's list of attachments was empty")
         self.assertTrue(self.sheet.discussions[0].commentAttachments[0].name == filename)
         self.assertTrue(self.sheet.discussions[0].commentAttachments[0].attachmentType == u'FILE')
 
