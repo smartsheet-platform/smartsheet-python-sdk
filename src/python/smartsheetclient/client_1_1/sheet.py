@@ -162,7 +162,6 @@ class Sheet(AttachPoint, TopLevelThing, object):
         self._max_cached_index = -1
         self._row_id_map = {}
         self._row_number_map = {}
-        # self._attachments = []
         self._discussions = []
         self._effectiveAttachmentOptions = []
         self._readOnly = False
@@ -272,11 +271,6 @@ class Sheet(AttachPoint, TopLevelThing, object):
     def discussions(self):
         self.errorIfDiscarded()
         return self._discussions
-
-    # @property
-    # def attachments(self):
-    #     self.errorIfDiscarded()
-    #     return self._attachments
 
     @property
     def effectiveAttachmentOptions(self):
@@ -756,7 +750,6 @@ class Sheet(AttachPoint, TopLevelThing, object):
             # the info for all of them.
             attachments = self.fetchAllAttachments(client=client)
             self._set_attachments(attachments)
-            # self._attachments = attachments
 
     def getAllAttachments(self, use_cache=True, client=None):
         '''
@@ -775,7 +768,6 @@ class Sheet(AttachPoint, TopLevelThing, object):
         else:
             attachments = self.fetchAllAttachments(client=client)
             self._set_attachments(attachments)
-            # self._attachments = attachments
             return self.getAllAttachments(use_cache=True)
 
     def fetchAllAttachments(self):
@@ -998,8 +990,6 @@ class Sheet(AttachPoint, TopLevelThing, object):
         '''
         Mark this Sheet as discarded.
         Operations on it after this should fail.
-
-        TODO: Make this actually occur.
         '''
         self._discarded = True
         self.client = None      # Not very nice, but it'll work for now.

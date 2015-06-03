@@ -13,8 +13,10 @@ from smartsheet_exceptions import (SmartsheetClientError,
         OperationOnDiscardedObject)
 from base import ContainedThing, slicedict
 import client
+import functools
 
 
+@functools.total_ordering
 class Attachment(ContainedThing, object):
     '''
     Information about an attachment.
@@ -313,6 +315,16 @@ class Attachment(ContainedThing, object):
         self.errorIfDiscarded()
         return str(self)
 
+    def __eq__(self, obj):
+      if not isinstance(obj, Attachment):
+          raise TypeError()
+      return self._id == obj._id
+
+    def __lt__(self, obj):
+      if not isinstance(obj, Attachment):
+          raise TypeError
+      return self._id < obj._id
+
 
 class AttachPoint(object):
     def __init__(self, sheet):
@@ -403,5 +415,5 @@ class AttachPoint(object):
         self.errorIfDiscarded()
         client = client or self.client
         result = client.GET(self._get_refresh_attachment_path())
-        self.__attachments = [] or [Attachment.newFromAPI(i, self.__sheet) for
+        self.__attachments = [Attachment.newFromAPI(i, self.__sheet) for
                 i in result if i['parentId'] == self.id]

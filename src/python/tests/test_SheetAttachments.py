@@ -86,9 +86,9 @@ class SheetAttachmentsTest(unittest.TestCase):
         a = self.sheet[1].attachUrl(self.link_url, self.link_name)
         sheet = self.sheet_info.loadSheet(attachments=True, discussions=True)
         self.assertTrue(a in self.sheet[1].attachments)
-        self.assertFalse(a in sheet[1].attachments)
+        self.assertTrue(a in sheet[1].attachments)
         self.assertTrue(len(sheet[1].attachments) == 1)
-        self.assertTrue(sheet[1].attachments[0].id == a.id)
+        self.assertTrue(sheet[1].attachments[0] == a)
         sheet[1].removeAttachment(sheet[1].attachments[0])
         self.assertTrue(len(sheet[1].attachments) == 0)
         self.sheet[1].refreshAttachments()
@@ -119,9 +119,9 @@ class SheetAttachmentsTest(unittest.TestCase):
         a = self.sheet[1].attachFile(self.filename)
         sheet = self.sheet_info.loadSheet(attachments=True, discussions=True)
         self.assertTrue(a in self.sheet[1].attachments)
-        self.assertFalse(a in sheet[1].attachments)
+        self.assertTrue(a in sheet[1].attachments)
         self.assertTrue(len(sheet[1].attachments) == 1)
-        self.assertTrue(sheet[1].attachments[0].id == a.id)
+        self.assertTrue(sheet[1].attachments[0] == a)
         sheet[1].removeAttachment(sheet[1].attachments[0])
         self.assertTrue(len(sheet[1].attachments) == 0)
         self.sheet[1].refreshAttachments()
@@ -154,15 +154,12 @@ class SheetAttachmentsTest(unittest.TestCase):
 
         sheet = self.sheet_info.loadSheet(attachments=True, discussions=True)
         self.assertTrue(len(sheet.attachments) > 0)
-        for i in sheet.attachments:
-            if i.id == a.id:
-                break
-        else:
-            self.assertTrue(False)
+        self.assertTrue(a in sheet.attachments)
         self.sheet.removeAttachment(a)
 
         sheet.refreshAttachments()
-        self.assertTrue(len(sheet.attachments) == 0)
+        self.assertTrue(a not in sheet.attachments)
+        self.assertTrue(a not in self.sheet.attachments)
 
         sheet_1 = self.sheet_info.loadSheet(attachments=True, discussions=True)
         sheet.refreshAttachments()
