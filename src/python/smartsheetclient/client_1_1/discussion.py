@@ -176,8 +176,10 @@ class Discussion(ContainedThing):
         client = client or self.client
         path = 'sheet/{0}/discussion/{1}'.format(self.sheet.id, self.id)
         response = client.GET(path)
+        for i in self._comments:
+            i.discard()
         self._comments = [Comment.newFromAPI(self._fixup_comment(i),
-            self.sheet) for i in response['comments']]
+            self.sheet)]
 
     def refreshAttachments(self, client=None):
         self.errorIfDiscarded()
