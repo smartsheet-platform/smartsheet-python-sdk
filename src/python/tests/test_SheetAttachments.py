@@ -14,7 +14,7 @@ api_token = 'UNSET'
 
 class SheetAttachmentsTest(unittest.TestCase):
     def setUp(self):
-        self.filename = 'test_SheetAttachments.py'
+        self.filename = 'payload.tar.gz'
         self.link_name = 'Google Search'
         self.link_url = 'https://google.com'
         global api_token
