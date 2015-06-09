@@ -9,6 +9,6 @@ setup(
         description='Client for interacting with the Smartsheet API',
         license='Copyright Smartsheet, Inc. 2014, all rights reserved',
         packages=find_packages('.'),
-        install_requires=['requests']
+        install_requires=['httplib2']
     )
 

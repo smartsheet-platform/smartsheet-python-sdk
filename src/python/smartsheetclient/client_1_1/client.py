@@ -12,7 +12,7 @@ import json
 import copy
 import time
 import collections
-import requests
+import httplib2
 
 
 from smartsheet_exceptions import (SmartsheetClientError, APIRequestError, SheetIntegrityError, ReadOnlyClientError)
@@ -110,7 +110,7 @@ class SmartsheetClient(object):
     @property
     def handle(self):
         if self.__handle is None:
-            self.__handle = requests.session()
+            self.__handle = httplib2.Http()
         return self.__handle
 
 
@@ -139,9 +139,8 @@ class SmartsheetClient(object):
         self.logger.debug('request_headers: %s', str(headers))
         if body:
             self.logger.debug('request_body: %r', body)
-        resp = self.handle.request(method, req_url, data=body,
+        resp, content = self.handle.request(req_url, method, body=body,
                 headers=req_headers)
-        content = resp.text
         self.logger.debug('response: %r',  resp)
         self.logger.debug('content: %r', content)
         return (resp, content)
@@ -550,7 +549,7 @@ class HttpResponse(object):
 
     @property
     def status(self):
-        return str(self.hdr.status_code)
+        return str(self.hdr.status)
 
     @property
     def statusMessage(self):
