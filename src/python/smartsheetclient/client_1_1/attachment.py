@@ -415,7 +415,7 @@ class AttachPoint(object):
         self.errorIfDiscarded()
         client = client or self.client
         result = client.GET(self._get_refresh_attachment_path())
-        for i in self._attachments:
+        for i in self.__attachments:
             i.discard()
         self.__attachments = [Attachment.newFromAPI(i, self.__sheet) for
                 i in result if i['parentId'] == self.id]
