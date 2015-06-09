@@ -179,7 +179,7 @@ class Discussion(ContainedThing):
         for i in self._comments:
             i.discard()
         self._comments = [Comment.newFromAPI(self._fixup_comment(i),
-            self.sheet)]
+            self.sheet) for i in response.get('comments', [])]
 
     def refreshAttachments(self, client=None):
         self.errorIfDiscarded()
