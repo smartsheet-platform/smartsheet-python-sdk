@@ -7,7 +7,6 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 '''
 
 import logging
-logging.captureWarnings(True)
 import json
 import copy
 import time
