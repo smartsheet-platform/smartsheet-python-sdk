@@ -11,6 +11,8 @@ from base import (ContainedThing, slicedict)
 from attachment import Attachment, AttachPoint
 from smartsheet_exceptions import OperationOnDiscardedObject
 import json
+import copy
+
 
 class Discussion(ContainedThing):
     '''
@@ -56,14 +58,18 @@ class Discussion(ContainedThing):
 
     @classmethod
     def newFromAPI(cls, fields, sheet):
+        def _fixup_comment(comment_dict):
+            comment_dict['discussionId'] = fields['id']
+            return comment_dict
         params = slicedict(fields, cls.field_names, include_missing_keys=True)
         params['commentAttachments'] = [Attachment.newFromAPI(a, sheet) for a in
                 fields.get('commentAttachments', [])]
-        params['comments'] = [Comment.newFromAPI(c, sheet) for c in
-                fields.get('comments', [])]
+        params['comments'] = [Comment.newFromAPI(_fixup_comment(c), sheet) for
+                c in fields.get('comments', [])]
         params['createdBy'] = client.SimpleUser(fields['createdBy'])
         disc = cls(sheet, **params)
-        disc._fields = fields
+        # disc._fields = fields
+        disc._fields = params
         return disc
 
     @property
@@ -151,14 +157,41 @@ class Discussion(ContainedThing):
                 body=body)
         return Comment.newFromAPI(response['result'], self.sheet)
 
+    def removeComment(self, obj, client=None):
+        self.errorIfDiscarded()
+        client = client or self.client
+        if not isinstance(obj, Comment):
+            raise TypeError("The first argument of Discussion.removeComment"
+                    " must be a Comment")
+        self._comments.remove(obj)
+        path = 'sheet/{0}/comment/{1}'.format(self.sheet.id, obj.id)
+        self.client.DELETE(path)
+
+    def _fixup_comment(self, comment_dict):
+        comment_dict['discussion_id'] = self._id
+        return comment_dict
+
     def refreshComments(self, client=None):
         self.errorIfDiscarded()
         client = client or self.client
         path = 'sheet/{0}/discussion/{1}'.format(self.sheet.id, self.id)
         response = client.GET(path)
-        self._comments = [Comment.newFromAPI(i, self.sheet) for i in
-                response['comments']]
+        for i in self._comments:
+            i.discard()
+        self._comments = [Comment.newFromAPI(self._fixup_comment(i),
+            self.sheet)]
 
+    def refreshAttachments(self, client=None):
+        self.errorIfDiscarded()
+        client = client or self.client
+        sheet_id = self.sheet.id
+        discussion_id = self.id
+        path = 'sheet/{0}/discussion/{1}/attachments'.format(
+                sheet_id, discussion_id)
+        response = client.GET(path)
+        self.logger.debug('discussion attachments: {0}'.format(response))
+        self._commentAttachments = [Attachment.newFromAPI(i, self.sheet)
+                for i in response]
 
 class Comment(AttachPoint, ContainedThing):
     '''
@@ -181,13 +214,16 @@ class Comment(AttachPoint, ContainedThing):
         # We might not have the Discussion object if somebody tried to fetch
         # a Comment directly.  But, we don't really give them a way to do
         # that.
+        AttachPoint.__init__(self, sheet)
         self.parent = sheet
         self._id = id
         self._text = text
         self._createdBy = createdBy
         self._createdAt = createdAt
         self._modifiedAt = modifiedAt
-        self._attachments = attachments or []
+        # self._attachments = attachments or []
+        if attachments:
+            self._set_attachments(attachments)
         self._discussionId = discussionId
         self._fields = {}
         self._discarded = False
@@ -195,10 +231,11 @@ class Comment(AttachPoint, ContainedThing):
     @classmethod
     def newFromAPI(cls, fields, sheet):
         params = slicedict(fields, cls.field_names, include_missing_keys=True)
-        params['attachments'] = [Attachment.newFromAPI(a, sheet) for a in 
+        params['attachments'] = [Attachment.newFromAPI(a, sheet) for a in
                 fields.get('attachments', [])]
         comment = Comment(sheet, **params)
-        comment._fields = fields
+        # comment._fields = fields
+        comment._fields = params
         return comment
 
     @property
@@ -226,10 +263,10 @@ class Comment(AttachPoint, ContainedThing):
         self.errorIfDiscarded()
         return self._modifiedAt
 
-    @property
-    def attachments(self):
-        self.errorIfDiscarded()
-        return self._attachments
+    # @property
+    # def attachments(self):
+    #     self.errorIfDiscarded()
+    #     return self._attachments
 
     @property
     def discussionId(self):
@@ -258,7 +295,7 @@ class Comment(AttachPoint, ContainedThing):
         self.errorIfDiscarded()
         path = '/sheet/%s/comment/%s/' % (str(self.sheet.id), str(self.id))
         client = client or self.client
-        body = client.get(path, name='Comment.getFullInfo(%s)' % str(self.id))
+        body = client.GET(path, name='Comment.getFullInfo(%s)' % str(self.id))
         return self.__class__.newFromAPI(body, self.sheet)
 
     def addAttachment(self, attachment):
@@ -269,9 +306,17 @@ class Comment(AttachPoint, ContainedThing):
         if self._discarded:
             raise OperationOnDiscardedObject("Comment was discarded.")
 
-    def get_attach_path(self):
+    def _get_create_attachment_path(self):
         self.errorIfDiscarded()
         sheet_id = self.sheet.id
         comment_id = self.id
         path = 'sheet/{0}/comment/{1}/attachments'.format(sheet_id, comment_id)
+        return path
+
+    def _get_refresh_attachment_path(self):
+        self.errorIfDiscarded()
+        sheet_id = self.sheet.id
+        discussion_id = self._discussionId
+        path = 'sheet/{0}/discussion/{1}/attachments'.format(sheet_id,
+                discussion_id)
         return path

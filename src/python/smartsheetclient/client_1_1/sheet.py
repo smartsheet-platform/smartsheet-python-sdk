@@ -11,6 +11,7 @@ import copy
 import operator
 import datetime
 import sys
+import collections
 
 from smartsheet_exceptions import OperationOnDiscardedObject
 from base import maybeAssignFromDict, TopLevelThing
@@ -146,6 +147,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
                     version workspace totalRowCount'''.split()
 
     def __init__(self, sheetId, name, logger=None):
+        AttachPoint.__init__(self, self)
         self._id = sheetId
         self._name = name
         self.fields = {}
@@ -160,7 +162,6 @@ class Sheet(AttachPoint, TopLevelThing, object):
         self._max_cached_index = -1
         self._row_id_map = {}
         self._row_number_map = {}
-        self._attachments = []
         self._discussions = []
         self._effectiveAttachmentOptions = []
         self._readOnly = False
@@ -209,8 +210,8 @@ class Sheet(AttachPoint, TopLevelThing, object):
             row = Row.newFromAPI(row_fields, self, self.columnsInfo)
             self._addRowToCache(row)
 
-        self._attachments = [Attachment.newFromAPI(a, self) for a in
-                fields.get('attachments', [])]
+        self._set_attachments([Attachment.newFromAPI(a, self) for a in
+                fields.get('attachments', [])])
         self._discussions = [Discussion.newFromAPI(d,self) for d in
                 fields.get('discussions', [])]
         maybeAssignFromDict(fields, self, 'effectiveAttachmentOptions')
@@ -270,11 +271,6 @@ class Sheet(AttachPoint, TopLevelThing, object):
     def discussions(self):
         self.errorIfDiscarded()
         return self._discussions
-
-    @property
-    def attachments(self):
-        self.errorIfDiscarded()
-        return self._attachments
 
     @property
     def effectiveAttachmentOptions(self):
@@ -744,7 +740,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
         '''
         self.errorIfDiscarded()
         if use_cache:
-            acc = [a for a in self._attachments if a.id == attachment_id]
+            acc = [a for a in self.attachments if a.id == attachment_id]
             if acc:
                 return acc[0]
             return None
@@ -753,7 +749,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
             # for all Attachments.  since we're caching the info, we'll get
             # the info for all of them.
             attachments = self.fetchAllAttachments(client=client)
-            self._attachments = attachments
+            self._set_attachments(attachments)
 
     def getAllAttachments(self, use_cache=True, client=None):
         '''
@@ -768,10 +764,10 @@ class Sheet(AttachPoint, TopLevelThing, object):
         '''
         self.errorIfDiscarded()
         if use_cache:
-            return copy.copy(self._attachments)
+            return copy.copy(self.attachments)
         else:
             attachments = self.fetchAllAttachments(client=client)
-            self._attachments = attachments
+            self._set_attachments(attachments)
             return self.getAllAttachments(use_cache=True)
 
     def fetchAllAttachments(self):
@@ -994,15 +990,12 @@ class Sheet(AttachPoint, TopLevelThing, object):
         '''
         Mark this Sheet as discarded.
         Operations on it after this should fail.
-
-        TODO: Make this actually occur.
         '''
         self._discarded = True
         self.client = None      # Not very nice, but it'll work for now.
         for row in self._rows:
             row.discard()
-        for attachment in self._attachments:
-            attachment.discard()
+        self._force_discard_attachments()
         for discussion in self._discussions:
             discussion.discard()
 
@@ -1028,11 +1021,14 @@ class Sheet(AttachPoint, TopLevelThing, object):
     def __repr__(self):
         return str(self)
 
-    def get_attach_path(self):
+    def _get_create_attachment_path(self):
         self.errorIfDiscarded()
         sheet_id = self.id
         path = 'sheet/{0}/attachments'.format(sheet_id)
         return path
+
+    def _get_refresh_attachment_path(self):
+        return self._get_create_attachment_path()
 
     def addDiscussion(self, title, initial_comment, client=None):
         self.errorIfDiscarded()
@@ -1046,19 +1042,41 @@ class Sheet(AttachPoint, TopLevelThing, object):
         response = client.POST(path,
                 extra_headers=None,
                 body=body)
-        return Discussion.newFromAPI(response['result'], self)
+        tmp = Discussion.newFromAPI(response['result'], self)
+        self.discussions.append(tmp)
+        return tmp
+
+    def removeDiscussion(self, obj, client=None):
+        self.errorIfDiscarded()
+        client = client or self.client
+        if not isinstance(obj, Discussion):
+            raise TypeError("The first argument of Sheet.removeDiscussion"
+                    " must be a Discussion")
+        self._discussions.remove(obj)
+        path = 'sheet/{0}/discussion/{1}'.format(self.id, obj.id)
+        self.client.DELETE(path)
 
     def fetchDiscussionById(self, discussion_id, client=None):
         self.errorIfDiscarded()
-        pass
+        client = client or self.client
+        path = 'sheet/{0}/discussion/{1}'.format(self.id, discussion_id)
+        response = client.GET(path)
+        d = Discussion.newFromAPI(response, self)
+        for i, j in enumerate(self.discussions):
+            if j.id == d.id:
+                self.discussions[i] == d
+                break
+        else:
+            self.discussions.append(d)
+        return d
 
     def fetchAllDiscussions(self, client=None):
         self.errorIfDiscarded()
         client = client or self.client
         path = 'sheet/{0}/discussions'.format(self.id)
         response = client.GET(path)
-        a = [Discussion.newFromAPI(i, self) for i in response]
-        return a
+        self._discussions = [Discussion.newFromAPI(i, self) for i in response]
+        return self.discussions
 
 
 class SheetInfo(TopLevelThing, object):

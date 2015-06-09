@@ -136,6 +136,7 @@ class SmartsheetClient(object):
         req_url = join_url_path(url, path)
 
         self.logger.debug('request: %r %r', method, req_url)
+        self.logger.debug('request_headers: %s', str(headers))
         if body:
             self.logger.debug('request_body: %r', body)
         resp = self.handle.request(method, req_url, data=body,
@@ -158,7 +159,7 @@ class SmartsheetClient(object):
         headers = self.defaultHeaders()
         if extra_headers:
             headers.update(extra_headers)
-    
+
         req_info = HttpRequestInfo(method, join_url_path(self.base_url,path),
                 headers, body)
         self.request_log.append(req_info)
@@ -332,14 +333,14 @@ class SmartsheetClient(object):
         @param sheetId The ID of the Sheet to fetch
         @param discussions True to fetch Discussions on the Sheet (and its Rows)
         @param attachments True to fetch Attachments on the Sheet (and its Rows)
-        @param format 
+        @param format
         @return The specified Sheet
         @raises SmartsheetClientError
         '''
         path = '/sheet/' + str(sheet_id)
         name = (("%s.fetchSheetById(%r, discussions=%r, attachments=%r, " +
                 "format=%r, filters=%r, source=%r, rowNumbers=%r, " +
-                "rowIds=%r, columnIds=%r, pageSize=%r, page=%r") % 
+                "rowIds=%r, columnIds=%r, pageSize=%r, page=%r") %
                 (self, sheet_id, discussions, attachments, format, filters,
                     source, rowNumbers, rowIds, columnIds, pageSize, page))
         path_params = []
@@ -351,17 +352,17 @@ class SmartsheetClient(object):
             self.logger.warn('SDK support for formats is incomplete.')
         if filters:
             include.append('filters')
-            self.logger.warn('SDK support for filters is incomplete.') 
+            self.logger.warn('SDK support for filters is incomplete.')
         if include:
             path_params.append("include=" + ','.join(include))
         if rowIds:
-            path_params.append('rowIds=' + 
+            path_params.append('rowIds=' +
                     ','.join([str(r) for r in rowIds]))
         if rowNumbers:
             path_params.append('rowNumbers='+
                     ','.join([str(r) for r in rowNumbers]))
         if columnIds:
-            path_params.append('columnIds=' + 
+            path_params.append('columnIds=' +
                     ','.join([str(c) for c in columnIds]))
         if pageSize is not None:
             path_params.append('pageSize=%s' % str(pageSize))
@@ -420,7 +421,7 @@ class SmartsheetClient(object):
             self.logger.error(err)
             raise SmartsheetClientError(err)
         path = location + '/sheets'
-        acc = {'name': name, 
+        acc = {'name': name,
                 'columns': [col.flattenForInsert() for col in columns]}
         hdr, body = self.request(path,
                 method='POST',
@@ -428,7 +429,7 @@ class SmartsheetClient(object):
                 body=json.dumps(acc))
         if hdr.isOK():
             return SheetInfo(body['result'], self)
-        else: 
+        else:
             self.logger.error("Failed creating sheet: %s", str(hdr))
             raise SmartsheetClientError("Failed creating sheet: %s" % str(hdr))
 
