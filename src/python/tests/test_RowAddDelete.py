@@ -1,7 +1,7 @@
 import sys
 import datetime
 import unittest
-from smartsheetclient import SmartsheetClient, SheetInfo, RowWrapper, Column, CellTypes
+from smartsheetclient import SmartsheetClient, SheetInfo, Column, CellTypes
 import logging
 log_format = '%(module)s.%(funcName)s[%(lineno)d] %(levelname)s - %(message)s'
 logging.basicConfig(filename='tests.log', level=logging.DEBUG, format=log_format)
@@ -54,6 +54,85 @@ class RowAddDeleteTest(unittest.TestCase):
         self.logger.info("Sheet %s deleted", sheet_name)
 
 
+    def test_add_one_row_to_top_of_sheet(self):
+        '''Add a single Row to the top of the blank Sheet.'''
+        r = self.sheet.makeRow()
+        r[0] = "one"
+        self.sheet.addRow(r, position='toTop')
+        self.assertTrue(len(self.sheet) == 1)
+        self.assertTrue(self.sheet[1][0] == "one")
+
+
+    def test_add_row_with_multiple_columns(self):
+        '''Add a Row that has multiple values in multiple Columns.'''
+        r = self.sheet.makeRow()
+        r[0] = "one"
+        r[1] = "2015-05-05"
+        self.sheet.addRow(r)
+
+        self.assertTrue(len(self.sheet) == 1)
+        self.assertTrue(self.sheet[1][0] == "one")
+        self.assertTrue(self.sheet[1][1] == "2015-05-05")
+
+
+    def test_make_a_row_from_a_list_of_values(self):
+        '''Make a Row from a list of values.'''
+        row_1_value_list = ["one", "2015-05-05", "Yes", True,
+                "scott.wimer@example.com"]
+        row_2_value_list = ["two", "2015-05-06", "No", False,
+                "scott.wimer@example.com"]
+
+        row = self.sheet.makeRow(row_1_value_list)
+
+        for i in range(len(row_1_value_list)):
+            self.assertTrue(row[i] == row_1_value_list[i])
+
+        self.sheet.addRow(row)
+
+        for i in range(len(row_1_value_list)):
+            self.assertTrue(self.sheet[1][i] == row_1_value_list[i])
+
+        rw = self.sheet.makeRowWrapper(position='toBottom')
+        row = rw.makeRow(row_2_value_list)
+
+        for i in range(len(row_2_value_list)):
+            self.assertTrue(row[i] == row_2_value_list[i])
+
+        self.sheet.addRow(row)
+
+        for i in range(len(row_2_value_list)):
+            self.assertTrue(self.sheet[2][i] == row_2_value_list[i])
+
+
+    def test_make_a_row_from_positional_parameters(self):
+        '''Make a Row from a list of positional parameters.'''
+        row_1_value_list = ["one", "2015-05-05", "Yes", True,
+                "scott.wimer@example.com"]
+        row_2_value_list = ["two", "2015-05-06", "No", False,
+                "scott.wimer@example.com"]
+
+        row = self.sheet.makeRow(*row_1_value_list)
+
+        for i in range(len(row_1_value_list)):
+            self.assertTrue(row[i] == row_1_value_list[i])
+
+        self.sheet.addRow(row)
+
+        for i in range(len(row_1_value_list)):
+            self.assertTrue(self.sheet[1][i] == row_1_value_list[i])
+
+        rw = self.sheet.makeRowWrapper(position='toBottom')
+        row = rw.makeRow(*row_2_value_list)
+
+        for i in range(len(row_2_value_list)):
+            self.assertTrue(row[i] == row_2_value_list[i])
+
+        self.sheet.addRow(row)
+
+        for i in range(len(row_2_value_list)):
+            self.assertTrue(self.sheet[2][i] == row_2_value_list[i])
+
+
     def test_add_rows_to_top_of_sheet(self):
         '''Add Rows, one at a time, to the top of an initially blank Sheet.'''
         r = self.sheet.makeRow()
@@ -76,6 +155,7 @@ class RowAddDeleteTest(unittest.TestCase):
         self.assertTrue(self.sheet[1][0] == "three")
         self.assertTrue(self.sheet[2][0] == "two")
         self.assertTrue(self.sheet[3][0] == "one")
+
 
     def test_add_rows_to_bottom_of_sheet(self):
         r = self.sheet.makeRow()
@@ -131,7 +211,7 @@ class RowAddDeleteTest(unittest.TestCase):
         row_2 = self.sheet.makeRow()
         row_2[0] = 'two'
 
-        rw = RowWrapper(self.sheet, position='toTop')
+        rw = self.sheet.makeRowWrapper(position='toTop')
         rw.addRow(row_1)
         rw.addRow(row_2)
 
@@ -142,7 +222,7 @@ class RowAddDeleteTest(unittest.TestCase):
         self.assertTrue(self.sheet[1][0] == 'one')
         self.assertTrue(self.sheet[2][0] == 'two')
 
-   
+
     def test_add_multiple_rows_to_top_of_one_row_sheet(self):
         '''Add multiple Rows at once to the top of a one-row Sheet.'''
         r = self.sheet.makeRow()
@@ -286,6 +366,7 @@ class RowAddDeleteTest(unittest.TestCase):
 
         self.assertTrue(len(self.sheet) == 0)
 
+
     def test_delete_rows_in_sheet_with_multiple_rows(self):
         '''Delete Rows from a Sheet with multiple Rows.'''
         rw = self.sheet.makeRowWrapper(position='toTop')
@@ -320,9 +401,40 @@ class RowAddDeleteTest(unittest.TestCase):
         self.assertTrue(len(self.sheet) == 0)
 
 
+    def test_add_row_from_list_of_items(self):
+        rw = self.sheet.makeRowWrapper(position='toBottom')
+        row = rw.makeRow('one', '2015-05-05', 'Maybe')
+        rw.addRow(row)
+        rw.addRow(rw.makeRow(['two', '2015-05-06', 'Yes']))
+        def value_generator():
+            vals = ['three', '2015-05-07', 'No']
+            for item in vals:
+                yield item
+
+        rw.addRow(rw.makeRow(value_generator()))
+
+        rw.addRow(rw.makeRow('four', None, 'Maybe'))
+        self.sheet.addRows(rw)
+
+        self.assertTrue(len(self.sheet) == 4)
+        self.assertTrue(self.sheet[1][0] == 'one')
+        self.assertTrue(self.sheet[1][1] == '2015-05-05')
+        self.assertTrue(self.sheet[1][2] == 'Maybe')
+
+        self.assertTrue(self.sheet[2][0] == 'two')
+        self.assertTrue(self.sheet[2][1] == '2015-05-06')
+        self.assertTrue(self.sheet[2][2] == 'Yes')
+
+        self.assertTrue(self.sheet[3][0] == 'three')
+        self.assertTrue(self.sheet[3][1] == '2015-05-07')
+        self.assertTrue(self.sheet[3][2] == 'No')
+
+        self.assertTrue(self.sheet[4][0] == 'four')
+        self.assertTrue(self.sheet[4][1] == None)
+        self.assertTrue(self.sheet[4][2] == 'Maybe')
 
 
-   
+
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
@@ -332,6 +444,5 @@ if __name__ == '__main__':
     with file(api_token_file, 'r') as fh:
         api_token = fh.read()
         api_token = api_token.strip()
-    del sys.argv[1] 
+    del sys.argv[1]
     unittest.main()
-
