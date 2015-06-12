@@ -13,10 +13,8 @@ from smartsheet_exceptions import (SmartsheetClientError,
         OperationOnDiscardedObject)
 from base import ContainedThing, slicedict
 import client
-import functools
 
 
-@functools.total_ordering
 class Attachment(ContainedThing, object):
     '''
     Information about an attachment.
@@ -316,14 +314,29 @@ class Attachment(ContainedThing, object):
         return str(self)
 
     def __eq__(self, obj):
-      if not isinstance(obj, Attachment):
-          raise TypeError()
-      return self._id == obj._id
+        if not isinstance(obj, Attachment):
+            raise TypeError()
+        return self._id == obj._id
 
     def __lt__(self, obj):
-      if not isinstance(obj, Attachment):
-          raise TypeError
-      return self._id < obj._id
+        if not isinstance(obj, Attachment):
+            raise TypeError
+        return self._id < obj._id
+
+    def __le__(self, obj):
+        if not isinstance(obj, Attachment):
+            raise TypeError
+        return self._id <= obj._id
+
+    def __gt__(self, obj):
+        if not isinstance(obj, Attachment):
+            raise TypeError
+        return self._id > obj._id
+
+    def __ge__(self, obj):
+        if not isinstance(obj, Attachment):
+            raise TypeError
+        return self._id >= obj._id
 
 
 class AttachPoint(object):
