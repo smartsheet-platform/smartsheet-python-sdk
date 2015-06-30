@@ -184,7 +184,7 @@ class Cell(ContainedThing, object):
         self.parent = row
         if link:
             # TODO:  Add Row number and Column index to this message.
-            self.logger.warn("Got a 'link' attribute for a Cell")
+            self.logger.warning("Got a 'link' attribute for a Cell")
 
         if type is None:
             type = column.type

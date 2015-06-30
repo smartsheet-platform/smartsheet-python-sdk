@@ -44,7 +44,7 @@ class SheetAttachmentsTest(unittest.TestCase):
         while len(self.sheet) < 10:
             now = datetime.datetime.now()
             h = hashlib.sha256()
-            h.update(str(now))
+            h.update(str(now).encode('utf-8'))
             r = self.sheet.makeRow()
             r[0] = "Padding"
             r[1] = 0
@@ -318,7 +318,7 @@ def main():
         sys.exit("Error, must supply path to token file")
     api_token_file = sys.argv[1]
 
-    with file(api_token_file, 'r') as fh:
+    with open(api_token_file, 'r') as fh:
         api_token = fh.read()
         api_token = api_token.strip()
     del sys.argv[1]

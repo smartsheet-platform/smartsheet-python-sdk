@@ -41,7 +41,7 @@ if __name__ == '__main__':
         sys.exit("Error, must supply path to token file")
     api_token_file = sys.argv[1]
 
-    with file(api_token_file, 'r') as fh:
+    with open(api_token_file, 'r') as fh:
         api_token = fh.read()
         api_token = api_token.strip()
     del sys.argv[1] 
