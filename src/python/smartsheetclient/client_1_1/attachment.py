@@ -9,10 +9,10 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 import json
 import os
 
-from smartsheet_exceptions import (SmartsheetClientError,
+from .smartsheet_exceptions import (SmartsheetClientError,
         OperationOnDiscardedObject)
-from base import ContainedThing, slicedict
-import client
+from .base import ContainedThing, slicedict
+from . import client
 
 
 class Attachment(ContainedThing, object):

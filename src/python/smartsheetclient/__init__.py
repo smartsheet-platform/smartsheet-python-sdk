@@ -2,7 +2,7 @@
 A Python Client for version 1.1 of the Smartsheet API
 '''
 
-from client_1_1 import (
+from .client_1_1 import (
         SmartsheetClientError, ReadOnlyClientError, APIRequestError,
         SheetIntegrityError, OperationOnDiscardedObject, UnknownColumnId,
         InvalidRowNumber, SheetHasNoRows, InvalidOperationOnUnattachedRow,

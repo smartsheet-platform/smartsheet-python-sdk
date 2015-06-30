@@ -10,10 +10,10 @@ import httplib2
 import json
 
 
-from cell import (CellTypes)
+from .cell import (CellTypes)
 
-from base import (ContainedThing, maybeAssignFromDict)
-from smartsheet_exceptions import OperationOnDiscardedObject
+from .base import (ContainedThing, maybeAssignFromDict)
+from .smartsheet_exceptions import OperationOnDiscardedObject
 
 
 class Column(ContainedThing, object):
