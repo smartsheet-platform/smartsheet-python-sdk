@@ -11,8 +11,10 @@ from .smartsheet_exceptions import (SmartsheetClientError, ReadOnlyClientError,
 from .base import (TopLevelThing, ContainedThing, string_trim,
         maybeAssignFromDict, slicedict, isList, isScalar, isGenerator)
 
-from .client import (HttpRequestInfo, SmartsheetClient, UserProfile, SimpleUser,
+from .client import (HttpRequestInfo, SmartsheetClient, UserProfile, 
         HttpResponse, SmartsheetAPIResponseHeader, SmartsheetAPIErrorMessage)
+
+from .users import SimpleUser
 
 from .attachment import Attachment
 

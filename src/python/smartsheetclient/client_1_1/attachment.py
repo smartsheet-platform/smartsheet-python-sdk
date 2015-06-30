@@ -12,7 +12,7 @@ import os
 from .smartsheet_exceptions import (SmartsheetClientError,
         OperationOnDiscardedObject)
 from .base import ContainedThing, slicedict
-from . import client
+from . import users
 
 
 class Attachment(ContainedThing, object):
@@ -108,7 +108,7 @@ class Attachment(ContainedThing, object):
     @property
     def createdBy(self):
         self.errorIfDiscarded()
-        return client.SimpleUser(self._createdBy)
+        return users.SimpleUser(self._createdBy)
 
     @property
     def parentType(self):
