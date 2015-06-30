@@ -14,8 +14,8 @@ import collections
 import httplib2
 
 
-from smartsheet_exceptions import (SmartsheetClientError, APIRequestError, SheetIntegrityError, ReadOnlyClientError)
-from sheet import (Sheet, SheetInfo)
+from .smartsheet_exceptions import (SmartsheetClientError, APIRequestError, SheetIntegrityError, ReadOnlyClientError)
+from .sheet import (Sheet, SheetInfo)
 
 
 class HttpRequestInfo(object):
@@ -220,7 +220,7 @@ class SmartsheetClient(object):
         try:
             hdr, body = self.request(path, method=method,
                     extra_headers=extra_headers, body=body)
-        except Exception, e:
+        except Exception as e:
             err = "%s failed: %s" % (str(name), str(e))
             self.logger.exception(err)
             raise
@@ -590,7 +590,7 @@ class SmartsheetAPIResponseHeader(HttpResponse):
         if not self.isOK():
             try:
                 json_content = self.contentAsJSON()
-            except Exception, e:
+            except Exception as e:
                 if client:
                     client.log.warn("Non-OK header: %r", self.hdr)
                 json_content = {}

@@ -259,7 +259,7 @@ def isScalar(item):
     Return True if item is a scalar (number or string, bytes).
     False otherwise.
     '''
-    if isinstance(item, (int, long, float, str, unicode, basestring,
+    if isinstance(item, (int, float, str,
         bool, bytes)):
         return True
     return False

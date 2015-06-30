@@ -29,10 +29,10 @@ class SheetListTest(unittest.TestCase):
 
         for si in sheet_list:
             self.assertIsInstance(si, SheetInfo)
-            self.assertIsInstance(si.name, basestring)
+            self.assertIsInstance(si.name, str)
             self.assertEqual(si.client, self.client)
             self.assertTrue(si.accessLevel in 'OWNER VIEWER EDITOR EDITOR_SHARE ADMIN'.split())
-            self.assertTrue(type(si.id) == int or type(si.id) == long)
+            self.assertTrue(type(si.id) == int or type(si.id) == int)
             self.assertTrue(si.permalink.startswith(self.permalink_start))
 
 

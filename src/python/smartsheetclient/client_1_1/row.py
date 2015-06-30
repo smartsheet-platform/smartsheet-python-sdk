@@ -8,13 +8,13 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 
 import json
 
-from base import (maybeAssignFromDict, isList, isScalar, isGenerator)
-from cell import (Cell, CellTypes)
-from attachment import Attachment, AttachPoint
-from discussion import Discussion
-from smartsheet_exceptions import (SmartsheetClientError, UnknownColumnId,
+from .base import (maybeAssignFromDict, isList, isScalar, isGenerator)
+from .cell import (Cell, CellTypes)
+from .attachment import Attachment, AttachPoint
+from .discussion import Discussion
+from .smartsheet_exceptions import (SmartsheetClientError, UnknownColumnId,
         OperationOnDiscardedObject, SheetIntegrityError)
-from base import ContainedThing
+from .base import ContainedThing
 
 
 # FIXME:  Something like this class seems necessary, but this isn't right.
@@ -262,10 +262,10 @@ class RowWrapper(object):
         '''
         self.errorIfDiscarded()
         if len(kwargs) == 1:
-            if isMapping(kwargs[kwargs.keys()[0]]):
+            if isMapping(kwargs[list(kwargs.keys())[0]]):
                 # If the original call was with a deeply nested dict/mapping,
                 # we will blow the call stack. :(
-                return self.makeRowFromDict(**kwargs[ kwargs.keys()[0] ])
+                return self.makeRowFromDict(**kwargs[ list(kwargs.keys())[0] ])
         raise NotImplementedError("%s.makeRowFromDict() not done" % self)
 
 
@@ -610,7 +610,7 @@ class Row(AttachPoint, ContainedThing, object):
                 self.logger.error("%s.getCellByIndex(%r) index is invalid.",
                         self, idx)
             raise
-        except Exception, e:
+        except Exception as e:
             err = "%s.getCellByIndex(%r) failed: %s" % (self, idx, str(e))
             self.logger.exception(err)
             raise SmartsheetClientError(err)
@@ -675,7 +675,7 @@ class Row(AttachPoint, ContainedThing, object):
 
         try:
             col = self.getColumnById(new_cell.columnId)
-        except Exception, e:
+        except Exception as e:
             err = ("%s.replaceCell() new_cell's columnId: %r not valid: %s" %
                     (self, new_cell.columnId, str(e)))
             self.logger.error(err)

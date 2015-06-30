@@ -6,10 +6,10 @@ This is HORRIBLY incomplete at the moment.
 Author:  Scott Wimer <scott.wimer@smartsheet.com>
 '''
 
-import client
-from base import (ContainedThing, slicedict)
-from attachment import Attachment, AttachPoint
-from smartsheet_exceptions import OperationOnDiscardedObject
+from . import client
+from .base import (ContainedThing, slicedict)
+from .attachment import Attachment, AttachPoint
+from .smartsheet_exceptions import OperationOnDiscardedObject
 import json
 import copy
 

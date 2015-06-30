@@ -68,15 +68,15 @@ class SheetAttachmentsTest(unittest.TestCase):
         headers, response = self.client.request(path)
         self.logger.debug(response)
         self.assertTrue(len(response) > 0)
-        self.assertTrue(response[0]['attachmentType'] == u'LINK')
-        self.assertTrue(response[0]['parentType'] == u'ROW')
+        self.assertTrue(response[0]['attachmentType'] == 'LINK')
+        self.assertTrue(response[0]['parentType'] == 'ROW')
         self.assertTrue(response[0]['name'] == self.link_name)
         self.assertTrue(response[0]['url'] == self.link_url)
 
         self.assertTrue(len(sheet[1].attachments) > 0)
         self.assertTrue(sheet[1].attachments[0].name == self.link_name)
         self.assertTrue(sheet[1].attachments[0].url == self.link_url)
-        self.assertTrue(sheet[1].attachments[0].attachmentType == u'LINK')
+        self.assertTrue(sheet[1].attachments[0].attachmentType == 'LINK')
         # self.assertTrue(sheet[1].attachments[0].parentType == u'ROW')
         self.logger.debug("exiting test_row_hyperlink_attachment")
 
@@ -105,13 +105,13 @@ class SheetAttachmentsTest(unittest.TestCase):
         headers, response = self.client.request(path)
         self.logger.debug(response)
         self.assertTrue(len(response) > 0)
-        self.assertTrue(response[0]['attachmentType'] == u'FILE')
-        self.assertTrue(response[0]['parentType'] == u'ROW')
+        self.assertTrue(response[0]['attachmentType'] == 'FILE')
+        self.assertTrue(response[0]['parentType'] == 'ROW')
         self.assertTrue(response[0]['name'] == self.filename)
 
         self.assertTrue(len(sheet[2].attachments) > 0)
         self.assertTrue(sheet[2].attachments[0].name == self.filename)
-        self.assertTrue(sheet[2].attachments[0].attachmentType == u'FILE')
+        self.assertTrue(sheet[2].attachments[0].attachmentType == 'FILE')
         # self.assertTrue(sheet[2].attachments[0].parentType == u'ROW')
         self.logger.debug("exiting test_row_file_attachment")
 
@@ -138,13 +138,13 @@ class SheetAttachmentsTest(unittest.TestCase):
         headers, response = self.client.request(path)
         self.logger.debug(response)
         self.assertTrue(len(response) > 0)
-        self.assertTrue(response[0]['attachmentType'] == u'FILE')
-        self.assertTrue(response[0]['parentType'] == u'SHEET')
+        self.assertTrue(response[0]['attachmentType'] == 'FILE')
+        self.assertTrue(response[0]['parentType'] == 'SHEET')
         self.assertTrue(response[0]['name'] == self.filename)
 
         self.assertTrue(len(sheet.attachments) > 0)
         self.assertTrue(sheet.attachments[0].name == self.filename)
-        self.assertTrue(sheet.attachments[0].attachmentType == u'FILE')
+        self.assertTrue(sheet.attachments[0].attachmentType == 'FILE')
         # self.assertTrue(sheet.attachments[0].parentType == u'SHEET')
         self.logger.debug("exiting test_sheet_file_attachment")
 
@@ -179,8 +179,8 @@ class SheetAttachmentsTest(unittest.TestCase):
         headers, response = self.client.request(path)
         self.logger.debug(response)
         self.assertTrue(len(response) > 0)
-        self.assertTrue(response[0]['attachmentType'] == u'LINK')
-        self.assertTrue(response[0]['parentType'] == u'SHEET')
+        self.assertTrue(response[0]['attachmentType'] == 'LINK')
+        self.assertTrue(response[0]['parentType'] == 'SHEET')
         self.assertTrue(response[0]['name'] == self.link_name)
         self.assertTrue(response[0]['url'] == self.link_url)
 
@@ -238,7 +238,7 @@ class SheetAttachmentsTest(unittest.TestCase):
         self.assertTrue(self.sheet.discussions[0].commentAttachments[0].name ==
                 self.filename)
         self.assertTrue(self.sheet.discussions[0].commentAttachments[0].attachmentType
-                == u'FILE')
+                == 'FILE')
 
         self.logger.debug('exit test_sheet_discussion_file_attachment')
 

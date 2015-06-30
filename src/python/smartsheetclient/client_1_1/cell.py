@@ -7,19 +7,19 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 '''
 
 import json
-from smartsheet_exceptions import (SmartsheetClientError, BadCellData,
+from .smartsheet_exceptions import (SmartsheetClientError, BadCellData,
         DeprecatedAttribute, OperationOnDiscardedObject)
-from base import ContainedThing
+from .base import ContainedThing
 
 
 class CellTypes(object):
     # TODO: Should this be an enum class?
-    TextNumber = u'TEXT_NUMBER'
-    Picklist = u'PICKLIST'
-    Date = u'DATE'
-    ContactList = u'CONTACT_LIST'
-    Checkbox = u'CHECKBOX'
-    EmptyCell = u'EMPTY_CELL'   # This must not be sent to the server.
+    TextNumber = 'TEXT_NUMBER'
+    Picklist = 'PICKLIST'
+    Date = 'DATE'
+    ContactList = 'CONTACT_LIST'
+    Checkbox = 'CHECKBOX'
+    EmptyCell = 'EMPTY_CELL'   # This must not be sent to the server.
 
 
 
@@ -294,7 +294,7 @@ class Cell(ContainedThing, object):
         # displayValue.  It's quite probably that the caller would rather
         # get the numeric value as a numeric type.
         if (self._displayValue is not None and self._value is not None and
-                isinstance(self._value, (int, long, float))):
+                isinstance(self._value, (int, float))):
             return self._value
         if self._displayValue is None and self._value is not None:
             return self._value
@@ -548,7 +548,7 @@ class Cell(ContainedThing, object):
         self.errorIfDiscarded()
         if self._displayValue is not None:
             return self._displayValue
-        return unicode(self.value)
+        return str(self.value)
 
     def __int__(self):
         '''Try to convert the value to an int.'''
@@ -558,7 +558,7 @@ class Cell(ContainedThing, object):
     def __long__(self):
         '''Try to convert the value to a long.'''
         self.errorIfDiscarded()
-        return long(self.value)
+        return int(self.value)
 
     def __float__(self):
         '''Try to convert the value to a float.'''
