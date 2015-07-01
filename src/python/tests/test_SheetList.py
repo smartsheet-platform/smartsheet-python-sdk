@@ -31,11 +31,12 @@ class SheetListTest(unittest.TestCase):
             self.assertIsInstance(si, SheetInfo)
             if sys.version_info.major == 3:
                 self.assertIsInstance(si.name, str)
+                self.assertTrue(type(si.id) == int)
             elif sys.version_info.major == 2:
                 self.assertIsInstance(si.name, unicode)
+                self.assertTrue(type(si.id) == int or type(si.id) == long)
             self.assertEqual(si.client, self.client)
             self.assertTrue(si.accessLevel in 'OWNER VIEWER EDITOR EDITOR_SHARE ADMIN'.split())
-            self.assertTrue(type(si.id) == int or type(si.id) == int)
             self.assertTrue(si.permalink.startswith(self.permalink_start))
 
 
