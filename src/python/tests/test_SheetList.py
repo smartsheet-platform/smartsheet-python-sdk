@@ -29,7 +29,10 @@ class SheetListTest(unittest.TestCase):
 
         for si in sheet_list:
             self.assertIsInstance(si, SheetInfo)
-            self.assertIsInstance(si.name, str)
+            if sys.version_info.major == 3:
+                self.assertIsInstance(si.name, str)
+            elif sys.version_info.major == 2:
+                self.assertIsInstance(si.name, unicode)
             self.assertEqual(si.client, self.client)
             self.assertTrue(si.accessLevel in 'OWNER VIEWER EDITOR EDITOR_SHARE ADMIN'.split())
             self.assertTrue(type(si.id) == int or type(si.id) == int)
