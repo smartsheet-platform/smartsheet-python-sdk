@@ -6,6 +6,7 @@ This is HORRIBLY incomplete at the moment.
 Author:  Scott Wimer <scott.wimer@smartsheet.com>
 '''
 
+import sys
 import json
 from .smartsheet_exceptions import (SmartsheetClientError, BadCellData,
         DeprecatedAttribute, OperationOnDiscardedObject)
@@ -548,7 +549,7 @@ class Cell(ContainedThing, object):
         self.errorIfDiscarded()
         if self._displayValue is not None:
             return self._displayValue
-        return str(self.value)
+        return str(self.value).decode('utf-8')
 
     def __int__(self):
         '''Try to convert the value to an int.'''
@@ -558,6 +559,8 @@ class Cell(ContainedThing, object):
     def __long__(self):
         '''Try to convert the value to a long.'''
         self.errorIfDiscarded()
+        if sys.version_info.major == 2:
+            return long(self.value)
         return int(self.value)
 
     def __float__(self):
