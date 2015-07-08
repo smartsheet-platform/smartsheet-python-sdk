@@ -11,7 +11,7 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 import json
 import time
 import collections
-import inspect
+import types
 import sys
 
 class TopLevelThing(object):
@@ -253,7 +253,7 @@ def isGenerator(items):
     '''
     Return True if items is a generator.
     '''
-    return inspect.isgenerator(items)
+    return type(items) == types.GeneratorType
 
 def isScalar(item):
     '''
@@ -267,3 +267,4 @@ def isScalar(item):
         bool, bytes)):
             return True
     return False
+

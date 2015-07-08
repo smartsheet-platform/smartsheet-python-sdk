@@ -254,12 +254,12 @@ class Sheet(AttachPoint, TopLevelThing, object):
     @property
     def rows(self):
         self.errorIfDiscarded()
-        return sorted(list(self._row_id_map.values()),
+        return sorted(self._row_id_map.values(),
                 key=operator.attrgetter('rowNumber'))
 
     @property
     def _rows(self):
-        return sorted(list(self._row_id_map.values()),
+        return sorted(self._row_id_map.values(),
                 key=operator.attrgetter('rowNumber'))
 
     @property
