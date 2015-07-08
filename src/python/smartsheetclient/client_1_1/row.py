@@ -8,7 +8,7 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 
 import json
 
-from base import (maybeAssignFromDict, isList, isScalar, isGenerator)
+from base import (maybeAssignFromDict, isList, isScalar, isGenerator, isMapping, isInteger)
 from cell import (Cell, CellTypes)
 from attachment import Attachment, AttachPoint
 from discussion import Discussion
@@ -266,8 +266,17 @@ class RowWrapper(object):
                 # If the original call was with a deeply nested dict/mapping,
                 # we will blow the call stack. :(
                 return self.makeRowFromDict(**kwargs[ kwargs.keys()[0] ])
-        raise NotImplementedError("%s.makeRowFromDict() not done" % self)
 
+        row = self.makeRow()
+        index = None
+        for key, value in kwargs.iteritems():
+            if isInteger(key):
+                index = key
+            else:
+                index = self._columns_info.getColumnByTitle(key).index
+            row[index] = value
+
+        return row
 
     def addRow(self, row):
         '''
