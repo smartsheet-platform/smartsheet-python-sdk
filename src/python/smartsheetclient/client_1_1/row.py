@@ -193,12 +193,7 @@ class RowWrapper(object):
             raise SmartsheetClientError(err)
         if values_list:
             if len(values_list) == 1 and isMapping(values_list[0]):
-                try:
-                    return self.makeRowFromDict(values_list[0])
-                except TypeError as e:
-                    import inspect
-                    print inspect.getargspec(self.makeRowFromDict)
-                    raise
+                return self.makeRowFromDict(values_list[0])
             return self.makeRowFromList(*values_list)
         elif values_dict:
             return self.makeRowFromDict(**values_dict)
