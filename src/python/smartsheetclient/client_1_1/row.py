@@ -8,20 +8,12 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 
 import json
 
-<<<<<<< HEAD
-from base import (maybeAssignFromDict, isList, isScalar, isGenerator, isMapping, isInteger)
-from cell import (Cell, CellTypes)
-from attachment import Attachment, AttachPoint
-from discussion import Discussion
-from smartsheet_exceptions import (SmartsheetClientError, UnknownColumnId,
-=======
 from .base import (maybeAssignFromDict, isList, isScalar, isGenerator,
         isMapping, isInteger)
 from .cell import (Cell, CellTypes)
 from .attachment import Attachment, AttachPoint
 from .discussion import Discussion
 from .smartsheet_exceptions import (SmartsheetClientError, UnknownColumnId,
->>>>>>> 0976ef7b444df45f89cd8a1f106f82d715b80bcd
         OperationOnDiscardedObject, SheetIntegrityError)
 from .base import ContainedThing
 
