@@ -976,6 +976,20 @@ class Sheet(AttachPoint, TopLevelThing, object):
         self.refreshColumnsInfo()
         return self
 
+    def updateColumn(self, column):
+        '''
+        Update the specified Column in the Sheet.
+        @param column The Column to update.
+        @return The Sheet.
+        @raises SmartsheetClientError
+        '''
+        self.errorIfDiscarded()
+        path = '/sheet/{sheetId}/column/{columnId}'.format(sheetId=self.id, columnId=column.id)
+        name = '{sheet}.updateColumnn({columnId})'.format(sheet=self, columnId=column.id)
+        body = self.client.PUT(path, name=name, extra_headers=self.client.json_headers, body=json.dumps(column.flattenForUpdate()))
+        self.logger.debug('{sheet}.updateColumn() refreshing columns_info'.format(sheet=self))
+        self.refreshColumnsInfo()
+
     def refetch(self):
         '''
         Refetch the Sheet - using the original fetch options.

@@ -87,10 +87,20 @@ class Column(ContainedThing, object):
         self.errorIfDiscarded()
         return self._title
 
+    @title.setter
+    def title(self, value):
+        self.errorIfDiscarded()
+        self._title = value
+
     @property
     def type(self):
         self.errorIfDiscarded()
         return self._type
+
+    @type.setter
+    def type(self, value):
+        self.errorIfDiscarded()
+        self._type = value
 
     @property
     def primary(self):
@@ -102,25 +112,50 @@ class Column(ContainedThing, object):
         self.errorIfDiscarded()
         return self._options
 
+    @options.setter
+    def options(self, value):
+        self.errorIfDiscarded()
+        self._options = value
+
     @property
     def symbol(self):
         self.errorIfDiscarded()
         return self._symbol
+
+    @symbol.setter
+    def symbol(self, value):
+        self.errorIfDiscarded()
+        self._symbol = value
 
     @property
     def systemColumnType(self):
         self.errorIfDiscarded()
         return self._systemColumnType
 
+    @systemColumnType.setter
+    def systemColumnType(self, value):
+        self.errorIfDiscarded()
+        self._systemColumnType = value
+
     @property
     def autoNumberFormat(self):
         self.errorIfDiscarded()
         return self._autoNumberFormat
 
+    @autoNumberFormat.setter
+    def autoNumberFormat(self, value):
+        self.errorIfDiscarded()
+        self._autoNumberFormat = value
+
     @property
     def width(self):
         self.errorIfDiscarded()
         return self._width
+
+    @width.setter
+    def width(self, value):
+        self.errorIfDiscarded()
+        self._width = value
 
     @property
     def id(self):
@@ -131,6 +166,11 @@ class Column(ContainedThing, object):
     def index(self):
         self.errorIfDiscarded()
         return self._index
+
+    @index.setter
+    def index(self, value):
+        self.errorIfDiscarded()
+        self._index = value
 
     @property
     def hidden(self):
@@ -146,6 +186,11 @@ class Column(ContainedThing, object):
     def format(self):
         self.errorIfDiscarded()
         return self._format
+
+    @format.setter
+    def format(self, value):
+        self.errorIfDiscarded()
+        self._format = value
 
     @property
     def filter(self):
@@ -190,6 +235,19 @@ class Column(ContainedThing, object):
                     "Column: %s", str(self))
         return acc
 
+    def flattenForUpdate(self):
+        '''
+        Return a dict of Column attributes suitable for update.
+        Notably, this dict contains the Sheet ID and omits the 'primary' attribute.
+        '''
+        self.errorIfDiscarded()
+        acc = self.flatten()
+        if self.sheet and self.sheet.id is not None:
+            acc['sheetId'] = self.sheet.id
+        if 'primary' in acc:
+            del acc['primary']
+        return acc
+
     def discard(self):
         '''
         Discard this Column, further operations on it will fail.
@@ -205,6 +263,13 @@ class Column(ContainedThing, object):
         column_id = self.id
         self.discard()
         return self.sheet.deleteColumnById(self, column_id, client=client)
+
+    def update(self):
+        '''
+        Update this Column.
+        '''
+        self.errorIfDiscarded()
+        return self.sheet.updateColumn(self)
 
     def errorIfDiscarded(self):
         if self._discarded:
