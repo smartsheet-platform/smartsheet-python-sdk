@@ -14,8 +14,8 @@ import collections
 import httplib2
 
 
-from smartsheet_exceptions import (SmartsheetClientError, APIRequestError, SheetIntegrityError, ReadOnlyClientError)
-from sheet import (Sheet, SheetInfo)
+from .smartsheet_exceptions import (SmartsheetClientError, APIRequestError, SheetIntegrityError, ReadOnlyClientError)
+from .sheet import (Sheet, SheetInfo)
 
 
 class HttpRequestInfo(object):
@@ -172,6 +172,7 @@ class SmartsheetClient(object):
             req_info.markRequestAttempt()
             (resp, content) = self.rawRequest(self.base_url, path, method,
                     headers=headers, body=body)
+            content = content.decode("utf-8")
             req_info.addResponse(resp, content)
             hdr = SmartsheetAPIResponseHeader(resp, content, self)
             body = {}
@@ -220,7 +221,7 @@ class SmartsheetClient(object):
         try:
             hdr, body = self.request(path, method=method,
                     extra_headers=extra_headers, body=body)
-        except Exception, e:
+        except Exception as e:
             err = "%s failed: %s" % (str(name), str(e))
             self.logger.exception(err)
             raise
@@ -497,33 +498,6 @@ class UserProfile(object):
         return str(self)
 
 
-
-class SimpleUser(object):
-    '''
-    Some objects (Discussions and Attachments) use this type of user.
-    It's a simplified identifier of a user.
-    '''
-    field_names = 'email name'.split()
-
-    def __init__(self, fields):
-        self.fields = fields
-
-    @property
-    def email(self):
-        return self.fields['email']
-
-    @property
-    def name(self):
-        return self.fields.get('name', '')
-
-    def __str__(self):
-        return '<SimpleUser email:%r, name:%r>' % (self.email, self.name)
-
-    def __repr__(self):
-        return str(self)
-
-
-
 class HttpResponse(object):
     '''
     A response from an HTTP request.
@@ -590,7 +564,7 @@ class SmartsheetAPIResponseHeader(HttpResponse):
         if not self.isOK():
             try:
                 json_content = self.contentAsJSON()
-            except Exception, e:
+            except Exception as e:
                 if client:
                     client.log.warn("Non-OK header: %r", self.hdr)
                 json_content = {}
