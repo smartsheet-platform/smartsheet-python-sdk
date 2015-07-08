@@ -6,10 +6,10 @@ This is HORRIBLY incomplete at the moment.
 Author:  Scott Wimer <scott.wimer@smartsheet.com>
 '''
 
-import client
-from base import (ContainedThing, slicedict)
-from attachment import Attachment, AttachPoint
-from smartsheet_exceptions import OperationOnDiscardedObject
+from . import users
+from .base import (ContainedThing, slicedict)
+from .attachment import Attachment, AttachPoint
+from .smartsheet_exceptions import OperationOnDiscardedObject
 import json
 import copy
 
@@ -66,7 +66,7 @@ class Discussion(ContainedThing):
                 fields.get('commentAttachments', [])]
         params['comments'] = [Comment.newFromAPI(_fixup_comment(c), sheet) for
                 c in fields.get('comments', [])]
-        params['createdBy'] = client.SimpleUser(fields['createdBy'])
+        params['createdBy'] = users.SimpleUser(fields['createdBy'])
         disc = cls(sheet, **params)
         # disc._fields = fields
         disc._fields = params

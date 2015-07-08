@@ -2,27 +2,29 @@
 Implementation of a client for version 1.1 of the Smartsheet API.
 '''
 
-from smartsheet_exceptions import (SmartsheetClientError, ReadOnlyClientError,
+from .smartsheet_exceptions import (SmartsheetClientError, ReadOnlyClientError,
         APIRequestError, SheetIntegrityError, OperationOnDiscardedObject,
         UnknownColumnId, InvalidRowNumber, SheetHasNoRows,
         InvalidOperationOnUnattachedRow, BadCellDataTypeError, BadCellData,
         DeprecatedAttribute)
 
-from base import (TopLevelThing, ContainedThing, string_trim,
+from .base import (TopLevelThing, ContainedThing, string_trim,
         maybeAssignFromDict, slicedict, isList, isScalar, isGenerator)
 
-from client import (HttpRequestInfo, SmartsheetClient, UserProfile, SimpleUser,
+from .client import (HttpRequestInfo, SmartsheetClient, UserProfile, 
         HttpResponse, SmartsheetAPIResponseHeader, SmartsheetAPIErrorMessage)
 
-from attachment import Attachment
+from .users import SimpleUser
 
-from discussion import (Discussion, Comment)
+from .attachment import Attachment
 
-from row import (RowWrapper, Row, RowPositionProperties)
+from .discussion import (Discussion, Comment)
 
-from cell import (CellTypes, CellHyperlink, CellLinkStatus, CellLinkIn, Cell)
+from .row import (RowWrapper, Row, RowPositionProperties)
 
-from column import Column
+from .cell import (CellTypes, CellHyperlink, CellLinkStatus, CellLinkIn, Cell)
 
-from sheet import (Sheet, SheetInfo)
+from .column import Column
+
+from .sheet import (Sheet, SheetInfo)
 

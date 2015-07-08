@@ -133,6 +133,60 @@ class RowAddDeleteTest(unittest.TestCase):
             self.assertTrue(self.sheet[2][i] == row_2_value_list[i])
 
 
+    def test_make_a_row_from_a_dict_keyed_by_index(self):
+        '''Make a Row from a dict where the keys are column Indexes.'''
+        row_1_value_list = ["one", "2015-05-05", "Yes", True,
+                "scott.wimer@example.com"]
+        row_1_items = dict(zip(range(len(row_1_value_list)), row_1_value_list))
+        row_2_value_list = ["two", "2015-05-06", "No", False,
+                "scott.wimer@example.com"]
+        row_2_items = dict(zip(range(len(row_2_value_list)), row_2_value_list))
+
+        row = self.sheet.makeRow(row_1_items)
+
+        for key, value in row_1_items.items():
+            self.assertTrue(row[key] == value)
+        for i in range(len(row_1_value_list)):
+            self.assertTrue(row[i] == row_1_value_list[i])
+
+        self.sheet.addRow(row)
+
+        for key, value in row_1_items.items():
+            self.assertTrue(self.sheet[1][key] == value)
+
+        rw = self.sheet.makeRowWrapper(position='toBottom')
+        row = rw.makeRow(row_2_items)
+
+        for key, value in row_2_items.items():
+            self.assertTrue(row[key] == value)
+        for i in range(len(row_2_value_list)):
+            self.assertTrue(row[i] == row_2_value_list[i])
+
+        rw.addRow(row)
+        self.sheet.addRows(rw)
+
+        for key, value in row_2_items.items():
+            self.assertTrue(self.sheet[2][key] == value)
+
+
+    def test_make_a_row_from_a_dict_keyed_by_title(self):
+        titles = map(lambda x: x.title, self.sheet.columns)
+        row_1_value_list = ["one", "2015-05-05", "Yes", True,
+                "scott.wimer@example.com"]
+        row_1_items = dict(zip(titles, row_1_value_list))
+        row_2_value_list = ["two", "2015-05-06", "No", False,
+                "scott.wimer@example.com"]
+        row_2_items = dict(zip(titles, row_2_value_list))
+
+        row = self.sheet.makeRow(row_1_items)
+        for i in range(len(row_1_value_list)):
+            self.assertTrue(row[i] == row_1_value_list[i])
+
+        self.sheet.addRow(row)
+        for i in range(len(row_1_value_list)):
+            self.assertTrue(self.sheet[1][i] == row_1_value_list[i])
+
+
     def test_add_rows_to_top_of_sheet(self):
         '''Add Rows, one at a time, to the top of an initially blank Sheet.'''
         r = self.sheet.makeRow()
@@ -441,7 +495,7 @@ if __name__ == '__main__':
         sys.exit("Error, must supply path to token file")
     api_token_file = sys.argv[1]
 
-    with file(api_token_file, 'r') as fh:
+    with open(api_token_file, 'r') as fh:
         api_token = fh.read()
         api_token = api_token.strip()
     del sys.argv[1]

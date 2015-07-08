@@ -145,7 +145,7 @@ class DiscussionTest(unittest.TestCase):
     def test_FetchDiscussions(self):
         DISCUSSION_COUNT = 10
         COMMENT_TEXT = 'now is the time for all good men to come to the aid of their country'
-        for i in xrange(DISCUSSION_COUNT):
+        for i in range(DISCUSSION_COUNT):
             path = 'sheet/{0}/discussions'.format(self.sheet.id)
             body = {
                 'title': 'FetchDiscussion_{0}'.format(i),
@@ -167,7 +167,7 @@ class DiscussionTest(unittest.TestCase):
         d = self.sheet.addDiscussion(DISCUSSION_NAME, COMMENT_1_TEXT)
         self.assertTrue(d is not None)
 
-        for i in xrange(COMMENT_COUNT):
+        for i in range(COMMENT_COUNT):
             path = 'sheet/{0}/discussion/{1}/comments'.format(self.sheet.id, d.id)
             body = {
                 'text': COMMENT_TEXT,
@@ -181,7 +181,7 @@ if __name__ == '__main__':
         sys.exit("Error, must supply path to token file")
     api_token_file = sys.argv[1]
 
-    with file(api_token_file, 'r') as fh:
+    with open(api_token_file, 'r') as fh:
         api_token = fh.read()
         api_token = api_token.strip()
     del sys.argv[1]

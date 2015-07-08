@@ -29,10 +29,14 @@ class SheetListTest(unittest.TestCase):
 
         for si in sheet_list:
             self.assertIsInstance(si, SheetInfo)
-            self.assertIsInstance(si.name, basestring)
+            if sys.version_info.major == 3:
+                self.assertIsInstance(si.name, str)
+                self.assertTrue(type(si.id) == int)
+            elif sys.version_info.major == 2:
+                self.assertIsInstance(si.name, unicode)
+                self.assertTrue(type(si.id) == int or type(si.id) == long)
             self.assertEqual(si.client, self.client)
             self.assertTrue(si.accessLevel in 'OWNER VIEWER EDITOR EDITOR_SHARE ADMIN'.split())
-            self.assertTrue(type(si.id) == int or type(si.id) == long)
             self.assertTrue(si.permalink.startswith(self.permalink_start))
 
 
@@ -41,7 +45,7 @@ if __name__ == '__main__':
         sys.exit("Error, must supply path to token file")
     api_token_file = sys.argv[1]
 
-    with file(api_token_file, 'r') as fh:
+    with open(api_token_file, 'r') as fh:
         api_token = fh.read()
         api_token = api_token.strip()
     del sys.argv[1] 

@@ -13,12 +13,12 @@ import datetime
 import sys
 import collections
 
-from smartsheet_exceptions import OperationOnDiscardedObject
-from base import maybeAssignFromDict, TopLevelThing
-from column import Column
-from row import (Row, RowWrapper, RowPositionProperties)
-from attachment import Attachment, AttachPoint
-from discussion import Discussion
+from .smartsheet_exceptions import OperationOnDiscardedObject
+from .base import maybeAssignFromDict, TopLevelThing
+from .column import Column
+from .row import (Row, RowWrapper, RowPositionProperties)
+from .attachment import Attachment, AttachPoint
+from .discussion import Discussion
 
 
 class Sheet(AttachPoint, TopLevelThing, object):
@@ -82,7 +82,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
         @property
         def columns(self):
             if self._columns is None:
-                self._columns = sorted(self.column_id_map.values(),
+                self._columns = sorted(list(self.column_id_map.values()),
                         key=operator.attrgetter('index'))
             return self._columns
 
@@ -111,7 +111,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
                 return self.columns[idx]
             if idx in self.column_index_map:
                 return self.column_index_map[idx]
-            raise IndexError
+            raise IndexError("%r invalid" % idx)
 
         def getColumnByTitle(self, title):
             '''

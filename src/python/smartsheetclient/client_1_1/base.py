@@ -11,7 +11,8 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 import json
 import time
 import collections
-import inspect
+import types
+import sys
 
 class TopLevelThing(object):
     '''
@@ -248,24 +249,34 @@ def isList(items):
         return False
     return isinstance(items, (collections.Sequence))
 
+
 def isGenerator(items):
     '''
     Return True if items is a generator.
     '''
-    return inspect.isgenerator(items)
+    return type(items) == types.GeneratorType
+
 
 def isScalar(item):
     '''
     Return True if item is a scalar (number or string, bytes).
     False otherwise.
     '''
-    if isinstance(item, (int, long, float, str, unicode, basestring,
+    if sys.version_info.major == 2 and isinstance(item, (int, float, long, str,
+        unicode, basestring, bytes)):
+            return True
+    elif sys.version_info.major == 3 and isinstance(item, (int, float, str,
         bool, bytes)):
-        return True
+            return True
     return False
 
 def isMapping(item):
-    return isinstance(item, dict)
+    return isinstance(item, collections.Mapping)
 
 def isInteger(item):
-    return isinstance(item, (int, long))
+    if sys.version_info.major == 2:
+        return isinstance(item, (int, long))
+    elif sys.version_info.major == 3:
+        return isinstance(item, int)
+    else:
+        return isinstance(item, int)

@@ -8,13 +8,22 @@ Author:  Scott Wimer <scott.wimer@smartsheet.com>
 
 import json
 
+<<<<<<< HEAD
 from base import (maybeAssignFromDict, isList, isScalar, isGenerator, isMapping, isInteger)
 from cell import (Cell, CellTypes)
 from attachment import Attachment, AttachPoint
 from discussion import Discussion
 from smartsheet_exceptions import (SmartsheetClientError, UnknownColumnId,
+=======
+from .base import (maybeAssignFromDict, isList, isScalar, isGenerator,
+        isMapping, isInteger)
+from .cell import (Cell, CellTypes)
+from .attachment import Attachment, AttachPoint
+from .discussion import Discussion
+from .smartsheet_exceptions import (SmartsheetClientError, UnknownColumnId,
+>>>>>>> 0976ef7b444df45f89cd8a1f106f82d715b80bcd
         OperationOnDiscardedObject, SheetIntegrityError)
-from base import ContainedThing
+from .base import ContainedThing
 
 
 # FIXME:  Something like this class seems necessary, but this isn't right.
@@ -191,6 +200,8 @@ class RowWrapper(object):
             self.sheet.logger.error(err)
             raise SmartsheetClientError(err)
         if values_list:
+            if len(values_list) == 1 and isMapping(values_list[0]):
+                return self.makeRowFromDict(values_list[0])
             return self.makeRowFromList(*values_list)
         elif values_dict:
             return self.makeRowFromDict(**values_dict)
@@ -254,28 +265,40 @@ class RowWrapper(object):
             row[column.index] = value
         return row
 
-    def makeRowFromDict(self, **kwargs):
+    def makeRowFromDict(self, *values_list,  **values):
         '''
-        Make a partially filled Row from a dict of values (either given as
-        key-value pairs as arguments or as a dict.
+        Make a partially filled Row from a dict of values.
+        The dict of values can be given as a dict argument or as name=value
+        arguments.
         The keys can be either Column titles or Column indexes.
+        If the keys are indexes or Column titles that are not valid Python
+        argument names, the name=value approach won't work.
+        Multiple dict arguments can be supplied, the Row created will contain
+        the values from each -- with later dicts overriding earlier ones.
+
+        @param values_list a list containing dicts (typically just one).
+        @param values the values for the Row, as key-value pairs.
+        @return A newly created Row in this RowWrapper (but not yet saved).
+        @raises IndexError if the titles or index are not valid.
         '''
         self.errorIfDiscarded()
-        if len(kwargs) == 1:
-            if isMapping(kwargs[kwargs.keys()[0]]):
-                # If the original call was with a deeply nested dict/mapping,
-                # we will blow the call stack. :(
-                return self.makeRowFromDict(**kwargs[ kwargs.keys()[0] ])
-
         row = self.makeRow()
-        index = None
-        for key, value in kwargs.iteritems():
+        kv_pairs = []
+        for item in values_list:
+            for key, value in item.items():
+                kv_pairs.append((key, value))
+
+        for key, value in values.items():
+            kv_pairs.append((key, value))
+
+        for key, value in kv_pairs:
             if isInteger(key):
-                index = key
+                index = int(key)
+                # Verify that the index is valid.
+                self._columns_info.getColumnByIndex(index)
             else:
                 index = self._columns_info.getColumnByTitle(key).index
             row[index] = value
-
         return row
 
     def addRow(self, row):
@@ -619,7 +642,7 @@ class Row(AttachPoint, ContainedThing, object):
                 self.logger.error("%s.getCellByIndex(%r) index is invalid.",
                         self, idx)
             raise
-        except Exception, e:
+        except Exception as e:
             err = "%s.getCellByIndex(%r) failed: %s" % (self, idx, str(e))
             self.logger.exception(err)
             raise SmartsheetClientError(err)
@@ -684,7 +707,7 @@ class Row(AttachPoint, ContainedThing, object):
 
         try:
             col = self.getColumnById(new_cell.columnId)
-        except Exception, e:
+        except Exception as e:
             err = ("%s.replaceCell() new_cell's columnId: %r not valid: %s" %
                     (self, new_cell.columnId, str(e)))
             self.logger.error(err)
