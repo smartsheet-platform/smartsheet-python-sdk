@@ -270,10 +270,8 @@ def isScalar(item):
             return True
     return False
 
-
 def isMapping(item):
     return isinstance(item, collections.Mapping)
-
 
 def isInteger(item):
     if sys.version_info.major == 2:
@@ -282,4 +280,3 @@ def isInteger(item):
         return isinstance(item, int)
     else:
         return isinstance(item, int)
-
