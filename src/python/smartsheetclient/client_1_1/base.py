@@ -263,3 +263,9 @@ def isScalar(item):
         bool, bytes)):
         return True
     return False
+
+def isMapping(item):
+    return isinstance(item, dict)
+
+def isInteger(item):
+    return isinstance(item, (int, long))
