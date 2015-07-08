@@ -55,7 +55,6 @@ that are covered here.
 * Continue adding support for more of the version 1.1 API
   * Move Rows (individually or a contigous block)
   * Change Row indentation (individually or in a group)
-  * Change column type
   * Bare minimum support for Workspaces and Folders
   * Bare minimum support for Reports
   * Bare minimum support for Search
