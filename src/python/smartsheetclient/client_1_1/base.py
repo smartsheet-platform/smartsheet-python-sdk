@@ -12,6 +12,7 @@ import json
 import time
 import collections
 import inspect
+import sys
 
 class TopLevelThing(object):
     '''
@@ -259,7 +260,10 @@ def isScalar(item):
     Return True if item is a scalar (number or string, bytes).
     False otherwise.
     '''
-    if isinstance(item, (int, long, float, str, unicode, basestring,
+    if sys.version_info.major == 2 and isinstance(item, (int, float, long, str,
+        unicode, basestring, bytes)):
+            return True
+    elif sys.version_info.major == 3 and isinstance(item, (int, float, str,
         bool, bytes)):
-        return True
+            return True
     return False
