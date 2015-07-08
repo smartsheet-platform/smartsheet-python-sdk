@@ -111,7 +111,7 @@ class Sheet(AttachPoint, TopLevelThing, object):
                 return self.columns[idx]
             if idx in self.column_index_map:
                 return self.column_index_map[idx]
-            raise IndexError
+            raise IndexError("%r invalid" % idx)
 
         def getColumnByTitle(self, title):
             '''

@@ -249,11 +249,13 @@ def isList(items):
         return False
     return isinstance(items, (collections.Sequence))
 
+
 def isGenerator(items):
     '''
     Return True if items is a generator.
     '''
     return type(items) == types.GeneratorType
+
 
 def isScalar(item):
     '''
@@ -267,4 +269,17 @@ def isScalar(item):
         bool, bytes)):
             return True
     return False
+
+
+def isMapping(item):
+    return isinstance(item, collections.Mapping)
+
+
+def isInteger(item):
+    if sys.version_info.major == 2:
+        return isinstance(item, (int, long))
+    elif sys.version_info.major == 3:
+        return isinstance(item, int)
+    else:
+        return isinstance(item, int)
 
