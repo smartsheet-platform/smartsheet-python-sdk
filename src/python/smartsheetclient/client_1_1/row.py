@@ -536,6 +536,11 @@ class Row(AttachPoint, ContainedThing, object):
         self.errorIfDiscarded()
         return self._expanded
 
+    @expanded.setter
+    def expanded(self, value):
+        self.errorIfDiscarded()
+        self._new_expanded = value
+
     @property
     def createdAt(self):
         self.errorIfDiscarded()
