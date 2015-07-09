@@ -43,7 +43,6 @@ that are covered here.
 
 * When fetching a Sheet, pagination isn't supported
 * Moving Rows
-* Expanding or collapsing Rows
 * Replacing an attachment doesn't work, only uploading a new version
 * Can't issue HEAD requests on the S3 link used to download attachments
   * These result in a 403 error even thought the S3 docs say that GET and HEAD use the same permissions object
