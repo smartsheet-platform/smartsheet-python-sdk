@@ -536,6 +536,11 @@ class Row(AttachPoint, ContainedThing, object):
         self.errorIfDiscarded()
         return self._expanded
 
+    @expanded.setter
+    def expanded(self, value):
+        self.errorIfDiscarded()
+        self._new_expanded = value
+
     @property
     def createdAt(self):
         self.errorIfDiscarded()
@@ -780,9 +785,9 @@ class Row(AttachPoint, ContainedThing, object):
         # When saving a single Cell on the Row, keep a copy of the other
         # cells so we can discard them later.
         all_cells = []
-        if cell:
+        if cell is not None:
             all_cells = list(self.cells)
-            self._cells = [cell]
+            self._cells = cell if isList(cell) else [cell]
 
         sheet = self.sheet
 
@@ -824,9 +829,9 @@ class Row(AttachPoint, ContainedThing, object):
 
         acc = { 'cells': [cell.flatten(strict=strict) for cell in
             self.cells if cell.type != CellTypes.EmptyCell] }
-        if self._new_position:
+        if self._new_position is not None:
             acc.update(self._new_position.flatten())
-        if self._new_expanded:
+        if self._new_expanded is not None:
             acc['expanded'] = self._new_expanded
 
         body = self.client.PUT(path, extra_headers=self.client.json_headers,
