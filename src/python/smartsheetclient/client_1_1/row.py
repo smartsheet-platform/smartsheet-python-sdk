@@ -782,7 +782,7 @@ class Row(AttachPoint, ContainedThing, object):
         all_cells = []
         if cell:
             all_cells = list(self.cells)
-            self.cells = [cell]
+            self._cells = [cell]
 
         sheet = self.sheet
 
