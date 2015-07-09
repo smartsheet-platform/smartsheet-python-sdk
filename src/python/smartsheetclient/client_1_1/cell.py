@@ -490,6 +490,7 @@ class Cell(ContainedThing, object):
         Row, it can only be saved into an existing Row.
 
         @param strict True to request strict Cell-data validation by server.
+        @return Dict containing the contents of this Cell.
         '''
         self.errorIfDiscarded()
         acc = {}
@@ -514,6 +515,7 @@ class Cell(ContainedThing, object):
         '''
         Return a flattened form of this Cell for Row insertion.
         @param strict True to request strict Cell-data validation by server.
+        @return Dict containing contents of this Cell (minus linkInFromCell).
         '''
         self.errorIfDiscarded()
         acc = self.flatten(strict=strict)
@@ -523,7 +525,7 @@ class Cell(ContainedThing, object):
                     str(self))
             del acc['linkInFromCell']
         return acc
-       
+
     def fetchHistory(self):
         '''
         Fetch the history of the Cell.

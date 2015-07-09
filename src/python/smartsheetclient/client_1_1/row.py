@@ -823,7 +823,8 @@ class Row(AttachPoint, ContainedThing, object):
         sheet = self.sheet
 
         acc = { 'cells': [cell.flatten(strict=strict) for cell in
-            self.cells if cell.type != CellTypes.EmptyCell] }
+            self.cells if (cell.type != CellTypes.EmptyCell and
+                cell.isDirty)] }
         if self._new_position:
             acc.update(self._new_position.flatten())
         if self._new_expanded:
