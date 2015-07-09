@@ -414,7 +414,7 @@ class Row(AttachPoint, ContainedThing, object):
         self._dirty = True      # Rows created this way need to be saved.
         self._discarded = False
         self._new_position = None
-        self._new_expanded = None       # TODO: Implement use of this.
+        self._new_expanded = None
         # Track whether or not this is a new Row.   Some Cell attributes
         # can only be set when the Row already exists, not when it is first
         # being saved.  We could probably use self.id == -1 too.
@@ -539,7 +539,7 @@ class Row(AttachPoint, ContainedThing, object):
     @expanded.setter
     def expanded(self, value):
         self.errorIfDiscarded()
-        self._new_expanded = value
+        self._new_expanded = bool(value)
 
     @property
     def createdAt(self):
@@ -833,7 +833,7 @@ class Row(AttachPoint, ContainedThing, object):
         if self._new_position is not None:
             acc.update(self._new_position.flatten())
         if self._new_expanded is not None:
-            acc['expanded'] = self._new_expanded
+            acc['expanded'] = str(self._new_expanded).lower()
 
         body = self.client.PUT(path, extra_headers=self.client.json_headers,
                 body=json.dumps(acc))
