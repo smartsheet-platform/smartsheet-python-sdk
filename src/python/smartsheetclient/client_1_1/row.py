@@ -413,7 +413,7 @@ class Row(AttachPoint, ContainedThing, object):
         self._filteredOut = None
         self._dirty = True      # Rows created this way need to be saved.
         self._discarded = False
-        self._new_position = None
+        self._new_position = None   # TODO: Handle Row move.
         self._new_expanded = None
         # Track whether or not this is a new Row.   Some Cell attributes
         # can only be set when the Row already exists, not when it is first
