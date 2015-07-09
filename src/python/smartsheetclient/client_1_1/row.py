@@ -829,9 +829,9 @@ class Row(AttachPoint, ContainedThing, object):
 
         acc = { 'cells': [cell.flatten(strict=strict) for cell in
             self.cells if cell.type != CellTypes.EmptyCell] }
-        if self._new_position:
+        if self._new_position is not None:
             acc.update(self._new_position.flatten())
-        if self._new_expanded:
+        if self._new_expanded is not None:
             acc['expanded'] = self._new_expanded
 
         body = self.client.PUT(path, extra_headers=self.client.json_headers,
