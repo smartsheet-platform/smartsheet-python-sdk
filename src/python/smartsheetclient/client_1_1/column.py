@@ -212,7 +212,7 @@ class Column(ContainedThing, object):
         if self.systemColumnType:
             acc['systemColumnType'] = self.systemColumnType
         if self.autoNumberFormat:
-            acc['autoNumberFormat'] = self.autonumberFormat
+            acc['autoNumberFormat'] = self.autoNumberFormat
         if self.width is not None:
             acc['width'] = self.width
         if self.format is not None:
