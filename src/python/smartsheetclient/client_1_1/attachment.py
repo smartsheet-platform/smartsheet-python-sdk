@@ -384,9 +384,10 @@ class AttachPoint(object):
 
     def attachBytes(self, attachment_name, data, client=None):
         self.errorIfDiscarded()
+        short_name = os.path.basename(attachment_name)
         headers = {
             'Content-Disposition':
-                'attachment; filename="{0}"'.format(attachment_name),
+                'attachment; filename="{0}"'.format(short_name),
             'Content-Type': 'application/octest-stream',
             'Content-Length': str(len(data)),
         }
