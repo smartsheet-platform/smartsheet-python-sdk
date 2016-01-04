@@ -128,7 +128,7 @@ def smart_setup(request):
                     'email': fixusers['moe'].email
                 }),
                 smart.models.GroupMember({
-                    'email': 'clay@loveless.net'
+                    'email': fixusers['admin'].email
                 })
             ]
         })
