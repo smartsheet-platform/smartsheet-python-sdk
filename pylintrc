@@ -1,0 +1,11 @@
+[MASTER]
+jobs=0
+
+[MESSAGES CONTROL]
+disable=missing-docstring,too-many-arguments,locally-disabled,locally-enabled,too-few-public-methods,too-many-public-methods,duplicate-code,too-many-instance-attributes,too-many-lines
+
+[REPORTS]
+output-format=colorized
+
+[BASIC]
+include-naming-hint=yes

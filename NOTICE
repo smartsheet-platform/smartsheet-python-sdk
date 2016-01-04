@@ -1,0 +1,10 @@
+Smartsheet Python SDK
+Copyright 2016 Smartsheet.com, Inc.
+
+Portions of this software were developed by SmartBear Software under
+the Apache License, Version 2.0. The original software is available
+from https://github.com/swagger-api/swagger-codegen
+
+Portions of this software were developed by Dropbox Inc. under the
+MIT license. The original software is available from
+https://github.com/dropbox/dropbox-sdk-python
