@@ -1,0 +1,24 @@
+language: python
+
+python:
+  - "2.7"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "pypy"
+  - "pypy3"
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+
+install:
+  - pip install --upgrade pip
+  - pip install certifi==2015.04.28
+  - pip install requests six python-dateutil coverage coveralls[yaml] pytest pytest-travis-fold pytest-instafail requests-toolbelt
+
+script:
+  coverage run --source=smartsheet setup.py test
+
+after_success:
+  - coveralls --verbose
