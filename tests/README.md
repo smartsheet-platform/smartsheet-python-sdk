@@ -29,4 +29,6 @@ export SMARTSHEET_FIXTURE_USERS='{"admin":{"id":9999999999999999},"larry":{"id":
 
 In addition, reports tests will be skipped unless there is a report within the organization. The report will not be modified or deleted, but must exist in order to acceptance-test the API methods pertaining to Reports.
 
+The `admin` user needs at least one Contact.
+
 Finally, the user corresponding to `moe` needs to be a Licensed User. `larry` and `curly` do not need to be Licensed Users.
