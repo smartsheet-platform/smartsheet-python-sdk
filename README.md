@@ -4,10 +4,14 @@
 This library is intended to simplify connecting to the [Smartsheet API](http://smartsheet-platform.github.io/api-docs/) from Python applications. 
 
 ##System Requirements
-The SDK currently supports Python 2.7, 3.3, 3.4, and 3.5.
+The SDK currently supports Python 2.7, 3.3, 3.4, 3.5, pypy, and pypy3.
 The following packages are required.
 
 * [requests](https://pypi.python.org/pypi/requests)
+* [requests-toolbelt](https://pypi.python.org/pypi/requests-toolbelt)
+* [six](https://pypi.python.org/pypi/six)
+* [certifi](https://pypi.python.org/pypi/certifi)
+* [python-dateutil](https://pypi.python.org/pypi/python-dateutil)
 
 ##Installation
 The SDK can be installed by using a package manager (pip) or manually by downloading the SDK directly from Git. These two steps are outlined below.
