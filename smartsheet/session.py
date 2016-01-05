@@ -42,6 +42,12 @@ def pinned_session(pool_maxsize=8):
                                pool_maxsize=pool_maxsize)
 
     _session = requests.session()
+    _session.hooks = {'response': redact_token}
     _session.mount('https://', http_adapter)
 
     return _session
+
+def redact_token(res, *args, **kwargs):
+    if 'Authorization' in res.request.headers:
+        res.request.headers.update({'Authorization': '[redacted]'})
+    return res
