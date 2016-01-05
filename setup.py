@@ -34,7 +34,7 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 setup(
-    name=NAME,
+    name="smartsheet-python-sdk",
     description="Smartsheet API",
     author_email="api@smartsheet.com",
     url="http://smartsheet-platform.github.io/api-docs/",
