@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 import sys
 
-NAME = "smartsheet"
+NAME = 'smartsheet-python-sdk'
 
 REQUIRES = [
     'requests',
@@ -14,7 +14,6 @@ REQUIRES = [
 # test packages:
 # https://github.com/coagulant/coveralls-python
 # https://github.com/pytest-dev/pytest
-
 
 class PyTest(TestCommand):
     user_options = [('pytest-args=', 'a', 'Arguments to pass to py.test')]
@@ -34,17 +33,37 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 setup(
-    name="smartsheet-python-sdk",
-    description="Smartsheet API",
-    author_email="api@smartsheet.com",
-    url="http://smartsheet-platform.github.io/api-docs/",
-    keywords=["Smartsheet API"],
-    use_scm_version=True,
+    name=NAME,
+    description='Library that uses Python to connect to Smartsheet services (using API 2.0).',
+    author='Smartsheet',
+    author_email='api@smartsheet.com',
+    url='http://smartsheet-platform.github.io/api-docs/',
+    license='Apache-2.0',
+    keywords=['Smartsheet', 'Collaboration', 'Project Management', 'Excel', 'spreadsheet'],
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'Natural Language :: English',
+        'Operating System :: OS Independent',
+        'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: Implementation :: PyPy',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Office/Business :: Financial :: Spreadsheet',
+    ],
+    use_scm_version={
+        'write_to': 'smartsheet/version.py'
+    },
     setup_requires=['setuptools_scm'],
     install_requires=REQUIRES,
     packages=find_packages(),
     include_package_data=True,
-    long_description="""Programmatic access to Smartsheet.""",
+    long_description=open('README.rst').read(),
     extras_require={
         'test': ['coverage', 'coveralls', 'pytest'],
         'develop': [
