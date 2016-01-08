@@ -109,7 +109,7 @@ class DownloadedFile(object):
 
     @result_code.setter
     def result_code(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._result_code = value
 
     def save_to_file(self, chunksize=2**16):

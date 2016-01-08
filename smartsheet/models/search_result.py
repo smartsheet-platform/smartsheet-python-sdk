@@ -76,7 +76,7 @@ class SearchResult(object):
 
     @total_count.setter
     def total_count(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._total_count = value
 
     def to_dict(self, op_id=None, method=None):

@@ -72,7 +72,7 @@ class Favorite(object):
 
     @object_id.setter
     def object_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._object_id = value
 
     @property

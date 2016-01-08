@@ -191,7 +191,7 @@ class Attachment(object):
 
     @_id.setter
     def _id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self.__id = value
 
     @property
@@ -218,7 +218,7 @@ class Attachment(object):
 
     @parent_id.setter
     def parent_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._parent_id = value
 
     @property
@@ -241,7 +241,7 @@ class Attachment(object):
 
     @size_in_kb.setter
     def size_in_kb(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._size_in_kb = value
 
     @property
@@ -259,7 +259,7 @@ class Attachment(object):
 
     @url_expires_in_millis.setter
     def url_expires_in_millis(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._url_expires_in_millis = value
 
     @property

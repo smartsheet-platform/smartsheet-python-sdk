@@ -214,7 +214,7 @@ class ReportColumn(Column):
 
     @index.setter
     def index(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._index = value
 
     @property
@@ -237,7 +237,7 @@ class ReportColumn(Column):
 
     @width.setter
     def width(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._width = value
 
     @property
@@ -269,7 +269,7 @@ class ReportColumn(Column):
 
     @_id.setter
     def _id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self.__id = value
 
     @property
@@ -337,7 +337,7 @@ class ReportColumn(Column):
 
     @virtual_id.setter
     def virtual_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._virtual_id = value
 
     @property

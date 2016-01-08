@@ -214,7 +214,7 @@ class Column(object):
 
     @_id.setter
     def _id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self.__id = value
 
     @property
@@ -223,7 +223,7 @@ class Column(object):
 
     @index.setter
     def index(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._index = value
 
     @property
@@ -348,7 +348,7 @@ class Column(object):
 
     @width.setter
     def width(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._width = value
 
     @property

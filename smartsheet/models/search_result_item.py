@@ -111,7 +111,7 @@ class SearchResultItem(object):
 
     @object_id.setter
     def object_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._object_id = value
 
     @property
@@ -134,7 +134,7 @@ class SearchResultItem(object):
 
     @parent_object_id.setter
     def parent_object_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._parent_object_id = value
 
     @property

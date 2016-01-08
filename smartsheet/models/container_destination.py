@@ -69,7 +69,7 @@ class ContainerDestination(object):
 
     @destination_id.setter
     def destination_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._destination_id = value
 
     @property

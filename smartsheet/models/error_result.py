@@ -69,7 +69,7 @@ class ErrorResult(object):
 
     @code.setter
     def code(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._code = value
 
     @property
@@ -114,7 +114,7 @@ class ErrorResult(object):
 
     @status_code.setter
     def status_code(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._status_code = value
 
     def to_dict(self, op_id=None, method=None):

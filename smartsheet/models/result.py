@@ -178,7 +178,7 @@ class Result(object):
 
     @result_code.setter
     def result_code(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._result_code = value
 
     @property
@@ -187,7 +187,7 @@ class Result(object):
 
     @version.setter
     def version(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._version = value
 
     @property

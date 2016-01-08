@@ -62,7 +62,7 @@ class CopyOrMoveRowResult(object):
 
     @destination_sheet_id.setter
     def destination_sheet_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._destination_sheet_id = value
 
     @property

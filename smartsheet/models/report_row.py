@@ -199,7 +199,7 @@ class ReportRow(Row):
 
     @sibling_id.setter
     def sibling_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._sibling_id = value
 
     @property
@@ -236,7 +236,7 @@ class ReportRow(Row):
 
     @row_number.setter
     def row_number(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._row_number = value
 
     @property
@@ -277,7 +277,7 @@ class ReportRow(Row):
 
     @version.setter
     def version(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._version = value
 
     @property
@@ -305,7 +305,7 @@ class ReportRow(Row):
 
     @_id.setter
     def _id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self.__id = value
 
     @property
@@ -314,7 +314,7 @@ class ReportRow(Row):
 
     @parent_id.setter
     def parent_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._parent_id = value
 
     @property
@@ -323,7 +323,7 @@ class ReportRow(Row):
 
     @sheet_id.setter
     def sheet_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._sheet_id = value
 
     @property

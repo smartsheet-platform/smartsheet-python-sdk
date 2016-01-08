@@ -81,7 +81,7 @@ class CellLink(object):
 
     @column_id.setter
     def column_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._column_id = value
 
     @property
@@ -90,7 +90,7 @@ class CellLink(object):
 
     @row_id.setter
     def row_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._row_id = value
 
     @property
@@ -99,7 +99,7 @@ class CellLink(object):
 
     @sheet_id.setter
     def sheet_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._sheet_id = value
 
     @property

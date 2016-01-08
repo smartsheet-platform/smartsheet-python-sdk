@@ -51,7 +51,7 @@ class Version(object):
 
     @version.setter
     def version(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._version = value
 
     def to_dict(self, op_id=None, method=None):
