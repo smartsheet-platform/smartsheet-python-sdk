@@ -30,7 +30,6 @@ import requests_toolbelt
 from requests_toolbelt.utils import dump
 from requests_toolbelt.utils.user_agent import user_agent as ua
 import six
-from setuptools_scm import get_version
 
 from .exceptions import *
 from .models import Error, ErrorResult
@@ -38,6 +37,7 @@ from .session import pinned_session
 from .types import TypedList
 from .util import is_multipart
 from . import (
+    __version__,
     __api_base__,
     models
 )
@@ -116,7 +116,7 @@ class Smartsheet(object):
             self._session.proxies = proxies
         self._max_retries_on_error = max_retries_on_error
 
-        base_user_agent = 'SmartsheetPythonSDK/' + get_version()
+        base_user_agent = 'SmartsheetPythonSDK/' + __version__
         if user_agent:
             self._user_agent = '{}/{}'.format(user_agent, base_user_agent)
         else:

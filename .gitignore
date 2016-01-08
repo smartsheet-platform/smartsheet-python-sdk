@@ -1,13 +1,21 @@
 .sw[op]
 .*.sw[op]
 *.pyc
+
 # Ignore setup.py artifacts
 build/
 dist/
 sdist/
-smartsheetclient.egg-info/
+smartsheet*.egg-info/
+
+# Ignore SDK reference docs artifacts
+gh-pages/
+docs/_build/
+docs/modules.rst
+docs/smartsheet*.rst
 
 # Ignore the test cases log files
 *.log
 
-
+# Ignore setuptools_scm-generated version.py
+smartsheet/version.py
