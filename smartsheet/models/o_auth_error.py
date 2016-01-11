@@ -84,7 +84,7 @@ class OAuthError(object):
 
     @error_code.setter
     def error_code(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._error_code = value
 
     @property

@@ -172,7 +172,7 @@ class IndexResult(object):
 
     @page_number.setter
     def page_number(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._page_number = value
 
     @property
@@ -181,7 +181,7 @@ class IndexResult(object):
 
     @page_size.setter
     def page_size(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._page_size = value
 
     @property
@@ -190,7 +190,7 @@ class IndexResult(object):
 
     @total_count.setter
     def total_count(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._total_count = value
 
     @property
@@ -199,7 +199,7 @@ class IndexResult(object):
 
     @total_pages.setter
     def total_pages(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._total_pages = value
 
     @property

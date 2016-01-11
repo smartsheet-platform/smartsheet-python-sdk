@@ -60,7 +60,7 @@ class Hyperlink(object):
 
     @report_id.setter
     def report_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._report_id = value
 
     @property
@@ -69,7 +69,7 @@ class Hyperlink(object):
 
     @sheet_id.setter
     def sheet_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._sheet_id = value
 
     @property

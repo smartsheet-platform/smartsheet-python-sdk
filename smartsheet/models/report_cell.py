@@ -124,7 +124,7 @@ class ReportCell(Cell):
 
     @virtual_column_id.setter
     def virtual_column_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._virtual_column_id = value
 
     @property
@@ -171,7 +171,7 @@ class ReportCell(Cell):
 
     @column_id.setter
     def column_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._column_id = value
 
     @property

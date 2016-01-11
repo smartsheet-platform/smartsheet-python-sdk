@@ -6,12 +6,6 @@ import json
 import os
 import six
 
-#def smart_dir(tmpdir):
-#    p = tmpdir.mkdir('sub').join('README.md')
-#    p.write('tmpdir')
-#    assert p.read() == 'tmpdir'
-#    assert len(tmpdir.listdir()) == 1
-
 @pytest.fixture(scope="module")
 def smart_setup(request):
     # set up a test session folder with basic starting points

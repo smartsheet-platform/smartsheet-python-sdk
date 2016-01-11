@@ -208,7 +208,7 @@ class Report(Sheet):
 
     @from_id.setter
     def from_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._from_id = value
 
     @property
@@ -230,7 +230,7 @@ class Report(Sheet):
 
     @owner_id.setter
     def owner_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._owner_id = value
 
     @property
@@ -286,7 +286,7 @@ class Report(Sheet):
 
     @version.setter
     def version(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._version = value
 
     @property
@@ -295,7 +295,7 @@ class Report(Sheet):
 
     @_id.setter
     def _id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self.__id = value
 
     @property
@@ -363,7 +363,7 @@ class Report(Sheet):
 
     @total_row_count.setter
     def total_row_count(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._total_row_count = value
 
     @property

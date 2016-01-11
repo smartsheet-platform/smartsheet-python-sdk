@@ -21,7 +21,7 @@ class TestReports:
             )
             assert isinstance(action, smart.models.Report)
         except IndexError:
-            pytest.runner.skip('no reports in test account')
+            pytest.skip('no reports in test account')
 
     @pytest.mark.usefixtures('tmpdir')
     def test_get_report_as_csv(self, smart_setup, tmpdir):
@@ -34,7 +34,7 @@ class TestReports:
             assert action.message == 'SUCCESS'
             assert isinstance(action, smart.models.DownloadedFile)
         except IndexError:
-            pytest.runner.skip('no reports in test account')
+            pytest.skip('no reports in test account')
 
     @pytest.mark.usefixtures('tmpdir')
     def test_get_report_as_excel(self, smart_setup, tmpdir):
@@ -47,7 +47,7 @@ class TestReports:
             assert action.message == 'SUCCESS'
             assert isinstance(action, smart.models.DownloadedFile)
         except IndexError:
-            pytest.runner.skip('no reports in test account')
+            pytest.skip('no reports in test account')
 
     def test_send_report(self, smart_setup):
         smart = smart_setup['smart']
@@ -69,7 +69,7 @@ class TestReports:
             )
             assert action.message == 'SUCCESS'
         except IndexError:
-            pytest.runner.skip('no reports in test account')
+            pytest.skip('no reports in test account')
 
     def test_share_report(self, smart_setup):
         smart = smart_setup['smart']
@@ -84,7 +84,7 @@ class TestReports:
             assert action.message == 'SUCCESS'
             TestReports.share = action.result
         except IndexError:
-            pytest.runner.skip('no reports in test account')
+            pytest.skip('no reports in test account')
 
     def test_list_shares(self, smart_setup):
         smart = smart_setup['smart']
@@ -95,7 +95,7 @@ class TestReports:
             assert action.total_count > 0
             TestReports.shares = action.result
         except IndexError:
-            pytest.runner.skip('no reports found in test account')
+            pytest.skip('no reports found in test account')
 
     def test_get_share(self, smart_setup):
         smart = smart_setup['smart']
@@ -106,7 +106,7 @@ class TestReports:
             )
             assert isinstance(share, smart.models.Share)
         except IndexError:
-            pytest.runner.skip('no reports found in test account')
+            pytest.skip('no reports found in test account')
 
     def test_update_share(self, smart_setup):
         smart = smart_setup['smart']
@@ -120,7 +120,7 @@ class TestReports:
             )
             assert action.message == 'SUCCESS'
         except IndexError:
-            pytest.runner.skip('no reports found in test account')
+            pytest.skip('no reports found in test account')
 
     def test_delete_share(self, smart_setup):
         smart = smart_setup['smart']
@@ -131,6 +131,4 @@ class TestReports:
             )
             assert action.message == 'SUCCESS'
         except IndexError:
-            pytest.runner.skip('no reports found in test account')
-
-
+            pytest.skip('no reports found in test account')

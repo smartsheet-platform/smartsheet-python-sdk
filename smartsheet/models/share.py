@@ -143,7 +143,7 @@ class Share(object):
 
     @group_id.setter
     def group_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._group_id = value
 
     @property
@@ -202,7 +202,7 @@ class Share(object):
 
     @user_id.setter
     def user_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._user_id = value
 
     @property

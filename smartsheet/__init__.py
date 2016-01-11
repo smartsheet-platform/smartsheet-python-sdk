@@ -20,5 +20,11 @@ from __future__ import absolute_import
 __api_base__ = 'https://api.smartsheet.com/2.0'
 __api_version__ = '2.0'
 
+try:
+    from .version import version
+    __version__ = version
+except ImportError:
+    from setuptools_scm import get_version
+    __version__ = get_version()
 
 from .smartsheet import Smartsheet, fresh_operation  # NOQA

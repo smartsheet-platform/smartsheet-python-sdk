@@ -73,7 +73,7 @@ class AccessToken(object):
 
     @expires_in.setter
     def expires_in(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._expires_in = value
 
     @property

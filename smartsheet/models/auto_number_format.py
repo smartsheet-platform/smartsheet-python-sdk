@@ -79,7 +79,7 @@ class AutoNumberFormat(object):
 
     @starting_number.setter
     def starting_number(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._starting_number = value
 
     @property

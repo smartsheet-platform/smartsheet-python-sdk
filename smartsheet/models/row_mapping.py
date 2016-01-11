@@ -62,7 +62,7 @@ class RowMapping(object):
 
     @_from.setter
     def _from(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self.__from = value
 
     @property
@@ -71,7 +71,7 @@ class RowMapping(object):
 
     @to.setter
     def to(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._to = value
 
     def to_dict(self, op_id=None, method=None):

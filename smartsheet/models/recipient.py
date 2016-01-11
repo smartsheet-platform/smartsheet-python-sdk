@@ -64,7 +64,7 @@ class Recipient(object):
 
     @group_id.setter
     def group_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._group_id = value
 
     def to_dict(self, op_id=None, method=None):

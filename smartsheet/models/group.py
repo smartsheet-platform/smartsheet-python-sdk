@@ -111,7 +111,7 @@ class Group(object):
 
     @_id.setter
     def _id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self.__id = value
 
     @property
@@ -170,7 +170,7 @@ class Group(object):
 
     @owner_id.setter
     def owner_id(self, value):
-        if isinstance(value, int):
+        if isinstance(value, six.integer_types):
             self._owner_id = value
 
     @property
