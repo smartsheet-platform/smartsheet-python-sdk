@@ -200,8 +200,7 @@ class Cell(object):
 
     @value.setter
     def value(self, value):
-        if isinstance(value, six.string_types):
-            self._value = value
+        self._value = value
 
     @property
     def pre_request_filter(self):
