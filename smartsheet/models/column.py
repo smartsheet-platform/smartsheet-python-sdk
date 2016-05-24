@@ -91,7 +91,7 @@ class Column(object):
         self._index = None
         self._locked = None
         self._locked_for_user = None
-        self._options = TypedList(str)
+        self._options = TypedList(unicode)
         self._primary = None
         self._symbol = None
         self._system_column_type = None
@@ -253,8 +253,8 @@ class Column(object):
         if isinstance(value, list):
             self._options.purge()
             self._options.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
+                (unicode(x)
+                 if not isinstance(x, unicode) else x) for x in value
             ])
         elif isinstance(value, TypedList):
             self._options.purge()
