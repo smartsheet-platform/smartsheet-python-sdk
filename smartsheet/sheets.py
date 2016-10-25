@@ -579,7 +579,8 @@ class Sheets(object):
 
         return response
 
-    def list_org_sheets(self):
+    def list_org_sheets(self, sheet_id, page_size=100, page=1,
+                        include_all=False):
         """Get a list of all Sheets owned by an organization.
 
         Get the list of all Sheets owned by the members of the
@@ -590,6 +591,9 @@ class Sheets(object):
         _op = fresh_operation('list_org_sheets')
         _op['method'] = 'GET'
         _op['path'] = '/users/sheets'
+        _op['query_params']['pageSize'] = page_size
+        _op['query_params']['page'] = page
+        _op['query_params']['includeAll'] = include_all
 
         expected = ['IndexResult', 'Sheet']
 
