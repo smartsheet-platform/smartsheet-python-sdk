@@ -33,6 +33,7 @@ from .sheet_publish import SheetPublish
 from .update_request import UpdateRequest
 from .user import User
 from .workspace import Workspace
+from .report_publish import ReportPublish
 from ..types import TypedList
 from ..util import prep
 from datetime import datetime
@@ -171,6 +172,11 @@ class Result(object):
                 self._result = [Workspace(x, self._base) for x in value]
             else:
                 self._result = Workspace(value, self._base)
+        if self._dynamic_result_type == 'ReportPublish':
+            if isinstance(value, list):
+                self._result = [ReportPublish(x, self._base) for x in value]
+            else:
+                self._result = ReportPublish(value, self._base)
 
     @property
     def result_code(self):

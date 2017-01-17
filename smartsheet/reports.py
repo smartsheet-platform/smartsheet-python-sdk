@@ -312,3 +312,66 @@ class Reports(object):
         response = self._base.request(prepped_request, expected, _op)
 
         return response
+
+    def get_publish_status(self, report_id):
+        """Get the Publish status of the Report.
+
+        Get the status of the Publish settings of the Report,
+        including URLs of any enabled publishings.
+
+        Args:
+            report_id (int): Report ID
+
+        Returns:
+            ReportPublish
+        """
+        _op = fresh_operation('get_publish_status')
+        _op['method'] = 'GET'
+        _op['path'] = '/reports/' + str(report_id) + '/publish'
+
+        expected = 'ReportPublish'
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def set_publish_status(self, report_id, report_publish_obj):
+        """Set the publish status of the Report and returns the new status,
+        including the URLs of any enabled publishings.
+
+        Args:
+            report_id (int): Report ID
+            report_publish_obj (ReportPublish): ReportPublish
+                object.
+
+        Returns:
+            Result
+        """
+        attributes = ['read_only_full_enabled','read_only_full_accessible_by']
+
+        fetch_first = False
+        # check for incompleteness, fill in from current status if necessary
+        for attribute in attributes:
+            val = getattr(report_publish_obj, attribute, None)
+            if val is None:
+                fetch_first = True
+                break
+
+        if fetch_first:
+            current_status = self.get_publish_status(report_id).to_dict()
+            current_status.update(report_publish_obj.to_dict())
+            report_publish_obj = self._base.models.ReportPublish(current_status)
+
+        _op = fresh_operation('set_publish_status')
+        _op['method'] = 'PUT'
+        _op['path'] = '/reports/' + str(report_id) + '/publish'
+        _op['json'] = report_publish_obj
+        # filter before we go
+        _op['json'].pre_request_filter = 'set_publish_status'
+
+        expected = ['Result', 'ReportPublish']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response

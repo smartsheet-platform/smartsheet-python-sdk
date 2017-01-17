@@ -77,3 +77,4 @@ from .copy_or_move_row_result import CopyOrMoveRowResult
 from .container_destination import ContainerDestination
 from .copy_or_move_row_directive import CopyOrMoveRowDirective
 from .copy_or_move_row_destination import CopyOrMoveRowDestination
+from .report_publish import ReportPublish
