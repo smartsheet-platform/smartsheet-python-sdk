@@ -191,17 +191,29 @@ class Users(object):
 
         return response
 
-    def list_org_sheets(self):
+    def list_org_sheets(self, page_size=100, page=1,
+                    include_all=False):
         """Get a list of all Sheets owned by an organization.
 
         Get the list of all Sheets owned by the members of the
         account (organization).
+
+        Args:
+            page_size (int): The maximum number of items to
+                return per page. Defaults to 100.
+            page (int): Which page to return. Defaults to 1
+                if not specified.
+            include_all (bool): If true, include all results
+                (i.e. do not paginate).
         Returns:
             IndexResult
         """
         _op = fresh_operation('list_org_sheets')
         _op['method'] = 'GET'
         _op['path'] = '/users/sheets'
+        _op['query_params']['pageSize'] = page_size
+        _op['query_params']['page'] = page
+        _op['query_params']['includeAll'] = include_all
 
         expected = ['IndexResult', 'Sheet']
 

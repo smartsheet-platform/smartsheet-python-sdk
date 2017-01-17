@@ -23,6 +23,7 @@ from .types import TypedList
 import logging
 import os.path
 import six
+from .util import deprecated
 from . import fresh_operation
 
 
@@ -579,6 +580,7 @@ class Sheets(object):
 
         return response
 
+    @deprecated
     def list_org_sheets(self):
         """Get a list of all Sheets owned by an organization.
 
