@@ -20,12 +20,11 @@ from __future__ import absolute_import
 from .attachment import Attachment
 from .cell import Cell
 from .column import Column
-from .comment import Comment
 from .discussion import Discussion
 from ..types import TypedList
+from .user import User
 from ..util import prep
 from datetime import datetime
-from dateutil.parser import parse
 import json
 import logging
 import six
@@ -58,6 +57,7 @@ class Row(object):
         self._columns = TypedList(Column)
         self._conditional_format = None
         self._created_at = None
+        self._created_by = None
         self._discussions = TypedList(Discussion)
         self._expanded = None
         self._filtered_out = None
@@ -67,6 +67,7 @@ class Row(object):
         self._locked = None
         self._locked_for_user = None
         self._modified_at = None
+        self._modified_by = None
         self._parent_id = None
         self._permalink = None
         self._row_number = None
@@ -99,6 +100,8 @@ class Row(object):
             # read only
             if 'createdAt' in props:
                 self.created_at = props['createdAt']
+            if 'createdBy' in props:
+                self.created_by = props['createdBy']
             if 'discussions' in props:
                 self.discussions = props['discussions']
             if 'expanded' in props:
@@ -127,6 +130,8 @@ class Row(object):
             # read only
             if 'modifiedAt' in props:
                 self.modified_at = props['modifiedAt']
+            if 'modifiedBy' in props:
+                self.modified_by = props['modifiedBy']
             if 'parentId' in props:
                 self.parent_id = props['parentId']
             if 'parent_id' in props:
@@ -264,6 +269,17 @@ class Row(object):
             self._created_at = value
 
     @property
+    def created_by(self):
+        return self._created_by
+
+    @created_by.setter
+    def created_by(self, value):
+        if isinstance(value, User):
+            self._created_by = value
+        else:
+            self._created_by = User(value, self._base)
+
+    @property
     def discussions(self):
         return self._discussions
 
@@ -353,6 +369,17 @@ class Row(object):
     def modified_at(self, value):
         if isinstance(value, datetime):
             self._modified_at = value
+
+    @property
+    def modified_by(self):
+        return self._modified_by
+
+    @modified_by.setter
+    def modified_by(self, value):
+        if isinstance(value, User):
+            self._modified_by = value
+        else:
+            self._modified_by = User(value, self._base)
 
     @property
     def parent_id(self):
@@ -484,6 +511,7 @@ class Row(object):
             'columns': prep(self._columns),
             'conditionalFormat': prep(self._conditional_format),
             'createdAt': prep(self._created_at),
+            'createdBy': prep(self._created_by),
             'discussions': prep(self._discussions),
             'expanded': prep(self._expanded),
             'filteredOut': prep(self._filtered_out),
@@ -493,6 +521,7 @@ class Row(object):
             'locked': prep(self._locked),
             'lockedForUser': prep(self._locked_for_user),
             'modifiedAt': prep(self._modified_at),
+            'modifiedBy': prep(self._modified_by),
             'parentId': prep(self._parent_id),
             'permalink': prep(self._permalink),
             'rowNumber': prep(self._row_number),
