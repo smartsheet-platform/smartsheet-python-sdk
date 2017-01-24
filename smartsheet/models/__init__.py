@@ -78,3 +78,6 @@ from .container_destination import ContainerDestination
 from .copy_or_move_row_directive import CopyOrMoveRowDirective
 from .copy_or_move_row_destination import CopyOrMoveRowDestination
 from .report_publish import ReportPublish
+from .image import Image
+from .image_url import ImageUrl
+from .image_url_map import ImageUrlMap

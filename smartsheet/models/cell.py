@@ -19,6 +19,7 @@ from __future__ import absolute_import
 
 from .cell_link import CellLink
 from .hyperlink import Hyperlink
+from .image import Image
 from ..types import TypedList
 from ..util import prep
 from datetime import datetime
@@ -46,6 +47,7 @@ class Cell(object):
         self.__format = None
         self._formula = None
         self._hyperlink = None
+        self._image = None
         self._link_in_from_cell = None
         self._links_out_to_cells = None
         self._strict = True
@@ -75,6 +77,8 @@ class Cell(object):
                 self.formula = props['formula']
             if 'hyperlink' in props:
                 self.hyperlink = props['hyperlink']
+            if 'image' in props:
+                self.image = props['image']
             if 'linkInFromCell' in props:
                 self.link_in_from_cell = props['linkInFromCell']
             if 'link_in_from_cell' in props:
@@ -162,6 +166,17 @@ class Cell(object):
             self._hyperlink = value
         else:
             self._hyperlink = Hyperlink(value, self._base)
+
+    @property
+    def image(self):
+        return self._image
+
+    @image.setter
+    def image(self, value):
+        if isinstance(value, Image):
+            self._image = value
+        else:
+            self._image = Image(value, self._base)
 
     @property
     def link_in_from_cell(self):

@@ -18,9 +18,9 @@
 from __future__ import absolute_import
 
 import logging
-import os.path
-import six
 from . import fresh_operation
+from io import BytesIO
+import os
 
 
 class Cells(object):
@@ -69,6 +69,46 @@ class Cells(object):
         _op['query_params']['includeAll'] = include_all
 
         expected = ['IndexResult', 'CellHistory']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def add_image_to_cell(self, sheet_id, row_id, column_id, file, file_type):
+        """Uploads an image to the specified cell.
+
+        Args:
+            sheet_id (int): Sheet ID
+            row_id (int): Row ID
+            column_id (int): Column ID
+            file (string): path to image file.
+            file_type (string): content type of image file
+
+        Returns:
+            Result
+        """
+        if not all(val is not None for val in ['sheet_id', 'row_id',
+                                               'column_id', 'file', 'file_type']):
+            raise ValueError(
+                ('One or more required values '
+                 'are missing from call to ' + __name__))
+
+        return self._attach_file_to_cell(sheet_id, row_id, column_id, file, file_type)
+
+    def _attach_file_to_cell(self, sheet_id, row_id, column_id, file, file_type):
+
+        _data = open(file, 'rb').read()
+
+        _op = fresh_operation('attach_file_to_row')
+        _op['method'] = 'POST'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/rows/' + str(row_id) + \
+                      '/columns/' + str(column_id) + '/cellimages'
+        _op['headers'] = {'content-type':file_type,
+                          'content-disposition':'attachment; filename="' + file + '"'}
+        _op['form_data'] = _data
+
+        expected = 'Result'
 
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
