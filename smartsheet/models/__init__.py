@@ -81,3 +81,5 @@ from .report_publish import ReportPublish
 from .image import Image
 from .image_url import ImageUrl
 from .image_url_map import ImageUrlMap
+from .bulk_item_failure import BulkItemFailure
+from .bulk_item_result import BulkItemResult

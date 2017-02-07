@@ -18,7 +18,7 @@
 from __future__ import absolute_import
 
 from ..util import prep
-from .error import Error
+from .error_result import ErrorResult
 import json
 import logging
 import six
@@ -101,8 +101,8 @@ class ImageUrl(object):
 
     @error.setter
     def error(self, value):
-        if isinstance(value, Error):
-            self._error = value
+        if isinstance(value, dict):
+            self._error = self._result = ErrorResult(value, self._base)
 
     def to_dict(self, op_id=None, method=None):
         obj = {

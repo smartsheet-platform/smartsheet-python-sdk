@@ -129,6 +129,70 @@ class Sheets(object):
 
         return response
 
+    def add_rows_with_partial_success(self, sheet_id, list_of_rows):
+        """Insert one or more Rows into the specified Sheet.
+
+        If multiple rows are specified in the request, all rows
+        must be inserted at the same location (i.e. the **toTop**,
+        **toBottom**, **parentId**, **siblingId**, and **above** attributes
+        must be the same for all rows in the request.)
+
+        In a parent row, values of the following fields will be
+        auto-calculated based upon values in the child rows (and therefore
+        cannot be updated using the API): Start Date, End Date, Duration, %
+        Complete.
+
+        Args:
+            sheet_id (int): Sheet ID
+            list_of_rows (list[Row]): An array of Row
+                objects with the following attributes:
+         * One or
+                more location-specifier attributes (optional)
+         *
+                format (optional)
+         * expanded (optional)
+         *
+                locked (optional)
+         * A cells attribute set to an
+                array of Cell objects. To
+           insert an empty row,
+                set the cells attribute to empty or
+           null. Each
+                Cell object may contain the following attributes:
+
+                * columnId (required)
+           * value (required)
+
+                  * strict (optional)
+           * format (optional)
+
+                   * hyperlink (optional)
+
+        Returns:
+            Result
+        """
+        if isinstance(list_of_rows, (dict, Row)):
+            arg_value = list_of_rows
+            list_of_rows = TypedList(Row)
+            list_of_rows.append(arg_value)
+
+        _op = fresh_operation('add_rows')
+        _op['method'] = 'POST'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/rows'
+        _op['json'] = list_of_rows
+        _op['query_params']['allowPartialSuccess'] = 'true'
+
+        # filter before we go
+        for item in _op['json']:
+            item.pre_request_filter = 'add_rows'
+
+        expected = ['BulkItemResult', 'Row']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
     def copy_rows(self, sheet_id, copy_or_move_row_directive_obj,
                   include=None, ignore_rows_not_found=False):
         """Copies Row(s) from the specified Sheet to the bottom of another
@@ -964,6 +1028,45 @@ class Sheets(object):
             item.pre_request_filter = 'update_rows'
 
         expected = ['Result', 'Row']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def update_rows_with_partial_success(self, sheet_id, list_of_rows):
+        """Update properties of the specified Row(s).
+
+        Updates cell values in the specified row(s),
+        expands/collapses the specified row(s), and/or modifies the
+        position of the specified rows (including indenting/outdenting).
+
+        If a row's position is updated, all child rows are moved with the
+        row.
+
+        In a parent row, values of the following fields are auto-calculated
+        based upon values in the child rows (and therefore cannot be
+        updated using the API): Start Date, End Date, Duration, % Complete.
+
+        Args:
+            sheet_id (int): Sheet ID
+            list_of_rows (list[Row]): Array containing one
+                or more Row objects.
+
+        Returns:
+            Result
+        """
+        _op = fresh_operation('update_rows')
+        _op['method'] = 'PUT'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/rows'
+        _op['json'] = list_of_rows
+        _op['query_params']['allowPartialSuccess'] = 'true'
+
+        # filter before we go
+        for item in _op['json']:
+            item.pre_request_filter = 'update_rows'
+
+        expected = ['BulkItemResult', 'Row']
 
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
