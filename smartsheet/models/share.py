@@ -17,9 +17,9 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
 from ..util import prep
 from datetime import datetime
+from dateutil.parser import parse
 import json
 import logging
 import six
@@ -50,11 +50,14 @@ class Share(object):
 
         self._access_level = None
         self._cc_me = None
+        self._created_at = None
         self._email = None
         self._group_id = None
         self.__id = None
         self._message = None
+        self._modified_at = None
         self._name = None
+        self._scope = None
         self._subject = None
         self.__type = None
         self._user_id = None
@@ -69,6 +72,10 @@ class Share(object):
                 self.cc_me = props['ccMe']
             if 'cc_me' in props:
                 self.cc_me = props['cc_me']
+            if 'createdAt' in props:
+                self.created_at = props['createdAt']
+            if 'created_at' in props:
+                self.created_at = props['created_at']
             if 'email' in props:
                 self.email = props['email']
             if 'groupId' in props:
@@ -81,8 +88,14 @@ class Share(object):
                 self._id = props['_id']
             if 'message' in props:
                 self.message = props['message']
+            if 'modifiedAt' in props:
+                self.modified_at = props['modifiedAt']
+            if 'modified_at' in props:
+                self.modified_at = props['modified_at']
             if 'name' in props:
                 self.name = props['name']
+            if 'scope' in props:
+                self.scope = props['scope']
             if 'subject' in props:
                 self.subject = props['subject']
             if 'type' in props:
@@ -129,6 +142,19 @@ class Share(object):
             self._cc_me = value
 
     @property
+    def created_at(self):
+        return self._created_at
+
+    @created_at.setter
+    def created_at(self, value):
+        if isinstance(value, datetime):
+            self._created_at = value
+        else:
+            if isinstance(value, six.string_types):
+                value = parse(value)
+                self._created_at = value
+
+    @property
     def email(self):
         return self._email
 
@@ -165,6 +191,19 @@ class Share(object):
             self._message = value
 
     @property
+    def modified_at(self):
+        return self._modified_at
+
+    @modified_at.setter
+    def modified_at(self, value):
+        if isinstance(value, datetime):
+            self._modified_at = value
+        else:
+            if isinstance(value, six.string_types):
+                value = parse(value)
+                self._modified_at = value
+
+    @property
     def name(self):
         return self._name
 
@@ -172,6 +211,15 @@ class Share(object):
     def name(self, value):
         if isinstance(value, six.string_types):
             self._name = value
+
+    @property
+    def scope(self):
+        return self._scope
+
+    @scope.setter
+    def scope(self, value):
+        if isinstance(value, six.string_types):
+            self._scope = value
 
     @property
     def subject(self):
@@ -217,11 +265,14 @@ class Share(object):
         obj = {
             'accessLevel': prep(self._access_level),
             'ccMe': prep(self._cc_me),
+            'createdAt': prep(self._created_at),
             'email': prep(self._email),
             'groupId': prep(self._group_id),
             'id': prep(self.__id),
             'message': prep(self._message),
+            'modifiedAt': prep(self._modified_at),
             'name': prep(self._name),
+            'scope': prep(self._scope),
             'subject': prep(self._subject),
             'type': prep(self.__type),
             'userId': prep(self._user_id)}
@@ -229,6 +280,17 @@ class Share(object):
 
     def _apply_pre_request_filter(self, obj):
         if self.pre_request_filter == 'share_sheet':
+            permitted = ['email', 'groupId', 'accessLevel',
+                         'subject', 'message', 'ccMe']
+            all_keys = list(obj.keys())
+            for key in all_keys:
+                if key not in permitted:
+                    self._log.debug(
+                        'deleting %s from obj (filter: %s)',
+                        key, self.pre_request_filter)
+                    del obj[key]
+
+        if self.pre_request_filter == 'share_sight':
             permitted = ['email', 'groupId', 'accessLevel',
                          'subject', 'message', 'ccMe']
             all_keys = list(obj.keys())

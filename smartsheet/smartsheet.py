@@ -1061,6 +1061,22 @@ class OperationErrorResult(object):
             'name': 'CellValuesOutOfRangeError',
             'recommendation': 'Do not retry without fixing the problem.',
             'should_retry': False},
+        1151: {
+            'name': 'ScopeObjectIdNotFoundError',
+            'recommendation': 'Do not retry without fixing the problem.',
+            'should_retry': False},
+        1152: {
+            'name': 'Only URLs with a protocol of https are supported for attribute {0}',
+            'recommendation': 'Do not retry without fixing the problem.',
+            'should_retry': False},
+        1153: {
+            'name': 'This webhook cannot be enabled because access was revoked for the application that created it',
+            'recommendation': 'Do not retry.',
+            'should_retry': False},
+        1154: {
+            'name': 'Please contact api@smartsheet.com in order to enable this Webhook',
+            'recommendation': 'Do not retry.',
+            'should_retry': False},
         2000: {
             'name': 'InvalidUsernameOrPasswordError',
             'recommendation': 'Do not retry without fixing the problem.',

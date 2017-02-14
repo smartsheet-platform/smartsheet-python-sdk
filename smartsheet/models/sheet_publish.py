@@ -39,10 +39,12 @@ class SheetPublish(object):
 
         self._ical_enabled = False
         self._ical_url = None
+        self._read_only_full_accessible_by = None
         self._read_only_full_enabled = False
         self._read_only_full_url = None
         self._read_only_lite_enabled = False
         self._read_only_lite_url = None
+        self._read_write_accessible_by = None
         self._read_write_enabled = False
         self._read_write_url = None
 
@@ -55,6 +57,12 @@ class SheetPublish(object):
             # read only
             if 'icalUrl' in props:
                 self.ical_url = props['icalUrl']
+            if 'readOnlyFullAccessibleBy' in props:
+                self.read_only_accessible_by = props[
+                    'readOnlyFullAccessibleBy']
+            if 'read_only_full_accessible_by' in props:
+                self.read_only_accessible_by = props[
+                    'read_only_full_accessible_by']
             if 'readOnlyFullEnabled' in props:
                 self.read_only_full_enabled = props[
                     'readOnlyFullEnabled']
@@ -75,6 +83,12 @@ class SheetPublish(object):
             if 'readOnlyLiteUrl' in props:
                 self.read_only_lite_url = props[
                     'readOnlyLiteUrl']
+            if 'readWriteAccessibleBy' in props:
+                self.read_write_accessible_by = props[
+                    'readWriteAccessibleBy']
+            if 'read_write_accessible_by' in props:
+                self.read_write_accessible_by = props[
+                    'read_write_accessible_by']
             if 'readWriteEnabled' in props:
                 self.read_write_enabled = props[
                     'readWriteEnabled']
@@ -104,6 +118,15 @@ class SheetPublish(object):
     def ical_url(self, value):
         if isinstance(value, six.string_types):
             self._ical_url = value
+
+    @property
+    def read_only_full_accessible_by(self):
+        return self._read_only_full_accessible_by
+
+    @read_only_full_accessible_by.setter
+    def read_only_full_accessible_by(self, value):
+        if isinstance(value, six.string_types):
+            self._read_only_full_accessible_by = value
 
     @property
     def read_only_full_enabled(self):
@@ -142,6 +165,15 @@ class SheetPublish(object):
             self._read_only_lite_url = value
 
     @property
+    def read_write_accessible_by(self):
+        return self._read_write_accessible_by
+
+    @read_write_accessible_by.setter
+    def read_write_accessible_by(self, value):
+        if isinstance(value, six.string_types):
+            self._read_write_accessible_by = value
+
+    @property
     def read_write_enabled(self):
         return self._read_write_enabled
 
@@ -171,10 +203,12 @@ class SheetPublish(object):
         obj = {
             'icalEnabled': prep(self._ical_enabled),
             'icalUrl': prep(self._ical_url),
+            'readOnlyFullAccessibleBy': prep(self._read_only_full_accessible_by),
             'readOnlyFullEnabled': prep(self._read_only_full_enabled),
             'readOnlyFullUrl': prep(self._read_only_full_url),
             'readOnlyLiteEnabled': prep(self._read_only_lite_enabled),
             'readOnlyLiteUrl': prep(self._read_only_lite_url),
+            'readWriteAccessibleBy': prep(self._read_write_accessible_by),
             'readWriteEnabled': prep(self._read_write_enabled),
             'readWriteUrl': prep(self._read_write_url)}
         return self._apply_pre_request_filter(obj)
@@ -182,7 +216,11 @@ class SheetPublish(object):
     def _apply_pre_request_filter(self, obj):
         if self.pre_request_filter == 'set_publish_status':
             permitted = ['readOnlyLiteEnabled',
-                         'readOnlyFullEnabled', 'readWriteEnabled', 'icalEnabled']
+                         'readOnlyFullAccessibleBy'
+                         'readOnlyFullEnabled',
+                         'readWriteAccessibleBy'
+                         'readWriteEnabled',
+                         'icalEnabled']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:

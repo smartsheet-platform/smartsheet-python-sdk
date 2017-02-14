@@ -203,7 +203,7 @@ class Reports(object):
         return response
 
     def list_shares(self, report_id, page_size=100, page=1,
-                    include_all=False):
+                    include_all=False, include_workspace_shares=False):
         """Get a list of all Users and Groups to whom the specified Report is
         shared, and their access level.
 
@@ -225,6 +225,8 @@ class Reports(object):
         _op['query_params']['pageSize'] = page_size
         _op['query_params']['page'] = page
         _op['query_params']['includeAll'] = include_all
+        if include_workspace_shares:
+            _op['query_params']['include'] = 'workspaceShares'
 
         expected = ['IndexResult', 'Share']
 

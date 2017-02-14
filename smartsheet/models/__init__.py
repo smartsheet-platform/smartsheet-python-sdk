@@ -83,3 +83,11 @@ from .image_url import ImageUrl
 from .image_url_map import ImageUrlMap
 from .bulk_item_failure import BulkItemFailure
 from .bulk_item_result import BulkItemResult
+from .sight import Sight
+from .widget import Widget
+from .widget_content import WidgetContent
+from .cell_data_item import CellDataItem
+from .shortcut_data_item import ShortcutDataItem
+from .webhook import Webhook
+from .webhook_stats import WebhookStats
+from .webhook_secret import WebhookSecret

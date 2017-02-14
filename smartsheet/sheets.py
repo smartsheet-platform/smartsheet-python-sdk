@@ -665,7 +665,7 @@ class Sheets(object):
         return response
 
     def list_shares(self, sheet_id, page_size=100, page=1,
-                    include_all=False):
+                    include_all=False, include_workspace_shares=False):
         """Get the list of all Users and Groups to whom the specified Sheet is
         shared, and their access level.
 
@@ -687,6 +687,8 @@ class Sheets(object):
         _op['query_params']['pageSize'] = page_size
         _op['query_params']['page'] = page
         _op['query_params']['includeAll'] = include_all
+        if include_workspace_shares:
+            _op['query_params']['include'] = 'workspaceShares'
 
         expected = ['IndexResult', 'Share']
 

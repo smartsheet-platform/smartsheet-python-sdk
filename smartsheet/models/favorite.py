@@ -43,7 +43,8 @@ class Favorite(object):
                 'folder',
                 'sheet',
                 'report',
-                'template']}
+                'template',
+                'sight']}
 
         self._object_id = None
         self.__type = None

@@ -29,8 +29,10 @@ from .group import Group
 from .report import Report
 from .share import Share
 from .sheet import Sheet
+from .sight import Sight
 from .template import Template
 from .user import User
+from .webhook import Webhook
 from .workspace import Workspace
 from ..types import TypedList
 from ..util import prep
@@ -150,6 +152,11 @@ class IndexResult(object):
                 self._data = [Sheet(x, self._base) for x in value]
             else:
                 self._data = Sheet(value, self._base)
+        if self._dynamic_data_type == 'Sight':
+            if isinstance(value, list):
+                self._data = [Sight(x, self._base) for x in value]
+            else:
+                self._data = Sight(value, self._base)
         if self._dynamic_data_type == 'Template':
             if isinstance(value, list):
                 self._data = [Template(x, self._base) for x in value]
@@ -160,6 +167,11 @@ class IndexResult(object):
                 self._data = [User(x, self._base) for x in value]
             else:
                 self._data = User(value, self._base)
+        if self._dynamic_data_type == 'Webhook':
+            if isinstance(value, list):
+                self._data = [Webhook(x, self._base) for x in value]
+            else:
+                self._data = Webhook(value, self._base)
         if self._dynamic_data_type == 'Workspace':
             if isinstance(value, list):
                 self._data = [Workspace(x, self._base) for x in value]

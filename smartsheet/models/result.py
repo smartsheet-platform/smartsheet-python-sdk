@@ -32,6 +32,8 @@ from .sheet import Sheet
 from .sheet_publish import SheetPublish
 from .update_request import UpdateRequest
 from .user import User
+from .webhook import Webhook
+from .webhook_secret import WebhookSecret
 from .workspace import Workspace
 from .report_publish import ReportPublish
 from ..types import TypedList
@@ -167,6 +169,16 @@ class Result(object):
                 self._result = [User(x, self._base) for x in value]
             else:
                 self._result = User(value, self._base)
+        if self._dynamic_result_type == 'Webhook':
+            if isinstance(value, list):
+                self._result = [Webhook(x, self._base) for x in value]
+            else:
+                self._result = Webhook(value, self._base)
+        if self._dynamic_result_type == 'WebhookSecret':
+            if isinstance(value, list):
+                self._result = [WebhookSecret(x, self._base) for x in value]
+            else:
+                self._result = WebhookSecret(value, self._base)
         if self._dynamic_result_type == 'Workspace':
             if isinstance(value, list):
                 self._result = [Workspace(x, self._base) for x in value]
