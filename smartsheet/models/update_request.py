@@ -19,7 +19,10 @@ from __future__ import absolute_import
 
 from ..types import TypedList
 from ..util import prep
+from .user import User
+from .schedule import Schedule
 from datetime import datetime
+from dateutil.parser import parse
 import json
 import logging
 import six
@@ -38,6 +41,10 @@ class UpdateRequest(object):
         self._log.info('initializing UpdateRequest (%s)', __name__)
 
         self.__id = None
+        self._sent_by = None
+        self._schedule = None
+        self._created_at = None
+        self._modified_at = None
 
         if props:
             # account for alternate variable names from raw API response
@@ -45,6 +52,21 @@ class UpdateRequest(object):
                 self._id = props['id']
             if '_id' in props:
                 self._id = props['_id']
+            if 'sentBy' in props:
+                self.sent_by = props['sentBy']
+            if 'sent_by' in props:
+                self.sent_by = props['sent_by']
+            if 'schedule' in props:
+                self.schedule = props['schedule']
+            if 'createdAt' in props:
+                self.created_at = props['createdAt']
+            if 'created_at' in props:
+                self.created_at = props['created_at']
+            if 'modifiedAt' in props:
+                self.modified_at = props['modifiedAt']
+            if 'modified_at' in props:
+                self.modified_at = props['modified_at']
+
         self.__initialized = True
 
     def __getattr__(self, key):
@@ -62,9 +84,62 @@ class UpdateRequest(object):
         if isinstance(value, six.integer_types):
             self.__id = value
 
+    @property
+    def sent_by(self):
+        return self._sent_by
+
+    @sent_by.setter
+    def sent_by(self, value):
+        if isinstance(value, User):
+            self._sent_by = value
+        else:
+            if isinstance(value, dict):
+                self._sent_by = User(value, self._base)
+
+    @property
+    def schedule(self):
+        self._schedule
+
+    @schedule.setter
+    def schedule(self, value):
+        if isinstance(value, Schedule):
+            self._schedule = value
+        else:
+            if isinstance(value, dict):
+                self._schedule = Schedule(value, self._base)
+
+    @property
+    def created_at(self):
+        return self._created_at
+
+    @created_at.setter
+    def created_at(self, value):
+        if isinstance(value, datetime):
+            self._created_at = value
+        else:
+            if isinstance(value, six.string_types):
+                value = parse(value)
+                self._created_at = value
+    @property
+    def modified_at(self):
+        return self._modified_at
+
+    @modified_at.setter
+    def modified_at(self, value):
+        if isinstance(value, datetime):
+            self._modified_at = value
+        else:
+            if isinstance(value, six.string_types):
+                value = parse(value)
+                self._modified_at = value
+
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'id': prep(self.__id)}
+            'id': prep(self.__id),
+            'sentBy': prep(self._sent_by),
+            'schedule': prep(self._schedule),
+            'createdAt': prep(self._created_at),
+            'modifiedAt': prep(self._modified_at)}
         return obj
 
     def to_json(self):

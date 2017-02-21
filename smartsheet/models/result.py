@@ -36,6 +36,7 @@ from .webhook import Webhook
 from .webhook_secret import WebhookSecret
 from .workspace import Workspace
 from .report_publish import ReportPublish
+from .sent_update_request import SentUpdateRequest
 from ..types import TypedList
 from ..util import prep
 from datetime import datetime
@@ -144,6 +145,11 @@ class Result(object):
                 self._result = [Row(x, self._base) for x in value]
             else:
                 self._result = Row(value, self._base)
+        if self._dynamic_result_type == 'SentUpdateRequest':
+            if isinstance(value, list):
+                self._result = [SentUpdateRequest(x, self._base) for x in value]
+            else:
+                self._result = SentUpdateRequest(value, self._base)
         if self._dynamic_result_type == 'Share':
             if isinstance(value, list):
                 self._result = [Share(x, self._base) for x in value]

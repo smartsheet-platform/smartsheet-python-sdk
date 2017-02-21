@@ -50,6 +50,7 @@ class Cell(object):
         self._image = None
         self._link_in_from_cell = None
         self._links_out_to_cells = None
+        self._object_value = None
         self._strict = True
         self._value = None
 
@@ -90,6 +91,10 @@ class Cell(object):
             if 'links_out_to_cells' in props:
                 self.links_out_to_cells = props[
                     'links_out_to_cells']
+            if 'objectValue' in props:
+                self.object_value = props['objectValue']
+            if 'object_value' in props:
+                self.object_value = props['object_value']
             if 'strict' in props:
                 self.strict = props['strict']
             if 'value' in props:
@@ -199,6 +204,14 @@ class Cell(object):
             self._links_out_to_cells = value
         else:
             self._links_out_to_cells = CellLink(value, self._base)
+
+    @property
+    def object_value(self):
+        return self._object_value
+
+    @object_value.setter
+    def object_value(self, value):
+        self._object_value = value
 
     @property
     def strict(self):

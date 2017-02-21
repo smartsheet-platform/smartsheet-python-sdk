@@ -91,3 +91,8 @@ from .shortcut_data_item import ShortcutDataItem
 from .webhook import Webhook
 from .webhook_stats import WebhookStats
 from .webhook_secret import WebhookSecret
+from .duration import Duration
+from .object_value import ObjectValue
+from .predecessor import Predecessor
+from .schedule import Schedule
+from .sent_update_request import SentUpdateRequest

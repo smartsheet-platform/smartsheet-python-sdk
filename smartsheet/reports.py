@@ -19,7 +19,7 @@ from __future__ import absolute_import
 
 import logging
 import os.path
-import six
+from datetime import datetime
 from . import fresh_operation
 
 
@@ -171,7 +171,7 @@ class Reports(object):
 
         return response
 
-    def list_reports(self, page_size=100, page=1, include_all=False):
+    def list_reports(self, page_size=100, page=1, include_all=False, modified_since=None):
         """Get the list of all Reports accessible by the User.
 
         Get the list of all Reports that the User has access to, in
@@ -194,6 +194,8 @@ class Reports(object):
         _op['query_params']['pageSize'] = page_size
         _op['query_params']['page'] = page
         _op['query_params']['includeAll'] = include_all
+        if isinstance(modified_since, datetime):
+            _op['query_params']['modifiedSince'] = modified_since.isoformat()
 
         expected = ['IndexResult', 'Report']
 

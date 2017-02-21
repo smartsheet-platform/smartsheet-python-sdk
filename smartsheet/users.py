@@ -18,9 +18,8 @@
 from __future__ import absolute_import
 
 import logging
-import os.path
-import six
 from . import fresh_operation
+from datetime import datetime
 
 
 class Users(object):
@@ -192,7 +191,7 @@ class Users(object):
         return response
 
     def list_org_sheets(self, page_size=100, page=1,
-                    include_all=False):
+                    include_all=False, modified_since=None):
         """Get a list of all Sheets owned by an organization.
 
         Get the list of all Sheets owned by the members of the
@@ -214,6 +213,8 @@ class Users(object):
         _op['query_params']['pageSize'] = page_size
         _op['query_params']['page'] = page
         _op['query_params']['includeAll'] = include_all
+        if isinstance(modified_since, datetime):
+            _op['query_params']['modifiedSince'] = modified_since.isoformat()
 
         expected = ['IndexResult', 'Sheet']
 

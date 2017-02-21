@@ -22,7 +22,7 @@ from .models.row import Row
 from .types import TypedList
 import logging
 import os.path
-import six
+from datetime import datetime
 from .util import deprecated
 from . import fresh_operation
 
@@ -698,7 +698,7 @@ class Sheets(object):
         return response
 
     def list_sheets(self, include=None, page_size=100, page=1,
-                    include_all=False):
+                    include_all=False, modified_since=None):
         """Get the list of all Sheets the User has access to, in alphabetical
         order, by name.
 
@@ -723,6 +723,8 @@ class Sheets(object):
         _op['query_params']['pageSize'] = page_size
         _op['query_params']['page'] = page
         _op['query_params']['includeAll'] = include_all
+        if isinstance(modified_since, datetime):
+            _op['query_params']['modifiedSince'] = modified_since.isoformat()
 
         expected = ['IndexResult', 'Sheet']
 
@@ -865,6 +867,7 @@ class Sheets(object):
 
         return response
 
+    @deprecated
     def send_update_request(self, sheet_id, multi_row_email_obj):
         """Create an Update Request for the specified Row(s) within the
         Sheet. An email notification (containing a link to the
@@ -1125,6 +1128,190 @@ class Sheets(object):
 
         expected = ['Result', 'Sheet']
 
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def list_update_requests(self, sheet_id, page_size=100, page=1,
+                        include_all=False):
+        """Get the list of all Sheet UpdateRequests.
+
+        Args:
+            sheet_id (int): Sheet ID
+            page_size (int): The maximum number of items to
+                return per page. Defaults to 100.
+            page (int): Which page to return. Defaults to 1
+                if not specified.
+            include_all (bool): If true, include all results
+                (i.e. do not paginate).
+
+        Returns:
+            IndexResult
+        """
+        _op = fresh_operation('list_update_requests')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests'
+        _op['query_params']['pageSize'] = page_size
+        _op['query_params']['page'] = page
+        _op['query_params']['includeAll'] = include_all
+
+        expected = ['IndexResult', 'UpdateRequest']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def get_update_request(self, sheet_id, update_request_id):
+        """Get the UpdateRequest for Sheet that has a future schedule.
+
+        Args:
+            sheet_id (int): Sheet ID
+            update_request_id (int): UpdateRequest ID
+
+        Returns:
+            UpdateRequest
+        """
+        _op = fresh_operation('get_update_request')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests/' + str(update_request_id)
+
+        expected = 'UpdateRequest'
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def create_update_request(self, sheet_id, update_request_obj):
+        """Creates an UpdateRequest for the specified Rows(s) within the Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            update_request_obj (UpdateRequest): UpdateRequest object
+
+        Returns:
+            Result
+        """
+        _op = fresh_operation('create_update_request')
+        _op['method'] = 'POST'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests'
+        _op['json'] = update_request_obj
+
+        expected = ['Result', 'UpdateRequest']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def delete_update_request(self, sheet_id, update_request_id):
+        """Deletes an UpdateRequest for the specified Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            update_request_id (int): UpdateRequest ID
+
+        Returns:
+            Result
+        """
+        _op = fresh_operation('delete_update_request')
+        _op['method'] = 'DELETE'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests/' + str(update_request_id)
+
+        expected = 'Result'
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def update_update_request(self, sheet_id, update_request_obj):
+        """Updates an UpdateRequest for the specified Rows(s) within the Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            update_request_obj (UpdateRequest): UpdateRequest object
+
+        Returns:
+            Result
+        """
+        _op = fresh_operation('create_update_request')
+        _op['method'] = 'PUT'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests/' + update_request_obj.id
+        _op['json'] = update_request_obj
+
+        expected = ['Result', 'UpdateRequest']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def list_sent_update_requests(self, sheet_id, page_size=100, page=1,
+                        include_all=False):
+        """Get the list of all Sent UpdateRequests.
+
+        Args:
+            sheet_id (int): Sheet ID
+            page_size (int): The maximum number of items to
+                return per page. Defaults to 100.
+            page (int): Which page to return. Defaults to 1
+                if not specified.
+            include_all (bool): If true, include all results
+                (i.e. do not paginate).
+
+        Returns:
+            IndexResult
+        """
+        _op = fresh_operation('list_update_requests')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/sentupdaterequests'
+        _op['query_params']['pageSize'] = page_size
+        _op['query_params']['page'] = page
+        _op['query_params']['includeAll'] = include_all
+
+        expected = ['IndexResult', 'SentUpdateRequest']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def get_sent_update_request(self, sheet_id, sent_update_request_id):
+        """Get the SentUpdateRequest for Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            sent_update_request_id (int): SentUpdateRequest ID
+
+        Returns:
+            UpdateRequest
+        """
+        _op = fresh_operation('get_sent_update_request')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/sentupdaterequests/' + str(sent_update_request_id)
+
+        expected = 'SentUpdateRequest'
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def delete_sent_update_request(self, sheet_id, sent_update_request_id):
+        """Deletes a SentUpdateRequest for the specified Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            sent_update_request_id (int): SentUpdateRequest ID
+
+        Returns:
+            Result
+        """
+        _op = fresh_operation('delete_update_request')
+        _op['method'] = 'DELETE'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/sentupdaterequests/' + str(sent_update_request_id)
+
+        expected = 'Result'
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 

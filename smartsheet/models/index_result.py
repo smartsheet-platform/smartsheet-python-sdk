@@ -27,10 +27,12 @@ from .favorite import Favorite
 from .folder import Folder
 from .group import Group
 from .report import Report
+from .sent_update_request import SentUpdateRequest
 from .share import Share
 from .sheet import Sheet
 from .sight import Sight
 from .template import Template
+from .update_request import UpdateRequest
 from .user import User
 from .webhook import Webhook
 from .workspace import Workspace
@@ -142,6 +144,11 @@ class IndexResult(object):
                 self._data = [Report(x, self._base) for x in value]
             else:
                 self._data = Report(value, self._base)
+        if self._dynamic_data_type == 'SentUpdateRequest':
+            if isinstance(value, list):
+                self._data = [SentUpdateRequest(x, self._base) for x in value]
+            else:
+                self._data = SentUpdateRequest(value, self._base)
         if self._dynamic_data_type == 'Share':
             if isinstance(value, list):
                 self._data = [Share(x, self._base) for x in value]
@@ -162,6 +169,11 @@ class IndexResult(object):
                 self._data = [Template(x, self._base) for x in value]
             else:
                 self._data = Template(value, self._base)
+        if self._dynamic_data_type == 'UpdateRequest':
+            if isinstance(value, list):
+                self._data = [UpdateRequest(x, self._base) for x in value]
+            else:
+                self._data = UpdateRequest(value, self._base)
         if self._dynamic_data_type == 'User':
             if isinstance(value, list):
                 self._data = [User(x, self._base) for x in value]
