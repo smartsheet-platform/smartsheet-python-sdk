@@ -24,11 +24,9 @@ import os
 import re
 import random
 import time
-
+import sys
 import requests
-import requests_toolbelt
 from requests_toolbelt.utils import dump
-from requests_toolbelt.utils.user_agent import user_agent as ua
 import six
 
 from .exceptions import *
@@ -182,8 +180,8 @@ class Smartsheet(object):
             return native
 
         if isinstance(native, self.models.Error):
-            the_ex = native.name
-            raise the_ex(native, native.code + ': ' + native.message)
+            the_ex = getattr(sys.modules[__name__], native.result.name)
+            raise the_ex(native, str(native.result.code) + ': ' + native.result.message)
         else:
             return native
 
@@ -236,24 +234,28 @@ class Smartsheet(object):
             Operation Result object.
         """
         attempt = 0
-        while True:
+        # Make a copy of the request as the access token will be redacted on response prior to logging
+        pre_redact_request = prepped_request.copy()
+        while attempt <= self._max_retries_on_error:
             self._log.info('Request to %s', prepped_request.url)
-            try:
-                return self._request(prepped_request, operation)
-            except (ApiError, HttpError) as err:
-                if isinstance(err, (
-                        InternalServerError, UnexpectedRequestError)):
-                    # Do not count a rate limiting error as an attempt
-                    attempt += 1
-                if attempt <= self._max_retries_on_error:
+            result = self._request(prepped_request, operation)
+            if isinstance(result, OperationErrorResult):
+                native = result.native('Error')
+                if native.result.should_retry:
+                    if native.result.status_code != 429:
+                        # Do not count a rate limiting error as an attempt
+                        attempt += 1
                     # Use exponential backoff
                     backoff = 2 ** attempt * random.random()
-                    self._log.info('HttpError status_code=%s: '
-                                   'Retrying in %.1f seconds',
-                                   err.status_code, backoff)
+                    self._log.info('HttpError status_code=%s: Retrying in %.1f seconds', native.result.status_code, backoff)
                     time.sleep(backoff)
+                    # restore un-redacted request prior to retry
+                    prepped_request = pre_redact_request.copy()
                 else:
-                    raise
+                    break
+            else:
+                break
+        return result
 
     def prepare_request(self, _op):
         """Generate a Requests prepared request object."""
@@ -416,708 +418,9 @@ class OperationErrorResult(object):
     """The error result of a call to an operation."""
 
     error_lookup = {
-        1001: {
-            'name': 'AccessTokenRequiredError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that Authorization header is '
-                               'present and set properly.'),
-            'should_retry': False},
-        1002: {
-            'name': 'AccessTokenInvalidError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that the access token '
-                               'specified in the Authorization header is '
-                               'valid.'),
-            'should_retry': False},
-        1003: {
-            'name': 'AccessTokenExpiredError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Generate a new access token or '
-                               'refresh the token.'),
-            'should_retry': False},
-        1004: {
-            'name': 'UnauthorizedError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that Authorization header is '
-                               'present and set properly, and that the '
-                               'requester has the required permission '
-                               'level in Smartsheet to perform the '
-                               'requested action.'),
-            'should_retry': False},
-        1005: {
-            'name': 'SSORequiredError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1006: {
-            'name': 'NotFoundError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that specified URI is '
-                               'correct. If the URI contains an object ID, '
-                               'verify that the object ID is correct and '
-                               'that the requester has access to the '
-                               'corresponding object in Smartsheet.'),
-            'should_retry': False},
-        1007: {
-            'name': 'VersionNotSupportedError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1008: {
-            'name': 'UnparseableRequestError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1010: {
-            'name': 'HttpMethodNotSupportedError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that the proper verb is '
-                               'specified for the request (GET, PUT, POST, '
-                               'or DELETE).'),
-            'should_retry': False},
-        1011: {
-            'name': 'RequiredHeaderMissingInvalidError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1012: {
-            'name': 'RequiredObjectAttributeMissingError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1013: {
-            'name': 'UnsupportedByPlanError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1014: {
-            'name': 'NoLicensesAvailableError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1015: {
-            'name': 'UserExistsInAnotherAccountError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1016: {
-            'name': 'UserAlreadyExistsError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1017: {
-            'name': 'PaidUserAccountExistsError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1018: {
-            'name': 'InvalidParameterValueError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1019: {
-            'name': 'TransferNonexistentUserError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that the transferTo User ID '
-                               'specified is correct.'),
-            'should_retry': False},
-        1020: {
-            'name': 'UserNotFoundError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that the User ID specified is '
-                               'correct.'),
-            'should_retry': False},
-        1021: {
-            'name': 'TransferNonmemberUserError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1022: {
-            'name': 'DeleteNonmemberUserError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1023: {
-            'name': 'SheetSharedAtWorkspaceLevelError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1024: {
-            'name': 'HttpBodyRequiredError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1025: {
-            'name': 'ShareAlreadyExistsError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1026: {
-            'name': 'TransferringOwnershipNotSupportedError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1027: {
-            'name': 'ShareNotFoundError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that the Share ID specified '
-                               'is correct.'),
-            'should_retry': False},
-        1028: {
-            'name': 'EditShareOfOwnerError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1029: {
-            'name': 'URIParameterDoesNotMatchBodyError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1030: {
-            'name': 'UnableToAssumeUserError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1031: {
-            'name': 'InvalidAttributeError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1032: {
-            'name': 'AttributeNotAllowedError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1033: {
-            'name': 'TemplateNotFoundError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that the Template ID '
-                               'specified is correct.'),
-            'should_retry': False},
-        1034: {
-            'name': 'InvalidRowIdError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1035: {
-            'name': 'RowPostError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1036: {
-            'name': 'InvalidColumnIdError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1037: {
-            'name': 'DuplicateColumnIdError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1038: {
-            'name': 'InvalidCellValueError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1039: {
-            'name': 'EditLockedColumnError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1040: {
-            'name': 'CannotEditOwnShareError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1041: {
-            'name': 'InvalidCharacterLengthError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1042: {
-            'name': 'StrictRequirementsFailureError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1043: {
-            'name': 'BlankRowRetrievalError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1044: {
-            'name': 'AssumeUserHeaderRequiredError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1045: {
-            'name': 'ReadOnlyResourceError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1046: {
-            'name': 'NotEditableViaApiError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1047: {
-            'name': 'CannotRemoveSelfViaApiError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1048: {
-            'name': 'ModifyDeclinedInvitationError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1049: {
-            'name': 'CannotRemoveAdminForSelfViaApiError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1050: {
-            'name': 'EditLockedRowError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1051: {
-            'name': 'FileAttachmentUsingJsonError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1052: {
-            'name': 'InvalidAcceptHeaderError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that Accept header is set to '
-                               'the proper value (to match the output of '
-                               'the invoked endpoint -- typically '
-                               '"application/json").'),
-            'should_retry': False},
-        1053: {
-            'name': 'UnknownPaperSizeError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1054: {
-            'name': 'NewSheetMissingRequirementsError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1055: {
-            'name': 'OnlyOnePrimaryError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1056: {
-            'name': 'UniqueColumnTitlesError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1057: {
-            'name': 'PrimaryColumnTypeError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1058: {
-            'name': 'ColumnTypeSymbolTypeUnsupportedError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1059: {
-            'name': 'ColumnOptionsNotAllowedWhenSymbolError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1060: {
-            'name': 'ColumnOptionsNotAllowedForColumnTypeError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1061: {
-            'name': 'MaxCountExceededError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1062: {
-            'name': 'InvalidRowLocationError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1063: {
-            'name': 'InvalidParentIdError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1064: {
-            'name': 'InvalidSiblingIdError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1065: {
-            'name': 'ColumnCannotBeDeletedError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1066: {
-            'name': 'UserShareLimitError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Reduce the number of users specified '
-                               'in the Share request.'),
-            'should_retry': False},
-        1067: {
-            'name': 'InvalidClientIdError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that the value of the '
-                               'client_id querystring parameter matches '
-                               'the value of the App client Id shown in '
-                               'the Smartsheet web UI (Developer Tools >> '
-                               'App Profile).'),
-            'should_retry': False},
-        1068: {
-            'name': 'UnsupportedGrantTypeError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that the value of the '
-                               'grant_type querystring parameter is '
-                               '"authorization_code".'),
-            'should_retry': False},
-        1069: {
-            'name': 'AuthorizationCodeExpiredError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Repeat step 1 of the OAuth flow (to '
-                               'retrieve a new authorization code).'),
-            'should_retry': False},
-        1070: {
-            'name': 'RequiredParameterMissingError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1071: {
-            'name': 'InvalidTokenProvidedError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1072: {
-            'name': 'InvalidHashValueError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1073: {
-            'name': 'RedirectUrlDidNotMatchError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Omit the redirect_uri querystring '
-                               'parameter -- if redirect_uri is not '
-                               'specified in the querystring, the value '
-                               'specified in the Smartsheet web UI '
-                               '(Developer Tools >> App Profile) will be '
-                               'used by default.'),
-            'should_retry': False},
-        1074: {
-            'name': 'UploadUnsupportedFileError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1075: {
-            'name': 'ContentSizeDidNotMatchError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1076: {
-            'name': 'UserMustBeLicensedError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1077: {
-            'name': 'DuplicateSystemColumnTypeError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1078: {
-            'name': 'SystemColumnTypeNotSupportedError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1079: {
-            'name': 'ColumnTypeNotSupportedForSystemTypeError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1080: {
-            'name': 'DependencyEnabledEndDatesError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1081: {
-            'name': 'DeleteAnotherUserDiscussionElementsError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1082: {
-            'name': 'NonPicklistError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1083: {
-            'name': 'AutoNumberFormattingCannotBeAddedError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1084: {
-            'name': 'AutoNumberFormatInvalidError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1085: {
-            'name': 'ChangeColumnDisableDependenciesFirstError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1086: {
-            'name': 'GoogleAccessVerificationError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1087: {
-            'name': 'ColumnRequiredByConditionalFormattingError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1088: {
-            'name': 'InvalidLengthAutoNumberFormatError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1089: {
-            'name': 'TypeForSystemColumnsOnlyError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1090: {
-            'name': 'ColumnTypeRequiredError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1091: {
-            'name': 'InvalidContentTypeError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1092: {
-            'name': 'LockedChildrenError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1095: {
-            'name': 'ExcelFileCorruptError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1096: {
-            'name': 'ApplePaymentReceiptAlreadyAppliedError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1097: {
-            'name': 'LicensedSheetCreatorRequiredError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1098: {
-            'name': 'DeleteColumnDisableDependenciesFirstError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1099: {
-            'name': 'DeleteColumnDisableResourceManagementFirstError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1100: {
-            'name': 'DiscussionCommentAttachmentVersionsNotSupportedError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1101: {
-            'name': 'NewVersionsNonFileNotSupportedError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1102: {
-            'name': 'AdminRequiresLicensedSheetCreatorError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1103: {
-            'name': 'GroupNameExistsError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1104: {
-            'name': 'GroupAdminMustCreateGroupError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that the requester has "Group '
-                               'Admin" permissions in Smartsheet.'),
-            'should_retry': False},
-        1105: {
-            'name': 'GroupMembersNotMembersOfAccountError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1106: {
-            'name': 'GroupNotFoundError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that specified Group ID is '
-                               'correct.'),
-            'should_retry': False},
-        1107: {
-            'name': 'TransferGroupsToUserMustBeGroupAdminError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1108: {
-            'name': 'TransferGroupsToValueRequiredError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1109: {
-            'name': 'OnlyOneLinkMayBeNonNullError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1110: {
-            'name': 'CellValueMustBeNullError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1111: {
-            'name': 'OnlyOneNullCellHyperlinkSheetIdReportIdError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1112: {
-            'name': 'CellHyperlinkUrlMustBeNullError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1113: {
-            'name': 'CellHyperlinkValueMustBeStringError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1114: {
-            'name': 'InvalidSheetIdOrReportIdError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1115: {
-            'name': 'UpdateTypeMixingNotSupportedError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1116: {
-            'name': 'CellLinkToSelfSheetError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1117: {
-            'name': 'CellHyperlinkNeedsUrlSheetIdOrReportIdError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1118: {
-            'name': 'GanttAllocationColumnIdError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1119: {
-            'name': 'CopyFailedError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1120: {
-            'name': 'TooManySheetsToCopyError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Reduce number of sheets being copied '
-                               'to maxSheetCount or fewer before '
-                               'reattempting the request.'),
-            'should_retry': False},
-        1121: {
-            'name': 'TransferToRequiredError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1122: {
-            'name': 'UnsupportedMethodError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that the verb specified for '
-                               'the request (GET, POST, PUT, DELETE) is '
-                               'valid for the specified URI.'),
-            'should_retry': False},
-        1123: {
-            'name': 'MultipleRowLocationSpecificationError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1124: {
-            'name': 'InvalidContentTypeMediaUnsupportedError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that Content-Type header is '
-                               'specified and set to the proper value.'),
-            'should_retry': False},
-        1125: {
-            'name': 'AllPartsRequireNamesMultipartPayloadError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1126: {
-            'name': 'DuplicatePartNamesMultipartPayloadError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1127: {
-            'name': 'RequiredMultiPartPartMissingError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1128: {
-            'name': 'MultipartUploadSizeLimitExceededError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1129: {
-            'name': 'ResourceAlreadyExistsError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1130: {
-            'name': 'CellValueOrObjectValueError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1131: {
-            'name': 'CellWrongObjectTypeError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1132: {
-            'name': 'TokenRevokedError',
-            'recommendation': ('Do not retry. Hint: This error occurs '
-                               'during the OAuth flow when trying to '
-                               'refresh a token that\'s previously been '
-                               'revoked.  Must instead obtain a new token.'),
-            'should_retry': False},
-        1133: {
-            'name': 'ColumnTitlesNotUniqueInInputError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1134: {
-            'name': 'DuplicateSystemColumnTypesInInputError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1135: {
-            'name': 'InputColumnIndexDiffersFromFirstInputColumnIndexError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1136: {
-            'name': 'CopyMoveInSameSheetError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1137: {
-            'name': 'MultipleInstancesSameElementError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1138: {
-            'name': 'UserIneligibleForTrialOrgError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1139: {
-            'name': 'UserAdminAnotherOrgError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1140: {
-            'name': 'UserMustBeAddedAsLicensedError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1141: {
-            'name': 'InvitingEnterpriseUsersError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1142: {
-            'name': 'ColumnTypeReservedForProjectSheetsError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1143: {
-            'name': 'EnableSheetDependenciesFirstError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1144: {
-            'name': 'UserOwnsOnePlusGroupsError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1145: {
-            'name': 'InvalidMultipartUploadRequestError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1146: {
-            'name': 'UnsupportedOperationError',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1147: {
-            'name': 'InvalidPartNameMultipartPayloadError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1148: {
-            'name': 'CellValuesOutOfRangeError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1151: {
-            'name': 'ScopeObjectIdNotFoundError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1152: {
-            'name': 'Only URLs with a protocol of https are supported for attribute {0}',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        1153: {
-            'name': 'This webhook cannot be enabled because access was revoked for the application that created it',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        1154: {
-            'name': 'Please contact api@smartsheet.com in order to enable this Webhook',
-            'recommendation': 'Do not retry.',
-            'should_retry': False},
-        2000: {
-            'name': 'InvalidUsernameOrPasswordError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        2001: {
-            'name': 'AccountLockedError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        2002: {
-            'name': 'InvalidEmailAddressError',
-            'recommendation': ('Do not retry without fixing the problem. '
-                               'Hint: Verify that value of Assume-User '
-                               'header is URL-encoded.'),
-            'should_retry': False},
-        2003: {
-            'name': 'AccountBillingLockError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        2004: {
-            'name': 'EmailConfirmationRequiredError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        2005: {
-            'name': 'DeviceIdExceedsMaxLengthError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        2006: {
-            'name': 'InvalidClientIdProvidedError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        2008: {
-            'name': 'InvalidLoginTicketError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        2009: {
-            'name': 'LaunchParametersProvidedUnsupportedError',
-            'recommendation': 'Do not retry without fixing the problem.',
-            'should_retry': False},
-        4000: {
-            'name': 'UnexpectedError',
-            'recommendation': 'Do not retry.',
+        0: {
+            'name': 'ApiError',
+            'recommendation': ('Do not retry without fixing the problem. '),
             'should_retry': False},
         4001: {
             'name': 'SystemMaintenanceError',
@@ -1138,7 +441,7 @@ class OperationErrorResult(object):
         4004: {
             'name': 'UnexpectedErrorShouldRetryError',
             'recommendation': 'Retry using exponential backoff.',
-            'should_retry': True}
+            'should_retry': True},
     }
 
     def __init__(self, op_result, resp):
@@ -1164,17 +467,23 @@ class OperationErrorResult(object):
         # look up name of the error
         error_payload = self.resp.json()
         error_code = error_payload['errorCode']
-        error_name = OperationErrorResult.error_lookup[error_code]['name']
+        try:
+            error_name = OperationErrorResult.error_lookup[error_code]['name']
+            recommendation = OperationErrorResult.error_lookup[error_code]['recommendation']
+            should_retry = OperationErrorResult.error_lookup[error_code]['should_retry']
+        except:
+            error_name = OperationErrorResult.error_lookup[0]['name']
+            recommendation = OperationErrorResult.error_lookup[0]['recommendation']
+            should_retry = OperationErrorResult.error_lookup[0]['should_retry']
+
         obj = Error({
             'result': ErrorResult({
                 'name': error_name,
                 'status_code': self.resp.status_code,
                 'code': error_code,
                 'message': error_payload['message'],
-                'recommendation': OperationErrorResult
-                              .error_lookup[error_code]['recommendation'],
-                'should_retry': OperationErrorResult
-                            .error_lookup[error_code]['should_retry']
+                'recommendation': recommendation,
+                'should_retry': should_retry
             }),
             'request_response': self.resp
         })
