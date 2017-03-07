@@ -78,10 +78,10 @@ class TestUsers:
             smart_setup['users']['larry'].id,
             [
                 smart.models.AlternateEmail({
-                    'email': 'foo@example.com'
+                    'email': 'foo@somecompany.com'
                 }),
                 smart.models.AlternateEmail({
-                    'email': 'bar@example.com'
+                    'email': 'bar@somecompany.com'
                 })
             ]
         )

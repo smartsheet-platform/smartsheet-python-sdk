@@ -216,9 +216,9 @@ class SheetPublish(object):
     def _apply_pre_request_filter(self, obj):
         if self.pre_request_filter == 'set_publish_status':
             permitted = ['readOnlyLiteEnabled',
-                         'readOnlyFullAccessibleBy'
+                         'readOnlyFullAccessibleBy',
                          'readOnlyFullEnabled',
-                         'readWriteAccessibleBy'
+                         'readWriteAccessibleBy',
                          'readWriteEnabled',
                          'icalEnabled']
             all_keys = list(obj.keys())
