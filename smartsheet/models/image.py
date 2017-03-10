@@ -52,15 +52,18 @@ class Image(object):
             if 'alt_text' in props:
                 self.alt_text = props['alt_text']
 
-        # requests package Response object
-        self.request_response = None
+    def __getattr__(self, key):
+        if key == 'id':
+            return self._id
+        else:
+            raise AttributeError(key)
 
     @property
-    def id(self):
+    def _id(self):
         return self.__id
 
-    @id.setter
-    def id(self, value):
+    @_id.setter
+    def _id(self, value):
         if isinstance(value, six.string_types):
             self.__id = value
 

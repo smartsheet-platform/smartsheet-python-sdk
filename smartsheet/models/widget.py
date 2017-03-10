@@ -98,9 +98,6 @@ class Widget(object):
                 self.version = props['version']
             if 'contents' in props:
                 self.contents = props['contents']
-
-        # requests package Response object
-        self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):

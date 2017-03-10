@@ -70,7 +70,6 @@ class Predecessor(object):
                 self.in_critical_path = props['inCriticalPath']
             if 'in_critical_path' in props:
                 self.in_critical_path = props['in_critical_path']
-
         self.__initialized = True
 
     @property

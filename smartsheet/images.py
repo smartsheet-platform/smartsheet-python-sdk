@@ -25,10 +25,10 @@ from .types import TypedList
 
 class Images(object):
 
-    """Class for handling Sheets operations."""
+    """Class for handling Images operations."""
 
     def __init__(self, smartsheet_obj):
-        """Init Sheets with base Smartsheet object."""
+        """Init Images with base Smartsheet object."""
         self._base = smartsheet_obj
         self._log = logging.getLogger(__name__)
 

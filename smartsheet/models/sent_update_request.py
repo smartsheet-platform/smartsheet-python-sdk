@@ -102,7 +102,8 @@ class SentUpdateRequest(object):
                 self.subject = props['subject']
             if 'message' in props:
                 self.message = props['message']
-
+        # requests package Response object
+        self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):

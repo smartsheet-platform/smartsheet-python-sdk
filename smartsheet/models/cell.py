@@ -228,7 +228,7 @@ class Cell(object):
 
     @value.setter
     def value(self, value):
-        if isinstance(value, six.string_types):
+        if isinstance(value, (six.string_types, six.integer_types, float, bool)):
             self._value = value
 
     @property
@@ -263,8 +263,10 @@ class Cell(object):
             'format': prep(self.__format),
             'formula': prep(self._formula),
             'hyperlink': prep(self._hyperlink),
+            'image': prep(self._image),
             'linkInFromCell': prep(self._link_in_from_cell),
             'linksOutToCells': prep(self._links_out_to_cells),
+            'objectValue': prep(self._object_value),
             'strict': prep(self._strict),
             'value': prep(self._value)}
         return self._apply_pre_request_filter(obj)

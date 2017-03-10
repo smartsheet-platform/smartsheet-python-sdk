@@ -109,7 +109,6 @@ class Schedule(object):
                 self.next_send_at = props['nextSendAt']
             if 'next_send_at' in props:
                 self.next_send_at = props['next_send_at']
-
         self.__initialized = True
 
     @property

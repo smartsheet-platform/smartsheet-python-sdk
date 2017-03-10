@@ -170,6 +170,12 @@ class Row(object):
         else:
             raise AttributeError(key)
 
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self._id = value
+        else:
+            object.__setattr__(self, key, value)
+
     @property
     def above(self):
         return self._above

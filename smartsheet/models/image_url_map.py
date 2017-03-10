@@ -49,9 +49,9 @@ class ImageUrlMap(object):
                 self.image_urls = props['imageUrls']
             if 'image_urls' in props:
                 self.image_urls = props['image_urls']
-
         # requests package Response object
         self.request_response = None
+        self.__initialized = True
 
     @property
     def url_expires_in_millis(self):

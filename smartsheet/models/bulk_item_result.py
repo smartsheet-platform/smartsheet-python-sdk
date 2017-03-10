@@ -63,8 +63,7 @@ class BulkItemResult(object):
                 self.failed_items = props['failedItems']
             if 'failed_items' in props:
                 self.failed_items = props['failed_items']
-        # requests package Response object
-        self.request_response = None
+        self.__initialized = True
 
     @property
     def message(self):

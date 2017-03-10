@@ -66,16 +66,7 @@ class CellDataItem(object):
                 self.column_id = props['columnId']
             if 'column_id' in props:
                 self.column_id = props['column_id']
-
-        # requests package Response object
-        self.request_response = None
         self.__initialized = True
-
-    def __getattr__(self, key):
-        if key == 'id':
-            return self._id
-        else:
-            raise AttributeError(key)
 
     @property
     def label(self):

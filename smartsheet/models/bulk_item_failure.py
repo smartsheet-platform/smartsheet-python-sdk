@@ -52,6 +52,7 @@ class BulkItemFailure(object):
                 self.row_id = props['row_id']
         # requests package Response object
         self.request_response = None
+        self.__initialized = True
 
     @property
     def index(self):

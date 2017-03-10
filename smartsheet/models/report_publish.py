@@ -57,9 +57,9 @@ class ReportPublish(object):
             if 'read_only_full_accessible_by' in props:
                 self.read_only_full_accessible_by = props[
                     'read_only_full_accessible_by']
-
         # requests package Response object
         self.request_response = None
+        self.__initialized = True
 
     @property
     def read_only_full_enabled(self):

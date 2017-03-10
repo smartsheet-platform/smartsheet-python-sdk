@@ -68,7 +68,6 @@ class Duration(object):
                 self.seconds = props['seconds']
             if 'milliseconds' in props:
                 self.milliseconds = props['milliseconds']
-
         self.__initialized = True
 
     @property

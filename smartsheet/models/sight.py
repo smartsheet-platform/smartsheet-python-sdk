@@ -90,7 +90,6 @@ class Sight(object):
                 self.modified_at = props['modified_at']
             if 'workspace' in props:
                 self.workspace = props['workspace']
-
         # requests package Response object
         self.request_response = None
         self.__initialized = True

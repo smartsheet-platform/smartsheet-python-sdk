@@ -52,7 +52,6 @@ class ObjectValue(object):
                 self.object_type = props['objectType']
             if 'object_type' in props:
                 self.object_type = props['object_type']
-
         self.__initialized = True
 
     @property

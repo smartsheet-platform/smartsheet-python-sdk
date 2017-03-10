@@ -56,9 +56,6 @@ class ImageUrl(object):
             if 'error' in props:
                 self.error = props['error']
 
-        # requests package Response object
-        self.request_response = None
-
     @property
     def image_id(self):
         return self._image_id

@@ -56,16 +56,7 @@ class ShortcutDataItem(object):
                 self.hyperlink = props['hyperlink']
             if 'order' in props:
                 self.order = props['order']
-
-        # requests package Response object
-        self.request_response = None
         self.__initialized = True
-
-    def __getattr__(self, key):
-        if key == 'id':
-            return self._id
-        else:
-            raise AttributeError(key)
 
     @property
     def label(self):

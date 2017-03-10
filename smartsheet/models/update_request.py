@@ -66,7 +66,8 @@ class UpdateRequest(object):
                 self.modified_at = props['modifiedAt']
             if 'modified_at' in props:
                 self.modified_at = props['modified_at']
-
+        # requests package Response object
+        self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):

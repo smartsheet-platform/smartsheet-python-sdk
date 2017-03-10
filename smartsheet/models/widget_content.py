@@ -94,16 +94,7 @@ class WidgetContent(object):
                 self.file_name = props['file_name']
             if 'format' in props:
                 self.format = props['format']
-
-        # requests package Response object
-        self.request_response = None
         self.__initialized = True
-
-    def __getattr__(self, key):
-        if key == 'id':
-            return self._id
-        else:
-            raise AttributeError(key)
 
     @property
     def shortcut_data(self):
