@@ -36,7 +36,6 @@ class SentUpdateRequest(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
         self._log = logging.getLogger(__name__)
         self._log.info('initializing SentUpdateRequest (%s)', __name__)
 
@@ -233,9 +232,8 @@ class SentUpdateRequest(object):
     def sent_to(self, value):
         if isinstance(value, Recipient):
             self._sent_to = value
-        else:
-            if isinstance(value, dict):
-                self._sent_to = Recipient(value, self._base)
+        elif isinstance(value, dict):
+            self._sent_to = Recipient(value, self._base)
 
     @property
     def subject(self):

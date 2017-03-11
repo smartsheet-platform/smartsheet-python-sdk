@@ -93,6 +93,8 @@ class Sights(object):
         _op['method'] = 'PUT'
         _op['path'] = '/sights/' + str(sight_id)
         _op['json'] = sight_obj
+        # filter before we go
+        _op['json'].pre_request_filter = 'update_sight'
 
         expected = ['Result', 'Sight']
 

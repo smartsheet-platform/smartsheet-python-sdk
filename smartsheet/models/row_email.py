@@ -40,53 +40,28 @@ class RowEmail(Email):
         self._log = logging.getLogger(__name__)
         self._log.info('initializing RowEmail (%s)', __name__)
 
-        self._message = None
         self._column_ids = TypedList(int)
-        self._send_to = TypedList(Recipient)
         self._include_attachments = False
-        self._subject = None
         self._include_discussions = False
-        self._cc_me = False
 
         if props:
             # account for alternate variable names from raw API response
-            if 'message' in props:
-                self.message = props['message']
             if 'columnIds' in props:
                 self.column_ids = props['columnIds']
             if 'column_ids' in props:
                 self.column_ids = props['column_ids']
-            if 'sendTo' in props:
-                self.send_to = props['sendTo']
-            if 'send_to' in props:
-                self.send_to = props['send_to']
             if 'includeAttachments' in props:
                 self.include_attachments = props[
                     'includeAttachments']
             if 'include_attachments' in props:
                 self.include_attachments = props[
                     'include_attachments']
-            if 'subject' in props:
-                self.subject = props['subject']
             if 'includeDiscussions' in props:
                 self.include_discussions = props[
                     'includeDiscussions']
             if 'include_discussions' in props:
                 self.include_discussions = props[
                     'include_discussions']
-            if 'ccMe' in props:
-                self.cc_me = props['ccMe']
-            if 'cc_me' in props:
-                self.cc_me = props['cc_me']
-
-    @property
-    def message(self):
-        return self._message
-
-    @message.setter
-    def message(self, value):
-        if isinstance(value, six.string_types):
-            self._message = value
 
     @property
     def column_ids(self):
@@ -108,25 +83,6 @@ class RowEmail(Email):
             self._column_ids.append(value)
 
     @property
-    def send_to(self):
-        return self._send_to
-
-    @send_to.setter
-    def send_to(self, value):
-        if isinstance(value, list):
-            self._send_to.purge()
-            self._send_to.extend([
-                (Recipient(x, self._base)
-                 if not isinstance(x, Recipient) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._send_to.purge()
-            self._send_to = value.to_list()
-        elif isinstance(value, Recipient):
-            self._send_to.purge()
-            self._send_to.append(value)
-
-    @property
     def include_attachments(self):
         return self._include_attachments
 
@@ -134,15 +90,6 @@ class RowEmail(Email):
     def include_attachments(self, value):
         if isinstance(value, bool):
             self._include_attachments = value
-
-    @property
-    def subject(self):
-        return self._subject
-
-    @subject.setter
-    def subject(self, value):
-        if isinstance(value, six.string_types):
-            self._subject = value
 
     @property
     def include_discussions(self):
@@ -153,25 +100,12 @@ class RowEmail(Email):
         if isinstance(value, bool):
             self._include_discussions = value
 
-    @property
-    def cc_me(self):
-        return self._cc_me
-
-    @cc_me.setter
-    def cc_me(self, value):
-        if isinstance(value, bool):
-            self._cc_me = value
-
     def to_dict(self, op_id=None, method=None):
         parent_obj = super(RowEmail, self).to_dict(op_id, method)
         obj = {
-            'message': prep(self._message),
             'columnIds': prep(self._column_ids),
-            'sendTo': prep(self._send_to),
             'includeAttachments': prep(self._include_attachments),
-            'subject': prep(self._subject),
-            'includeDiscussions': prep(self._include_discussions),
-            'ccMe': prep(self._cc_me)}
+            'includeDiscussions': prep(self._include_discussions)}
         combo = parent_obj.copy()
         combo.update(obj)
         return combo

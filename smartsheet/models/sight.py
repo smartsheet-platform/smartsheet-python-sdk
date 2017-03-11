@@ -213,6 +213,14 @@ class Sight(object):
         if isinstance(value, Workspace):
             self._workspace = value
 
+    @property
+    def pre_request_filter(self):
+        return self._pre_request_filter
+
+    @pre_request_filter.setter
+    def pre_request_filter(self, value):
+        self._pre_request_filter = value
+
     def to_dict(self, op_id=None, method=None):
         obj = {
             'id': prep(self.__id),
@@ -225,6 +233,19 @@ class Sight(object):
             'createdAt': prep(self._created_at),
             'modifiedA_at': prep(self._modified_at),
             'workspace': prep(self._workspace)}
+        return self._apply_pre_request_filter(obj)
+
+    def _apply_pre_request_filter(self, obj):
+        if self.pre_request_filter == 'update_sight':
+            permitted = ['name']
+            all_keys = list(obj.keys())
+            for key in all_keys:
+                if key not in permitted:
+                    self._log.debug(
+                        'deleting %s from obj (filter: %s)',
+                        key, self.pre_request_filter)
+                    del obj[key]
+
         return obj
 
     def to_json(self):

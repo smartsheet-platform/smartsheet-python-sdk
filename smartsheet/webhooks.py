@@ -90,6 +90,8 @@ class Webhooks(object):
         _op['method'] = 'POST'
         _op['path'] = '/webhooks'
         _op['json'] = webhook_obj
+        # filter before we go
+        _op['json'].pre_request_filter = 'create_webhook'
 
         expected = ['Result', 'Webhook']
 
@@ -112,6 +114,8 @@ class Webhooks(object):
         _op['method'] = 'PUT'
         _op['path'] = '/webhooks/' + str(webhook_id)
         _op['json'] = webhook_obj
+        # filter before we go
+        _op['json'].pre_request_filter = 'update_webhook'
 
         expected = ['Result', 'Webhook']
 

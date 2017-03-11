@@ -1197,6 +1197,8 @@ class Sheets(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests'
         _op['json'] = update_request_obj
+        # filter before we go
+        _op['json'].pre_request_filter = 'create_update_request'
 
         expected = ['Result', 'UpdateRequest']
 
@@ -1237,8 +1239,10 @@ class Sheets(object):
         """
         _op = fresh_operation('create_update_request')
         _op['method'] = 'PUT'
-        _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests/' + update_request_obj.id
+        _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests/' + str(update_request_obj.id)
         _op['json'] = update_request_obj
+        # filter before we go
+        _op['json'].pre_request_filter = 'update_update_request'
 
         expected = ['Result', 'UpdateRequest']
 

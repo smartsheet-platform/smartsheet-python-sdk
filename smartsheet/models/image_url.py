@@ -116,7 +116,7 @@ class ImageUrl(object):
         for key in all_keys:
             if key not in permitted:
                 self._log.debug(
-                    'deleting %s from obj (filter: %s)', key)
+                    'deleting %s from obj', key)
                 del obj[key]
 
         return obj

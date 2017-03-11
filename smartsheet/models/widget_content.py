@@ -35,7 +35,6 @@ class WidgetContent(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
         self._log = logging.getLogger(__name__)
         self._log.info('initializing WidgetContent (%s)', __name__)
 
@@ -157,7 +156,7 @@ class WidgetContent(object):
 
     @file_name.setter
     def file_name(self, value):
-        if isinstance(six.string_types):
+        if isinstance(value, six.string_types):
             self._file_name = value
 
     @property
@@ -171,18 +170,17 @@ class WidgetContent(object):
 
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'id': prep(self.__id),
-            'type': prep(self._type),
-            'title': prep(self._title),
-            'showTitle': prep(self._show_title),
-            'showTitleIcon': prep(self._show_title_icon),
-            'titleFormat': prep(self._title_format),
-            'xPosition': prep(self._x_position),
-            'yPosition': prep(self._y_position),
+            'hyperlink': prep(self._hyperlink),
+            'cellData': prep(self._cell_data),
+            'column': prep(self._column),
+            'html': prep(self._html),
+            'shortcutData': prep(self._shortcut_data),
+            'htmlContent': prep(self._html_content),
+            'privateId': prep(self._private_id),
             'height': prep(self._height),
             'width': prep(self._width),
-            'version' : prep(self._version),
-            'contents' : prep(self._contents)}
+            'fileName': prep(self._file_name),
+            'format': prep(self._format)}
         return obj
 
     def to_json(self):

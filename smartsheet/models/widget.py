@@ -32,7 +32,6 @@ class Widget(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
         self._log = logging.getLogger(__name__)
         self._log.info('initializing Widget (%s)', __name__)
 
@@ -58,7 +57,7 @@ class Widget(object):
         self._height = None
         self._width = None
         self._version = None
-        self._contents = TypedList(WidgetContent)
+        self._contents = None
 
         if props:
             # account for alternate variable names from raw API response
@@ -216,18 +215,10 @@ class Widget(object):
 
     @contents.setter
     def contents(self, value):
-        if isinstance(value, list):
-            self._contents.purge()
-            self._contents.extend([
-                (WidgetContent(x, self._base)
-                if not isinstance(x, WidgetContent) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._contents.purge()
-            self._contents = value.to_list()
-        elif isinstance(value, WidgetContent):
-            self._contents.purge()
-            self._contents.append(value)
+        if isinstance(value, WidgetContent):
+            self._contents = value
+        elif isinstance(value, dict):
+            self._contents = WidgetContent(value, self._base)
 
     def to_dict(self, op_id=None, method=None):
         obj = {

@@ -235,14 +235,38 @@ class Schedule(object):
                 value = parse(value)
                 self._next_send_at = value
 
+    @property
+    def pre_request_filter(self):
+        return self._pre_request_filter
+
+    @pre_request_filter.setter
+    def pre_request_filter(self, value):
+        self._pre_request_filter = value
+
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'rowId': prep(self._rows_id),
-            'rowNumber': prep(self._row_number),
             'type': prep(self._type),
-            'lag': prep(self._lag),
-            'invalid': prep(self._invalid),
-            'inCriticalPath': prep(self._in_critical_path)}
+            'startAt': prep(self._start_at),
+            'endAt': prep(self._end_at),
+            'dayOfMonth': prep(self._day_of_month),
+            'dayDescriptors': prep(self._day_descriptors),
+            'dayOrdinal': prep(self._day_ordinal),
+            'repeatEvery': prep(self._repeat_every),
+            'lastSentAt': prep(self._last_sent_at),
+            'nextSendAt': prep(self._next_send_at)}
+        return self._apply_pre_request_filter(obj)
+
+    def _apply_pre_request_filter(self, obj):
+        if self.pre_request_filter == 'create_update_request' or \
+                        self.pre_request_filter == 'update_update_request':
+            permitted = ['type','startAt','endAt','dayOfMonth','dayDescriptors','dayOrdinal','repeatEvery']
+            all_keys = list(obj.keys())
+            for key in all_keys:
+                if key not in permitted:
+                    self._log.debug(
+                        'deleting %s from obj', key)
+                    del obj[key]
+
         return obj
 
     def to_json(self):
