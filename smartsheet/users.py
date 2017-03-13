@@ -61,19 +61,21 @@ class Users(object):
         """Add a User to the organization.
 
         Args:
-            user_obj (User): User object with the following
-                attributes:
-          * email (required)
-          * admin
-                (required)
-          * licensedSheetCreator (required)
+            user_obj (User): User object with the following attributes:
 
-                    * firstName (optional)
-          * lastName (optional)
+                email (required)
 
-                        * resourceViewer (optional)
-            send_email (bool): Either true or false to
-                indicate whether or not to notify the user by email. Default
+                admin (required)
+
+                licensedSheetCreator (required)
+
+                firstName (optional)
+
+                lastName (optional)
+
+                resourceViewer (optional)
+
+                send_email (bool): Either true or false to indicate whether or not to notify the user by email. Default
                 is false.
 
         Returns:

@@ -82,29 +82,29 @@ class Sheets(object):
 
         Args:
             sheet_id (int): Sheet ID
-            list_of_rows (list[Row]): An array of Row
-                objects with the following attributes:
-         * One or
-                more location-specifier attributes (optional)
-         *
-                format (optional)
-         * expanded (optional)
-         *
-                locked (optional)
-         * A cells attribute set to an
-                array of Cell objects. To
-           insert an empty row,
-                set the cells attribute to empty or
-           null. Each
-                Cell object may contain the following attributes:
+            list_of_rows (list[Row]): An array of Row objects with the following attributes:
 
-                * columnId (required)
-           * value (required)
+               One or more location-specifier attributes (optional)
 
-                  * strict (optional)
-           * format (optional)
+               format (optional)
 
-                   * hyperlink (optional)
+               expanded (optional)
+
+               locked (optional)
+
+               A cells attribute set to an array of Cell objects.
+               To insert an empty row, set the cells attribute to empty or null.
+               Each Cell object may contain the following attributes:
+
+                   columnId (required)
+
+                   value (required)
+
+                   strict (optional)
+
+                   format (optional)
+
+                   hyperlink (optional)
 
         Returns:
             Result
@@ -144,29 +144,29 @@ class Sheets(object):
 
         Args:
             sheet_id (int): Sheet ID
-            list_of_rows (list[Row]): An array of Row
-                objects with the following attributes:
-         * One or
-                more location-specifier attributes (optional)
-         *
+            list_of_rows (list[Row]): An array of Row objects with the following attributes:
+
+                One or more location-specifier attributes (optional)
+
                 format (optional)
-         * expanded (optional)
-         *
+
+                expanded (optional)
+
                 locked (optional)
-         * A cells attribute set to an
-                array of Cell objects. To
-           insert an empty row,
-                set the cells attribute to empty or
-           null. Each
-                Cell object may contain the following attributes:
 
-                * columnId (required)
-           * value (required)
+                A cells attribute set to an array of Cell objects.
+                To insert an empty row, set the cells attribute to empty or null.
+                Each Cell object may contain the following attributes:
 
-                  * strict (optional)
-           * format (optional)
+                    columnId (required)
 
-                   * hyperlink (optional)
+                    value (required)
+
+                    strict (optional)
+
+                    format (optional)
+
+                    hyperlink (optional)
 
         Returns:
             Result
