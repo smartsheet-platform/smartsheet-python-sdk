@@ -51,6 +51,9 @@ If you have any questions or issues with this SDK please post on StackOverflow u
 ## Release Notes
 Each specific release is available for download via [Github](https://github.com/smartsheet-platform/smartsheet-python-sdk/tags).
 
+**1.1.0 (March 15, 2017)**
+* SDK updates through Smartsheet API level 2.0.10
+
 **1.0.1 (Jan 11, 2016)**
 * Fix package version in User-Agent string
 * Fix integer ID handling on Python 2.x for Windows
