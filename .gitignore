@@ -19,3 +19,10 @@ docs/smartsheet*.rst
 
 # Ignore setuptools_scm-generated version.py
 smartsheet/version.py
+
+# ignore PyCharm files
+.pydevproject
+.project
+.idea/*
+.eggs/*
+.cache/*

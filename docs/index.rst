@@ -1,7 +1,7 @@
 Smartsheet Python SDK Documentation
 ===================================
 
-Release v\ |version|. (:ref:`Installation <install>`)
+Release v\ |version|.
 
 Quickstart
 ----------

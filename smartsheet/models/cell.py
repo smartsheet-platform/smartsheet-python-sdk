@@ -19,6 +19,7 @@ from __future__ import absolute_import
 
 from .cell_link import CellLink
 from .hyperlink import Hyperlink
+from .image import Image
 from ..types import TypedList
 from ..util import prep
 from datetime import datetime
@@ -46,8 +47,10 @@ class Cell(object):
         self.__format = None
         self._formula = None
         self._hyperlink = None
+        self._image = None
         self._link_in_from_cell = None
         self._links_out_to_cells = None
+        self._object_value = None
         self._strict = True
         self._value = None
 
@@ -75,6 +78,8 @@ class Cell(object):
                 self.formula = props['formula']
             if 'hyperlink' in props:
                 self.hyperlink = props['hyperlink']
+            if 'image' in props:
+                self.image = props['image']
             if 'linkInFromCell' in props:
                 self.link_in_from_cell = props['linkInFromCell']
             if 'link_in_from_cell' in props:
@@ -86,6 +91,10 @@ class Cell(object):
             if 'links_out_to_cells' in props:
                 self.links_out_to_cells = props[
                     'links_out_to_cells']
+            if 'objectValue' in props:
+                self.object_value = props['objectValue']
+            if 'object_value' in props:
+                self.object_value = props['object_value']
             if 'strict' in props:
                 self.strict = props['strict']
             if 'value' in props:
@@ -164,6 +173,17 @@ class Cell(object):
             self._hyperlink = Hyperlink(value, self._base)
 
     @property
+    def image(self):
+        return self._image
+
+    @image.setter
+    def image(self, value):
+        if isinstance(value, Image):
+            self._image = value
+        else:
+            self._image = Image(value, self._base)
+
+    @property
     def link_in_from_cell(self):
         return self._link_in_from_cell
 
@@ -186,6 +206,14 @@ class Cell(object):
             self._links_out_to_cells = CellLink(value, self._base)
 
     @property
+    def object_value(self):
+        return self._object_value
+
+    @object_value.setter
+    def object_value(self, value):
+        self._object_value = value
+
+    @property
     def strict(self):
         return self._strict
 
@@ -200,7 +228,7 @@ class Cell(object):
 
     @value.setter
     def value(self, value):
-        if isinstance(value, six.string_types):
+        if isinstance(value, (six.string_types, six.integer_types, float, bool)):
             self._value = value
 
     @property
@@ -235,8 +263,10 @@ class Cell(object):
             'format': prep(self.__format),
             'formula': prep(self._formula),
             'hyperlink': prep(self._hyperlink),
+            'image': prep(self._image),
             'linkInFromCell': prep(self._link_in_from_cell),
             'linksOutToCells': prep(self._links_out_to_cells),
+            'objectValue': prep(self._object_value),
             'strict': prep(self._strict),
             'value': prep(self._value)}
         return self._apply_pre_request_filter(obj)

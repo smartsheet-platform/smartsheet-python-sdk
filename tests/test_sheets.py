@@ -169,7 +169,9 @@ class TestSheets:
         smart = smart_setup['smart']
         action = smart_setup['sheet_b'].set_publish_status(
             smart.models.SheetPublish({
-                'read_only_lite_enabled': True
+                'read_only_lite_enabled': True,
+                'read_only_full_enabled': True,
+                'read_write_enabled': True
             })
         )
         assert action.message == 'SUCCESS'

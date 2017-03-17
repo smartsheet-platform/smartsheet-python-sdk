@@ -67,13 +67,37 @@ class MultiRowEmail(RowEmail):
             self._row_ids.purge()
             self._row_ids.append(value)
 
+    @property
+    def pre_request_filter(self):
+        return self._pre_request_filter
+
+    @pre_request_filter.setter
+    def pre_request_filter(self, value):
+        # Schedule
+        if self.schedule is not None:
+            self.schedule.pre_request_filter = value
+        self._pre_request_filter = value
+
     def to_dict(self, op_id=None, method=None):
         parent_obj = super(MultiRowEmail, self).to_dict(op_id, method)
         obj = {
             'rowIds': prep(self._row_ids)}
+        obj = MultiRowEmail._apply_pre_request_filter(self, obj)
         combo = parent_obj.copy()
         combo.update(obj)
         return combo
+
+    def _apply_pre_request_filter(self, obj):
+        if self.pre_request_filter == 'update_update_request':
+            permitted = []
+            all_keys = list(obj.keys())
+            for key in all_keys:
+                if key not in permitted:
+                    self._log.debug(
+                        'deleting %s from obj', key)
+                    del obj[key]
+
+        return obj
 
     def to_json(self):
         return json.dumps(self.to_dict(), indent=2)

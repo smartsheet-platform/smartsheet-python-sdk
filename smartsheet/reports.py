@@ -19,7 +19,7 @@ from __future__ import absolute_import
 
 import logging
 import os.path
-import six
+from datetime import datetime
 from . import fresh_operation
 
 
@@ -171,7 +171,7 @@ class Reports(object):
 
         return response
 
-    def list_reports(self, page_size=100, page=1, include_all=False):
+    def list_reports(self, page_size=100, page=1, include_all=False, modified_since=None):
         """Get the list of all Reports accessible by the User.
 
         Get the list of all Reports that the User has access to, in
@@ -194,6 +194,8 @@ class Reports(object):
         _op['query_params']['pageSize'] = page_size
         _op['query_params']['page'] = page
         _op['query_params']['includeAll'] = include_all
+        if isinstance(modified_since, datetime):
+            _op['query_params']['modifiedSince'] = modified_since.isoformat()
 
         expected = ['IndexResult', 'Report']
 
@@ -203,7 +205,7 @@ class Reports(object):
         return response
 
     def list_shares(self, report_id, page_size=100, page=1,
-                    include_all=False):
+                    include_all=False, include_workspace_shares=False):
         """Get a list of all Users and Groups to whom the specified Report is
         shared, and their access level.
 
@@ -225,6 +227,8 @@ class Reports(object):
         _op['query_params']['pageSize'] = page_size
         _op['query_params']['page'] = page
         _op['query_params']['includeAll'] = include_all
+        if include_workspace_shares:
+            _op['query_params']['include'] = 'workspaceShares'
 
         expected = ['IndexResult', 'Share']
 
@@ -307,6 +311,69 @@ class Reports(object):
         _op['json'].pre_request_filter = 'update_share'
 
         expected = ['Result', 'Share']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def get_publish_status(self, report_id):
+        """Get the Publish status of the Report.
+
+        Get the status of the Publish settings of the Report,
+        including URLs of any enabled publishings.
+
+        Args:
+            report_id (int): Report ID
+
+        Returns:
+            ReportPublish
+        """
+        _op = fresh_operation('get_publish_status')
+        _op['method'] = 'GET'
+        _op['path'] = '/reports/' + str(report_id) + '/publish'
+
+        expected = 'ReportPublish'
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def set_publish_status(self, report_id, report_publish_obj):
+        """Set the publish status of the Report and returns the new status,
+        including the URLs of any enabled publishings.
+
+        Args:
+            report_id (int): Report ID
+            report_publish_obj (ReportPublish): ReportPublish
+                object.
+
+        Returns:
+            Result
+        """
+        attributes = ['read_only_full_enabled','read_only_full_accessible_by']
+
+        fetch_first = False
+        # check for incompleteness, fill in from current status if necessary
+        for attribute in attributes:
+            val = getattr(report_publish_obj, attribute, None)
+            if val is None:
+                fetch_first = True
+                break
+
+        if fetch_first:
+            current_status = self.get_publish_status(report_id).to_dict()
+            current_status.update(report_publish_obj.to_dict())
+            report_publish_obj = self._base.models.ReportPublish(current_status)
+
+        _op = fresh_operation('set_publish_status')
+        _op['method'] = 'PUT'
+        _op['path'] = '/reports/' + str(report_id) + '/publish'
+        _op['json'] = report_publish_obj
+        # filter before we go
+        _op['json'].pre_request_filter = 'set_publish_status'
+
+        expected = ['Result', 'ReportPublish']
 
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)

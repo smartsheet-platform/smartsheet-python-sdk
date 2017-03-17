@@ -41,6 +41,7 @@ class ErrorResult(object):
         self._message = None
         self._name = None
         self._recommendation = None
+        self._ref_id = None
         self._should_retry = None
         self._status_code = None
 
@@ -48,12 +49,18 @@ class ErrorResult(object):
             # account for alternate variable names from raw API response
             if 'code' in props:
                 self.code = props['code']
+            if 'errorCode' in props:
+                self.error_code = props['errorCode']
             if 'message' in props:
                 self.message = props['message']
             if 'name' in props:
                 self.name = props['name']
             if 'recommendation' in props:
                 self.recommendation = props['recommendation']
+            if 'refId' in props:
+                self.ref_id = props['refId']
+            if 'ref_id' in props:
+                self.ref_id = props['ref_id']
             if 'shouldRetry' in props:
                 self.should_retry = props['shouldRetry']
             if 'should_retry' in props:
@@ -69,6 +76,15 @@ class ErrorResult(object):
 
     @code.setter
     def code(self, value):
+        if isinstance(value, six.integer_types):
+            self._code = value
+
+    @property
+    def error_code(self):
+        return self._code
+
+    @error_code.setter
+    def error_code(self, value):
         if isinstance(value, six.integer_types):
             self._code = value
 
@@ -100,6 +116,15 @@ class ErrorResult(object):
             self._recommendation = value
 
     @property
+    def ref_id(self):
+        return self._ref_id
+
+    @ref_id.setter
+    def ref_id(self, value):
+        if isinstance(value, six.string_types):
+            self._ref_id = value
+
+    @property
     def should_retry(self):
         return self._should_retry
 
@@ -123,6 +148,7 @@ class ErrorResult(object):
             'message': prep(self._message),
             'name': prep(self._name),
             'recommendation': prep(self._recommendation),
+            'refId':prep(self._ref_id),
             'shouldRetry': prep(self._should_retry),
             'statusCode': prep(self._status_code)}
         return obj

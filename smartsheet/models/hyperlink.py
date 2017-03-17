@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
 from ..util import prep
-from datetime import datetime
 import json
 import logging
 import six
@@ -39,6 +37,7 @@ class Hyperlink(object):
 
         self._report_id = None
         self._sheet_id = None
+        self._sight_id = None
         self._url = None
 
         if props:
@@ -51,6 +50,10 @@ class Hyperlink(object):
                 self.sheet_id = props['sheetId']
             if 'sheet_id' in props:
                 self.sheet_id = props['sheet_id']
+            if 'sightId' in props:
+                self.sight_id = props['sightId']
+            if 'sight_id' in props:
+                self.sight_id = props['sight_id']
             if 'url' in props:
                 self.url = props['url']
 
@@ -73,6 +76,15 @@ class Hyperlink(object):
             self._sheet_id = value
 
     @property
+    def sight_id(self):
+        return self._sight_id
+
+    @sight_id.setter
+    def sight_id(self, value):
+        if isinstance(value, six.integer_types):
+            self._sight_id = value
+
+    @property
     def url(self):
         return self._url
 
@@ -85,6 +97,7 @@ class Hyperlink(object):
         obj = {
             'reportId': prep(self._report_id),
             'sheetId': prep(self._sheet_id),
+            'sightId': prep(self._sight_id),
             'url': prep(self._url)}
         return obj
 

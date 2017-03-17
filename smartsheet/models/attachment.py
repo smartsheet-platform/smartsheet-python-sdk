@@ -53,7 +53,8 @@ class Attachment(object):
                 'EVERNOTE',
                 'FILE',
                 'GOOGLE_DRIVE',
-                'LINK'],
+                'LINK',
+                'ONEDRIVE'],
             'parent_type': [
                 'SHEET',
                 'ROW',

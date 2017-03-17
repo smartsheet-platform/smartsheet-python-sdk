@@ -39,30 +39,28 @@ class Workspaces(object):
 
         Args:
             workspace_id (int): Workspace ID
-            container_destination_obj
-                (ContainerDestination): Container Destination object.
-            include (list[str]): A comma-separated list of
-                optional elements to copy. Valid list values:
+            container_destination_obj (ContainerDestination): Container Destination object.
+            include (list[str]): A comma-separated list of optional elements to copy. Valid list values:
 
+                data
 
-                    * data
-          * attachments
-          * discussions
+                attachments
 
-                        * cellLinks
-          * forms
-          * brand
+                discussions
 
-                     * shares
-          * **all** - specify a value of
-                \"all\" to include everything.
+                cellLinks
 
-        Cell history
-                will not be copied, regardless of which **include**
-                parameter values are specified.
-            skip_remap (list[str]): A comma separated list
-                of references to NOT re-map for the newly created resource.
-                Valid list items: cellLinks, reports, sheetHyperlinks
+                forms
+
+                brand
+
+                shares
+
+                **all** - specify a value of \"all\" to include everything.
+
+        Cell history will not be copied, regardless of which **include** parameter values are specified.
+            skip_remap (list[str]): A comma separated list of references to NOT re-map for the newly created resource.
+            Valid list items: cellLinks, reports, sheetHyperlinks, sights
 
         Returns:
             Result
@@ -326,7 +324,7 @@ class Workspaces(object):
 
         return response
 
-    def list_shares(self, workspace_id):
+    def list_shares(self, workspace_id, include_workspace_shares=False):
         """Get a list of all Users and Groups to whom the specified Workspace
         is shared, and their access level.
 
@@ -339,6 +337,8 @@ class Workspaces(object):
         _op = fresh_operation('list_shares')
         _op['method'] = 'GET'
         _op['path'] = '/workspaces/' + str(workspace_id) + '/shares'
+        if include_workspace_shares:
+            _op['query_params']['include'] = 'workspaceShares'
 
         expected = ['IndexResult', 'Share']
 

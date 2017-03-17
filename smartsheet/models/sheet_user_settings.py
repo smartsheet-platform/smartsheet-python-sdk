@@ -38,6 +38,7 @@ class SheetUserSettings(object):
         self._log.info('initializing SheetUserSettings (%s)', __name__)
 
         self._critical_path_enabled = None
+        self._display_summary_tasks = None
 
         if props:
             # account for alternate variable names from raw API response
@@ -47,6 +48,12 @@ class SheetUserSettings(object):
             if 'critical_path_enabled' in props:
                 self.critical_path_enabled = props[
                     'critical_path_enabled']
+            if 'displaySummaryTasks' in props:
+                self.display_summary_tasks = props[
+                    'displaySummaryTasks']
+            if 'display_summary_tasks' in props:
+                self.display_summary_tasks = props[
+                    'display_summary_tasks']
 
     @property
     def critical_path_enabled(self):
@@ -57,9 +64,20 @@ class SheetUserSettings(object):
         if isinstance(value, bool):
             self._critical_path_enabled = value
 
+    @property
+    def display_summary_tasks(self):
+        return self._display_summary_tasks
+
+    @display_summary_tasks.setter
+    def display_summary_tasks(self, value):
+        if isinstance(value, bool):
+            self._display_summary_tasks = value
+
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'criticalPathEnabled': prep(self._critical_path_enabled)}
+            'criticalPathEnabled': prep(self._critical_path_enabled),
+            'displaySummaryTasks': prep(self._display_summary_tasks)}
+
         return obj
 
     def to_json(self):

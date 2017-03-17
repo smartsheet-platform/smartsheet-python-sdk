@@ -18,9 +18,8 @@
 from __future__ import absolute_import
 
 import logging
-import os.path
-import six
 from . import fresh_operation
+from datetime import datetime
 
 
 class Users(object):
@@ -62,19 +61,21 @@ class Users(object):
         """Add a User to the organization.
 
         Args:
-            user_obj (User): User object with the following
-                attributes:
-          * email (required)
-          * admin
-                (required)
-          * licensedSheetCreator (required)
+            user_obj (User): User object with the following attributes:
 
-                    * firstName (optional)
-          * lastName (optional)
+                email (required)
 
-                        * resourceViewer (optional)
-            send_email (bool): Either true or false to
-                indicate whether or not to notify the user by email. Default
+                admin (required)
+
+                licensedSheetCreator (required)
+
+                firstName (optional)
+
+                lastName (optional)
+
+                resourceViewer (optional)
+
+                send_email (bool): Either true or false to indicate whether or not to notify the user by email. Default
                 is false.
 
         Returns:
@@ -191,17 +192,31 @@ class Users(object):
 
         return response
 
-    def list_org_sheets(self):
+    def list_org_sheets(self, page_size=100, page=1,
+                    include_all=False, modified_since=None):
         """Get a list of all Sheets owned by an organization.
 
         Get the list of all Sheets owned by the members of the
         account (organization).
+
+        Args:
+            page_size (int): The maximum number of items to
+                return per page. Defaults to 100.
+            page (int): Which page to return. Defaults to 1
+                if not specified.
+            include_all (bool): If true, include all results
+                (i.e. do not paginate).
         Returns:
             IndexResult
         """
         _op = fresh_operation('list_org_sheets')
         _op['method'] = 'GET'
         _op['path'] = '/users/sheets'
+        _op['query_params']['pageSize'] = page_size
+        _op['query_params']['page'] = page
+        _op['query_params']['includeAll'] = include_all
+        if isinstance(modified_since, datetime):
+            _op['query_params']['modifiedSince'] = modified_since.isoformat()
 
         expected = ['IndexResult', 'Sheet']
 

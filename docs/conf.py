@@ -20,7 +20,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 project = u'Smartsheet Python SDK'
-copyright = u'Copyright 2016 Smartsheet.com, Inc.'
+copyright = u'Copyright 2017 Smartsheet.com, Inc.'
 
 version = get_version(root="../")
 release = get_version(root="../")
