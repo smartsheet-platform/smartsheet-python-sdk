@@ -274,6 +274,11 @@ class Smartsheet(object):
             else:
                 _op['json'] = _op['json'].to_dict(_op['id'], _op['method'])
 
+        if _op['query_params']:
+            for key, val in six.iteritems(_op['query_params']):
+                if isinstance(val, list):
+                    val = ','.join([str(num) for num in val])
+                _op['query_params'][key] = val
 
         req = requests.Request(
             _op['method'],
