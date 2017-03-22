@@ -298,6 +298,8 @@ class Sheets(object):
         _op = fresh_operation('delete_rows')
         _op['method'] = 'DELETE'
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows'
+        if isinstance(ids, list):
+            ids = ','.join([str(id) for id in ids])
         _op['query_params']['ids'] = ids
         _op['query_params']['ignoreRowsNotFound'] = ignore_rows_not_found
 
