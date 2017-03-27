@@ -25,6 +25,7 @@ from ..types import TypedList
 from .user import User
 from ..util import prep
 from datetime import datetime
+from dateutil.parser import parse
 import json
 import logging
 import six
@@ -273,6 +274,10 @@ class Row(object):
     def created_at(self, value):
         if isinstance(value, datetime):
             self._created_at = value
+        else:
+            if isinstance(value, six.string_types):
+                value = parse(value)
+                self._created_at = value
 
     @property
     def created_by(self):
@@ -375,6 +380,10 @@ class Row(object):
     def modified_at(self, value):
         if isinstance(value, datetime):
             self._modified_at = value
+        else:
+            if isinstance(value, six.string_types):
+                value = parse(value)
+                self._modified_at = value
 
     @property
     def modified_by(self):
