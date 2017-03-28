@@ -34,8 +34,6 @@ class Contact(object):
         if base_obj is not None:
             self._base = base_obj
         self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
-        self._log.info('initializing Contact (%s)', __name__)
 
         self._email = None
         self.__id = None

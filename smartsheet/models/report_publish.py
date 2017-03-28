@@ -33,7 +33,6 @@ class ReportPublish(object):
             self._base = base_obj
         self._pre_request_filter = None
         self._log = logging.getLogger(__name__)
-        self._log.info('initializing ReportPublish (%s)', __name__)
 
         self._read_only_full_enabled = False
         self._read_only_full_url = None

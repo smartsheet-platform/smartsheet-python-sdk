@@ -35,8 +35,6 @@ class Error(object):
         if base_obj is not None:
             self._base = base_obj
         self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
-        self._log.info('initializing Error (%s)', __name__)
 
         self._request_response = None
         self._result = None

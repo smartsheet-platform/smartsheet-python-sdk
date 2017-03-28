@@ -33,7 +33,6 @@ class ImageUrl(object):
         if base_obj is not None:
             self._base = base_obj
         self._log = logging.getLogger(__name__)
-        self._log.info('initializing ImageUrl (%s)', __name__)
 
         self._image_id = None
         self._width = 0

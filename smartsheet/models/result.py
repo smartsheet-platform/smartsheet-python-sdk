@@ -54,8 +54,6 @@ class Result(object):
         if base_obj is not None:
             self._base = base_obj
         self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
-        self._log.info('initializing Result (%s)', __name__)
 
         self._dynamic_result_type = None
         if dynamic_result_type is not None:

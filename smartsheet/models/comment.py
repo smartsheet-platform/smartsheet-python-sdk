@@ -38,7 +38,6 @@ class Comment(object):
             self._base = base_obj
         self._pre_request_filter = None
         self._log = logging.getLogger(__name__)
-        self._log.info('initializing Comment (%s)', __name__)
 
         self._attachments = TypedList(Attachment)
         self._created_at = None
