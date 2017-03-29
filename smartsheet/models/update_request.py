@@ -39,7 +39,6 @@ class UpdateRequest(MultiRowEmail):
             self._base = base_obj
         self._pre_request_filter = None
         self._log = logging.getLogger(__name__)
-        self._log.info('initializing UpdateRequest (%s)', __name__)
 
         self.__id = None
         self._sent_by = None

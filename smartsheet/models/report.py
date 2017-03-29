@@ -42,8 +42,6 @@ class Report(Sheet):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._log = logging.getLogger(__name__)
-        self._log.info('initializing Report (%s)', __name__)
 
         self.allowed_values = {
             'access_level': [

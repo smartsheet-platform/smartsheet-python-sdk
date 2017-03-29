@@ -39,7 +39,6 @@ class Discussion(object):
             self._base = base_obj
         self._pre_request_filter = None
         self._log = logging.getLogger(__name__)
-        self._log.info('initializing Discussion (%s)', __name__)
 
         self.allowed_values = {
             'access_level': [

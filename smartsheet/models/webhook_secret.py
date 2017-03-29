@@ -31,8 +31,6 @@ class WebhookSecret(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._log = logging.getLogger(__name__)
-        self._log.info('initializing WebhookSecret (%s)', __name__)
 
         self._shared_secret = None
 
