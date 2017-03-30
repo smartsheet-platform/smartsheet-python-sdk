@@ -10,9 +10,9 @@ smartsheet*.egg-info/
 
 # Ignore SDK reference docs artifacts
 gh-pages/
-docs/_build/
-docs/modules.rst
-docs/smartsheet*.rst
+docs-source/_build/
+docs-source/modules.rst
+docs-source/smartsheet*.rst
 
 # Ignore the test cases log files
 *.log

@@ -45,12 +45,14 @@ coverage:
 	open htmlcov/index.html
 
 docs:
-	rm -f docs/smartsheet.rst
-	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ smartsheet
-	$(MAKE) -C docs clean
-	$(MAKE) -C docs html
-	open docs/_build/html/index.html
+	rm -f docs-source/smartsheet.rst
+	rm -f docs-source/modules.rst
+	sphinx-apidoc -o docs-source/ smartsheet
+	$(MAKE) -C docs-source clean
+	$(MAKE) -C docs-source html
+	rm -rf docs
+	cp -r docs-source/_build/html docs
+	open docs/index.html
 
 release: clean
 	python setup.py sdist upload
