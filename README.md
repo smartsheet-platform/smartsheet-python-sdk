@@ -29,7 +29,8 @@ To install this SDK manually, download the source code from [GitHub](https://git
 `$ python setup.py install`
 
 ## Documentation
-The SDK documentation can be viewed online at [http://smartsheet-platform.github.io/smartsheet-python-sdk/](http://smartsheet-platform.github.io/smartsheet-python-sdk/).
+The Smartsheet API is documented here: http://smartsheet-platform.github.io/api-docs/
+The Python SDK documentation can be viewed here: [http://smartsheet-platform.github.io/smartsheet-python-sdk/](http://smartsheet-platform.github.io/smartsheet-python-sdk/).
 
 ## Getting Started
 Getting started with the Python SDK is easy:
