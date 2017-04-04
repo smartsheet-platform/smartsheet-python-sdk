@@ -204,6 +204,8 @@ class Smartsheet(object):
             stream = True
         try:
             res = self._session.send(prepped_request, stream=stream)
+        except requests.exceptions.SSLError as rex:
+            raise HttpError(rex, 'SSL handshake error, old CA bundle or old OpenSSL?')
         except (requests.exceptions.RequestException) as rex:
             raise UnexpectedRequestError(rex.request, rex.response)
 

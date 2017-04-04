@@ -29,7 +29,9 @@ To install this SDK manually, download the source code from [GitHub](https://git
 `$ python setup.py install`
 
 ## Documentation
-The SDK documentation can be viewed online at [http://smartsheet-platform.github.io/smartsheet-python-sdk/](http://smartsheet-platform.github.io/smartsheet-python-sdk/).
+The Smartsheet API is documented here: http://smartsheet-platform.github.io/api-docs/
+
+The Python SDK documentation can be viewed here: [http://smartsheet-platform.github.io/smartsheet-python-sdk/](http://smartsheet-platform.github.io/smartsheet-python-sdk/).
 
 ## Getting Started
 Getting started with the Python SDK is easy:
@@ -42,14 +44,16 @@ Getting started with the Python SDK is easy:
 
 4.  Refer to the [Smartsheet API Documentation](https://smartsheet-platform.github.io/api-docs/?python#python-sample-code) for Python SDK usage examples.
 
-## Contributing
-If you would like to contribute a change to the SDK, please fork a branch and then submit a pull request. More info [here](https://help.github.com/articles/using-pull-requests).
+See a sample application here: https://github.com/smartsheet-samples/python-read-write-sheet
 
 ## Support
 If you have any questions or issues with this SDK please post on StackOverflow using the tag ["smartsheet-api"](http://stackoverflow.com/questions/tagged/smartsheet-api) or contact us directly at api@smartsheet.com.
 
+## Contributing
+If you would like to contribute a change to the SDK, please fork a branch and then submit a pull request.
+
 ## Release Notes
-Each specific release is available for download via [Github](https://github.com/smartsheet-platform/smartsheet-python-sdk/tags).
+Each release with notes is available for download via [Github](https://github.com/smartsheet-platform/smartsheet-python-sdk/releases).
 
 **1.1.0 (March 15, 2017)**
 * SDK updates through Smartsheet API level 2.0.10
