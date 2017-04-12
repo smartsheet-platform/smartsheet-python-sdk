@@ -300,3 +300,65 @@ class Sights(object):
         response = self._base.request(prepped_request, expected, _op)
 
         return response
+
+    def get_publish_status(self, sight_id):
+        """Get the Publish status of the Sight.
+
+        Get the status of the Publish settings of the Sight,
+        including URLs of any enabled publishings.
+
+        Args:
+            sight_id (int): Sight ID
+
+        Returns:
+            SightPublish
+        """
+        _op = fresh_operation('get_publish_status')
+        _op['method'] = 'GET'
+        _op['path'] = '/sights/' + str(sight_id) + '/publish'
+
+        expected = 'SightPublish'
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def set_publish_status(self, sight_id, sight_publish_obj):
+        """Set the publish status of the Sight and returns the new status,
+        including the URLs of any enabled publishings.
+
+        Args:
+            sight_id (int): Sight ID
+            sight_publish_obj (SightPublish): SightPublish object.
+
+        Returns:
+            Result
+        """
+        attributes = ['read_only_full_enabled','read_only_full_accessible_by']
+
+        fetch_first = False
+        # check for incompleteness, fill in from current status if necessary
+        for attribute in attributes:
+            val = getattr(sight_publish_obj, attribute, None)
+            if val is None:
+                fetch_first = True
+                break
+
+        if fetch_first:
+            current_status = self.get_publish_status(sight_id).to_dict()
+            current_status.update(sight_publish_obj.to_dict())
+            sight_publish_obj = self._base.models.SightPublish(current_status)
+
+        _op = fresh_operation('set_publish_status')
+        _op['method'] = 'PUT'
+        _op['path'] = '/sights/' + str(sight_id) + '/publish'
+        _op['json'] = sight_publish_obj
+        # filter before we go
+        _op['json'].pre_request_filter = 'set_publish_status'
+
+        expected = ['Result', 'SightPublish']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response

@@ -41,6 +41,7 @@ class RowEmail(Email):
         self._column_ids = TypedList(int)
         self._include_attachments = False
         self._include_discussions = False
+        self._layout = None
 
         if props:
             # account for alternate variable names from raw API response
@@ -60,6 +61,8 @@ class RowEmail(Email):
             if 'include_discussions' in props:
                 self.include_discussions = props[
                     'include_discussions']
+            if 'layout' in props:
+                self.layout = props['layout']
 
     @property
     def column_ids(self):
@@ -98,12 +101,22 @@ class RowEmail(Email):
         if isinstance(value, bool):
             self._include_discussions = value
 
+    @property
+    def layout(self):
+        return self._layout
+
+    @layout.setter
+    def layout(self, value):
+        if isinstance(value, six.string_types):
+            self._layout = value
+
     def to_dict(self, op_id=None, method=None):
         parent_obj = super(RowEmail, self).to_dict(op_id, method)
         obj = {
             'columnIds': prep(self._column_ids),
             'includeAttachments': prep(self._include_attachments),
-            'includeDiscussions': prep(self._include_discussions)}
+            'includeDiscussions': prep(self._include_discussions),
+            'layout' : prep(self._layout)}
         combo = parent_obj.copy()
         combo.update(obj)
         return combo
