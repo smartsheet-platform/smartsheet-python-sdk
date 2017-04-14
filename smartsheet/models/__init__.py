@@ -97,3 +97,4 @@ from .predecessor import Predecessor
 from .schedule import Schedule
 from .sent_update_request import SentUpdateRequest
 from .sight_publish import SightPublish
+from .project_settings import ProjectSettings

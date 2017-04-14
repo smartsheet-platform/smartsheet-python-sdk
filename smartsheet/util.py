@@ -16,6 +16,7 @@
 
 from __future__ import absolute_import
 import logging
+from datetime import date
 from datetime import datetime
 import warnings
 import functools
@@ -25,7 +26,7 @@ LOG = logging.getLogger('util')
 
 def prep(prop, op_id=None, method=None):
     """Serialize a value for JSON transformation."""
-    if isinstance(prop, datetime):
+    if isinstance(prop, (datetime, date)):
         retval = prop.isoformat()
 
     elif hasattr(prop, 'to_list'):
