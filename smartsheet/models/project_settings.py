@@ -93,6 +93,7 @@ class ProjectSettings(object):
             self._non_working_days.purge()
             self._non_working_days.append(value)
         elif isinstance(value, six.string_types):
+            value = parse(value).date()
             self._non_working_days.purge()
             self._non_working_days.append(value)
 
