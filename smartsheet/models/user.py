@@ -152,7 +152,7 @@ class User(object):
         return self._custom_welcome_screen_viewed
 
     @custom_welcome_screen_viewed.setter
-    def created_at(self, value):
+    def custom_welcome_screen_viewed(self, value):
         if isinstance(value, datetime):
             self._custom_welcome_screen_viewed = value
         else:
@@ -201,7 +201,7 @@ class User(object):
         return self._last_login
 
     @last_login.setter
-    def created_at(self, value):
+    def last_login(self, value):
         if isinstance(value, datetime):
             self._last_login = value
         else:
