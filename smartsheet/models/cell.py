@@ -280,7 +280,7 @@ class Cell(object):
 
     def _apply_pre_request_filter(self, obj):
         if self.pre_request_filter == 'add_rows':
-            permitted = ['columnId', 'value', 'strict',
+            permitted = ['columnId', 'value', 'formula', 'strict',
                          'format', 'hyperlink']
             all_keys = list(obj.keys())
             for key in all_keys:
@@ -289,9 +289,11 @@ class Cell(object):
                         'deleting %s from obj (filter: %s)',
                         key, self.pre_request_filter)
                     del obj[key]
+            if self.formula is not None:
+                del obj['value']
 
         if self.pre_request_filter == 'update_rows':
-            permitted = ['columnId', 'value', 'strict',
+            permitted = ['columnId', 'value', 'formula', 'strict',
                          'format', 'hyperlink', 'linkInFromCell']
             all_keys = list(obj.keys())
             for key in all_keys:
@@ -300,6 +302,8 @@ class Cell(object):
                         'deleting %s from obj (filter: %s)',
                         key, self.pre_request_filter)
                     del obj[key]
+            if self.formula is not None:
+                del obj['value']
 
         return obj
 

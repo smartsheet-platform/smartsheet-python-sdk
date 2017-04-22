@@ -380,3 +380,29 @@ class Discussions(object):
         response = self._base.request(prepped_request, expected, _op)
 
         return response
+
+    def update_comment(self, sheet_id, comment_id, comment_obj):
+        """Update the specified Comment.
+
+        Args:
+            sheet_id (int): Sheet ID
+            comment_id (int): Comment ID
+            comment_obj (Comment): Comment object with the following attributes:
+          * text (required)
+
+        Returns:
+            Result
+        """
+        _op = fresh_operation('update_comment')
+        _op['method'] = 'PUT'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/comments/' + str(comment_id)
+        _op['json'] = comment_obj
+        # filter before we go
+        _op['json'].pre_request_filter = 'update_comment'
+
+        expected = ['Result', 'Comment']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
