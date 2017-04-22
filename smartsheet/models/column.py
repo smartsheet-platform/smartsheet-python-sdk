@@ -19,6 +19,7 @@ from __future__ import absolute_import
 
 from .auto_number_format import AutoNumberFormat
 from .filter import Filter
+from .contact import Contact
 from ..types import TypedList
 from ..util import prep
 import json
@@ -82,6 +83,7 @@ class Column(object):
                 'ABSTRACT_DATETIME']}
 
         self._auto_number_format = None
+        self._contact_options = TypedList(Contact)
         self.__filter = None
         self.__format = None
         self._hidden = None
@@ -106,6 +108,10 @@ class Column(object):
             if 'auto_number_format' in props:
                 self.auto_number_format = props[
                     'auto_number_format']
+            if 'contactOptions' in props:
+                self.contact_options = props['contactOptions']
+            if 'contact_options' in props:
+                self.contact_options = props['contact_options']
             if 'filter' in props:
                 self._filter = props['filter']
             if '_filter' in props:
@@ -176,6 +182,25 @@ class Column(object):
             self._auto_number_format = value
         else:
             self._auto_number_format = AutoNumberFormat(value, self._base)
+
+    @property
+    def contact_options(self):
+        return self._contact_options
+
+    @contact_options.setter
+    def contact_options(self, value):
+        if isinstance(value, list):
+            self._contact_options.purge()
+            self._contact_options.extend([
+                (Contact(x)
+                 if not isinstance(x, Contact) else x) for x in value
+            ])
+        elif isinstance(value, TypedList):
+            self._contact_options.purge()
+            self._contact_options = value.to_list()
+        elif isinstance(value, Contact):
+            self._contact_options.purge()
+            self._contact_options.append(value)
 
     @property
     def _filter(self):
@@ -371,6 +396,7 @@ class Column(object):
 
         obj = {
             'autoNumberFormat': prep(self._auto_number_format),
+            'contactOptions': prep(self._contact_options),
             'filter': prep(self.__filter),
             'format': prep(self.__format),
             'hidden': prep(self._hidden),
@@ -392,7 +418,7 @@ class Column(object):
         if self.pre_request_filter == 'add_columns':
             permitted = ['title', 'type', 'symbol',
                          'options', 'index', 'systemColumnType', 'autoNumberFormat',
-                         'width', 'locked']
+                         'width', 'locked', 'contactOptions']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
@@ -440,7 +466,7 @@ class Column(object):
         if self.pre_request_filter == 'update_column':
             permitted = ['index', 'title', 'type', 'symbol',
                          'options', 'systemColumnType', 'autoNumberFormat', 'width',
-                         'locked']
+                         'locked', 'contactOptions']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
