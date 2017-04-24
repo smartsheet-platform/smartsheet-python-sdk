@@ -71,14 +71,32 @@ def setup_logging():
                 logging.basicConfig(level=logging.INFO)
 
 
+def calc_backoff(previous_attempts, total_elapsed_time):
+    """
+    Default backoff calculator on retry.
+
+    Args:
+        previous_attempts(int) : number of previous retry attempts
+        total_elapsed_time(float): elapsed time in seconds
+
+    Returns:
+         (float) Backoff time in seconds (any negative number will drop out of retry loop)
+    """
+    maximum_elapsed = 30 # maximum 30 second timeout on operation
+    if total_elapsed_time > maximum_elapsed:
+        return -1
+    # Use exponential backoff
+    backoff = (2 ** previous_attempts) + random.random()
+    return backoff
+
+
 class Smartsheet(object):
     """Use this to make requests to the Smartsheet API."""
 
     models = models
 
     def __init__(self, access_token=None, max_connections=8,
-                 max_retries_on_error=4, user_agent=None,
-                 proxies=None):
+                 user_agent=None, user_calc_backoff = calc_backoff, proxies=None):
         """
         Set up base client object.
 
@@ -87,7 +105,7 @@ class Smartsheet(object):
                 requests. May also be set as an env variable in
                 SMARTSHEET_ACCESS_TOKEN. (required)
             max_connections (int): Maximum connection pool size.
-            max_retries_on_error (int): On 5xx errors, the number of times to
+            user_calc_backoff (callback): user provided callback for backoff calculation on
                 retry.
             user_agent (str): The user agent to use when making requests. This
                 helps us identify requests coming from your application. We
@@ -109,10 +127,10 @@ class Smartsheet(object):
                              'or passed to smartsheet.Smartsheet() '
                              'as a parameter.')
 
+        self._user_calc_backoff = user_calc_backoff
         self._session = pinned_session(pool_maxsize=max_connections)
         if proxies:
             self._session.proxies = proxies
-        self._max_retries_on_error = max_retries_on_error
 
         base_user_agent = 'SmartsheetPythonSDK/' + __version__
         if user_agent:
@@ -226,7 +244,7 @@ class Smartsheet(object):
 
     def request_with_retry(self, prepped_request, operation):
         """
-        Perform the request with an expontial backoff retry.
+        Perform the request with retry.
 
         Args:
             prepped_request (Request): A prepared request object for
@@ -236,19 +254,19 @@ class Smartsheet(object):
             Operation Result object.
         """
         attempt = 0
+        start_time = time.time()
         # Make a copy of the request as the access token will be redacted on response prior to logging
         pre_redact_request = prepped_request.copy()
-        while attempt <= self._max_retries_on_error:
+        while True:
             self._log.info('Request to %s', prepped_request.url)
             result = self._request(prepped_request, operation)
             if isinstance(result, OperationErrorResult):
                 native = result.native('Error')
                 if native.result.should_retry:
-                    if native.result.status_code != 429:
-                        # Do not count a rate limiting error as an attempt
-                        attempt += 1
-                    # Use exponential backoff
-                    backoff = 2 ** attempt * random.random()
+                    attempt += 1
+                    backoff = self._user_calc_backoff(attempt,time.time()-start_time)
+                    if backoff < 0:
+                        break
                     self._log.info('HttpError status_code=%s: Retrying in %.1f seconds', native.result.status_code, backoff)
                     time.sleep(backoff)
                     # restore un-redacted request prior to retry
