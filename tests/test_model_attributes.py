@@ -1,6 +1,6 @@
 import pytest
-import requests
 import smartsheet
+
 
 # Given Python's variable naming convention of snake_case,
 # and Smartsheet's API attribute naming convention of
@@ -193,7 +193,7 @@ class TestModelAttributes:
         assert model.formula == 'foo'
         assert isinstance(model.hyperlink, smart.models.Hyperlink)
         assert isinstance(model.link_in_from_cell, smart.models.CellLink)
-        assert isinstance(model.links_out_to_cells, smart.models.CellLink)
+        assert isinstance(model.links_out_to_cells[0], smart.models.CellLink)
         assert model.strict == True
         assert model.value == 'foo'
         model.hyperlink = {}
@@ -201,7 +201,7 @@ class TestModelAttributes:
         model.linkInFromCell = {}
         assert isinstance(model.link_in_from_cell, smart.models.CellLink)
         model.linksOutToCells = {}
-        assert isinstance(model.links_out_to_cells, smart.models.CellLink)
+        assert isinstance(model.links_out_to_cells[0], smart.models.CellLink)
         as_dict = model.to_dict()
         assert isinstance(as_dict, dict)
 
@@ -229,7 +229,7 @@ class TestModelAttributes:
         assert model.formula == 'foo'
         assert isinstance(model.hyperlink, smart.models.Hyperlink)
         assert isinstance(model.link_in_from_cell, smart.models.CellLink)
-        assert isinstance(model.links_out_to_cells, smart.models.CellLink)
+        assert isinstance(model.links_out_to_cells[0], smart.models.CellLink)
         assert model.strict == True
         assert model.value == 'foo'
 
@@ -1617,14 +1617,14 @@ class TestModelAttributes:
         assert model._format == 'foo'
         assert model.strict == True
         assert model.display_value == 'foo'
-        assert isinstance(model.links_out_to_cells, smart.models.CellLink)
+        assert isinstance(model.links_out_to_cells[0], smart.models.CellLink)
         assert model.formula == 'foo'
         model.linkInFromCell = {}
         assert isinstance(model.link_in_from_cell, smart.models.CellLink)
         model.hyperlink = {}
         assert isinstance(model.hyperlink, smart.models.Hyperlink)
         model.linksOutToCells = {}
-        assert isinstance(model.links_out_to_cells, smart.models.CellLink)
+        assert isinstance(model.links_out_to_cells[0], smart.models.CellLink)
         as_dict = model.to_dict()
         assert isinstance(as_dict, dict)
 
@@ -1655,7 +1655,7 @@ class TestModelAttributes:
         assert model._format == 'foo'
         assert model.strict == True
         assert model.display_value == 'foo'
-        assert isinstance(model.links_out_to_cells, smart.models.CellLink)
+        assert isinstance(model.links_out_to_cells[0], smart.models.CellLink)
         assert model.formula == 'foo'
 
     def test_row_mapping(self, smart_setup):
@@ -2005,7 +2005,7 @@ class TestModelAttributes:
         assert model._format == 'foo'
         assert model.strict == True
         assert model.display_value == 'foo'
-        assert isinstance(model.links_out_to_cells, smart.models.CellLink)
+        assert isinstance(model.links_out_to_cells[0], smart.models.CellLink)
         assert model.formula == 'foo'
         model.linkInFromCell = {}
         assert isinstance(model.link_in_from_cell, smart.models.CellLink)
@@ -2014,7 +2014,7 @@ class TestModelAttributes:
         model.hyperlink = {}
         assert isinstance(model.hyperlink, smart.models.Hyperlink)
         model.linksOutToCells = {}
-        assert isinstance(model.links_out_to_cells, smart.models.CellLink)
+        assert isinstance(model.links_out_to_cells[0], smart.models.CellLink)
         as_dict = model.to_dict()
         assert isinstance(as_dict, dict)
 
@@ -2045,7 +2045,7 @@ class TestModelAttributes:
         assert model._format == 'foo'
         assert model.strict == True
         assert model.display_value == 'foo'
-        assert isinstance(model.links_out_to_cells, smart.models.CellLink)
+        assert isinstance(model.links_out_to_cells[0], smart.models.CellLink)
         assert model.formula == 'foo'
 
     def test_user_profile(self, smart_setup):
