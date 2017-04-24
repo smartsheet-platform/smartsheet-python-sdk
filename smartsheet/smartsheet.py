@@ -82,7 +82,7 @@ def calc_backoff(previous_attempts, total_elapsed_time):
     Returns:
          (float) Backoff time in seconds (any negative number will drop out of retry loop)
     """
-    maximum_elapsed = 30 # maximum 30 second timeout on operation
+    maximum_elapsed = 60 # maximum 60 second timeout on operation
     if total_elapsed_time > maximum_elapsed:
         return -1
     # Use exponential backoff
