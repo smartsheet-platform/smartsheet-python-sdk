@@ -19,7 +19,7 @@ from __future__ import absolute_import
 
 from .auto_number_format import AutoNumberFormat
 from .filter import Filter
-from .contact import Contact
+from .contact_option import ContactOption
 from ..types import TypedList
 from ..util import prep
 import json
@@ -83,7 +83,7 @@ class Column(object):
                 'ABSTRACT_DATETIME']}
 
         self._auto_number_format = None
-        self._contact_options = TypedList(Contact)
+        self._contact_options = TypedList(ContactOption)
         self.__filter = None
         self.__format = None
         self._hidden = None
@@ -192,13 +192,13 @@ class Column(object):
         if isinstance(value, list):
             self._contact_options.purge()
             self._contact_options.extend([
-                (Contact(x)
-                 if not isinstance(x, Contact) else x) for x in value
+                (ContactOption(x)
+                 if not isinstance(x, ContactOption) else x) for x in value
             ])
         elif isinstance(value, TypedList):
             self._contact_options.purge()
             self._contact_options = value.to_list()
-        elif isinstance(value, Contact):
+        elif isinstance(value, ContactOption):
             self._contact_options.purge()
             self._contact_options.append(value)
 
@@ -418,7 +418,7 @@ class Column(object):
         if self.pre_request_filter == 'add_columns':
             permitted = ['title', 'type', 'symbol',
                          'options', 'index', 'systemColumnType', 'autoNumberFormat',
-                         'width', 'locked', 'contactOptions']
+                         'width', 'locked', 'hidden', 'contactOptions']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
@@ -430,7 +430,7 @@ class Column(object):
         if self.pre_request_filter == 'create_sheet':
             permitted = ['title', 'primary', 'type',
                          'symbol', 'options', 'systemColumnType', 'autoNumberFormat',
-                         'width']
+                         'width', 'hidden', 'contactOptions']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
@@ -442,7 +442,7 @@ class Column(object):
         if self.pre_request_filter == 'create_sheet_in_folder':
             permitted = ['title', 'primary', 'type',
                          'symbol', 'options', 'systemColumnType', 'autoNumberFormat',
-                         'width']
+                         'width', 'hidden', 'contactOptions']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
@@ -454,7 +454,7 @@ class Column(object):
         if self.pre_request_filter == 'create_sheet_in_workspace':
             permitted = ['title', 'primary', 'type',
                          'symbol', 'options', 'systemColumnType', 'autoNumberFormat',
-                         'width']
+                         'width', 'hidden', 'contactOptions']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
@@ -466,7 +466,7 @@ class Column(object):
         if self.pre_request_filter == 'update_column':
             permitted = ['index', 'title', 'type', 'symbol',
                          'options', 'systemColumnType', 'autoNumberFormat', 'width',
-                         'locked', 'contactOptions']
+                         'locked', 'hidden', 'contactOptions']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
