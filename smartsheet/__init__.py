@@ -27,4 +27,4 @@ except ImportError:
     from setuptools_scm import get_version
     __version__ = get_version()
 
-from .smartsheet import Smartsheet, fresh_operation  # NOQA
+from .smartsheet import Smartsheet, fresh_operation, AbstractUserCalcBackoff  # NOQA
