@@ -64,10 +64,12 @@ class Row(object):
         self.__format = None
         self.__id = None
         self._in_critical_path = None
+        self._indent = None
         self._locked = None
         self._locked_for_user = None
         self._modified_at = None
         self._modified_by = None
+        self._outdent = None
         self._parent_id = None
         self._permalink = None
         self._row_number = None
@@ -122,6 +124,8 @@ class Row(object):
             if 'in_critical_path' in props:
                 self.in_critical_path = props[
                     'in_critical_path']
+            if 'indent' in props:
+                self.indent = props['indent']
             if 'locked' in props:
                 self.locked = props['locked']
             # read only
@@ -132,6 +136,8 @@ class Row(object):
                 self.modified_at = props['modifiedAt']
             if 'modifiedBy' in props:
                 self.modified_by = props['modifiedBy']
+            if 'outdent' in props:
+                self.outdent = props['outdent']
             if 'parentId' in props:
                 self.parent_id = props['parentId']
             if 'parent_id' in props:
@@ -158,6 +164,7 @@ class Row(object):
                 self.to_top = props['to_top']
             if 'version' in props:
                 self.version = props['version']
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
@@ -354,6 +361,15 @@ class Row(object):
             self._in_critical_path = value
 
     @property
+    def indent(self):
+        return self._indent
+
+    @indent.setter
+    def indent(self, value):
+        if isinstance(value, six.integer_types):
+            self._indent = value
+
+    @property
     def locked(self):
         return self._locked
 
@@ -394,6 +410,15 @@ class Row(object):
             self._modified_by = value
         else:
             self._modified_by = User(value, self._base)
+
+    @property
+    def outdent(self):
+        return self._outdent
+
+    @outdent.setter
+    def outdent(self, value):
+        if isinstance(value, six.integer_types):
+            self._outdent = value
 
     @property
     def parent_id(self):
@@ -532,10 +557,12 @@ class Row(object):
             'format': prep(self.__format),
             'id': prep(self.__id),
             'inCriticalPath': prep(self._in_critical_path),
+            'indent': prep(self._indent),
             'locked': prep(self._locked),
             'lockedForUser': prep(self._locked_for_user),
             'modifiedAt': prep(self._modified_at),
             'modifiedBy': prep(self._modified_by),
+            'outdent': prep(self._outdent),
             'parentId': prep(self._parent_id),
             'permalink': prep(self._permalink),
             'rowNumber': prep(self._row_number),
@@ -562,7 +589,7 @@ class Row(object):
         if self.pre_request_filter == 'update_rows':
             permitted = ['id', 'format', 'expanded',
                          'locked', 'cells', 'toTop', 'toBottom', 'above',
-                         'siblingId', 'parentId']
+                         'siblingId', 'parentId', 'indent', 'outdent']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:

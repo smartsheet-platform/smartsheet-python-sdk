@@ -48,7 +48,7 @@ class Cell(object):
         self._hyperlink = None
         self._image = None
         self._link_in_from_cell = None
-        self._links_out_to_cells = None
+        self._links_out_to_cells = TypedList(CellLink)
         self._object_value = None
         self._strict = True
         self._value = None
@@ -199,10 +199,18 @@ class Cell(object):
 
     @links_out_to_cells.setter
     def links_out_to_cells(self, value):
-        if isinstance(value, CellLink):
-            self._links_out_to_cells = value
-        else:
-            self._links_out_to_cells = CellLink(value, self._base)
+        if isinstance(value, list):
+            self._links_out_to_cells.purge()
+            self._links_out_to_cells.extend([
+                 (CellLink(x, self._base)
+                  if not isinstance(x, CellLink) else x) for x in value
+             ])
+        elif isinstance(value, TypedList):
+            self._links_out_to_cells.purge()
+            self._links_out_to_cells = value.to_list()
+        elif isinstance(value, CellLink):
+            self._links_out_to_cells.purge()
+            self._links_out_to_cells.append(value)
 
     @property
     def object_value(self):
@@ -272,7 +280,7 @@ class Cell(object):
 
     def _apply_pre_request_filter(self, obj):
         if self.pre_request_filter == 'add_rows':
-            permitted = ['columnId', 'value', 'strict',
+            permitted = ['columnId', 'value', 'formula', 'strict',
                          'format', 'hyperlink']
             all_keys = list(obj.keys())
             for key in all_keys:
@@ -281,9 +289,11 @@ class Cell(object):
                         'deleting %s from obj (filter: %s)',
                         key, self.pre_request_filter)
                     del obj[key]
+            if self.formula is not None:
+                del obj['value']
 
         if self.pre_request_filter == 'update_rows':
-            permitted = ['columnId', 'value', 'strict',
+            permitted = ['columnId', 'value', 'formula', 'strict',
                          'format', 'hyperlink', 'linkInFromCell']
             all_keys = list(obj.keys())
             for key in all_keys:
@@ -292,6 +302,8 @@ class Cell(object):
                         'deleting %s from obj (filter: %s)',
                         key, self.pre_request_filter)
                     del obj[key]
+            if self.formula is not None:
+                del obj['value']
 
         return obj
 

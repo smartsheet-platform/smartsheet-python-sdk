@@ -260,6 +260,16 @@ class Comment(object):
                         key, self.pre_request_filter)
                     del obj[key]
 
+        if self.pre_request_filter == 'update_comment':
+            permitted = ['text']
+            all_keys = list(obj.keys())
+            for key in all_keys:
+                if key not in permitted:
+                    self._log.debug(
+                        'deleting %s from obj (filter: %s)',
+                        key, self.pre_request_filter)
+                    del obj[key]
+
         return obj
 
     def to_json(self):

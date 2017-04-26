@@ -51,6 +51,7 @@ class Discussion(object):
         self._access_level = None
         self._comment = None
         self._comment_attachments = TypedList(Attachment)
+        self._comment_count = None
         self._comments = TypedList(Comment)
         self._created_by = None
         self.__id = None
@@ -75,6 +76,10 @@ class Discussion(object):
             if 'comment_attachments' in props:
                 self.comment_attachments = props[
                     'comment_attachments']
+            if 'commentCount' in props:
+                self.comment_count = props['commentCount']
+            if 'comment_count' in props:
+                self.comment_count = props['comment_count']
             if 'comments' in props:
                 self.comments = props['comments']
             if 'createdBy' in props:
@@ -164,6 +169,15 @@ class Discussion(object):
         elif isinstance(value, Attachment):
             self._comment_attachments.purge()
             self._comment_attachments.append(value)
+
+    @property
+    def comment_count(self):
+        return self._comment_count
+
+    @comment_count.setter
+    def comment_count(self, value):
+        if isinstance(value, six.integer_types):
+            self._comment_count = value
 
     @property
     def comments(self):
@@ -306,6 +320,7 @@ class Discussion(object):
             'accessLevel': prep(self._access_level),
             'comment': prep(self._comment),
             'commentAttachments': prep(self._comment_attachments),
+            'commentCount':prep(self._comment_count),
             'comments': prep(self._comments),
             'createdBy': prep(self._created_by),
             'id': prep(self.__id),

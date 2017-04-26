@@ -21,6 +21,7 @@ from .attachment import Attachment
 from .column import Column
 from .comment import Comment
 from .discussion import Discussion
+from .project_settings import ProjectSettings
 from .row import Row
 from .sheet_user_settings import SheetUserSettings
 from .source import Source
@@ -68,6 +69,7 @@ class Sheet(object):
         self._owner = None
         self._owner_id = None
         self._permalink = None
+        self._project_settings = None
         self._read_only = None
         self._resource_management_enabled = None
         self._rows = TypedList(Row)
@@ -133,6 +135,10 @@ class Sheet(object):
                 self.owner_id = props['owner_id']
             if 'permalink' in props:
                 self.permalink = props['permalink']
+            if 'projectSettings' in props:
+                self.project_settings = props['projectSettings']
+            if 'project_settings' in props:
+                self.project_settings = props['project_settings']
             if 'readOnly' in props:
                 self.read_only = props['readOnly']
             if 'read_only' in props:
@@ -371,6 +377,17 @@ class Sheet(object):
             self._permalink = value
 
     @property
+    def project_settings(self):
+        return self._project_settings
+
+    @project_settings.setter
+    def project_settings(self, value):
+        if isinstance(value, ProjectSettings):
+            self._project_settings = value
+        elif isinstance(value, dict):
+            self._project_settings = ProjectSettings(value, self._base)
+
+    @property
     def read_only(self):
         return self._read_only
 
@@ -597,6 +614,7 @@ class Sheet(object):
             'owner': prep(self._owner),
             'ownerId': prep(self._owner_id),
             'permalink': prep(self._permalink),
+            'projectSettings': prep(self._project_settings),
             'readOnly': prep(self._read_only),
             'resourceManagementEnabled': prep(
                 self._resource_management_enabled),
@@ -671,7 +689,7 @@ class Sheet(object):
                     del obj[key]
 
         if self.pre_request_filter == 'update_sheet':
-            permitted = ['name', 'userSettings']
+            permitted = ['name', 'userSettings', 'projectSettings']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:

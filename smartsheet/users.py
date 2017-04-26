@@ -57,6 +57,27 @@ class Users(object):
 
         return response
 
+    def promote_alternate_email(self, user_id, alt_id):
+        """Add one or more alternate email addresses for the specified User
+
+        Args:
+            user_id (int): User ID
+            alt_id(int):  AlternateEmail ID to be promoted
+
+        Returns:
+            Result
+        """
+        _op = fresh_operation('promote_alternate_email')
+        _op['method'] = 'POST'
+        _op['path'] = '/users/' + str(user_id) + '/alternateemails/' + str(alt_id) + '/makeprimary'
+
+        expected = ['Result', 'AlternateEmail']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
     def add_user(self, user_obj, send_email=False):
         """Add a User to the organization.
 

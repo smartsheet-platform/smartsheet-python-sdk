@@ -20,6 +20,8 @@ from __future__ import absolute_import
 from ..types import TypedList
 from ..util import prep
 from datetime import datetime
+from dateutil.parser import parse
+from .alternate_email import AlternateEmail
 import json
 import logging
 import six
@@ -43,20 +45,32 @@ class User(object):
                 'DECLINED']}
 
         self._admin = None
+        self._alternate_emails = TypedList(AlternateEmail)
+        self._custom_welcome_screen_viewed = None
         self._email = None
         self._first_name = None
         self._group_admin = None
         self.__id = None
+        self._last_login = None
         self._last_name = None
         self._licensed_sheet_creator = None
         self._name = None
         self._resource_viewer = None
+        self._sheet_count = None
         self._status = None
 
         if props:
             # account for alternate variable names from raw API response
             if 'admin' in props:
                 self.admin = props['admin']
+            if 'alternateEmails' in props:
+                self.alternate_emails = props['alternateEmails']
+            if 'alternate_emails' in props:
+                self.alternate_emails = props['alternate_emails']
+            if 'customWelcomeScreenViewed' in props:
+                self.custom_welcome_screen_viewed = props['customWelcomeScreenViewed']
+            if 'custom_welcome_screen_viewed' in props:
+                self.custom_welcome_screen_viewed = props['custom_welcome_screen_viewed']
             if 'email' in props:
                 self.email = props['email']
             if 'firstName' in props:
@@ -71,6 +85,10 @@ class User(object):
                 self._id = props['id']
             if '_id' in props:
                 self._id = props['_id']
+            if 'lastLogin' in props:
+                self.last_login = props['lastLogin']
+            if 'last_login' in props:
+                self.last_login = props['last_login']
             if 'lastName' in props:
                 self.last_name = props['lastName']
             if 'last_name' in props:
@@ -87,6 +105,10 @@ class User(object):
                 self.resource_viewer = props['resourceViewer']
             if 'resource_viewer' in props:
                 self.resource_viewer = props['resource_viewer']
+            if 'sheetCount' in props:
+                self.sheet_count = props['sheetCount']
+            if 'sheet_count' in props:
+                self.sheet_count = props['sheet_count']
             if 'status' in props:
                 self.status = props['status']
         self.__initialized = True
@@ -105,6 +127,38 @@ class User(object):
     def admin(self, value):
         if isinstance(value, bool):
             self._admin = value
+
+    @property
+    def alternate_emails(self):
+        return self._alternate_emails
+
+    @alternate_emails.setter
+    def alternate_emails(self, value):
+        if isinstance(value, list):
+            self._alternate_emails.purge()
+            self._alternate_emails.extend([
+                (AlternateEmail(x, self._base)
+                 if not isinstance(x, AlternateEmail) else x) for x in value
+            ])
+        elif isinstance(value, TypedList):
+            self._alternate_emails.purge()
+            self._alternate_emails = value.to_list()
+        elif isinstance(value, AlternateEmail):
+            self._alternate_emails.purge()
+            self._alternate_emails.append(value)
+
+    @property
+    def custom_welcome_screen_viewed(self):
+        return self._custom_welcome_screen_viewed
+
+    @custom_welcome_screen_viewed.setter
+    def custom_welcome_screen_viewed(self, value):
+        if isinstance(value, datetime):
+            self._custom_welcome_screen_viewed = value
+        else:
+            if isinstance(value, six.string_types):
+                value = parse(value)
+                self._custom_welcome_screen_viewed = value
 
     @property
     def email(self):
@@ -143,6 +197,19 @@ class User(object):
             self.__id = value
 
     @property
+    def last_login(self):
+        return self._last_login
+
+    @last_login.setter
+    def last_login(self, value):
+        if isinstance(value, datetime):
+            self._last_login = value
+        else:
+            if isinstance(value, six.string_types):
+                value = parse(value)
+                self._last_login = value
+
+    @property
     def last_name(self):
         return self._last_name
 
@@ -179,6 +246,15 @@ class User(object):
             self._resource_viewer = value
 
     @property
+    def sheet_count(self):
+        return self._sheet_count
+
+    @sheet_count.setter
+    def sheet_count(self, value):
+        if isinstance(value, six.integer_types):
+            self._sheet_count = value
+
+    @property
     def status(self):
         return self._status
 
@@ -203,14 +279,18 @@ class User(object):
     def to_dict(self, op_id=None, method=None):
         obj = {
             'admin': prep(self._admin),
+            'alternateEmails': prep(self._alternate_emails),
+            'customWelcomeScreenViewed': prep(self._custom_welcome_screen_viewed),
             'email': prep(self._email),
             'firstName': prep(self._first_name),
             'groupAdmin': prep(self._group_admin),
             'id': prep(self.__id),
+            'lastLogin': prep(self._last_login),
             'lastName': prep(self._last_name),
             'licensedSheetCreator': prep(self._licensed_sheet_creator),
             'name': prep(self._name),
             'resourceViewer': prep(self._resource_viewer),
+            'sheetCount': prep(self.sheet_count),
             'status': prep(self._status)}
         return self._apply_pre_request_filter(obj)
 
