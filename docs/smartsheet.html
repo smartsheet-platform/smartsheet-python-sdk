@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet package &mdash; Smartsheet Python SDK 1.1.0 documentation</title>
+  <title>smartsheet package &mdash; Smartsheet Python SDK 1.2.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Smartsheet Python SDK 1.1.0 documentation" href="index.html"/>
+    <link rel="top" title="Smartsheet Python SDK 1.2.0 documentation" href="index.html"/>
         <link rel="next" title="smartsheet.models package" href="smartsheet.models.html"/>
         <link rel="prev" title="Smartsheet Python SDK Documentation" href="index.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.1.0
+                1.2.0
               </div>
             
           
@@ -208,6 +208,7 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.column">smartsheet.models.column module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.comment">smartsheet.models.comment module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.contact">smartsheet.models.contact module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.contact_option">smartsheet.models.contact_option module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.container_destination">smartsheet.models.container_destination module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.copy_or_move_row_destination">smartsheet.models.copy_or_move_row_destination module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.copy_or_move_row_directive">smartsheet.models.copy_or_move_row_directive module</a></li>
@@ -238,6 +239,7 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.o_auth_error">smartsheet.models.o_auth_error module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.object_value">smartsheet.models.object_value module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.predecessor">smartsheet.models.predecessor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.project_settings">smartsheet.models.project_settings module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.recipient">smartsheet.models.recipient module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.report">smartsheet.models.report module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.report_cell">smartsheet.models.report_cell module</a></li>
@@ -260,6 +262,7 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sheet_user_settings">smartsheet.models.sheet_user_settings module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.shortcut_data_item">smartsheet.models.shortcut_data_item module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sight">smartsheet.models.sight module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sight_publish">smartsheet.models.sight_publish module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.source">smartsheet.models.source module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.template">smartsheet.models.template module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.update_request">smartsheet.models.update_request module</a></li>
@@ -1083,6 +1086,28 @@ if not specified.</li>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">IndexResult</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.discussions.Discussions.update_comment">
+<code class="descname">update_comment</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>comment_id</em>, <em>comment_obj</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.discussions.Discussions.update_comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the specified Comment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sheet_id</strong> (<em>int</em>) &#8211; Sheet ID</li>
+<li><strong>comment_id</strong> (<em>int</em>) &#8211; Comment ID</li>
+<li><strong>comment_obj</strong> &#8211; Comment object with the following attributes:</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Result</p>
 </td>
 </tr>
 </tbody>
@@ -3302,6 +3327,24 @@ or more Row objects.</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="smartsheet.sights.Sights.get_publish_status">
+<code class="descname">get_publish_status</code><span class="sig-paren">(</span><em>sight_id</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sights.Sights.get_publish_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Publish status of the Sight.</p>
+<p>Get the status of the Publish settings of the Sight,
+including URLs of any enabled publishings.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sight_id</strong> (<em>int</em>) &#8211; Sight ID</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">SightPublish</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="smartsheet.sights.Sights.get_share">
 <code class="descname">get_share</code><span class="sig-paren">(</span><em>sight_id</em>, <em>share_id</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sights.Sights.get_share" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the specified Share.</p>
@@ -3413,6 +3456,28 @@ if not specified.</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="smartsheet.sights.Sights.set_publish_status">
+<code class="descname">set_publish_status</code><span class="sig-paren">(</span><em>sight_id</em>, <em>sight_publish_obj</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sights.Sights.set_publish_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the publish status of the Sight and returns the new status,
+including the URLs of any enabled publishings.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sight_id</strong> (<em>int</em>) &#8211; Sight ID</li>
+<li><strong>sight_publish_obj</strong> (<a class="reference internal" href="smartsheet.models.html#smartsheet.models.sight_publish.SightPublish" title="smartsheet.models.sight_publish.SightPublish"><em>SightPublish</em></a>) &#8211; SightPublish object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Result</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="smartsheet.sights.Sights.share_sight">
 <code class="descname">share_sight</code><span class="sig-paren">(</span><em>share_id</em>, <em>share_obj</em>, <em>send_email=False</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sights.Sights.share_sight" title="Permalink to this definition">¶</a></dt>
 <dd><p>Share the specified Sight.</p>
@@ -3488,7 +3553,7 @@ is false.</li>
 <span id="smartsheet-smartsheet-module"></span><h2>smartsheet.smartsheet module<a class="headerlink" href="#module-smartsheet.smartsheet" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="smartsheet.smartsheet.Smartsheet">
-<em class="property">class </em><code class="descclassname">smartsheet.smartsheet.</code><code class="descname">Smartsheet</code><span class="sig-paren">(</span><em>access_token=None</em>, <em>max_connections=8</em>, <em>max_retries_on_error=4</em>, <em>user_agent=None</em>, <em>proxies=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.smartsheet.Smartsheet" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">smartsheet.smartsheet.</code><code class="descname">Smartsheet</code><span class="sig-paren">(</span><em>access_token=None</em>, <em>max_connections=8</em>, <em>user_agent=None</em>, <em>max_retry_time=15</em>, <em>proxies=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.smartsheet.Smartsheet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Use this to make requests to the Smartsheet API.</p>
 <dl class="method">
@@ -3565,7 +3630,7 @@ raw wire messages to a native objects based on the value of <cite>expected</cite
 <dl class="method">
 <dt id="smartsheet.smartsheet.Smartsheet.request_with_retry">
 <code class="descname">request_with_retry</code><span class="sig-paren">(</span><em>prepped_request</em>, <em>operation</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.smartsheet.Smartsheet.request_with_retry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform the request with an expontial backoff retry.</p>
+<dd><p>Perform the request with retry.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -3585,6 +3650,17 @@ the operation.</td>
 <dt id="smartsheet.smartsheet.fresh_operation">
 <code class="descclassname">smartsheet.smartsheet.</code><code class="descname">fresh_operation</code><span class="sig-paren">(</span><em>op_id</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.smartsheet.fresh_operation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a default operation object.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="smartsheet.smartsheet.AbstractUserCalcBackoff">
+<em class="property">class </em><code class="descclassname">smartsheet.smartsheet.</code><code class="descname">AbstractUserCalcBackoff</code><a class="headerlink" href="#smartsheet.smartsheet.AbstractUserCalcBackoff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="smartsheet.smartsheet.AbstractUserCalcBackoff.calc_backoff">
+<code class="descname">calc_backoff</code><span class="sig-paren">(</span><em>previous_attempts</em>, <em>total_elapsed_time</em>, <em>error_result</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.smartsheet.AbstractUserCalcBackoff.calc_backoff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>
@@ -3938,6 +4014,27 @@ if not specified.</li>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">IndexResult</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.users.Users.promote_alternate_email">
+<code class="descname">promote_alternate_email</code><span class="sig-paren">(</span><em>user_id</em>, <em>alt_id</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.users.Users.promote_alternate_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add one or more alternate email addresses for the specified User</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user_id</strong> (<em>int</em>) &#8211; User ID</li>
+<li><strong>alt_id</strong> (<em>int</em>) &#8211; AlternateEmail ID to be promoted</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Result</p>
 </td>
 </tr>
 </tbody>
@@ -4582,7 +4679,7 @@ Workspace.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.1.0',
+            VERSION:'1.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
