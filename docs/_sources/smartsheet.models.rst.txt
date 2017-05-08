@@ -116,6 +116,14 @@ smartsheet.models.contact module
     :undoc-members:
     :show-inheritance:
 
+smartsheet.models.contact_option module
+---------------------------------------
+
+.. automodule:: smartsheet.models.contact_option
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 smartsheet.models.container_destination module
 ----------------------------------------------
 
@@ -356,6 +364,14 @@ smartsheet.models.predecessor module
     :undoc-members:
     :show-inheritance:
 
+smartsheet.models.project_settings module
+-----------------------------------------
+
+.. automodule:: smartsheet.models.project_settings
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 smartsheet.models.recipient module
 ----------------------------------
 
@@ -528,6 +544,14 @@ smartsheet.models.sight module
 ------------------------------
 
 .. automodule:: smartsheet.models.sight
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+smartsheet.models.sight_publish module
+--------------------------------------
+
+.. automodule:: smartsheet.models.sight_publish
     :members:
     :undoc-members:
     :show-inheritance:

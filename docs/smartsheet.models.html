@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet.models package &mdash; Smartsheet Python SDK 1.1.0 documentation</title>
+  <title>smartsheet.models package &mdash; Smartsheet Python SDK 1.2.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Smartsheet Python SDK 1.1.0 documentation" href="index.html"/>
+    <link rel="top" title="Smartsheet Python SDK 1.2.0 documentation" href="index.html"/>
         <link rel="up" title="smartsheet package" href="smartsheet.html"/>
         <link rel="prev" title="smartsheet package" href="smartsheet.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.1.0
+                1.2.0
               </div>
             
           
@@ -109,6 +109,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.column">smartsheet.models.column module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.comment">smartsheet.models.comment module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.contact">smartsheet.models.contact module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.contact_option">smartsheet.models.contact_option module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.container_destination">smartsheet.models.container_destination module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.copy_or_move_row_destination">smartsheet.models.copy_or_move_row_destination module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.copy_or_move_row_directive">smartsheet.models.copy_or_move_row_directive module</a></li>
@@ -139,6 +140,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.o_auth_error">smartsheet.models.o_auth_error module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.object_value">smartsheet.models.object_value module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.predecessor">smartsheet.models.predecessor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.project_settings">smartsheet.models.project_settings module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.recipient">smartsheet.models.recipient module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.report">smartsheet.models.report module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.report_cell">smartsheet.models.report_cell module</a></li>
@@ -161,6 +163,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sheet_user_settings">smartsheet.models.sheet_user_settings module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.shortcut_data_item">smartsheet.models.shortcut_data_item module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sight">smartsheet.models.sight module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sight_publish">smartsheet.models.sight_publish module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.source">smartsheet.models.source module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.template">smartsheet.models.template module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.update_request">smartsheet.models.update_request module</a></li>
@@ -859,6 +862,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.column.Column.contact_options">
+<code class="descname">contact_options</code><a class="headerlink" href="#smartsheet.models.column.Column.contact_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.column.Column.hidden">
 <code class="descname">hidden</code><a class="headerlink" href="#smartsheet.models.column.Column.hidden" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1011,6 +1019,36 @@
 <dl class="method">
 <dt id="smartsheet.models.contact.Contact.to_json">
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact.Contact.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-smartsheet.models.contact_option">
+<span id="smartsheet-models-contact-option-module"></span><h2>smartsheet.models.contact_option module<a class="headerlink" href="#module-smartsheet.models.contact_option" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.contact_option.ContactOption">
+<em class="property">class </em><code class="descclassname">smartsheet.models.contact_option.</code><code class="descname">ContactOption</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_option.ContactOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Smartsheet ContactOption data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.contact_option.ContactOption.email">
+<code class="descname">email</code><a class="headerlink" href="#smartsheet.models.contact_option.ContactOption.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.contact_option.ContactOption.name">
+<code class="descname">name</code><a class="headerlink" href="#smartsheet.models.contact_option.ContactOption.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.contact_option.ContactOption.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_option.ContactOption.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.contact_option.ContactOption.to_json">
+<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_option.ContactOption.to_json" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1226,6 +1264,11 @@
 <dl class="attribute">
 <dt id="smartsheet.models.discussion.Discussion.comment_attachments">
 <code class="descname">comment_attachments</code><a class="headerlink" href="#smartsheet.models.discussion.Discussion.comment_attachments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.discussion.Discussion.comment_count">
+<code class="descname">comment_count</code><a class="headerlink" href="#smartsheet.models.discussion.Discussion.comment_count" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2302,6 +2345,41 @@
 </dd></dl>
 
 </div>
+<div class="section" id="module-smartsheet.models.project_settings">
+<span id="smartsheet-models-project-settings-module"></span><h2>smartsheet.models.project_settings module<a class="headerlink" href="#module-smartsheet.models.project_settings" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.project_settings.ProjectSettings">
+<em class="property">class </em><code class="descclassname">smartsheet.models.project_settings.</code><code class="descname">ProjectSettings</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.project_settings.ProjectSettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Smartsheet ProjectSettings data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.project_settings.ProjectSettings.length_of_day">
+<code class="descname">length_of_day</code><a class="headerlink" href="#smartsheet.models.project_settings.ProjectSettings.length_of_day" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.project_settings.ProjectSettings.non_working_days">
+<code class="descname">non_working_days</code><a class="headerlink" href="#smartsheet.models.project_settings.ProjectSettings.non_working_days" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.project_settings.ProjectSettings.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.project_settings.ProjectSettings.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.project_settings.ProjectSettings.to_json">
+<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.project_settings.ProjectSettings.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.project_settings.ProjectSettings.working_days">
+<code class="descname">working_days</code><a class="headerlink" href="#smartsheet.models.project_settings.ProjectSettings.working_days" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-smartsheet.models.recipient">
 <span id="smartsheet-models-recipient-module"></span><h2>smartsheet.models.recipient module<a class="headerlink" href="#module-smartsheet.models.recipient" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -2926,6 +3004,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.row.Row.indent">
+<code class="descname">indent</code><a class="headerlink" href="#smartsheet.models.row.Row.indent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.row.Row.locked">
 <code class="descname">locked</code><a class="headerlink" href="#smartsheet.models.row.Row.locked" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -2943,6 +3026,11 @@
 <dl class="attribute">
 <dt id="smartsheet.models.row.Row.modified_by">
 <code class="descname">modified_by</code><a class="headerlink" href="#smartsheet.models.row.Row.modified_by" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.row.Row.outdent">
+<code class="descname">outdent</code><a class="headerlink" href="#smartsheet.models.row.Row.outdent" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3028,6 +3116,11 @@
 <dl class="attribute">
 <dt id="smartsheet.models.row_email.RowEmail.include_discussions">
 <code class="descname">include_discussions</code><a class="headerlink" href="#smartsheet.models.row_email.RowEmail.include_discussions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.row_email.RowEmail.layout">
+<code class="descname">layout</code><a class="headerlink" href="#smartsheet.models.row_email.RowEmail.layout" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -3576,6 +3669,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.sheet.Sheet.project_settings">
+<code class="descname">project_settings</code><a class="headerlink" href="#smartsheet.models.sheet.Sheet.project_settings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.sheet.Sheet.read_only">
 <code class="descname">read_only</code><a class="headerlink" href="#smartsheet.models.sheet.Sheet.read_only" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -3918,6 +4016,46 @@
 </dd></dl>
 
 </div>
+<div class="section" id="module-smartsheet.models.sight_publish">
+<span id="smartsheet-models-sight-publish-module"></span><h2>smartsheet.models.sight_publish module<a class="headerlink" href="#module-smartsheet.models.sight_publish" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.sight_publish.SightPublish">
+<em class="property">class </em><code class="descclassname">smartsheet.models.sight_publish.</code><code class="descname">SightPublish</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sight_publish.SightPublish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Smartsheet SightPublish data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.sight_publish.SightPublish.pre_request_filter">
+<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.sight_publish.SightPublish.pre_request_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.sight_publish.SightPublish.read_only_full_accessible_by">
+<code class="descname">read_only_full_accessible_by</code><a class="headerlink" href="#smartsheet.models.sight_publish.SightPublish.read_only_full_accessible_by" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.sight_publish.SightPublish.read_only_full_enabled">
+<code class="descname">read_only_full_enabled</code><a class="headerlink" href="#smartsheet.models.sight_publish.SightPublish.read_only_full_enabled" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.sight_publish.SightPublish.read_only_full_url">
+<code class="descname">read_only_full_url</code><a class="headerlink" href="#smartsheet.models.sight_publish.SightPublish.read_only_full_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.sight_publish.SightPublish.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sight_publish.SightPublish.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.sight_publish.SightPublish.to_json">
+<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sight_publish.SightPublish.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-smartsheet.models.source">
 <span id="smartsheet-models-source-module"></span><h2>smartsheet.models.source module<a class="headerlink" href="#module-smartsheet.models.source" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -4071,6 +4209,16 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.user.User.alternate_emails">
+<code class="descname">alternate_emails</code><a class="headerlink" href="#smartsheet.models.user.User.alternate_emails" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.user.User.custom_welcome_screen_viewed">
+<code class="descname">custom_welcome_screen_viewed</code><a class="headerlink" href="#smartsheet.models.user.User.custom_welcome_screen_viewed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.user.User.email">
 <code class="descname">email</code><a class="headerlink" href="#smartsheet.models.user.User.email" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -4083,6 +4231,11 @@
 <dl class="attribute">
 <dt id="smartsheet.models.user.User.group_admin">
 <code class="descname">group_admin</code><a class="headerlink" href="#smartsheet.models.user.User.group_admin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.user.User.last_login">
+<code class="descname">last_login</code><a class="headerlink" href="#smartsheet.models.user.User.last_login" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -4108,6 +4261,11 @@
 <dl class="attribute">
 <dt id="smartsheet.models.user.User.resource_viewer">
 <code class="descname">resource_viewer</code><a class="headerlink" href="#smartsheet.models.user.User.resource_viewer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.user.User.sheet_count">
+<code class="descname">sheet_count</code><a class="headerlink" href="#smartsheet.models.user.User.sheet_count" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -4629,7 +4787,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.1.0',
+            VERSION:'1.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
