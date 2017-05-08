@@ -108,7 +108,7 @@ class Smartsheet(object):
     models = models
 
     def __init__(self, access_token=None, max_connections=8,
-                 user_agent=None, max_retry_time = 15, proxies=None):
+                 user_agent=None, max_retry_time=15, proxies=None):
         """
         Set up base client object.
 
