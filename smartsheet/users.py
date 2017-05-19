@@ -96,7 +96,7 @@ class Users(object):
 
                 resourceViewer (optional)
 
-            send_email (bool): Either true or false to indicate whether or not to notify the user by email. Default
+                send_email (bool): Either true or false to indicate whether or not to notify the user by email. Default
                 is false.
 
         Returns:
