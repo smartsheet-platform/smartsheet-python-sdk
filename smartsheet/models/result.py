@@ -37,6 +37,7 @@ from .webhook_secret import WebhookSecret
 from .workspace import Workspace
 from .report_publish import ReportPublish
 from .sent_update_request import SentUpdateRequest
+from .sight_publish import SightPublish
 from ..types import TypedList
 from ..util import prep
 from datetime import datetime
@@ -193,6 +194,11 @@ class Result(object):
                 self._result = [ReportPublish(x, self._base) for x in value]
             else:
                 self._result = ReportPublish(value, self._base)
+        if self._dynamic_result_type == 'SightPublish':
+            if isinstance(value, list):
+                self._result = [SightPublish(x, self._base) for x in value]
+            else:
+                self._result = SightPublish(value, self._base)
 
     @property
     def result_code(self):
