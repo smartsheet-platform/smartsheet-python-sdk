@@ -219,7 +219,7 @@ class SentUpdateRequest(object):
 
     @include_discussions.setter
     def include_discussions(self, value):
-        if isinstance(self, value):
+        if isinstance(value, bool):
             self._include_discussions = value
 
     @property
