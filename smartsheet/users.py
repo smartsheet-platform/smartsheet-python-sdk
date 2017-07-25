@@ -58,7 +58,7 @@ class Users(object):
         return response
 
     def promote_alternate_email(self, user_id, alt_id):
-        """Add one or more alternate email addresses for the specified User
+        """Promote an email address to primary
 
         Args:
             user_id (int): User ID
