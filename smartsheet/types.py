@@ -33,13 +33,11 @@ class TypedList(collections.MutableSequence):
                 importlib.import_module(
                     __package__ + '.models.' + self.item_type.lower()
                 ), self.item_type)
-        self._log.debug('TypedList item type is %s', self.item_type)
 
     def __len__(self):
         return len(self.__store)
 
     def __getitem__(self, idx):
-        # self._log.debug('__getitem__, %s', idx)
         return self.__store[idx]
 
     def __setitem__(self, idx, value):
@@ -50,14 +48,12 @@ class TypedList(collections.MutableSequence):
         del self.__store[idx]
 
     def insert(self, idx, value):
-        self._log.debug('insert called with %s, %s', idx, value)
         self.__store.insert(idx, self.convert(value))
 
     def convert(self, item):
         """Convert the input item to the desired object type."""
         try:
             if isinstance(item, self.item_type):
-                self._log.debug('item is %s: %s', self.item_type, item)
                 return item
         except TypeError:
             raise

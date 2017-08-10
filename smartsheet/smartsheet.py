@@ -361,22 +361,18 @@ class Smartsheet(object):
         """
         try:
             # api class first
-            self._log.debug('try loading api class %s', name)
             class_ = getattr(importlib.import_module(
                 __package__ + '.' + name.lower()), name)
-            self._log.debug('loaded instance of api class %s', name)
             return class_(self)
         except ImportError:
             # model class next:
             try:
-                self._log.debug('try loading model class %s', name)
                 class_ = getattr(importlib.import_module(
                     name.lower()), name)
-                self._log.debug('loaded instance of model class %s', name)
                 return class_()
             except ImportError:
                 self._log.debug(
-                    'ImportError! Cound not load api or model class %s', name)
+                    'ImportError! Could not load api or model class %s', name)
                 return name
 
 
