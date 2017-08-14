@@ -22,7 +22,6 @@ from .hyperlink import Hyperlink
 from .image import Image
 from ..types import TypedList
 from ..util import prep
-from datetime import datetime
 import json
 import logging
 import six
@@ -248,8 +247,8 @@ class Cell(object):
             self.hyperlink.pre_request_filter = value
         if self.link_in_from_cell is not None:
             self.link_in_from_cell.pre_request_filter = value
-        if self.links_out_to_cells is not None:
-            self.links_out_to_cells.pre_request_filter = value
+        for item in self.links_out_to_cells:
+            item.pre_request_filter = value
         self._pre_request_filter = value
 
     def to_dict(self, op_id=None, method=None):
@@ -259,8 +258,8 @@ class Cell(object):
                 self.hyperlink.pre_request_filter = req_filter
             if self.link_in_from_cell is not None:
                 self.link_in_from_cell.pre_request_filter = req_filter
-            if self.links_out_to_cells is not None:
-                self.links_out_to_cells.pre_request_filter = req_filter
+            for item in self.links_out_to_cells:
+                item.pre_request_filter = req_filter
 
         obj = {
             'columnId': prep(self._column_id),
@@ -293,8 +292,12 @@ class Cell(object):
                 del obj['value']
 
         if self.pre_request_filter == 'update_rows':
-            permitted = ['columnId', 'value', 'formula', 'strict',
-                         'format', 'hyperlink', 'linkInFromCell']
+            if self._link_in_from_cell is not None:
+                obj['value'] = None;
+                permitted = ['columnId', 'value', 'linkInFromCell']
+            else:
+                permitted = ['columnId', 'value', 'formula', 'strict',
+                             'format', 'hyperlink']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
