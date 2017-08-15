@@ -255,7 +255,7 @@ class Smartsheet(object):
                 self._log.debug(res.headers)
             return OperationResult(res.text, res, self, operation)
         else:
-            self._log.info(dump.dump_response(res))
+            self._log.error(dump.dump_response(res))
             return OperationErrorResult(res.text, res)
 
     def request_with_retry(self, prepped_request, operation):
@@ -330,7 +330,7 @@ class Smartsheet(object):
             prepped_request = self._session.prepare_request(req)
         except TypeError as ex:
             # JSON not serializable for some reason
-            self._log.debug(ex)
+            self._log.error(ex)
 
         prepped_request.headers.update({'User-Agent': self._user_agent})
         if _op['auth_settings'] is not None:
@@ -371,7 +371,7 @@ class Smartsheet(object):
                     name.lower()), name)
                 return class_()
             except ImportError:
-                self._log.debug(
+                self._log.error(
                     'ImportError! Could not load api or model class %s', name)
                 return name
 
