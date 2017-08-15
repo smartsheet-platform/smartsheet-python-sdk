@@ -28,6 +28,17 @@ To install this SDK manually, download the source code from [GitHub](https://git
 
 `$ python setup.py install`
 
+## Logging
+There are two log levels currently supported by the Smartsheet Python SDK:
+
+**INFO** - will log information about the API resources being requested and API response bodies on failure.
+
+**DEBUG** - will log request and response bodies and information regarding object attributes that are changed by the SDK due to the nature of the API call being made.
+
+Use the logging facility's [basicConfig](https://docs.python.org/2/library/logging.html#logging.basicConfig) method to set your logging properties:
+ 
+ `logging.basicConfig(filename='mylog.log', level=logging.DEBUG)`
+
 ## Documentation
 The Smartsheet API is documented here: http://smartsheet-platform.github.io/api-docs/
 
