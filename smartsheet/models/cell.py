@@ -20,6 +20,7 @@ from __future__ import absolute_import
 from .cell_link import CellLink
 from .hyperlink import Hyperlink
 from .image import Image
+from .object_value import ObjectValue
 from ..types import TypedList
 from ..util import prep
 import json
@@ -217,7 +218,10 @@ class Cell(object):
 
     @object_value.setter
     def object_value(self, value):
-        self._object_value = value
+        if isinstance(value, ObjectValue):
+            self._object_value = value
+        elif isinstance(value, dict):
+            self._object_value = ObjectValue(value, self._base)
 
     @property
     def strict(self):
@@ -249,6 +253,8 @@ class Cell(object):
             self.link_in_from_cell.pre_request_filter = value
         for item in self.links_out_to_cells:
             item.pre_request_filter = value
+        if self.object_value is not None:
+            self.object_value.pre_request_filter = value
         self._pre_request_filter = value
 
     def to_dict(self, op_id=None, method=None):
@@ -260,6 +266,8 @@ class Cell(object):
                 self.link_in_from_cell.pre_request_filter = req_filter
             for item in self.links_out_to_cells:
                 item.pre_request_filter = req_filter
+            if self.object_value is not None:
+                self.object_value.pre_request_filter = req_filter
 
         obj = {
             'columnId': prep(self._column_id),
@@ -279,7 +287,7 @@ class Cell(object):
 
     def _apply_pre_request_filter(self, obj):
         if self.pre_request_filter == 'add_rows':
-            permitted = ['columnId', 'value', 'formula', 'strict',
+            permitted = ['columnId', 'value', 'objectValue', 'formula', 'strict',
                          'format', 'hyperlink']
             all_keys = list(obj.keys())
             for key in all_keys:
@@ -288,7 +296,7 @@ class Cell(object):
                         'deleting %s from obj (filter: %s)',
                         key, self.pre_request_filter)
                     del obj[key]
-            if self.formula is not None:
+            if self.formula is not None or self.object_value is not None:
                 del obj['value']
 
         if self.pre_request_filter == 'update_rows':
@@ -296,7 +304,7 @@ class Cell(object):
                 obj['value'] = None;
                 permitted = ['columnId', 'value', 'linkInFromCell']
             else:
-                permitted = ['columnId', 'value', 'formula', 'strict',
+                permitted = ['columnId', 'value', 'objectValue', 'formula', 'strict',
                              'format', 'hyperlink']
             all_keys = list(obj.keys())
             for key in all_keys:
@@ -305,7 +313,7 @@ class Cell(object):
                         'deleting %s from obj (filter: %s)',
                         key, self.pre_request_filter)
                     del obj[key]
-            if self.formula is not None:
+            if self.formula is not None or self.object_value is not None:
                 del obj['value']
 
         return obj

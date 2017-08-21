@@ -32,6 +32,8 @@ class Predecessor(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
+        self._pre_request_filter = None
+        self._log = logging.getLogger(__name__)
 
         self.allowed_values = {
             'type': [
@@ -40,7 +42,7 @@ class Predecessor(object):
                 'SS',
                 'SS']}
 
-        self._rows_id = None
+        self._row_id = None
         self._row_number = None
         self._type = None
         self._lag = None
@@ -71,7 +73,7 @@ class Predecessor(object):
 
     @property
     def row_id(self):
-        return self._rows_id
+        return self._row_id
 
     @row_id.setter
     def row_id(self, value):
@@ -94,7 +96,7 @@ class Predecessor(object):
     @type.setter
     def type(self, value):
         if isinstance(value, six.string_types):
-            self._type = type
+            self._type = value
 
     @property
     def lag(self):
@@ -122,15 +124,45 @@ class Predecessor(object):
     def in_critical_path(self, value):
         if isinstance(value, bool):
             self._in_critical_path = value
+    @property
+    def pre_request_filter(self):
+        return self._pre_request_filter
+
+    @pre_request_filter.setter
+    def pre_request_filter(self, value):
+        self._pre_request_filter = value
 
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'rowId': prep(self._rows_id),
+            'rowId': prep(self._row_id),
             'rowNumber': prep(self._row_number),
             'type': prep(self._type),
             'lag': prep(self._lag),
             'invalid': prep(self._invalid),
             'inCriticalPath': prep(self._in_critical_path)}
+        return self._apply_pre_request_filter(obj)
+
+    def _apply_pre_request_filter(self, obj):
+        if self.pre_request_filter == 'add_rows':
+            permitted = ['rowId', 'type', 'lag']
+            all_keys = list(obj.keys())
+            for key in all_keys:
+                if key not in permitted:
+                    self._log.debug(
+                        'deleting %s from obj (filter: %s)',
+                        key, self.pre_request_filter)
+                    del obj[key]
+
+        if self.pre_request_filter == 'update_rows':
+            permitted = ['rowId', 'type', 'lag']
+            all_keys = list(obj.keys())
+            for key in all_keys:
+                if key not in permitted:
+                    self._log.debug(
+                        'deleting %s from obj (filter: %s)',
+                        key, self.pre_request_filter)
+                    del obj[key]
+
         return obj
 
     def to_json(self):

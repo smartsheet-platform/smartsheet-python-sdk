@@ -18,10 +18,11 @@
 from __future__ import absolute_import
 
 from ..util import prep
-import logging
+from ..types import TypedList
+from .predecessor import Predecessor
 import six
 import json
-
+import logging
 
 class ObjectValue(object):
     """Smartsheet ObjectValue data model."""
@@ -32,6 +33,7 @@ class ObjectValue(object):
         if base_obj is not None:
             self._base = base_obj
         self._pre_request_filter = None
+        self._log = logging.getLogger(__name__)
 
         self.allowed_values = {
             'object_type': [
@@ -43,6 +45,8 @@ class ObjectValue(object):
                 'PREDECESSOR_LIST']}
 
         self._object_type = None
+        self._predecessors = TypedList(Predecessor)
+        self._value = None
 
         if props:
             # account for alternate variable names from raw API response
@@ -50,6 +54,10 @@ class ObjectValue(object):
                 self.object_type = props['objectType']
             if 'object_type' in props:
                 self.object_type = props['object_type']
+            if 'predecessors' in props:
+                self.predecessors = props['predecessors']
+            if 'value' in props:
+                self.value = props['value']
         self.__initialized = True
 
     @property
@@ -66,9 +74,76 @@ class ObjectValue(object):
                          value, self.allowed_values['object_type']))
             self._object_type = value
 
+    @property
+    def predecessors(self):
+        return self._predecessors
+
+    @predecessors.setter
+    def predecessors(self, value):
+        if isinstance(value, list):
+            self._predecessors.purge()
+            self._predecessors.extend([
+                 (Predecessor(x, self._base)
+                  if not isinstance(x, Predecessor) else x) for x in value
+             ])
+        elif isinstance(value, TypedList):
+            self._predecessors.purge()
+            self._predecessors = value.to_list()
+        elif isinstance(value, Predecessor):
+            self._predecessors.purge()
+            self._predecessors.append(value)
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        if isinstance(value, (six.string_types, six.integer_types, float, bool)):
+            self._value = value
+
+    @property
+    def pre_request_filter(self):
+        return self._pre_request_filter
+
+    @pre_request_filter.setter
+    def pre_request_filter(self, value):
+        for item in self.predecessors:
+            item.pre_request_filter = value
+        self._pre_request_filter = value
+
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'objectType': prep(self._object_type)}
+            'objectType': prep(self._object_type),
+            'predecessors': prep(self._predecessors),
+            'value': prep(self._value)}
+        return self._apply_pre_request_filter(obj)
+
+    def _apply_pre_request_filter(self, obj):
+        if self.pre_request_filter == 'add_rows':
+            permitted = ['objectType', 'predecessors', 'value']
+            all_keys = list(obj.keys())
+            for key in all_keys:
+                if key not in permitted:
+                    self._log.debug(
+                        'deleting %s from obj (filter: %s)',
+                        key, self.pre_request_filter)
+                    del obj[key]
+            if self.predecessors is not None:
+                del obj['value']
+
+        if self.pre_request_filter == 'update_rows':
+            permitted = ['objectType', 'predecessors', 'value']
+            all_keys = list(obj.keys())
+            for key in all_keys:
+                if key not in permitted:
+                    self._log.debug(
+                        'deleting %s from obj (filter: %s)',
+                        key, self.pre_request_filter)
+                    del obj[key]
+            if self.predecessors is not None:
+                del obj['value']
+
         return obj
 
     def to_json(self):
