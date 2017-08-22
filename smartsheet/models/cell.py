@@ -20,7 +20,14 @@ from __future__ import absolute_import
 from .cell_link import CellLink
 from .hyperlink import Hyperlink
 from .image import Image
-from .object_value import ObjectValue
+from .object_value import *
+from .duration import Duration
+from .predecessor_list import PredecessorList
+from .contact_object_value import ContactObjectValue
+from .date_object_value import DateObjectValue
+from .string_object_value import StringObjectValue
+from .number_object_value import NumberObjectValue
+from .boolean_object_value import BooleanObjectValue
 from ..types import TypedList
 from ..util import prep
 import json
@@ -221,7 +228,30 @@ class Cell(object):
         if isinstance(value, ObjectValue):
             self._object_value = value
         elif isinstance(value, dict):
-            self._object_value = ObjectValue(value, self._base)
+            object_type = value['objectType']
+            if object_type in OBJECT_VALUE['object_type']:
+                enum_object_type = enum_object_value_type(object_type)
+                if enum_object_type == DURATION:
+                    self._object_value = Duration(value, self._base)
+                elif enum_object_type == PREDECESSOR_LIST:
+                    self._object_value = PredecessorList(value, self._base)
+                elif enum_object_type == CONTACT:
+                    self._object_value = ContactObjectValue(value, self._base)
+                elif enum_object_type == DATE or enum_object_type == DATETIME or enum_object_type == ABSTRACT_DATETIME:
+                    self._object_value = DateObjectValue(value, enum_object_value_type, self._base)
+                else:
+                    self._object_value = None
+            else:
+                raise ValueError(
+                    ("`{0}` is an invalid value for ObjectValue`object_type`,"
+                     " must be one of {1}").format(
+                        object_type, OBJECT_VALUE['object_type']))
+        elif isinstance(value, six.string_types):
+            self._object_value = StringObjectValue(value)
+        elif isinstance(value, (six.integer_types, float)):
+            self._object_value = NumberObjectValue(value)
+        elif isinstance(value, bool):
+            self._object_value = BooleanObjectValue(value)
 
     @property
     def strict(self):

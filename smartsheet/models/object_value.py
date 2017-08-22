@@ -17,12 +17,50 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-from ..types import TypedList
-from .predecessor import Predecessor
-import six
 import json
-import logging
+import six
+
+DATE = 1
+DATETIME = 2
+ABSTRACT_DATETIME = 3
+CONTACT = 4
+DURATION = 5
+PREDECESSOR_LIST = 6
+NUMBER = 7
+BOOLEAN = 8
+STRING = 9
+
+OBJECT_VALUE = {
+    'object_type': [
+        'DATE',
+        'DATETIME',
+        'ABSTRACT_DATETIME',
+        'CONTACT',
+        'DURATION',
+        'PREDECESSOR_LIST']}
+
+_typeToName = {
+    DATE: 'DATE',
+    DATETIME: 'DATETIME',
+    ABSTRACT_DATETIME: 'ABSTRACT_DATETIME',
+    CONTACT: 'CONTACT',
+    DURATION: 'DURATION',
+    PREDECESSOR_LIST: 'PREDECESSOR_LIST',
+}
+
+_nameToType = {
+    'DATE': DATE,
+    'DATETIME': DATETIME,
+    'ABSTRACT_DATETIME': ABSTRACT_DATETIME,
+    'CONTACT': CONTACT,
+    'DURATION': DURATION,
+    'PREDECESSOR_LIST': PREDECESSOR_LIST,
+}
+
+
+def enum_object_value_type(object_type=None):
+    return _nameToType.get(object_type)
+
 
 class ObjectValue(object):
     """Smartsheet ObjectValue data model."""
@@ -32,32 +70,15 @@ class ObjectValue(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
-
-        self.allowed_values = {
-            'object_type': [
-                'DATE',
-                'DATETIME',
-                'ABSTRACT_DATETIME',
-                'CONTACT',
-                'DURATION',
-                'PREDECESSOR_LIST']}
 
         self._object_type = None
-        self._predecessors = TypedList(Predecessor)
-        self._value = None
 
         if props:
             # account for alternate variable names from raw API response
-            if 'objectType' in props:
-                self.object_type = props['objectType']
             if 'object_type' in props:
                 self.object_type = props['object_type']
-            if 'predecessors' in props:
-                self.predecessors = props['predecessors']
-            if 'value' in props:
-                self.value = props['value']
+            if 'objectType' in props:
+                self.object_type = props['objectType']
         self.__initialized = True
 
     @property
@@ -67,83 +88,13 @@ class ObjectValue(object):
     @object_type.setter
     def object_type(self, value):
         if isinstance(value, six.string_types):
-            if value not in self.allowed_values['object_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for ObjectValue`object_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['object_type']))
+            self._object_type = _nameToType.get(value)
+        else:
             self._object_type = value
-
-    @property
-    def predecessors(self):
-        return self._predecessors
-
-    @predecessors.setter
-    def predecessors(self, value):
-        if isinstance(value, list):
-            self._predecessors.purge()
-            self._predecessors.extend([
-                 (Predecessor(x, self._base)
-                  if not isinstance(x, Predecessor) else x) for x in value
-             ])
-        elif isinstance(value, TypedList):
-            self._predecessors.purge()
-            self._predecessors = value.to_list()
-        elif isinstance(value, Predecessor):
-            self._predecessors.purge()
-            self._predecessors.append(value)
-
-    @property
-    def value(self):
-        return self._value
-
-    @value.setter
-    def value(self, value):
-        if isinstance(value, (six.string_types, six.integer_types, float, bool)):
-            self._value = value
-
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        for item in self.predecessors:
-            item.pre_request_filter = value
-        self._pre_request_filter = value
 
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'objectType': prep(self._object_type),
-            'predecessors': prep(self._predecessors),
-            'value': prep(self._value)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'add_rows':
-            permitted = ['objectType', 'predecessors', 'value']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-            if self.predecessors is not None:
-                del obj['value']
-
-        if self.pre_request_filter == 'update_rows':
-            permitted = ['objectType', 'predecessors', 'value']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-            if self.predecessors is not None:
-                del obj['value']
-
+            'objectType': _typeToName.get(self._object_type)}
         return obj
 
     def to_json(self):
