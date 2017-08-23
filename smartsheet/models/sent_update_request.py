@@ -40,7 +40,8 @@ class SentUpdateRequest(object):
         self.allowed_values = {
             'update_request_status': [
                 'PENDING',
-                'COMPLETE']}
+                'COMPLETE',
+                'CANCELED']}
 
         self.__id = None
         self._update_request_id = None

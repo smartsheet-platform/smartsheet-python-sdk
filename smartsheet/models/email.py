@@ -108,6 +108,8 @@ class Email(object):
             'message': prep(self._message),
             'sendTo': prep(self._send_to),
             'subject': prep(self._subject)}
+        if not self._send_to:
+            del obj['sendTo']
         return obj
 
     def to_json(self):
