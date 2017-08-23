@@ -19,10 +19,10 @@ from __future__ import absolute_import
 
 from .report import Report
 from .sheet import Sheet
+from .sight import Sight
 from .template import Template
 from ..types import TypedList
 from ..util import prep
-from .sight import Sight
 import json
 import logging
 import six
