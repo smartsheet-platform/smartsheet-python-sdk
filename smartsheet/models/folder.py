@@ -22,7 +22,7 @@ from .sheet import Sheet
 from .template import Template
 from ..types import TypedList
 from ..util import prep
-from datetime import datetime
+from .sight import Sight
 import json
 import logging
 import six
@@ -46,6 +46,7 @@ class Folder(object):
         self._permalink = None
         self._reports = TypedList(Report)
         self._sheets = TypedList(Sheet)
+        self._sights = TypedList(Sight)
         self._templates = TypedList(Template)
 
         if props:
@@ -66,6 +67,8 @@ class Folder(object):
                 self.reports = props['reports']
             if 'sheets' in props:
                 self.sheets = props['sheets']
+            if 'sights' in props:
+                self.sights = props['sights']
             if 'templates' in props:
                 self.templates = props['templates']
         # requests package Response object
@@ -172,6 +175,25 @@ class Folder(object):
             self._sheets.append(value)
 
     @property
+    def sights(self):
+        return self._sights
+
+    @sights.setter
+    def sights(self, value):
+        if isinstance(value, list):
+            self._sights.purge()
+            self._sights.extend([
+                (Sight(x, self._base)
+                 if not isinstance(x, Sight) else x) for x in value
+            ])
+        elif isinstance(value, TypedList):
+            self._sights.purge()
+            self._sights = value.to_list()
+        elif isinstance(value, Sight):
+            self._sights.purge()
+            self._sights.append(value)
+
+    @property
     def templates(self):
         return self._templates
 
@@ -241,6 +263,7 @@ class Folder(object):
             'permalink': prep(self._permalink),
             'reports': prep(self._reports),
             'sheets': prep(self._sheets),
+            'sights': prep(self._sights),
             'templates': prep(self._templates)}
         return self._apply_pre_request_filter(obj)
 
