@@ -319,6 +319,16 @@ class Cell(object):
         if self.pre_request_filter == 'add_rows':
             permitted = ['columnId', 'value', 'objectValue', 'formula', 'strict',
                          'format', 'hyperlink']
+            # make formula, objectValue and value mutually exclusive
+            if self.formula is not None:
+                del obj['value']
+                del obj['objectValue']
+            elif self.object_value is not None:
+                del obj['formula']
+                del obj['value']
+            else:
+                del obj['formula']
+                del obj['objectValue']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
@@ -326,16 +336,24 @@ class Cell(object):
                         'deleting %s from obj (filter: %s)',
                         key, self.pre_request_filter)
                     del obj[key]
-            if self.formula is not None or self.object_value is not None:
-                del obj['value']
 
         if self.pre_request_filter == 'update_rows':
             if self._link_in_from_cell is not None:
-                obj['value'] = None;
+                obj['value'] = None
                 permitted = ['columnId', 'value', 'linkInFromCell']
             else:
                 permitted = ['columnId', 'value', 'objectValue', 'formula', 'strict',
                              'format', 'hyperlink']
+                # make formula, objectValue and value mutually exclusive
+                if self.formula is not None:
+                    del obj['value']
+                    del obj['objectValue']
+                elif self.object_value is not None:
+                    del obj['formula']
+                    del obj['value']
+                else:
+                    del obj['formula']
+                    del obj['objectValue']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
@@ -343,8 +361,6 @@ class Cell(object):
                         'deleting %s from obj (filter: %s)',
                         key, self.pre_request_filter)
                     del obj[key]
-            if self.formula is not None or self.object_value is not None:
-                del obj['value']
 
         return obj
 

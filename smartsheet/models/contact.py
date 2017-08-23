@@ -17,11 +17,9 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
 from ..util import prep
-from datetime import datetime
+from .object_value import ObjectValue
 import json
-import logging
 import six
 
 class Contact(object):
@@ -30,7 +28,8 @@ class Contact(object):
 
     def __init__(self, props=None, base_obj=None):
         """Initialize the Contact model."""
-        super(Contact, self).__init__(props, base_obj)
+        if isinstance(super(Contact, self), ObjectValue):
+            super(Contact, self).__init__(props, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj
@@ -87,7 +86,9 @@ class Contact(object):
             self._name = value
 
     def to_dict(self, op_id=None, method=None):
-        parent_obj = super(Contact, self).to_dict(op_id, method)
+        parent_obj = {}
+        if isinstance(super(Contact, self), ObjectValue):
+            parent_obj = super(Contact, self).to_dict(op_id, method)
         obj = {
             'email': prep(self._email),
             'id': prep(self.__id),
