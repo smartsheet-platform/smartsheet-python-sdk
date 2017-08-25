@@ -49,7 +49,7 @@ The Python SDK documentation can be viewed here: [http://smartsheet-platform.git
 ## Getting Started
 Getting started with the Python SDK is easy:
 
-1.  Set **SMARTSHEET_ACCESS_TOKEN** in your environment. Find out more about getting [direct API access](https://smartsheet-platform.github.io/api-docs/index.html#direct-api-access) in the Smartsheet API Documentation.
+1.  Set **SMARTSHEET_ACCESS_TOKEN** in your environment. Find out more about [Authentication and Access Tokens](https://smartsheet-platform.github.io/api-docs/index.html#authentication-and-access-tokens) in the Smartsheet API Documentation.
 
 2.  Install the Smartsheet Python SDK from the [Python Package Index](http://pypi.python.org/pypi/smartsheet-python-sdk), or by using "pip install smartsheet-python-sdk".
 
