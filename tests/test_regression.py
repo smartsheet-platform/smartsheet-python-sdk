@@ -1,6 +1,7 @@
 import pytest
 import six
 
+
 @pytest.mark.usefixtures("smart_setup")
 class TestRegression:
 
@@ -110,13 +111,11 @@ class TestRegression:
         sheet = smart_setup['sheet']
         row = smart.models.Row()
         row.to_bottom = True
-        for col in sheet.columns:
-            if col.primary:
-                row.cells.append({
-                    'column_id': col.id,
-                    'value': 'abc123'
-                })
-                break
+        col_id = sheet.columns[0].id
+        row.cells.append({
+            'column_id': col_id,
+            'value': 'abc123'
+        })
 
         action = smart.Sheets.add_rows(sheet.id, [row])
         added_row = action.result[0]
@@ -131,7 +130,7 @@ class TestRegression:
         cell_link.column_id = sheet_b.columns[0].id
 
         cell = smart.models.Cell()
-        cell.column_id = col.id
+        cell.column_id = col_id
         cell.link_in_from_cell = cell_link
 
         row = smart.models.Row()
@@ -148,51 +147,85 @@ class TestRegression:
         smart = smart_setup['smart']
 
         sheet = smart_setup['sheet']
+        col_id = sheet.columns[0].id
+
         row_1 = smart.models.Row()
         row_1.to_bottom = True
-        for col in sheet.columns:
-            if col.primary:
-                row_1.cells.append({
-                    'column_id': col.id,
-                    'strict': True,
-                    'value': 0
-                })
-                break
+        row_1.cells.append({
+            'column_id': col_id,
+            'strict': True,
+            'value': 0
+        })
 
         row_2 = smart.models.Row()
         row_2.to_bottom = True
-        for col in sheet.columns:
-            if col.primary:
-                row_2.cells.append({
-                    'column_id': col.id,
-                    'strict': True,
-                    'value': '0'
-                })
-                break
+        row_2.cells.append({
+            'column_id': col_id,
+            'strict': True,
+            'value': '0'
+        })
 
         row_3 = smart.models.Row()
         row_3.to_bottom = True
-        for col in sheet.columns:
-            if col.primary:
-                row_3.cells.append({
-                    'column_id': col.id,
-                    'strict': False,
-                    'value': 0
-                })
-                break
+        row_3.cells.append({
+            'column_id': col_id,
+            'strict': False,
+            'value': 0
+        })
 
         row_4 = smart.models.Row()
         row_4.to_bottom = True
-        for col in sheet.columns:
-            if col.primary:
-                row_4.cells.append({
-                    'column_id': col.id,
-                    'strict': False,
-                    'value': '0'
-                })
-                break
+        row_4.cells.append({
+            'column_id': col_id,
+            'strict': False,
+            'value': '0'
+        })
 
         action = smart.Sheets.add_rows(sheet.id, [row_1, row_2, row_3, row_4])
+
+        # strict, num - expecting numeric
+        assert isinstance(action.result[0].cells[0].value, (six.integer_types, float))
+        # strict, str - expecting str
+        assert isinstance(action.result[1].cells[0].value, six.string_types)
+        # not strict, num - expecting numeric
+        assert isinstance(action.result[2].cells[0].value, (six.integer_types, float))
+        # not strict, str - expecting numeric
+        assert isinstance(action.result[3].cells[0].value, (six.integer_types, float))
+
+        row_1 = smart.models.Row()
+        row_1.id = action.result[0].id
+        row_1.cells.append({
+            'column_id': col_id,
+            'strict': True,
+            'value': 1
+        })
+
+        row_2 = smart.models.Row()
+        row_2.id = action.result[1].id
+        row_2.cells.append({
+            'column_id': col_id,
+            'strict': True,
+            'value': '1'
+        })
+
+        row_3 = smart.models.Row()
+        row_3.id = action.result[2].id
+        row_3.cells.append({
+            'column_id': col_id,
+            'strict': False,
+            'value': 1
+        })
+
+        row_4 = smart.models.Row()
+        row_4.id = action.result[3].id
+        row_4.cells.append({
+            'column_id': col_id,
+            'strict': False,
+            'value': '1'
+        })
+
+        action = smart.Sheets.update_rows(sheet.id, [row_1, row_2, row_3, row_4])
+        assert action.request_response.status_code == 200
 
         # strict, num - expecting numeric
         assert isinstance(action.result[0].cells[0].value, (six.integer_types, float))
