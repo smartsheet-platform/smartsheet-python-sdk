@@ -13,7 +13,7 @@ class TestRegression:
                 break
 
         sheet = smart.models.Sheet({
-            'name': 'example_projectsheet_python_sdk' + smart_setup['now'],
+            'name': 'example_project_python_sdk' + smart_setup['now'],
             'fromId': template.id
         })
         action = smart.Home.create_sheet_from_template(sheet)
