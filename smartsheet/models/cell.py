@@ -20,9 +20,16 @@ from __future__ import absolute_import
 from .cell_link import CellLink
 from .hyperlink import Hyperlink
 from .image import Image
+from .object_value import *
+from .duration import Duration
+from .predecessor_list import PredecessorList
+from .contact_object_value import ContactObjectValue
+from .date_object_value import DateObjectValue
+from .string_object_value import StringObjectValue
+from .number_object_value import NumberObjectValue
+from .boolean_object_value import BooleanObjectValue
 from ..types import TypedList
 from ..util import prep
-from datetime import datetime
 import json
 import logging
 import six
@@ -218,7 +225,33 @@ class Cell(object):
 
     @object_value.setter
     def object_value(self, value):
-        self._object_value = value
+        if isinstance(value, ObjectValue):
+            self._object_value = value
+        elif isinstance(value, dict):
+            object_type = value['objectType']
+            if object_type in OBJECT_VALUE['object_type']:
+                enum_object_type = enum_object_value_type(object_type)
+                if enum_object_type == DURATION:
+                    self._object_value = Duration(value, self._base)
+                elif enum_object_type == PREDECESSOR_LIST:
+                    self._object_value = PredecessorList(value, self._base)
+                elif enum_object_type == CONTACT:
+                    self._object_value = ContactObjectValue(value, self._base)
+                elif enum_object_type == DATE or enum_object_type == DATETIME or enum_object_type == ABSTRACT_DATETIME:
+                    self._object_value = DateObjectValue(value, enum_object_value_type, self._base)
+                else:
+                    self._object_value = None
+            else:
+                raise ValueError(
+                    ("`{0}` is an invalid value for ObjectValue`object_type`,"
+                     " must be one of {1}").format(
+                        object_type, OBJECT_VALUE['object_type']))
+        elif isinstance(value, six.string_types):
+            self._object_value = StringObjectValue(value)
+        elif isinstance(value, (six.integer_types, float)):
+            self._object_value = NumberObjectValue(value)
+        elif isinstance(value, bool):
+            self._object_value = BooleanObjectValue(value)
 
     @property
     def strict(self):
@@ -248,8 +281,10 @@ class Cell(object):
             self.hyperlink.pre_request_filter = value
         if self.link_in_from_cell is not None:
             self.link_in_from_cell.pre_request_filter = value
-        if self.links_out_to_cells is not None:
-            self.links_out_to_cells.pre_request_filter = value
+        for item in self.links_out_to_cells:
+            item.pre_request_filter = value
+        if self.object_value is not None:
+            self.object_value.pre_request_filter = value
         self._pre_request_filter = value
 
     def to_dict(self, op_id=None, method=None):
@@ -259,8 +294,10 @@ class Cell(object):
                 self.hyperlink.pre_request_filter = req_filter
             if self.link_in_from_cell is not None:
                 self.link_in_from_cell.pre_request_filter = req_filter
-            if self.links_out_to_cells is not None:
-                self.links_out_to_cells.pre_request_filter = req_filter
+            for item in self.links_out_to_cells:
+                item.pre_request_filter = req_filter
+            if self.object_value is not None:
+                self.object_value.pre_request_filter = req_filter
 
         obj = {
             'columnId': prep(self._column_id),
@@ -280,8 +317,18 @@ class Cell(object):
 
     def _apply_pre_request_filter(self, obj):
         if self.pre_request_filter == 'add_rows':
-            permitted = ['columnId', 'value', 'formula', 'strict',
+            permitted = ['columnId', 'value', 'objectValue', 'formula', 'strict',
                          'format', 'hyperlink']
+            # make formula, objectValue and value mutually exclusive
+            if self.formula is not None:
+                del obj['value']
+                del obj['objectValue']
+            elif self.object_value is not None:
+                del obj['formula']
+                del obj['value']
+            else:
+                del obj['formula']
+                del obj['objectValue']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
@@ -289,12 +336,24 @@ class Cell(object):
                         'deleting %s from obj (filter: %s)',
                         key, self.pre_request_filter)
                     del obj[key]
-            if self.formula is not None:
-                del obj['value']
 
         if self.pre_request_filter == 'update_rows':
-            permitted = ['columnId', 'value', 'formula', 'strict',
-                         'format', 'hyperlink', 'linkInFromCell']
+            if self._link_in_from_cell is not None:
+                obj['value'] = None
+                permitted = ['columnId', 'value', 'linkInFromCell']
+            else:
+                permitted = ['columnId', 'value', 'objectValue', 'formula', 'strict',
+                             'format', 'hyperlink']
+                # make formula, objectValue and value mutually exclusive
+                if self.formula is not None:
+                    del obj['value']
+                    del obj['objectValue']
+                elif self.object_value is not None:
+                    del obj['formula']
+                    del obj['value']
+                else:
+                    del obj['formula']
+                    del obj['objectValue']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
@@ -302,8 +361,6 @@ class Cell(object):
                         'deleting %s from obj (filter: %s)',
                         key, self.pre_request_filter)
                     del obj[key]
-            if self.formula is not None:
-                del obj['value']
 
         return obj
 

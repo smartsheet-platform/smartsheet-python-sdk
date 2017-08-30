@@ -58,7 +58,7 @@ class Users(object):
         return response
 
     def promote_alternate_email(self, user_id, alt_id):
-        """Add one or more alternate email addresses for the specified User
+        """Promote an email address to primary
 
         Args:
             user_id (int): User ID
@@ -247,7 +247,7 @@ class Users(object):
         return response
 
     def list_users(self, email=None, page_size=100, page=1,
-                   include_all=False):
+                   include_all=False, include=None):
         """Get the list of Users in the organization.
 
         Args:
@@ -259,6 +259,8 @@ class Users(object):
                 if not specified.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
+            include(list[str]): optional include parameter, only current
+                accepted value is 'lastLogin'
 
         Returns:
             IndexResult
@@ -267,6 +269,7 @@ class Users(object):
         _op['method'] = 'GET'
         _op['path'] = '/users'
         _op['query_params']['email'] = email
+        _op['query_params']['include'] = include
         _op['query_params']['pageSize'] = page_size
         _op['query_params']['page'] = page
         _op['query_params']['includeAll'] = include_all

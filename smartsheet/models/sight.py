@@ -19,7 +19,6 @@ from __future__ import absolute_import
 
 from ..types import TypedList
 from ..util import prep
-from .workspace import Workspace
 from .widget import Widget
 from datetime import datetime
 from dateutil.parser import parse
@@ -209,8 +208,11 @@ class Sight(object):
 
     @workspace.setter
     def workspace(self, value):
+        from .workspace import Workspace
         if isinstance(value, Workspace):
             self._workspace = value
+        elif isinstance(value, dict):
+            self._workspace = Workspace(value, self._base)
 
     @property
     def pre_request_filter(self):

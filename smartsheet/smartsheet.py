@@ -108,7 +108,7 @@ class Smartsheet(object):
     models = models
 
     def __init__(self, access_token=None, max_connections=8,
-                 user_agent=None, max_retry_time = 15, proxies=None):
+                 user_agent=None, max_retry_time=15, proxies=None):
         """
         Set up base client object.
 
@@ -255,7 +255,7 @@ class Smartsheet(object):
                 self._log.debug(res.headers)
             return OperationResult(res.text, res, self, operation)
         else:
-            self._log.info(dump.dump_response(res))
+            self._log.error(dump.dump_response(res))
             return OperationErrorResult(res.text, res)
 
     def request_with_retry(self, prepped_request, operation):
@@ -330,7 +330,7 @@ class Smartsheet(object):
             prepped_request = self._session.prepare_request(req)
         except TypeError as ex:
             # JSON not serializable for some reason
-            self._log.debug(ex)
+            self._log.error(ex)
 
         prepped_request.headers.update({'User-Agent': self._user_agent})
         if _op['auth_settings'] is not None:
@@ -361,22 +361,18 @@ class Smartsheet(object):
         """
         try:
             # api class first
-            self._log.debug('try loading api class %s', name)
             class_ = getattr(importlib.import_module(
                 __package__ + '.' + name.lower()), name)
-            self._log.debug('loaded instance of api class %s', name)
             return class_(self)
         except ImportError:
             # model class next:
             try:
-                self._log.debug('try loading model class %s', name)
                 class_ = getattr(importlib.import_module(
                     name.lower()), name)
-                self._log.debug('loaded instance of model class %s', name)
                 return class_()
             except ImportError:
-                self._log.debug(
-                    'ImportError! Cound not load api or model class %s', name)
+                self._log.error(
+                    'ImportError! Could not load api or model class %s', name)
                 return name
 
 
@@ -524,6 +520,7 @@ class OperationErrorResult(object):
                 'status_code': self.resp.status_code,
                 'code': error_code,
                 'message': error_payload['message'],
+                'ref_id': error_payload['refId'],
                 'recommendation': recommendation,
                 'should_retry': should_retry
             }),

@@ -72,9 +72,6 @@ class MultiRowEmail(RowEmail):
 
     @pre_request_filter.setter
     def pre_request_filter(self, value):
-        # Schedule
-        if self.schedule is not None:
-            self.schedule.pre_request_filter = value
         self._pre_request_filter = value
 
     def to_dict(self, op_id=None, method=None):

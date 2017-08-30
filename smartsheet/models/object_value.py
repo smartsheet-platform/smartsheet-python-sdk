@@ -17,10 +17,49 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import logging
-import six
 import json
+import six
+
+DATE = 1
+DATETIME = 2
+ABSTRACT_DATETIME = 3
+CONTACT = 4
+DURATION = 5
+PREDECESSOR_LIST = 6
+NUMBER = 7
+BOOLEAN = 8
+STRING = 9
+
+OBJECT_VALUE = {
+    'object_type': [
+        'DATE',
+        'DATETIME',
+        'ABSTRACT_DATETIME',
+        'CONTACT',
+        'DURATION',
+        'PREDECESSOR_LIST']}
+
+_typeToName = {
+    DATE: 'DATE',
+    DATETIME: 'DATETIME',
+    ABSTRACT_DATETIME: 'ABSTRACT_DATETIME',
+    CONTACT: 'CONTACT',
+    DURATION: 'DURATION',
+    PREDECESSOR_LIST: 'PREDECESSOR_LIST',
+}
+
+_nameToType = {
+    'DATE': DATE,
+    'DATETIME': DATETIME,
+    'ABSTRACT_DATETIME': ABSTRACT_DATETIME,
+    'CONTACT': CONTACT,
+    'DURATION': DURATION,
+    'PREDECESSOR_LIST': PREDECESSOR_LIST,
+}
+
+
+def enum_object_value_type(object_type=None):
+    return _nameToType.get(object_type)
 
 
 class ObjectValue(object):
@@ -31,25 +70,15 @@ class ObjectValue(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-
-        self.allowed_values = {
-            'object_type': [
-                'DATE',
-                'DATETIME',
-                'ABSTRACT_DATETIME',
-                'CONTACT',
-                'DURATION',
-                'PREDECESSOR_LIST']}
 
         self._object_type = None
 
         if props:
             # account for alternate variable names from raw API response
-            if 'objectType' in props:
-                self.object_type = props['objectType']
             if 'object_type' in props:
                 self.object_type = props['object_type']
+            if 'objectType' in props:
+                self.object_type = props['objectType']
         self.__initialized = True
 
     @property
@@ -59,16 +88,13 @@ class ObjectValue(object):
     @object_type.setter
     def object_type(self, value):
         if isinstance(value, six.string_types):
-            if value not in self.allowed_values['object_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for ObjectValue`object_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['object_type']))
+            self._object_type = _nameToType.get(value)
+        else:
             self._object_type = value
 
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'objectType': prep(self._object_type)}
+            'objectType': _typeToName.get(self._object_type)}
         return obj
 
     def to_json(self):

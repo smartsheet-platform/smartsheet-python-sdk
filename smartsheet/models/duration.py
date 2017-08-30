@@ -18,22 +18,22 @@
 from __future__ import absolute_import
 
 from ..util import prep
-import logging
+from .object_value import *
 import six
 import json
 
 
-class Duration(object):
+class Duration(ObjectValue):
 
     """Smartsheet Duration data model."""
 
     def __init__(self, props=None, base_obj=None):
         """Initialize the Duration model."""
+        super(Duration, self).__init__(props, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj
 
-        self._object_type = None
         self._negative = None
         self._elapsed = None
         self._weeks = None
@@ -44,11 +44,6 @@ class Duration(object):
         self._milliseconds = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'objectType' in props:
-                self.object_type = props['objectType']
-            if 'object_type' in props:
-                self.object_type = props['object_type']
             if 'negative' in props:
                 self.negative = props['negative']
             if 'elapsed' in props:
@@ -65,16 +60,10 @@ class Duration(object):
                 self.seconds = props['seconds']
             if 'milliseconds' in props:
                 self.milliseconds = props['milliseconds']
+        else:
+            self.object_type = DURATION
+
         self.__initialized = True
-
-    @property
-    def object_type(self):
-        return self._object_type
-
-    @object_type.setter
-    def object_type(self, value):
-        if isinstance(value, six.string_types):
-            self._object_type = value
 
     @property
     def negative(self):
@@ -100,7 +89,7 @@ class Duration(object):
 
     @weeks.setter
     def weeks(self, value):
-        if isinstance(value, six.integer_types):
+        if isinstance(value, (six.integer_types, float)):
             self._weeks = value
 
     @property
@@ -109,7 +98,7 @@ class Duration(object):
 
     @days.setter
     def days(self, value):
-        if isinstance(value, six.integer_types):
+        if isinstance(value, (six.integer_types, float)):
             self._days = value
 
     @property
@@ -118,7 +107,7 @@ class Duration(object):
 
     @hours.setter
     def hours(self, value):
-        if isinstance(value, six.integer_types):
+        if isinstance(value, (six.integer_types, float)):
             self._hours = value
 
     @property
@@ -127,7 +116,7 @@ class Duration(object):
 
     @minutes.setter
     def minutes(self, value):
-        if isinstance(value, six.integer_types):
+        if isinstance(value, (six.integer_types, float)):
             self._minutes = value
 
     @property
@@ -136,7 +125,7 @@ class Duration(object):
 
     @seconds.setter
     def seconds(self, value):
-        if isinstance(value, six.integer_types):
+        if isinstance(value, (six.integer_types, float)):
             self._seconds = value
 
     @property
@@ -145,12 +134,12 @@ class Duration(object):
 
     @milliseconds.setter
     def milliseconds(self, value):
-        if isinstance(value, six.integer_types):
+        if isinstance(value, (six.integer_types, float)):
             self._milliseconds = value
 
     def to_dict(self, op_id=None, method=None):
+        parent_obj = super(Duration, self).to_dict(op_id, method)
         obj = {
-            'objectType': prep(self._object_type),
             'negative': prep(self._negative),
             'elapsed': prep(self._elapsed),
             'weeks': prep(self._weeks),
@@ -159,7 +148,9 @@ class Duration(object):
             'minutes': prep(self._minutes),
             'seconds': prep(self._seconds),
             'milliseconds': prep(self._milliseconds)}
-        return obj
+        combo = parent_obj.copy()
+        combo.update(obj)
+        return combo
 
     def to_json(self):
         return json.dumps(self.to_dict(), indent=2)

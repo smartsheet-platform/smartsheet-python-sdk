@@ -57,6 +57,9 @@ class WidgetContent(object):
         self._file_name = None
         self._format = None
 
+        """Represents the TitleWidgetContent object."""
+        self._background_color = None
+
         if props:
             # account for alternate variable names from raw API response
             if 'hyperlink' in props:
@@ -91,6 +94,10 @@ class WidgetContent(object):
                 self.file_name = props['file_name']
             if 'format' in props:
                 self.format = props['format']
+            if 'backgroundColor' in props:
+                self.background_color = props['backgroundColor']
+            if 'background_color' in props:
+                self.background_color = props['background_color']
         self.__initialized = True
 
     @property
@@ -166,6 +173,15 @@ class WidgetContent(object):
         if isinstance(value, six.string_types):
             self._format = value
 
+    @property
+    def background_color(self):
+        return self._background_color
+
+    @background_color.setter
+    def background_color(self, value):
+        if isinstance(value, six.string_types):
+            self._background_color = value
+
     def to_dict(self, op_id=None, method=None):
         obj = {
             'hyperlink': prep(self._hyperlink),
@@ -178,7 +194,8 @@ class WidgetContent(object):
             'height': prep(self._height),
             'width': prep(self._width),
             'fileName': prep(self._file_name),
-            'format': prep(self._format)}
+            'format': prep(self._format),
+            'backgroundColor': prep(self._background_color)}
         return obj
 
     def to_json(self):

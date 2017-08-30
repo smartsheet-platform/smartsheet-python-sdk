@@ -41,7 +41,8 @@ class Widget(object):
                 'SHORTCUTICON',
                 'SHORTCUTLIST',
                 'GRIDGANTT',
-                'IMAGE'
+                'IMAGE',
+                'TITLE'
             ]}
 
         self.__id = None

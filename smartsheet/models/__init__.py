@@ -93,6 +93,12 @@ from .webhook_stats import WebhookStats
 from .webhook_secret import WebhookSecret
 from .duration import Duration
 from .object_value import ObjectValue
+from .predecessor_list import PredecessorList
+from .contact_object_value import ContactObjectValue
+from .date_object_value import DateObjectValue
+from .string_object_value import StringObjectValue
+from .number_object_value import NumberObjectValue
+from .boolean_object_value import BooleanObjectValue
 from .predecessor import Predecessor
 from .schedule import Schedule
 from .sent_update_request import SentUpdateRequest
