@@ -520,6 +520,7 @@ class OperationErrorResult(object):
                 'status_code': self.resp.status_code,
                 'code': error_code,
                 'message': error_payload['message'],
+                'ref_id': error_payload['refId'],
                 'recommendation': recommendation,
                 'should_retry': should_retry
             }),
