@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet.models package &mdash; Smartsheet Python SDK 1.2.1.dev4+ngde62d64 documentation</title>
+  <title>smartsheet.models package &mdash; Smartsheet Python SDK 1.2.1 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Smartsheet Python SDK 1.2.1.dev4+ngde62d64 documentation" href="index.html"/>
+    <link rel="top" title="Smartsheet Python SDK 1.2.1 documentation" href="index.html"/>
         <link rel="up" title="smartsheet package" href="smartsheet.html"/>
         <link rel="prev" title="smartsheet package" href="smartsheet.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.2.1.dev4+ngde62d64
+                1.2.1
               </div>
             
           
@@ -1384,7 +1384,7 @@
 <dl class="class">
 <dt id="smartsheet.models.duration.Duration">
 <em class="property">class </em><code class="descclassname">smartsheet.models.duration.</code><code class="descname">Duration</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.duration.Duration" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#smartsheet.models.object_value.ObjectValue" title="smartsheet.models.object_value.ObjectValue"><code class="xref py py-class docutils literal"><span class="pre">smartsheet.models.object_value.ObjectValue</span></code></a></p>
 <p>Smartsheet Duration data model.</p>
 <dl class="attribute">
 <dt id="smartsheet.models.duration.Duration.days">
@@ -1414,11 +1414,6 @@
 <dl class="attribute">
 <dt id="smartsheet.models.duration.Duration.negative">
 <code class="descname">negative</code><a class="headerlink" href="#smartsheet.models.duration.Duration.negative" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.duration.Duration.object_type">
-<code class="descname">object_type</code><a class="headerlink" href="#smartsheet.models.duration.Duration.object_type" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1679,6 +1674,11 @@
 <dl class="attribute">
 <dt id="smartsheet.models.folder.Folder.sheets">
 <code class="descname">sheets</code><a class="headerlink" href="#smartsheet.models.folder.Folder.sheets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.folder.Folder.sights">
+<code class="descname">sights</code><a class="headerlink" href="#smartsheet.models.folder.Folder.sights" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2294,6 +2294,11 @@
 
 </dd></dl>
 
+<dl class="function">
+<dt id="smartsheet.models.object_value.enum_object_value_type">
+<code class="descclassname">smartsheet.models.object_value.</code><code class="descname">enum_object_value_type</code><span class="sig-paren">(</span><em>object_type=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.object_value.enum_object_value_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 <div class="section" id="module-smartsheet.models.predecessor">
 <span id="smartsheet-models-predecessor-module"></span><h2>smartsheet.models.predecessor module<a class="headerlink" href="#module-smartsheet.models.predecessor" title="Permalink to this headline">¶</a></h2>
@@ -2315,6 +2320,11 @@
 <dl class="attribute">
 <dt id="smartsheet.models.predecessor.Predecessor.lag">
 <code class="descname">lag</code><a class="headerlink" href="#smartsheet.models.predecessor.Predecessor.lag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.predecessor.Predecessor.pre_request_filter">
+<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.predecessor.Predecessor.pre_request_filter" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -4629,6 +4639,11 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Smartsheet WidgetContent data model.</p>
 <dl class="attribute">
+<dt id="smartsheet.models.widget_content.WidgetContent.background_color">
+<code class="descname">background_color</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.background_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.widget_content.WidgetContent.file_name">
 <code class="descname">file_name</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.file_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -4724,6 +4739,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.workspace.Workspace.sights">
+<code class="descname">sights</code><a class="headerlink" href="#smartsheet.models.workspace.Workspace.sights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.workspace.Workspace.templates">
 <code class="descname">templates</code><a class="headerlink" href="#smartsheet.models.workspace.Workspace.templates" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -4787,7 +4807,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.2.1.dev4+ngde62d64',
+            VERSION:'1.2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

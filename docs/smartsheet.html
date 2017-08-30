@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet package &mdash; Smartsheet Python SDK 1.2.1.dev4+ngde62d64 documentation</title>
+  <title>smartsheet package &mdash; Smartsheet Python SDK 1.2.1 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Smartsheet Python SDK 1.2.1.dev4+ngde62d64 documentation" href="index.html"/>
+    <link rel="top" title="Smartsheet Python SDK 1.2.1 documentation" href="index.html"/>
         <link rel="next" title="smartsheet.models package" href="smartsheet.models.html"/>
         <link rel="prev" title="Smartsheet Python SDK Documentation" href="index.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.2.1.dev4+ngde62d64
+                1.2.1
               </div>
             
           
@@ -3995,7 +3995,7 @@ if not specified.</li>
 
 <dl class="method">
 <dt id="smartsheet.users.Users.list_users">
-<code class="descname">list_users</code><span class="sig-paren">(</span><em>email=None</em>, <em>page_size=100</em>, <em>page=1</em>, <em>include_all=False</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.users.Users.list_users" title="Permalink to this definition">¶</a></dt>
+<code class="descname">list_users</code><span class="sig-paren">(</span><em>email=None</em>, <em>page_size=100</em>, <em>page=1</em>, <em>include_all=False</em>, <em>include=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.users.Users.list_users" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of Users in the organization.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -4010,6 +4010,8 @@ return per page. Defaults to 100.</li>
 if not specified.</li>
 <li><strong>include_all</strong> (<em>bool</em>) &#8211; If true, include all results
 (i.e. do not paginate).</li>
+<li><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; optional include parameter, only current
+accepted value is &#8216;lastLogin&#8217;</li>
 </ul>
 </td>
 </tr>
@@ -4023,7 +4025,7 @@ if not specified.</li>
 <dl class="method">
 <dt id="smartsheet.users.Users.promote_alternate_email">
 <code class="descname">promote_alternate_email</code><span class="sig-paren">(</span><em>user_id</em>, <em>alt_id</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.users.Users.promote_alternate_email" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add one or more alternate email addresses for the specified User</p>
+<dd><p>Promote an email address to primary</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -4679,7 +4681,7 @@ Workspace.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.2.1.dev4+ngde62d64',
+            VERSION:'1.2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
