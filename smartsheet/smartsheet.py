@@ -94,11 +94,13 @@ class DefaultCalcBackoff(AbstractUserCalcBackoff):
         Returns:
              (float) Back off time in seconds (any negative number will drop out of retry loop)
         """
-        if total_elapsed_time > self._max_retry_time:
-            return -1
 
         # Use exponential backoff
         backoff = (2 ** previous_attempts) + random.random()
+
+        if (total_elapsed_time + backoff) > self._max_retry_time:
+            return -1
+
         return backoff
 
 
