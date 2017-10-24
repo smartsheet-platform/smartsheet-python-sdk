@@ -491,6 +491,8 @@ class Column(object):
 
             if self.type != 'PICKLIST':
                 del obj['options']
+            if self.type == 'TEXT_NUMBER':
+                del obj['validation']
 
         return obj
 
