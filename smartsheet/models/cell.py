@@ -59,6 +59,7 @@ class Cell(object):
         self._object_value = None
         self._strict = True
         self._value = None
+        self._override_validation = False
 
         if props:
             # account for alternate variable names from raw API response
@@ -105,6 +106,10 @@ class Cell(object):
                 self.strict = props['strict']
             if 'value' in props:
                 self.value = props['value']
+            if 'overrideValidation' in props:
+                self.override_validation = props['overrideValidation']
+            if 'override_validation' in props:
+                self.override_validation = props['override_validation']
         self.__initialized = True
 
     def __getattr__(self, key):
@@ -272,6 +277,15 @@ class Cell(object):
             self._value = value
 
     @property
+    def override_validation(self):
+        return self._override_validation
+
+    @override_validation.setter
+    def override_validation(self, value):
+        if isinstance(value, bool):
+            self._override_validation = value
+
+    @property
     def pre_request_filter(self):
         return self._pre_request_filter
 
@@ -312,13 +326,14 @@ class Cell(object):
             'linksOutToCells': prep(self._links_out_to_cells),
             'objectValue': prep(self._object_value),
             'strict': prep(self._strict),
-            'value': prep(self._value)}
+            'value': prep(self._value),
+            'overrideValidation': prep(self._override_validation)}
         return self._apply_pre_request_filter(obj)
 
     def _apply_pre_request_filter(self, obj):
         if self.pre_request_filter == 'add_rows':
             permitted = ['columnId', 'value', 'objectValue', 'formula', 'strict',
-                         'format', 'hyperlink']
+                         'format', 'hyperlink', 'overrideValidation']
             # make formula, objectValue and value mutually exclusive
             if self.formula is not None:
                 del obj['value']
@@ -343,7 +358,7 @@ class Cell(object):
                 permitted = ['columnId', 'value', 'linkInFromCell']
             else:
                 permitted = ['columnId', 'value', 'objectValue', 'formula', 'strict',
-                             'format', 'hyperlink']
+                             'format', 'hyperlink', 'overrideValidation']
                 # make formula, objectValue and value mutually exclusive
                 if self.formula is not None:
                     del obj['value']

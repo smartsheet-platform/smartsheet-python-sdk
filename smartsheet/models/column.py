@@ -99,6 +99,7 @@ class Column(object):
         self._title = None
         self.__type = None
         self._width = None
+        self._validation = None
 
         if props:
             # account for alternate variable names from raw API response
@@ -156,6 +157,8 @@ class Column(object):
                 self._type = props['_type']
             if 'width' in props:
                 self.width = props['width']
+            if 'validation' in props:
+                self.validation = props['validation']
         # requests package Response object
         self.request_response = None
         self.__initialized = True
@@ -375,6 +378,15 @@ class Column(object):
             self._width = value
 
     @property
+    def validation(self):
+        return self._validation
+
+    @validation.setter
+    def validation(self, value):
+        if isinstance(value, bool):
+            self._validation = value;
+
+    @property
     def pre_request_filter(self):
         return self._pre_request_filter
 
@@ -411,14 +423,16 @@ class Column(object):
             'tags': prep(self._tags),
             'title': prep(self._title),
             'type': prep(self.__type),
-            'width': prep(self._width)}
+            'width': prep(self._width),
+            'validation': prep(self._validation)}
+
         return self._apply_pre_request_filter(obj)
 
     def _apply_pre_request_filter(self, obj):
         if self.pre_request_filter == 'add_columns':
             permitted = ['title', 'type', 'symbol',
                          'options', 'index', 'systemColumnType', 'autoNumberFormat',
-                         'width', 'locked', 'hidden', 'contactOptions']
+                         'validation', 'width', 'locked', 'hidden', 'contactOptions']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
@@ -465,8 +479,8 @@ class Column(object):
 
         if self.pre_request_filter == 'update_column':
             permitted = ['index', 'title', 'type', 'symbol',
-                         'options', 'systemColumnType', 'autoNumberFormat', 'width',
-                         'locked', 'hidden', 'contactOptions']
+                         'options', 'systemColumnType', 'autoNumberFormat', 'validation',
+                         'width', 'locked', 'hidden', 'contactOptions']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
