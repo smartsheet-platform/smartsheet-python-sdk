@@ -10,7 +10,7 @@ import six
 def smart_setup(request):
     # set up a test session folder with basic starting points
     smart = smartsheet.Smartsheet()
-    now = datetime.now(tzlocal()).strftime("%Y-%m-%d %H:%M:%S")
+    now = datetime.now(tzlocal()).strftime("%Y-%m-%d %H:%M:%S%Z")
 
     # test run base folders
     folder_name = 'pytest ' + now
