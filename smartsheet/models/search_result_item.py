@@ -56,9 +56,11 @@ class SearchResultItem(object):
         self._context_data = TypedList(str)
         self._object_id = None
         self._object_type = None
+        self._favorite = None
         self._parent_object_id = None
         self._parent_object_name = None
         self._parent_object_type = None
+        self._parent_object_favorite = None
         self._text = None
 
         if props:
@@ -74,6 +76,9 @@ class SearchResultItem(object):
             if 'objectType' in props:
                 self.object_type = props['objectType']
             # read only
+            if 'favorite' in props:
+                self.favorite = props['favorite']
+            # read only
             if 'parentObjectId' in props:
                 self.parent_object_id = props['parentObjectId']
             # read only
@@ -84,6 +89,10 @@ class SearchResultItem(object):
             if 'parentObjectType' in props:
                 self.parent_object_type = props[
                     'parentObjectType']
+            # read only
+            if 'parentObjectFavorite' in props:
+                self.parent_object_favorite = props[
+                    'parentObjectFavorite']
             if 'text' in props:
                 self.text = props['text']
 
@@ -130,6 +139,15 @@ class SearchResultItem(object):
             self._object_type = value
 
     @property
+    def favorite(self):
+        return self._favorite
+
+    @favorite.setter
+    def favorite(self, value):
+        if isinstance(value, bool):
+            self._favorite = value
+
+    @property
     def parent_object_id(self):
         return self._parent_object_id
 
@@ -162,6 +180,15 @@ class SearchResultItem(object):
             self._parent_object_type = value
 
     @property
+    def parent_object_favorite(self):
+        return self._parent_object_favorite
+
+    @parent_object_favorite.setter
+    def parent_object_favorite(self, value):
+        if isinstance(value, bool):
+            self._parent_object_favorite = value
+
+    @property
     def text(self):
         return self._text
 
@@ -175,9 +202,11 @@ class SearchResultItem(object):
             'contextData': prep(self._context_data),
             'objectId': prep(self._object_id),
             'objectType': prep(self._object_type),
+            'favorite': prep(self._favorite),
             'parentObjectId': prep(self._parent_object_id),
             'parentObjectName': prep(self._parent_object_name),
             'parentObjectType': prep(self._parent_object_type),
+            'parentObjectFavorite': prep(self._parent_object_favorite),
             'text': prep(self._text)}
         return obj
 
