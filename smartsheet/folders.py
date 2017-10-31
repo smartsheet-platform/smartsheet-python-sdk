@@ -191,7 +191,7 @@ class Folders(object):
             folder_id (int): Folder ID
             include (list[str]): A comma-separated list of
                 optional elements to include in the response. Valid list
-                values: ownerInfo, source.
+                values: ownerInfo, sheetVersion, source.
 
         Returns:
             Folder

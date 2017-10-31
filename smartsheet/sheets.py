@@ -708,7 +708,7 @@ class Sheets(object):
         Args:
             include (list[str]): A comma-separated list of
                 optional elements to include in the response. Valid list
-                values: ownerInfo, source.
+                values: ownerInfo, sheetVersion, source.
             page_size (int): The maximum number of items to
                 return per page. Defaults to 100.
             page (int): Which page to return. Defaults to 1

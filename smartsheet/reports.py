@@ -68,7 +68,8 @@ class Reports(object):
                 if not specified.
             include (list[str]): A comma-separated list of
                 optional elements to include in the response. Valid list
-                values: discussions, attachments, format, sourceSheets.
+                values: discussions, attachments, format, sheetVersion(requires sourceSheets),
+                    sourceSheets.
 
         Returns:
             Report
