@@ -229,7 +229,7 @@ class Sheets(object):
         return response
 
     def copy_sheet(self, sheet_id, container_destination_obj,
-                   include=None):
+                   include=None, omit=None):
         """Creates a copy of the specified Sheet
 
         Args:
@@ -238,8 +238,10 @@ class Sheets(object):
                 (ContainerDestination): Container Destination object.
             include (list[str]): A comma-separated list of
                 optional elements to include in the response. Valid list
-                values: data, attachments, discussions, cellLinks, forms,
-                all.
+                values: attachments, cellLinks, data, discussions, forms,
+                    ruleRecipients, rules, shares, all (deprecated).
+            omit (list[str]): A comma-seperated list of optional elements
+                to omit. Only current valid value is sheetHyperlinks
 
         Returns:
             Result
@@ -248,6 +250,7 @@ class Sheets(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/copy'
         _op['query_params']['include'] = include
+        _op['query_params']['omit'] = omit
         _op['json'] = container_destination_obj
 
         expected = ['Result', 'Sheet']

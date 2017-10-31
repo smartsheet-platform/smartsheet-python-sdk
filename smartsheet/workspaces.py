@@ -34,34 +34,21 @@ class Workspaces(object):
         self._log = logging.getLogger(__name__)
 
     def copy_workspace(self, workspace_id, container_destination_obj,
-                       include=None, skip_remap=None):
+                       include=None, skip_remap=None, omit=None):
         """Create a copy of the specified Workspace.
 
         Args:
             workspace_id (int): Workspace ID
             container_destination_obj (ContainerDestination): Container Destination object.
-            include (list[str]): A comma-separated list of optional elements to copy. Valid list values:
-
-                data
-
-                attachments
-
-                discussions
-
-                cellLinks
-
-                forms
-
-                brand
-
-                shares
-
-                **all** - specify a value of \"all\" to include everything.
-
-        Cell history will not be copied, regardless of which **include** parameter values are specified.
-            skip_remap (list[str]): A comma separated list of references to NOT re-map for the newly created resource.
-            Valid list items: cellLinks, reports, sheetHyperlinks, sights
-
+            include (list[str]): A comma-separated list of optional elements to copy.
+                Valid list values: attachments, brand, cellLinks, data, discussions, forms,
+                    ruleRecipients, rules, shares, all (deprecated).
+                Cell history will not be copied, regardless of which **include** parameter values are specified.
+            skip_remap (list[str]): A comma separated list of references to NOT re-map for
+                the newly created resource.
+                    Valid list items: cellLinks, reports, sheetHyperlinks, sights
+            omit (list[str]): a comma seperated list of items to exclude. The only
+                currently valid option is sheetHyperlinks
         Returns:
             Result
         """
@@ -70,6 +57,7 @@ class Workspaces(object):
         _op['path'] = '/workspaces/' + str(workspace_id) + '/copy'
         _op['query_params']['include'] = include
         _op['query_params']['skipRemap'] = skip_remap
+        _op['query_params']['omit'] = omit
         _op['json'] = container_destination_obj
         # filter before we go
         _op['json'].pre_request_filter = 'copy_workspace'
