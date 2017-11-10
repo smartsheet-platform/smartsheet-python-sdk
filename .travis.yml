@@ -24,7 +24,8 @@ install:
 
 script:
   - wiremock-scenario-templating/travis_scripts/start_wiremock.sh
-  - coverage run --source=smartsheet setup.py test
+  - coverage run --source=smartsheet setup.py test -a tests/integration
+  # - coverage run --source=smartsheet setup.py test # use this line instead to enable mock api tests
 
 after_success:
   - coveralls --verbose
