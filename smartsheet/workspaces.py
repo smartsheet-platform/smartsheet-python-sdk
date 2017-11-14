@@ -312,12 +312,19 @@ class Workspaces(object):
 
         return response
 
-    def list_shares(self, workspace_id, include_workspace_shares=False):
+    def list_shares(self, workspace_id, page_size=100, page=1,
+                    include_all=False):
         """Get a list of all Users and Groups to whom the specified Workspace
         is shared, and their access level.
 
         Args:
             workspace_id (int): Workspace ID
+            page_size (int): The maximum number of items to
+                return per page. Defaults to 100.
+            page (int): Which page to return. Defaults to 1
+                if not specified.
+            include_all (bool): If true, include all results
+                (i.e. do not paginate).
 
         Returns:
             IndexResult
@@ -325,9 +332,9 @@ class Workspaces(object):
         _op = fresh_operation('list_shares')
         _op['method'] = 'GET'
         _op['path'] = '/workspaces/' + str(workspace_id) + '/shares'
-        if include_workspace_shares:
-            _op['query_params']['include'] = 'workspaceShares'
-
+        _op['query_params']['pageSize'] = page_size
+        _op['query_params']['page'] = page
+        _op['query_params']['includeAll'] = include_all
         expected = ['IndexResult', 'Share']
 
         prepped_request = self._base.prepare_request(_op)
