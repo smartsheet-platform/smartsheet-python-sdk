@@ -43,7 +43,7 @@ class Folders(object):
                 (ContainerDestination): Container Destination object.
             include (list[str]): A comma separated list of
                 elements to copy. Valid list values: attachments,
-                cellLinks, data, discussions, forms, ruleRecipients,
+                cellLinks, data, discussions, filters, forms, ruleRecipients,
                 rules, shares, all (deprecated).
             skip_remap (list[str]): A comma separated list
                 of references to NOT re-map for the newly created resource.

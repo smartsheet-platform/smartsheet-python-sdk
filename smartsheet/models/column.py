@@ -18,7 +18,6 @@
 from __future__ import absolute_import
 
 from .auto_number_format import AutoNumberFormat
-from .filter import Filter
 from .contact_option import ContactOption
 from ..types import TypedList
 from ..util import prep
@@ -84,7 +83,6 @@ class Column(object):
 
         self._auto_number_format = None
         self._contact_options = TypedList(ContactOption)
-        self.__filter = None
         self.__format = None
         self._hidden = None
         self.__id = None
@@ -113,10 +111,6 @@ class Column(object):
                 self.contact_options = props['contactOptions']
             if 'contact_options' in props:
                 self.contact_options = props['contact_options']
-            if 'filter' in props:
-                self._filter = props['filter']
-            if '_filter' in props:
-                self._filter = props['_filter']
             if 'format' in props:
                 self._format = props['format']
             if '_format' in props:
@@ -164,9 +158,7 @@ class Column(object):
         self.__initialized = True
 
     def __getattr__(self, key):
-        if key == 'filter':
-            return self._filter
-        elif key == 'format':
+        if key == 'format':
             return self._format
         elif key == 'id':
             return self._id
@@ -204,17 +196,6 @@ class Column(object):
         elif isinstance(value, ContactOption):
             self._contact_options.purge()
             self._contact_options.append(value)
-
-    @property
-    def _filter(self):
-        return self.__filter
-
-    @_filter.setter
-    def _filter(self, value):
-        if isinstance(value, Filter):
-            self.__filter = value
-        else:
-            self.__filter = Filter(value, self._base)
 
     @property
     def _format(self):
@@ -394,8 +375,6 @@ class Column(object):
     def pre_request_filter(self, value):
         if self.auto_number_format is not None:
             self.auto_number_format.pre_request_filter = value
-        if self._filter is not None:
-            self._filter.pre_request_filter = value
         self._pre_request_filter = value
 
     def to_dict(self, op_id=None, method=None):
@@ -403,13 +382,10 @@ class Column(object):
         if req_filter:
             if self.auto_number_format is not None:
                 self.auto_number_format.pre_request_filter = req_filter
-            if self._filter is not None:
-                self._filter.pre_request_filter = req_filter
 
         obj = {
             'autoNumberFormat': prep(self._auto_number_format),
             'contactOptions': prep(self._contact_options),
-            'filter': prep(self.__filter),
             'format': prep(self.__format),
             'hidden': prep(self._hidden),
             'id': prep(self.__id),

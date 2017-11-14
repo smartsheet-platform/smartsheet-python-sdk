@@ -104,3 +104,5 @@ from .schedule import Schedule
 from .sent_update_request import SentUpdateRequest
 from .sight_publish import SightPublish
 from .project_settings import ProjectSettings
+from .sheet_filter import SheetFilter
+from .sheet_filter_details import SheetFilterDetails

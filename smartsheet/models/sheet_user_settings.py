@@ -37,6 +37,7 @@ class SheetUserSettings(object):
 
         self._critical_path_enabled = None
         self._display_summary_tasks = None
+        self._applied_sheet_filter_id = None
 
         if props:
             # account for alternate variable names from raw API response
@@ -52,6 +53,12 @@ class SheetUserSettings(object):
             if 'display_summary_tasks' in props:
                 self.display_summary_tasks = props[
                     'display_summary_tasks']
+            if 'appliedSheetFilterId' in props:
+                self.applied_sheet_filter_id = props[
+                    'appliedSheetFilterId']
+            if 'applied_sheet_filter_id' in props:
+                self.applied_sheet_filter_id = props[
+                    'applied_sheet_filter_id']
 
     @property
     def critical_path_enabled(self):
@@ -71,10 +78,20 @@ class SheetUserSettings(object):
         if isinstance(value, bool):
             self._display_summary_tasks = value
 
+    @property
+    def applied_sheet_filter_id(self):
+        return self._applied_sheet_filter_id
+
+    @applied_sheet_filter_id.setter
+    def applied_sheet_filter_id(self, value):
+        if isinstance(value, six.integer_types):
+            self._applied_sheet_filter_id = value
+
     def to_dict(self, op_id=None, method=None):
         obj = {
             'criticalPathEnabled': prep(self._critical_path_enabled),
-            'displaySummaryTasks': prep(self._display_summary_tasks)}
+            'displaySummaryTasks': prep(self._display_summary_tasks),
+            'appliedSheetFilterId': prep(self._applied_sheet_filter_id)}
 
         return obj
 
