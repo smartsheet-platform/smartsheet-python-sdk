@@ -127,6 +127,7 @@ class Smartsheet(object):
                 <http://docs.python-requests.org/en/latest/user/advanced/#proxies>`_
                 for more details.
         """
+
         self.raise_exceptions = False
         if access_token:
             self._access_token = access_token
@@ -191,6 +192,15 @@ class Smartsheet(object):
                 as exceptions.
         """
         self.raise_exceptions = preference
+
+    def as_test_scenario(self, name):
+        """
+        Identify requests made with this client as a test scenario.
+
+        Args:
+            name (str): The name of the test scenario.
+        """
+        self._test_scenario_name = name
 
     def request(self, prepped_request, expected, operation):
         """
@@ -344,6 +354,15 @@ class Smartsheet(object):
         else:
             try:
                 del prepped_request.headers['Assume-User']
+            except KeyError:
+                pass
+        
+        if self._test_scenario_name is not None:
+            prepped_request.headers.update(
+                {'Api-Scenario': self._test_scenario_name})
+        else:
+            try:
+                del prepped_request.headers['Api-Scenario']
             except KeyError:
                 pass
 
