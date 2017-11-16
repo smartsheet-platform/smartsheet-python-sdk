@@ -13,13 +13,19 @@ cache:
   directories:
     - $HOME/.cache/pip
 
+before_install:
+  - git clone https://github.com/smartsheet-platform/smartsheet-sdk-tests.git
+  - smartsheet-sdk-tests/travis_scripts/install_wiremock.sh
+
 install:
   - pip install --upgrade pip
   - pip install certifi==2015.04.28
   - pip install requests six python-dateutil coverage coveralls[yaml] pytest pytest-travis-fold pytest-instafail requests-toolbelt
 
 script:
-  coverage run --source=smartsheet setup.py test
+  - smartsheet-sdk-tests/travis_scripts/start_wiremock.sh
+  - coverage run --source=smartsheet setup.py test -a tests/integration
+  # - coverage run --source=smartsheet setup.py test # use this line instead to enable mock api tests
 
 after_success:
   - coveralls --verbose
