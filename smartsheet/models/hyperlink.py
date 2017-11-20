@@ -18,8 +18,8 @@
 from __future__ import absolute_import
 
 from ..util import prep
+from ..util import null_filter
 import json
-import logging
 import six
 
 class Hyperlink(object):
@@ -97,7 +97,7 @@ class Hyperlink(object):
             'sheetId': prep(self._sheet_id),
             'sightId': prep(self._sight_id),
             'url': prep(self._url)}
-        return obj
+        return null_filter(obj)
 
     def to_json(self):
         return json.dumps(self.to_dict(), indent=2)

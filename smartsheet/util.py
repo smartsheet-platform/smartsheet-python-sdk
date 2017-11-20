@@ -45,6 +45,12 @@ def prep(prop, op_id=None, method=None):
 
     return retval
 
+def null_filter(obj):
+    filtered = {}
+    for key, value in obj.items():
+        if value is not None:
+            filtered[key] = value
+    return filtered
 
 def dump_message_headers(request):
     bytearr = bytearray()
