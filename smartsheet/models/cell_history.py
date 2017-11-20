@@ -179,7 +179,7 @@ class CellHistory(Cell):
 
     @value.setter
     def value(self, value):
-        if isinstance(value, six.string_types):
+        if isinstance(value, (six.string_types, six.integer_types, float, bool)):
             self._value = value
 
     @property
