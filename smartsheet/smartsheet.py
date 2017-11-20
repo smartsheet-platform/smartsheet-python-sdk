@@ -28,6 +28,7 @@ import sys
 import requests
 from requests_toolbelt.utils import dump
 import six
+import inspect
 
 from .exceptions import *
 from .models import Error, ErrorResult
@@ -154,7 +155,9 @@ class Smartsheet(object):
         if user_agent:
             self._user_agent = '{}/{}'.format(user_agent, base_user_agent)
         else:
-            self._user_agent = base_user_agent
+            stack = inspect.stack()
+            caller = inspect.getmodule(stack[-1][0]).__name__
+            self._user_agent = '{}/{}'.format(caller, base_user_agent)
 
         self._log = logging.getLogger(__name__)
         setup_logging()
