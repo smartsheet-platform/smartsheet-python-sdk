@@ -104,6 +104,24 @@ class TestRegression:
         assert isinstance(task3_row, smart.models.row.Row)
         assert action.request_response.status_code == 200
 
+        # clear the predecessor list from task 3
+        row = smart.models.Row()
+        row.id = task3_row.id
+        row.row_number = task3_row.row_number
+        for col in sheet.columns:
+            if col.type == 'PREDECESSOR':
+                row.cells.append({
+                    'column_id': col.id
+                })
+                break
+
+        action = smart.Sheets.update_rows(sheet.id, [row])
+        assert action.request_response.status_code == 200
+        for cell in action.data[0].cells:
+            if cell.column_id == col.id:
+                break;
+        assert cell.object_value is None
+
         # clean up
         action = smart.Sheets.delete_sheet(sheet.id)
         assert action.message == 'SUCCESS'
