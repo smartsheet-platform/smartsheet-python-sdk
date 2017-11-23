@@ -26,7 +26,6 @@ import random
 import time
 import sys
 import requests
-from requests_toolbelt.utils import dump
 import six
 import inspect
 import json
@@ -239,16 +238,20 @@ class Smartsheet(object):
             response (Response):
         """
         # request
-        if is_multipart(response.request):
-            response.request.body = '<< multipart body suppressed >>'
         self._log.info('Request: {\ncommand: %s %s\n}', response.request.method, response.request.url)
         if response.request.body is not None:
-            body = response.request.body.decode('utf8')
-            body_dumps = json.dumps(json.loads(body), indent=4, sort_keys=True)
+            body_dumps = '<< {} content type suppressed >>'.format(response.request.headers['Content-Type'])
+            if is_multipart(response.request):
+                body_dumps = '<< multipart body suppressed >>'
+            elif 'application/json' in response.request.headers['Content-Type']:
+                body = response.request.body.decode('utf8')
+                body_dumps = json.dumps(json.loads(body), indent=4, sort_keys=True)
             self._log.debug('Request Body: {\n%s\n}', body_dumps)
         # response
-        content = response.content.decode('utf8')
-        content_dumps = json.dumps(json.loads(content), indent=4, sort_keys=True)
+        content_dumps = '<< {} content type suppressed >>'.format(response.headers['Content-Type'])
+        if 'application/json' in response.headers['Content-Type']:
+            content = response.content.decode('utf8')
+            content_dumps = json.dumps(json.loads(content), indent=4, sort_keys=True)
         if 200 <= response.status_code <= 299:
             if operation['dl_path'] is None:
                 self._log.debug('Response: {\nstatus: %d %s\ncontent: {\n%s\n}',

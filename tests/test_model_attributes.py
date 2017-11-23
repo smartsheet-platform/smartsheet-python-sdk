@@ -861,7 +861,6 @@ class TestModelAttributes:
     def test_column(self, smart_setup):
         smart = smart_setup['smart']
         # auto_number_format, autoNumberFormat
-        # _filter, filter
         # _format, format
         # hidden, hidden
         # _id, id
@@ -878,7 +877,6 @@ class TestModelAttributes:
         # width, width
         model = smart.models.Column({
             'autoNumberFormat': smart.models.AutoNumberFormat(),
-            'filter': smart.models.Filter(),
             'format': 'foo',
             'hidden': True,
             'id': 19082,
@@ -896,7 +894,6 @@ class TestModelAttributes:
         })
 
         assert isinstance(model.auto_number_format, smart.models.AutoNumberFormat)
-        assert isinstance(model._filter, smart.models.Filter)
         assert model._format == 'foo'
         assert model.hidden == True
         assert model._id == 19082
@@ -913,8 +910,6 @@ class TestModelAttributes:
         assert model.width == 19082
         model.autoNumberFormat = {}
         assert isinstance(model.auto_number_format, smart.models.AutoNumberFormat)
-        model.filter = {}
-        assert isinstance(model._filter, smart.models.Filter)
         model.options = 'foo'
         assert model.options[0] == 'foo'
         tmplist = smartsheet.types.TypedList(str)
@@ -943,7 +938,6 @@ class TestModelAttributes:
             'title': 'foo',
             'width': 19082,
             'auto_number_format': smart.models.AutoNumberFormat(),
-            '_filter': smart.models.Filter(),
             '_format': 'foo',
             '_id': 19082,
             'locked_for_user': True,
@@ -952,7 +946,6 @@ class TestModelAttributes:
         })
 
         assert isinstance(model.auto_number_format, smart.models.AutoNumberFormat)
-        assert isinstance(model._filter, smart.models.Filter)
         assert model._format == 'foo'
         assert model.hidden == True
         assert model._id == 19082
