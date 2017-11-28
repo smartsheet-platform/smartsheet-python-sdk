@@ -156,11 +156,11 @@ class Smartsheet(object):
 
         base_user_agent = 'SmartsheetPythonSDK/' + __version__
         if user_agent:
-            self._user_agent = '{}/{}'.format(user_agent, base_user_agent)
+            self._user_agent = '{}/{}'.format(base_user_agent, user_agent)
         else:
             stack = inspect.stack()
             caller = inspect.getmodule(stack[-1][0]).__name__
-            self._user_agent = '{}/{}'.format(caller, base_user_agent)
+            self._user_agent = '{}/{}'.format(base_user_agent, caller)
 
         self._log = logging.getLogger(__name__)
         setup_logging()
