@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 import logging
+from .models import JSONObject
 from . import fresh_operation
 
 class Passthrough(object):
@@ -55,7 +56,7 @@ class Passthrough(object):
 
         Args:
             endpoint (str): Endpoint URL (relative to base), e.g. '/sheets'
-            payload (JSONObject): JSON payload
+            payload (str, dict, or JSONObject): JSON payload
             query_params (dict): Optional dictionary of additional query parameters
 
         Returns:
@@ -64,6 +65,8 @@ class Passthrough(object):
         _op = fresh_operation('post_passthrough')
         _op['method'] = 'POST'
         _op['path'] = endpoint
+        if not isinstance(payload, JSONObject):
+            payload = JSONObject(payload)
         _op['json'] = payload
         _op['query_params'] = query_params
 
@@ -79,7 +82,7 @@ class Passthrough(object):
 
         Args:
             endpoint (str): Endpoint URL (relative to base), e.g. '/sheets/{id}'
-            payload (JSONObject): JSON payload
+            payload (str, dict or JSONObject): JSON payload
             query_params (dict): Optional dictionary of additional query parameters
 
         Returns:
@@ -88,6 +91,8 @@ class Passthrough(object):
         _op = fresh_operation('put_passthrough')
         _op['method'] = 'PUT'
         _op['path'] = endpoint
+        if not isinstance(payload, JSONObject):
+            payload = JSONObject(payload)
         _op['json'] = payload
         _op['query_params'] = query_params
 

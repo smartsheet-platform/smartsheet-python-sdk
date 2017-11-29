@@ -16,18 +16,21 @@
 # under the License.
 
 from __future__ import absolute_import
+import six
 import json
 
 class JSONObject(object):
 
     """Smartsheet JSONObject data model."""
 
-    def __init__(self, props=None, base_obj=None):
+    def __init__(self, payload=None, base_obj=None):
         """Initialize the JSONObject model."""
         self._base = None
+        self._data = None
         if base_obj is not None:
             self._base = base_obj
-        self._data = props
+        if payload is not None:
+            self.data = payload
 
     @property
     def data(self):
@@ -37,6 +40,8 @@ class JSONObject(object):
     def data(self, value):
         if isinstance(value, dict):
             self._data = value
+        elif isinstance(value, six.string_types):
+            self._data = json.loads(value)
 
     def to_dict(self, op_id=None, method=None):
         return self._data

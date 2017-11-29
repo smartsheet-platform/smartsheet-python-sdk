@@ -22,10 +22,16 @@ class TestRegression:
                                                   {'include': ['format', 'ownerInfo']})
         assert json.data['id'] is not None
 
-        json = smart.Passthrough.put('/sheets/' + str(json.data['id']),
-                                                  smart.models.JSONObject({'name': 'my new new sheet'}))
+        # change the name using a Python dict as input
+        json = smart.Passthrough.put('/sheets/' + str(json.data['id']), {'name': 'my new new sheet'})
         assert json.data['message'] == 'SUCCESS'
         assert json.data['result']['name'] == 'my new new sheet'
 
+        # change the name again using a JSON str as input
+        json = smart.Passthrough.put('/sheets/' + str(json.data['result']['id']), '{"name": "my really new sheet"}')
+        assert json.data['message'] == 'SUCCESS'
+        assert json.data['result']['name'] == 'my really new sheet'
+
+        # delete
         json = smart.Passthrough.delete('/sheets/' + str(json.data['result']['id']))
         assert json.data['message'] == 'SUCCESS'
