@@ -18,8 +18,7 @@
 from __future__ import absolute_import
 
 import logging
-import os.path
-import six
+from datetime import datetime
 from . import fresh_operation
 
 
@@ -32,12 +31,28 @@ class Search(object):
         self._base = smartsheet_obj
         self._log = logging.getLogger(__name__)
 
-    def search(self, query):
+    def search(self, query, include=None, location=None, modified_since=None, scopes=None):
         """Search all Sheets the User can access for the specified text.
 
         Args:
-            query (str): Text with which to perform the
-                search.
+            query (str): Text with which to perform the search.
+            include (str): when specified with a value of 'favoriteFlag',
+                response indicates which returned items are favorites
+            location (str): when specified with a value of 'personalWorkspace',
+                limits the response to only those items in the user's Workspaces
+            modified_since (str): includes items that are modified on or after the
+                date and time specified
+            scopes (str): comma-seperated list of search filters:
+                attachments
+                cellData
+                comments
+                folderNames
+                profileFields
+                reportNames
+                sheetNames
+                sightNames
+                templateNames
+                workspaceNames
 
         Returns:
             SearchResult
@@ -46,6 +61,11 @@ class Search(object):
         _op['method'] = 'GET'
         _op['path'] = '/search'
         _op['query_params']['query'] = query
+        _op['query_params']['include'] = include
+        _op['query_params']['location'] = location
+        _op['query_params']['scopes'] = scopes
+        if isinstance(modified_since, datetime):
+            _op['query_params']['modifiedSince'] = modified_since.isoformat()
 
         expected = 'SearchResult'
         prepped_request = self._base.prepare_request(_op)

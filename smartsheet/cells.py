@@ -75,7 +75,7 @@ class Cells(object):
 
         return response
 
-    def add_image_to_cell(self, sheet_id, row_id, column_id, file, file_type):
+    def add_image_to_cell(self, sheet_id, row_id, column_id, file, file_type, override_validation=False, alt_text=None):
         """Uploads an image to the specified cell.
 
         Args:
@@ -94,9 +94,9 @@ class Cells(object):
                 ('One or more required values '
                  'are missing from call to ' + __name__))
 
-        return self._attach_file_to_cell(sheet_id, row_id, column_id, file, file_type)
+        return self._attach_file_to_cell(sheet_id, row_id, column_id, file, file_type, override_validation, alt_text)
 
-    def _attach_file_to_cell(self, sheet_id, row_id, column_id, file, file_type):
+    def _attach_file_to_cell(self, sheet_id, row_id, column_id, file, file_type, override_validation, alt_text):
 
         _data = open(file, 'rb').read()
 
@@ -106,6 +106,8 @@ class Cells(object):
                       '/columns/' + str(column_id) + '/cellimages'
         _op['headers'] = {'content-type':file_type,
                           'content-disposition':'attachment; filename="' + file + '"'}
+        _op['query_params']['altText'] = alt_text
+        _op['query_params']['overrideValidation'] = override_validation
         _op['form_data'] = _data
 
         expected = 'Result'

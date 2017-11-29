@@ -37,6 +37,8 @@ class ReportPublish(object):
         self._read_only_full_enabled = False
         self._read_only_full_url = None
         self._read_only_full_accessible_by = None
+        self._read_only_full_default_view = None
+        self._read_only_full_show_toolbar = True
 
         if props:
             # account for alternate variable names from raw API response
@@ -56,6 +58,18 @@ class ReportPublish(object):
             if 'read_only_full_accessible_by' in props:
                 self.read_only_full_accessible_by = props[
                     'read_only_full_accessible_by']
+            if 'readOnlyFullDefaultView' in props:
+                self.read_only_full_default_view = props[
+                    'readOnlyFullDefaultView']
+            if 'read_only_full_default_view' in props:
+                self.read_only_full_default_view = props[
+                    'read_only_full_default_view']
+            if 'readOnlyFullShowToolbar' in props:
+                self.read_only_full_show_toolbar = props[
+                    'readOnlyFullShowToolbar']
+            if 'read_only_full_show_toolbar' in props:
+                self.read_only_full_show_toolbar = props[
+                    'read_only_full_show_toolbar']
         # requests package Response object
         self.request_response = None
         self.__initialized = True
@@ -88,6 +102,24 @@ class ReportPublish(object):
             self._read_only_full_accessible_by = value
 
     @property
+    def read_only_full_default_view(self):
+        return self._read_only_full_default_view
+
+    @read_only_full_default_view.setter
+    def read_only_full_default_view(self, value):
+        if isinstance(value, six.string_types):
+            self._read_only_full_default_view = value;
+
+    @property
+    def read_only_full_show_toolbar(self):
+        return self._read_only_full_show_toolbar
+
+    @read_only_full_show_toolbar.setter
+    def read_only_full_show_toolbar(self, value):
+        if isinstance(value, bool):
+            self._read_only_full_show_toolbar = value
+
+    @property
     def pre_request_filter(self):
         return self._pre_request_filter
 
@@ -99,12 +131,17 @@ class ReportPublish(object):
         obj = {
             'readOnlyFullEnabled': prep(self._read_only_full_enabled),
             'readOnlyFullAccessibleBy': prep(self._read_only_full_accessible_by),
-            'readOnlyFullUrl': prep(self._read_only_full_url)}
+            'readOnlyFullUrl': prep(self._read_only_full_url),
+            'readOnlyFullDefaultView': prep(self._read_only_full_default_view),
+            'readOnlyFullShowToolbar': prep(self._read_only_full_show_toolbar)}
         return self._apply_pre_request_filter(obj)
 
     def _apply_pre_request_filter(self, obj):
         if self.pre_request_filter == 'set_publish_status':
-            permitted = ['readOnlyFullEnabled', 'readOnlyFullAccessibleBy']
+            permitted = ['readOnlyFullEnabled',
+                         'readOnlyFullAccessibleBy',
+                         'readOnlyFullDefaultView',
+                         'readOnlyFullShowToolbar']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:

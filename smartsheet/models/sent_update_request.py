@@ -76,10 +76,10 @@ class SentUpdateRequest(object):
                 self.sent_by = props['sent_by']
             if 'status' in props:
                 self.status = props['status']
-            if 'rowsIds' in props:
-                self.rows_ids = props['rowIds']
-            if 'rows_ids' in props:
-                self.rows_ids = props['row_ids']
+            if 'rowIds' in props:
+                self.row_ids = props['rowIds']
+            if 'row_ids' in props:
+                self.row_ids = props['row_ids']
             if 'columnIds' in props:
                 self.column_ids = props['columnIds']
             if 'column_ids' in props:

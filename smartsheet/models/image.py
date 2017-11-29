@@ -19,7 +19,6 @@ from __future__ import absolute_import
 
 from ..util import prep
 import json
-import logging
 import six
 
 class Image(object):

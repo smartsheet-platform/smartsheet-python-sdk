@@ -229,7 +229,7 @@ class Sheets(object):
         return response
 
     def copy_sheet(self, sheet_id, container_destination_obj,
-                   include=None):
+                   include=None, omit=None):
         """Creates a copy of the specified Sheet
 
         Args:
@@ -238,8 +238,10 @@ class Sheets(object):
                 (ContainerDestination): Container Destination object.
             include (list[str]): A comma-separated list of
                 optional elements to include in the response. Valid list
-                values: data, attachments, discussions, cellLinks, forms,
-                all.
+                values: attachments, cellLinks, data, discussions, forms,
+                    ruleRecipients, rules, shares, all (deprecated).
+            omit (list[str]): A comma-seperated list of optional elements
+                to omit. Only current valid value is sheetHyperlinks
 
         Returns:
             Result
@@ -248,6 +250,7 @@ class Sheets(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/copy'
         _op['query_params']['include'] = include
+        _op['query_params']['omit'] = omit
         _op['json'] = container_destination_obj
 
         expected = ['Result', 'Sheet']
@@ -352,9 +355,7 @@ class Sheets(object):
         Args:
             sheet_id (int): Sheet ID
             column_id (int): Column ID
-            include (str): When specified with a value of
-                'filters', response will include the Filter the user has
-                applied (if any).
+            include (str): (future)
 
         Returns:
             Column
@@ -377,9 +378,7 @@ class Sheets(object):
 
         Args:
             sheet_id (int): Sheet ID
-            include (str): When specified with a value of
-                'filters', response will include the Filter the user has
-                applied (if any).
+            include (str): (future)
             page_size (int): The maximum number of items to
                 return per page. Defaults to 100.
             page (int): Which page to return. Defaults to 1
@@ -489,7 +488,7 @@ class Sheets(object):
             include (list[str]): A comma-separated list of
                 optional elements to include in the response. Valid list
                 values: attachments, discussions, format, filters,
-                ownerInfo, source, rowWriterInfo.
+                filterDefinitions, ownerInfo, source, rowWriterInfo.
             exclude (str): Response will not include cells
                 that have never contained any data.
             row_ids (list[int]): comma-separated list of Row
@@ -705,7 +704,7 @@ class Sheets(object):
         Args:
             include (list[str]): A comma-separated list of
                 optional elements to include in the response. Valid list
-                values: ownerInfo, source.
+                values: ownerInfo, sheetVersion, source.
             page_size (int): The maximum number of items to
                 return per page. Defaults to 100.
             page (int): Which page to return. Defaults to 1
@@ -1321,15 +1320,83 @@ class Sheets(object):
 
         return response
 
+    def list_filters(self, sheet_id, page_size=100, page=1,
+                        include_all=False):
+        """Returns a list of all saved sheet filters
+
+        Args:
+            sheet_id (int): Sheet ID
+            page_size (int): The maximum number of items to
+                return per page. Defaults to 100.
+            page (int): Which page to return. Defaults to 1
+                if not specified.
+            include_all (bool): If true, include all results
+                (i.e. do not paginate).
+
+        Returns:
+            IndexResult
+        """
+        _op = fresh_operation('list_sheet_filters')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/filters'
+        _op['query_params']['pageSize'] = page_size
+        _op['query_params']['page'] = page
+        _op['query_params']['includeAll'] = include_all
+
+        expected = ['IndexResult', 'SheetFilter']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def get_filter(self, sheet_id, filter_id):
+        """Get the Filter.
+
+        Args:
+            sheet_id (int): Sheet ID
+            filter_id (int): Filter ID
+
+        Returns:
+            Filter
+        """
+        _op = fresh_operation('get_sheet_filter')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/filters/' + str(filter_id)
+
+        expected = 'SheetFilter'
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def delete_filter(self, sheet_id, filter_id):
+        """Deletes a Filter for the specified Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            filter_id (int): Filter ID
+
+        Returns:
+            Result
+        """
+        _op = fresh_operation('delete_sheet_filter')
+        _op['method'] = 'DELETE'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/filters/' + str(filter_id)
+
+        expected = 'Result'
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
     def get_column_by_title(self, sheet_id, title, include=None):
         """For those times when you don't know the Column Id.
 
         Note: returns the first matching title found.
 
         Args:
-            include (str): When specified with a value of
-                'filters', response will include the Filter the user has
-                applied (if any).
+            include (str): (future).
         """
         all_columns = self.get_columns(sheet_id, include_all=True)
         for _c in all_columns.data:

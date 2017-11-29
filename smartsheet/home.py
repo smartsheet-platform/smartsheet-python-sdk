@@ -134,7 +134,7 @@ class Home(object):
         Args:
             include (list[str]): A comma-separated list of
                 optional elements to include in the response. Valid list
-                values: ownerInfo, source.
+                values: ownerInfo, sheetVersion, source.
 
         Returns:
             Home

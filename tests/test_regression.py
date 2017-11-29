@@ -1,5 +1,9 @@
 import pytest
 import six
+import os.path
+from datetime import date
+
+_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 @pytest.mark.usefixtures("smart_setup")
@@ -100,6 +104,24 @@ class TestRegression:
         task3_row = action.result[0]
         assert isinstance(task3_row, smart.models.row.Row)
         assert action.request_response.status_code == 200
+
+        # clear the predecessor list from task 3
+        row = smart.models.Row()
+        row.id = task3_row.id
+        row.row_number = task3_row.row_number
+        for col in sheet.columns:
+            if col.type == 'PREDECESSOR':
+                row.cells.append({
+                    'column_id': col.id
+                })
+                break
+
+        action = smart.Sheets.update_rows(sheet.id, [row])
+        assert action.request_response.status_code == 200
+        for cell in action.data[0].cells:
+            if cell.column_id == col.id:
+                break;
+        assert cell.object_value is None
 
         # clean up
         action = smart.Sheets.delete_sheet(sheet.id)
@@ -240,4 +262,71 @@ class TestRegression:
                                                      action.result[2].id, action.result[3].id])
         assert action.request_response.status_code == 200
 
+    def test_validation(self, smart_setup):
+        smart = smart_setup['smart']
 
+        sheet_spec = smart.models.Sheet({
+            'name': 'my validation sheet',
+            'columns': [{
+                'title': 'col 1',
+                'type': 'DATE'
+            }, {
+                'title': 'col 2',
+                'primary': True,
+                'type': 'TEXT_NUMBER'
+            }]
+        })
+        action = smart.Home.create_sheet(sheet_spec)
+        assert action.message == 'SUCCESS'
+        sheet = action.result
+
+        col1 = smart.models.Column()
+        col1.validation = True
+        action = smart.Sheets.update_column(sheet.id, sheet.columns[0].id, col1)
+        assert action.message == 'SUCCESS'
+
+        sheet_row = smart.models.Row({
+            'to_top': True,
+            'cells': [{
+                'column_id': sheet.columns[0].id,
+                'value': date.today().strftime("%Y-%m-%d")
+            }, {
+                'column_id': sheet.columns[1].id,
+                'value': 'this is a test'
+            }]
+        })
+        action = smart.Sheets.add_rows(sheet.id, [sheet_row])
+        assert action.message == 'SUCCESS'
+
+        sheet_row = smart.models.Row({
+            'to_top': True,
+            'cells': [{
+                'column_id': sheet.columns[0].id,
+                'value': 'this is an invalid value'
+            }, {
+                'column_id': sheet.columns[1].id,
+                'value': 'this is a test'
+            }]
+        })
+        action = smart.Sheets.add_rows(sheet.id, [sheet_row])
+        assert action.message == 'ERROR'
+
+        sheet_row.cells[0].override_validation = True
+        sheet_row.cells[0].strict = False
+        action = smart.Sheets.add_rows(sheet.id, [sheet_row])
+        assert action.message == 'SUCCESS'
+
+        sheet = smart.Sheets.get_sheet(sheet.id)
+        action = smart.Cells.add_image_to_cell(sheet.id, sheet.rows[0].id, sheet.columns[0].id,
+                                               _dir + '/fixtures/stooges_v1.jpg', 'image/jpeg')
+        # expect error here because we did not override validation
+        assert action.message == 'ERROR'
+
+        action = smart.Cells.add_image_to_cell(sheet.id, sheet.rows[0].id, sheet.columns[0].id,
+                                               _dir + '/fixtures/stooges_v1.jpg', 'image/jpeg', True)
+        # expect error here because we did not override validation
+        assert action.message == 'SUCCESS'
+
+        # clean up
+        action = smart.Sheets.delete_sheet(sheet.id)
+        assert action.message == 'SUCCESS'

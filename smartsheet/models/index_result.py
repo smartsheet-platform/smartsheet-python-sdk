@@ -30,6 +30,7 @@ from .report import Report
 from .sent_update_request import SentUpdateRequest
 from .share import Share
 from .sheet import Sheet
+from .sheet_filter import SheetFilter
 from .sight import Sight
 from .template import Template
 from .update_request import UpdateRequest
@@ -38,9 +39,7 @@ from .webhook import Webhook
 from .workspace import Workspace
 from ..types import TypedList
 from ..util import prep
-from datetime import datetime
 import json
-import logging
 import six
 
 class IndexResult(object):
@@ -157,6 +156,11 @@ class IndexResult(object):
                 self._data = [Sheet(x, self._base) for x in value]
             else:
                 self._data = Sheet(value, self._base)
+        if self._dynamic_data_type == 'SheetFilter':
+            if isinstance(value, list):
+                self._data = [SheetFilter(x, self._base) for x in value]
+            else:
+                self._data = SheetFilter(value, self._base)
         if self._dynamic_data_type == 'Sight':
             if isinstance(value, list):
                 self._data = [Sight(x, self._base) for x in value]

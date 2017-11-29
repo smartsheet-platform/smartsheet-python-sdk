@@ -34,34 +34,22 @@ class Workspaces(object):
         self._log = logging.getLogger(__name__)
 
     def copy_workspace(self, workspace_id, container_destination_obj,
-                       include=None, skip_remap=None):
+                       include=None, skip_remap=None, omit=None):
         """Create a copy of the specified Workspace.
 
         Args:
             workspace_id (int): Workspace ID
             container_destination_obj (ContainerDestination): Container Destination object.
-            include (list[str]): A comma-separated list of optional elements to copy. Valid list values:
-
-                data
-
-                attachments
-
-                discussions
-
-                cellLinks
-
-                forms
-
-                brand
-
-                shares
-
-                **all** - specify a value of \"all\" to include everything.
-
-        Cell history will not be copied, regardless of which **include** parameter values are specified.
-            skip_remap (list[str]): A comma separated list of references to NOT re-map for the newly created resource.
-            Valid list items: cellLinks, reports, sheetHyperlinks, sights
-
+            include (list[str]): A comma-separated list of optional elements to copy.
+                Valid list values: attachments, brand, cellLinks, data, discussions, filters,
+                    forms, ruleRecipients, rules, shares, all (deprecated).
+                Cell history will not be copied, regardless of which **include** parameter values
+                    are specified.
+            skip_remap (list[str]): A comma separated list of references to NOT re-map for
+                the newly created resource.
+                    Valid list items: cellLinks, reports, sheetHyperlinks, sights
+            omit (list[str]): a comma seperated list of items to exclude. The only
+                currently valid option is sheetHyperlinks
         Returns:
             Result
         """
@@ -70,6 +58,7 @@ class Workspaces(object):
         _op['path'] = '/workspaces/' + str(workspace_id) + '/copy'
         _op['query_params']['include'] = include
         _op['query_params']['skipRemap'] = skip_remap
+        _op['query_params']['omit'] = omit
         _op['json'] = container_destination_obj
         # filter before we go
         _op['json'].pre_request_filter = 'copy_workspace'
@@ -276,7 +265,7 @@ class Workspaces(object):
                 nested items.
             include (list[str]): A comma-separated list of
                 optional elements to include in the response. Valid list
-                values: ownerInfo, source.
+                values: ownerInfo, sheetVersion, source.
 
         Returns:
             Workspace
@@ -324,12 +313,19 @@ class Workspaces(object):
 
         return response
 
-    def list_shares(self, workspace_id, include_workspace_shares=False):
+    def list_shares(self, workspace_id, page_size=100, page=1,
+                    include_all=False):
         """Get a list of all Users and Groups to whom the specified Workspace
         is shared, and their access level.
 
         Args:
             workspace_id (int): Workspace ID
+            page_size (int): The maximum number of items to
+                return per page. Defaults to 100.
+            page (int): Which page to return. Defaults to 1
+                if not specified.
+            include_all (bool): If true, include all results
+                (i.e. do not paginate).
 
         Returns:
             IndexResult
@@ -337,9 +333,9 @@ class Workspaces(object):
         _op = fresh_operation('list_shares')
         _op['method'] = 'GET'
         _op['path'] = '/workspaces/' + str(workspace_id) + '/shares'
-        if include_workspace_shares:
-            _op['query_params']['include'] = 'workspaceShares'
-
+        _op['query_params']['pageSize'] = page_size
+        _op['query_params']['page'] = page
+        _op['query_params']['includeAll'] = include_all
         expected = ['IndexResult', 'Share']
 
         prepped_request = self._base.prepare_request(_op)

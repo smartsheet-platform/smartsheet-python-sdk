@@ -26,8 +26,9 @@ import random
 import time
 import sys
 import requests
-from requests_toolbelt.utils import dump
 import six
+import inspect
+import json
 
 from .exceptions import *
 from .models import Error, ErrorResult
@@ -69,6 +70,9 @@ def setup_logging():
                 logging.basicConfig(level=logging.DEBUG)
             elif log_env.upper() == 'INFO':
                 logging.basicConfig(level=logging.INFO)
+    # we will do most of the logging here so turn down the requests library
+    logging.getLogger('requests').setLevel(logging.WARNING)
+    logging.getLogger('urllib3').setLevel(logging.WARNING)
 
 
 class AbstractUserCalcBackoff(object):
@@ -94,11 +98,13 @@ class DefaultCalcBackoff(AbstractUserCalcBackoff):
         Returns:
              (float) Back off time in seconds (any negative number will drop out of retry loop)
         """
-        if total_elapsed_time > self._max_retry_time:
-            return -1
 
         # Use exponential backoff
         backoff = (2 ** previous_attempts) + random.random()
+
+        if (total_elapsed_time + backoff) > self._max_retry_time:
+            return -1
+
         return backoff
 
 
@@ -150,9 +156,11 @@ class Smartsheet(object):
 
         base_user_agent = 'SmartsheetPythonSDK/' + __version__
         if user_agent:
-            self._user_agent = '{}/{}'.format(user_agent, base_user_agent)
+            self._user_agent = '{}/{}'.format(base_user_agent, user_agent)
         else:
-            self._user_agent = base_user_agent
+            stack = inspect.stack()
+            caller = inspect.getmodule(stack[-1][0]).__name__
+            self._user_agent = '{}/{}'.format(base_user_agent, caller)
 
         self._log = logging.getLogger(__name__)
         setup_logging()
@@ -221,6 +229,40 @@ class Smartsheet(object):
 
         return res.native(expected)
 
+    def _log_request(self, operation, response):
+        """
+        Wrapper for request/response logger
+
+        Args:
+            operation (dict):
+            response (Response):
+        """
+        # request
+        self._log.info('Request: {\ncommand: %s %s\n}', response.request.method, response.request.url)
+        if response.request.body is not None:
+            body_dumps = '<< {} content type suppressed >>'.format(response.request.headers['Content-Type'])
+            if is_multipart(response.request):
+                body_dumps = '<< multipart body suppressed >>'
+            elif 'application/json' in response.request.headers['Content-Type']:
+                body = response.request.body.decode('utf8')
+                body_dumps = json.dumps(json.loads(body), indent=4, sort_keys=True)
+            self._log.debug('Request Body: {\n%s\n}', body_dumps)
+        # response
+        content_dumps = '<< {} content type suppressed >>'.format(response.headers['Content-Type'])
+        if 'application/json' in response.headers['Content-Type']:
+            content = response.content.decode('utf8')
+            content_dumps = json.dumps(json.loads(content), indent=4, sort_keys=True)
+        if 200 <= response.status_code <= 299:
+            if operation['dl_path'] is None:
+                self._log.debug('Response: {\nstatus: %d %s\ncontent: {\n%s\n}',
+                               response.status_code, response.reason, content_dumps)
+            else:
+                self._log.debug('Response: {\nstatus: %d %s',
+                               response.status_code, response.reason)
+        else:
+            self._log.error('Response: {\nstatus: %d %s\ncontent: {\n%s\n}',
+                           response.status_code, response.reason, content_dumps)
+
     def _request(self, prepped_request, operation):
         """
         Wrapper for the low-level Request action.
@@ -238,24 +280,15 @@ class Smartsheet(object):
             stream = True
         try:
             res = self._session.send(prepped_request, stream=stream)
+            self._log_request(operation, res)
         except requests.exceptions.SSLError as rex:
             raise HttpError(rex, 'SSL handshake error, old CA bundle or old OpenSSL?')
-        except (requests.exceptions.RequestException) as rex:
+        except requests.exceptions.RequestException as rex:
             raise UnexpectedRequestError(rex.request, rex.response)
 
-        # req_headers = dump_message_headers(res.request)
-        # self._log.debug(req_headers)
-        if is_multipart(res.request):
-            res.request.body = '<< multipart body suppressed >>'
         if 200 <= res.status_code <= 299:
-            if operation['dl_path'] is None:
-                self._log.debug(dump.dump_response(res))
-            else:
-                self._log.debug(res.status_code)
-                self._log.debug(res.headers)
             return OperationResult(res.text, res, self, operation)
         else:
-            self._log.error(dump.dump_response(res))
             return OperationErrorResult(res.text, res)
 
     def request_with_retry(self, prepped_request, operation):
@@ -274,7 +307,6 @@ class Smartsheet(object):
         # Make a copy of the request as the access token will be redacted on response prior to logging
         pre_redact_request = prepped_request.copy()
         while True:
-            self._log.info('Request to %s', prepped_request.url)
             result = self._request(prepped_request, operation)
             if isinstance(result, OperationErrorResult):
                 native = result.native('Error')

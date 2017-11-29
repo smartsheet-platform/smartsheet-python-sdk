@@ -19,6 +19,7 @@ from __future__ import absolute_import
 
 from .attachment import Attachment
 from .column import Column
+from .sheet_filter import SheetFilter
 from .comment import Comment
 from .discussion import Discussion
 from .project_settings import ProjectSettings
@@ -61,6 +62,7 @@ class Sheet(object):
         self._discussions = TypedList(Discussion)
         self._effective_attachment_options = TypedList(str)
         self._favorite = None
+        self._filters = TypedList(SheetFilter)
         self._from_id = None
         self._gantt_enabled = None
         self.__id = None
@@ -109,6 +111,8 @@ class Sheet(object):
                     'effective_attachment_options']
             if 'favorite' in props:
                 self.favorite = props['favorite']
+            if 'filters' in props:
+                self.filters = props['filters']
             if 'fromId' in props:
                 self.from_id = props['fromId']
             if 'from_id' in props:
@@ -299,6 +303,25 @@ class Sheet(object):
     def favorite(self, value):
         if isinstance(value, bool):
             self._favorite = value
+
+    @property
+    def filters(self):
+        return self._filters
+
+    @filters.setter
+    def filters(self, value):
+        if isinstance(value, list):
+            self._filters.purge()
+            self._filters.extend([
+                (SheetFilter(x, self._base)
+                 if not isinstance(x, SheetFilter) else x) for x in value
+            ])
+        elif isinstance(value, TypedList):
+            self._filters.purge()
+            self._filters = value.to_list()
+        elif isinstance(value, SheetFilter):
+            self._filters.purge()
+            self._filters.append(value)
 
     @property
     def from_id(self):
@@ -606,6 +629,7 @@ class Sheet(object):
             'effectiveAttachmentOptions': prep(
                 self._effective_attachment_options),
             'favorite': prep(self._favorite),
+            'filters': prep(self._filters),
             'fromId': prep(self._from_id),
             'ganttEnabled': prep(self._gantt_enabled),
             'id': prep(self.__id),

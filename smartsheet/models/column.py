@@ -18,7 +18,6 @@
 from __future__ import absolute_import
 
 from .auto_number_format import AutoNumberFormat
-from .filter import Filter
 from .contact_option import ContactOption
 from ..types import TypedList
 from ..util import prep
@@ -84,7 +83,6 @@ class Column(object):
 
         self._auto_number_format = None
         self._contact_options = TypedList(ContactOption)
-        self.__filter = None
         self.__format = None
         self._hidden = None
         self.__id = None
@@ -99,6 +97,7 @@ class Column(object):
         self._title = None
         self.__type = None
         self._width = None
+        self._validation = None
 
         if props:
             # account for alternate variable names from raw API response
@@ -112,10 +111,6 @@ class Column(object):
                 self.contact_options = props['contactOptions']
             if 'contact_options' in props:
                 self.contact_options = props['contact_options']
-            if 'filter' in props:
-                self._filter = props['filter']
-            if '_filter' in props:
-                self._filter = props['_filter']
             if 'format' in props:
                 self._format = props['format']
             if '_format' in props:
@@ -156,14 +151,14 @@ class Column(object):
                 self._type = props['_type']
             if 'width' in props:
                 self.width = props['width']
+            if 'validation' in props:
+                self.validation = props['validation']
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
-        if key == 'filter':
-            return self._filter
-        elif key == 'format':
+        if key == 'format':
             return self._format
         elif key == 'id':
             return self._id
@@ -201,17 +196,6 @@ class Column(object):
         elif isinstance(value, ContactOption):
             self._contact_options.purge()
             self._contact_options.append(value)
-
-    @property
-    def _filter(self):
-        return self.__filter
-
-    @_filter.setter
-    def _filter(self, value):
-        if isinstance(value, Filter):
-            self.__filter = value
-        else:
-            self.__filter = Filter(value, self._base)
 
     @property
     def _format(self):
@@ -375,6 +359,15 @@ class Column(object):
             self._width = value
 
     @property
+    def validation(self):
+        return self._validation
+
+    @validation.setter
+    def validation(self, value):
+        if isinstance(value, bool):
+            self._validation = value;
+
+    @property
     def pre_request_filter(self):
         return self._pre_request_filter
 
@@ -382,8 +375,6 @@ class Column(object):
     def pre_request_filter(self, value):
         if self.auto_number_format is not None:
             self.auto_number_format.pre_request_filter = value
-        if self._filter is not None:
-            self._filter.pre_request_filter = value
         self._pre_request_filter = value
 
     def to_dict(self, op_id=None, method=None):
@@ -391,13 +382,10 @@ class Column(object):
         if req_filter:
             if self.auto_number_format is not None:
                 self.auto_number_format.pre_request_filter = req_filter
-            if self._filter is not None:
-                self._filter.pre_request_filter = req_filter
 
         obj = {
             'autoNumberFormat': prep(self._auto_number_format),
             'contactOptions': prep(self._contact_options),
-            'filter': prep(self.__filter),
             'format': prep(self.__format),
             'hidden': prep(self._hidden),
             'id': prep(self.__id),
@@ -411,14 +399,16 @@ class Column(object):
             'tags': prep(self._tags),
             'title': prep(self._title),
             'type': prep(self.__type),
-            'width': prep(self._width)}
+            'width': prep(self._width),
+            'validation': prep(self._validation)}
+
         return self._apply_pre_request_filter(obj)
 
     def _apply_pre_request_filter(self, obj):
         if self.pre_request_filter == 'add_columns':
             permitted = ['title', 'type', 'symbol',
                          'options', 'index', 'systemColumnType', 'autoNumberFormat',
-                         'width', 'locked', 'hidden', 'contactOptions']
+                         'validation', 'width', 'locked', 'hidden', 'contactOptions']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
@@ -465,8 +455,8 @@ class Column(object):
 
         if self.pre_request_filter == 'update_column':
             permitted = ['index', 'title', 'type', 'symbol',
-                         'options', 'systemColumnType', 'autoNumberFormat', 'width',
-                         'locked', 'hidden', 'contactOptions']
+                         'options', 'systemColumnType', 'autoNumberFormat', 'validation',
+                         'width', 'locked', 'hidden', 'contactOptions']
             all_keys = list(obj.keys())
             for key in all_keys:
                 if key not in permitted:
@@ -477,6 +467,8 @@ class Column(object):
 
             if self.type != 'PICKLIST':
                 del obj['options']
+            if self.type == 'TEXT_NUMBER':
+                del obj['validation']
 
         return obj
 
