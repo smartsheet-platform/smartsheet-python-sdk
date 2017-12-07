@@ -38,9 +38,9 @@ There are three log levels currently supported by the Smartsheet Python SDK (in 
 **DEBUG** - API request and response bodies and messages regarding object attributes that are changed by the SDK due to the nature of the API call being made
 
 Use the logging facility's [basicConfig](https://docs.python.org/2/library/logging.html#logging.basicConfig) method to set your logging properties:
- 
+
     import logging
-    logging.basicConfig(filename='mylog.log', level=logging.DEBUG) 
+    logging.basicConfig(filename='mylog.log', level=logging.DEBUG)
 
 ## Documentation
 The Smartsheet API is documented here: http://smartsheet-platform.github.io/api-docs/
@@ -65,6 +65,18 @@ If you have any questions or issues with this SDK please post on StackOverflow u
 
 ## Contributing
 If you would like to contribute a change to the SDK, please fork a branch and then submit a pull request.
+
+### Running the Tests
+#### All
+1. Run `pytest`. Note, the integration and mock API tests will fail unless the mock server is running. See [Mock API Tests](#mock-api-tests) and [Integration Tests](#integration-tests)
+
+#### Integration Tests
+1. Follow the instructions [here](tests/integration/README.md)
+2. Run `pytest tests/integration`
+
+#### Mock API Tests
+1. Clone the [Smartsheet SDK tests](https://github.com/smartsheet-platform/smartsheet-sdk-tests) repo and follow the instructions from the README to start the mock server
+2. Run `pytest tests/mock_api`
 
 ## Release Notes
 Each release with notes is available for download on the [Github Releases page](https://github.com/smartsheet-platform/smartsheet-python-sdk/releases).
