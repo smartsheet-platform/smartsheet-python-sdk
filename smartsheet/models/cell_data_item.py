@@ -18,9 +18,13 @@
 from __future__ import absolute_import
 from ..util import prep
 from .cell import Cell
-import logging
+from .object_value import ObjectValue
+from .string_object_value import StringObjectValue
+from .boolean_object_value import BooleanObjectValue
+from .number_object_value import NumberObjectValue
 import six
 import json
+
 
 class CellDataItem(object):
     """Smartsheet CellDataItem data model."""
@@ -89,7 +93,14 @@ class CellDataItem(object):
 
     @object_value.setter
     def object_value(self, value):
-        self._object_value = value
+        if isinstance(value, ObjectValue):
+            self._object_value = value
+        elif isinstance(value, six.string_types):
+            self._object_value = StringObjectValue(value)
+        elif isinstance(value, (six.integer_types, float)):
+            self._object_value = NumberObjectValue(value)
+        elif isinstance(value, bool):
+            self._object_value = BooleanObjectValue(value)
 
     @property
     def cell(self):
@@ -99,6 +110,8 @@ class CellDataItem(object):
     def cell(self, value):
         if isinstance(value, Cell):
             self._cell = value
+        elif isinstance(value, dict):
+            self._cell = Cell(value, self._base)
 
     @property
     def value_format(self):
@@ -108,6 +121,15 @@ class CellDataItem(object):
     def value_format(self, value):
         if isinstance(value, six.string_types):
             self._value_format = value
+
+    @property
+    def order(self):
+        return self._order
+
+    @order.setter
+    def order(self, value):
+        if isinstance(value, six.integer_types):
+            self._order = value
 
     @property
     def column_id(self):

@@ -22,7 +22,7 @@ from ..util import prep
 from .column import Column
 from .cell_data_item import CellDataItem
 from .shortcut_data_item import ShortcutDataItem
-import logging
+from .hyperlink import Hyperlink
 import six
 import json
 
@@ -39,7 +39,7 @@ class WidgetContent(object):
         """Represents the CellLinkWidgetContent object."""
         self._hyperlink = None
         self._cell_data = TypedList(CellDataItem)
-        self._column = TypedList(Column)
+        self._columns = TypedList(Column)
 
         """Represents the RichtextWidgetContent object."""
         self._html = None
@@ -63,13 +63,13 @@ class WidgetContent(object):
         if props:
             # account for alternate variable names from raw API response
             if 'hyperlink' in props:
-                self.hyperlink = props['id']
+                self.hyperlink = props['hyperlink']
             if 'cellData' in props:
                 self.cell_data = props['cellData']
             if 'cell_data' in props:
                 self.cell_data = props['cell_data']
-            if 'column' in props:
-                self.column = props['column']
+            if 'columns' in props:
+                self.columns = props['columns']
             if 'html' in props:
                 self.html = props['html']
             if 'shortcutData' in props:
@@ -99,6 +99,64 @@ class WidgetContent(object):
             if 'background_color' in props:
                 self.background_color = props['background_color']
         self.__initialized = True
+
+    @property
+    def hyperlink(self):
+        return self._hyperlink
+
+    @hyperlink.setter
+    def hyperlink(self, value):
+        if isinstance(value, Hyperlink):
+            self._hyperlink = value
+        elif isinstance(value, dict):
+            self._hyperlink = Hyperlink(value, self._base)
+
+    @property
+    def cell_data(self):
+        return self._cell_data
+
+    @cell_data.setter
+    def cell_data(self, value):
+        if isinstance(value, list):
+            self._cell_data.purge()
+            self._cell_data.extend([
+                (CellDataItem(x, self._base)
+                 if not isinstance(x, CellDataItem) else x) for x in value
+             ])
+        elif isinstance(value, TypedList):
+            self._cell_data.purge()
+            self._cell_data = value.to_list()
+        elif isinstance(value, CellDataItem):
+            self._cell_data.purge()
+            self._cell_data.append(value)
+
+    @property
+    def columns(self):
+        return self._columns
+
+    @columns.setter
+    def columns(self, value):
+        if isinstance(value, list):
+            self._columns.purge()
+            self._columns.extend([
+                (Column(x, self._base)
+                 if not isinstance(x, Column) else x) for x in value
+             ])
+        elif isinstance(value, TypedList):
+            self._columns.purge()
+            self._columns = value.to_list()
+        elif isinstance(value, Column):
+            self._columns.purge()
+            self._columns.append(value)
+
+    @property
+    def html(self):
+        return self._html
+
+    @html.setter
+    def html(self, value):
+        if isinstance(value, six.string_types):
+            self._html = value
 
     @property
     def shortcut_data(self):
