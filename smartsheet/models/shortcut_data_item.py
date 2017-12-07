@@ -33,6 +33,7 @@ class ShortcutDataItem(object):
 
         self._label = None
         self._label_format = None
+        self._attachment_type = None
         self._mime_type = None
         self._hyperlink = None
         self._order = None
@@ -45,6 +46,10 @@ class ShortcutDataItem(object):
                 self.label_format = props['labelFormat']
             if 'label_format' in props:
                 self.label_format = props['label_format']
+            if 'attachmentType' in props:
+                self.attachment_type = props['attachmentType']
+            if 'attachment_type' in props:
+                self.attachment_type = props['attachment_type']
             if 'mimeType' in props:
                 self.mime_type = props['mimeType']
             if 'mime_type' in props:
@@ -74,6 +79,15 @@ class ShortcutDataItem(object):
             self._label_format = value
 
     @property
+    def attachment_type(self):
+        return self._attachment_type
+
+    @attachment_type.setter
+    def attachment_type(self, value):
+        if isinstance(value, six.string_types):
+            self._attachment_type = value
+
+    @property
     def mime_type(self):
         return self._mime_type
 
@@ -90,6 +104,8 @@ class ShortcutDataItem(object):
     def hyperlink(self, value):
         if isinstance(value, Hyperlink):
             self._hyperlink = value
+        elif isinstance(value, dict):
+            self._hyperlink = Hyperlink(value, self._base)
 
     @property
     def order(self):
@@ -104,7 +120,8 @@ class ShortcutDataItem(object):
         obj = {
             'label': prep(self._label),
             'labelFormat': prep(self._label_format),
-            'mimeTtype': prep(self._mime_type),
+            'attachmentType': prep(self._attachment_type),
+            'mimeType': prep(self._mime_type),
             'hyperlink': prep(self._hyperlink),
             'order': prep(self._order)}
         return obj
