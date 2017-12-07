@@ -244,7 +244,7 @@ class WidgetContent(object):
         obj = {
             'hyperlink': prep(self._hyperlink),
             'cellData': prep(self._cell_data),
-            'column': prep(self._column),
+            'column': prep(self._columns),
             'html': prep(self._html),
             'shortcutData': prep(self._shortcut_data),
             'htmlContent': prep(self._html_content),
