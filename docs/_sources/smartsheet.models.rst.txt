@@ -44,6 +44,14 @@ smartsheet.models.auto_number_format module
     :undoc-members:
     :show-inheritance:
 
+smartsheet.models.boolean_object_value module
+---------------------------------------------
+
+.. automodule:: smartsheet.models.boolean_object_value
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 smartsheet.models.bulk_item_failure module
 ------------------------------------------
 
@@ -116,6 +124,14 @@ smartsheet.models.contact module
     :undoc-members:
     :show-inheritance:
 
+smartsheet.models.contact_object_value module
+---------------------------------------------
+
+.. automodule:: smartsheet.models.contact_object_value
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 smartsheet.models.contact_option module
 ---------------------------------------
 
@@ -168,6 +184,14 @@ smartsheet.models.currency module
 ---------------------------------
 
 .. automodule:: smartsheet.models.currency
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+smartsheet.models.date_object_value module
+------------------------------------------
+
+.. automodule:: smartsheet.models.date_object_value
     :members:
     :undoc-members:
     :show-inheritance:
@@ -332,10 +356,26 @@ smartsheet.models.index_result module
     :undoc-members:
     :show-inheritance:
 
+smartsheet.models.json_object module
+------------------------------------
+
+.. automodule:: smartsheet.models.json_object
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 smartsheet.models.multi_row_email module
 ----------------------------------------
 
 .. automodule:: smartsheet.models.multi_row_email
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+smartsheet.models.number_object_value module
+--------------------------------------------
+
+.. automodule:: smartsheet.models.number_object_value
     :members:
     :undoc-members:
     :show-inheritance:
@@ -360,6 +400,22 @@ smartsheet.models.predecessor module
 ------------------------------------
 
 .. automodule:: smartsheet.models.predecessor
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+smartsheet.models.predecessor_list module
+-----------------------------------------
+
+.. automodule:: smartsheet.models.predecessor_list
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+smartsheet.models.primitive_object_value module
+-----------------------------------------------
+
+.. automodule:: smartsheet.models.primitive_object_value
     :members:
     :undoc-members:
     :show-inheritance:
@@ -516,6 +572,22 @@ smartsheet.models.sheet_email module
     :undoc-members:
     :show-inheritance:
 
+smartsheet.models.sheet_filter module
+-------------------------------------
+
+.. automodule:: smartsheet.models.sheet_filter
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+smartsheet.models.sheet_filter_details module
+---------------------------------------------
+
+.. automodule:: smartsheet.models.sheet_filter_details
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 smartsheet.models.sheet_publish module
 --------------------------------------
 
@@ -560,6 +632,14 @@ smartsheet.models.source module
 -------------------------------
 
 .. automodule:: smartsheet.models.source
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+smartsheet.models.string_object_value module
+--------------------------------------------
+
+.. automodule:: smartsheet.models.string_object_value
     :members:
     :undoc-members:
     :show-inheritance:
