@@ -159,8 +159,11 @@ class Smartsheet(object):
         if user_agent:
             self._user_agent = '{}/{}'.format(base_user_agent, user_agent)
         else:
+            caller = '__unknown__'
             stack = inspect.stack()
-            caller = inspect.getmodule(stack[-1][0]).__name__
+            module = inspect.getmodule(stack[-1][0])
+            if module is not None:
+                caller = inspect.getmodule(stack[-1][0]).__name__
             self._user_agent = '{}/{}'.format(base_user_agent, caller)
 
         self._log = logging.getLogger(__name__)
