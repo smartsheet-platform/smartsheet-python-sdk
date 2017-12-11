@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.3] - 2017-12-11
+
+### Fixed
+
+- Safe defaults for mock api test name and module name
 ## [1.2.2] - 2017-12-7
 ### Added
 - Support for column validation
