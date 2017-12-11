@@ -170,6 +170,8 @@ class Smartsheet(object):
             'API_BASE', __api_base__)
         self._assume_user = None
 
+        self._test_scenario_name = None
+
     def assume_user(self, email=None):
         """Assume identity of specified user.
 
