@@ -52,7 +52,7 @@ docs:
 	$(MAKE) -C docs-source html
 	rm -rf docs
 	cp -r docs-source/_build/html docs
-    cp .nojekyll docs
+	cp .nojekyll docs
 	open docs/index.html
 
 # Don't use - see release docs
