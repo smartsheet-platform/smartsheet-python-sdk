@@ -4,7 +4,9 @@
 This library is intended to simplify connecting to the [Smartsheet API](http://smartsheet-platform.github.io/api-docs/) from Python applications.
 
 ## System Requirements
-The SDK currently supports Python 2.7, 3.3, 3.4, 3.5, 3.6, pypy, and pypy3.
+The SDK currently supports Python 2.7, 3.3, 3.4, 3.5, 3.6, pypy, and pypy3.  
+**Note** that Python version 3.3 or higher is required for Unicode support. (E.g. if your Smartsheet data includes non-ASCII characters.)  
+
 The following packages are required.
 
 * [requests](https://pypi.python.org/pypi/requests)
