@@ -62,6 +62,18 @@ Getting started with the Python SDK is easy:
 
 See a sample application here: https://github.com/smartsheet-samples/python-read-write-sheet
 
+## Passthrough Option
+
+There are times when you need to pass data back and forth, but either the SDK doesn't fit your needs or that feature from the UI hasn't been added to the SDK yet. For these times, the Smartsheet Python SDK has a passthrough option so you can pass raw JSON blobs back and forth. 
+
+To invoke the passthrough, your code needs to have the following structure:
+
+json = ss_client.Passthrough.xxx('/sheets', json)
+
+Where xxx can be get, post, put, or delete.
+
+The client object base URL gets prepended to the caller’s URL argument, so in the above example, an HTTP POST is sent to the URL https://api.smartsheet.com/2.0/sheets
+
 ## Support
 If you have any questions or issues with this SDK please post on StackOverflow using the tag ["smartsheet-api"](http://stackoverflow.com/questions/tagged/smartsheet-api) or contact us directly at api@smartsheet.com.
 
