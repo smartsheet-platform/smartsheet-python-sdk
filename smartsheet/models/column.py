@@ -469,6 +469,8 @@ class Column(object):
                 del obj['options']
             if self.type == 'TEXT_NUMBER':
                 del obj['validation']
+            if self.type != 'CONTACT_LIST' and not self.contact_options:
+                del obj['contactOptions']
 
         return obj
 
