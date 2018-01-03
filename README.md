@@ -64,29 +64,20 @@ See a sample application here: https://github.com/smartsheet-samples/python-read
 
 ## Passthrough Option
 
-There are times when you need to pass data back and forth, but either the SDK doesn't fit your needs or that feature from the UI hasn't been added to the SDK yet. For these times, the Smartsheet Python SDK has a passthrough option so you can pass and receive raw JSON blobs directly from the API. 
+If there is an API Feature that is not yet supported by the Python SDK, there is a passthrough option that allows you to pass and receive raw JSON objects.
 
 To invoke the passthrough, your code can call one of the following four methods:
 
-`json = ss_client.Passthrough.get(endpoint, query_params)`
+`response = ss_client.Passthrough.get(endpoint, query_params)`
+`response = ss_client.Passthrough.post(endpoint, payload, query_params)`
+`response = ss_client.Passthrough.put(endpoint, payload, query_parameters)`
+`response = ss_client.Passthrough.delete(endpoint)`
 
-Where `endpoint` is the specific API you wish to invoke, and `query_params` is an optional dictionary of query parameters
+* The `endpoint` is the specific API endpoint you wish to invoke. The client object base URL gets prepended to the caller’s endpoint URL argument, so in the above `get` example, if endpoint is `'/sheets'` an HTTP GET is requested from the URL `https://api.smartsheet.com/2.0/sheets`
+* The `payload` can be either a dictionary or string.
+* The `query_params` is an optional dictionary of query parameters.
 
-`json = ss_client.Passthrough.post(endpoint, payload, query_params)`
-
-Where `endpoint`is the specific API endpoint you wish to invoke, `payload` is a string, dictionary or `JSONObject` containing the JSON POST payload and `query_params` is an optional dictionary of query parameters
-
-`json = ss_client.Passthrough.put(endpoint, payload, query_parameters)`
-
-Where `endpoint`is the specific API endpoint you wish to invoke, `payload` is a string, dictionary or `JSONObject` containing the JSON PUT payload and `query_params` is an optional dictionary of query parameters
-
-`json = ss_client.Passthrough.delete(endpoint)`
-
-Where `endpoint`is the specific API endpoint you wish to invoke
-
-The client object base URL gets prepended to the caller’s endpoint URL argument, so in the above `get` example, if endpoint is `'/sheets'` an HTTP GET is requested from the URL `https://api.smartsheet.com/2.0/sheets`
-
-All calls to passthrough methods return a `JSONObject` containing the JSON result. The `data` attribute contains the JSON result as a dictionary. For example, after a PUT operation the API's result message will be contained in `json.data['message']`. The `to_json()` method will return a string containing the formatted raw JSON result. 
+All calls to passthrough methods return a JSON result. The `data` attribute contains the JSON result as a dictionary. For example, after a PUT operation the API's result message will be contained in `response.data['message']`. If you prefer raw JSON instead of a dictionary, you can use the `to_json()` method, for example `response.to_json()`. 
 
 The file `test_passthrough.py` in the integration tests folder contains usage examples.
 
