@@ -88,6 +88,8 @@ The client object base URL gets prepended to the caller’s endpoint URL argumen
 
 All calls to passthrough methods return a `JSONObject` containing the JSON result. The `data` attribute contains the JSON result as a dictionary. For example, after a PUT operation the API's result message will be contained in `json.data['message']`. The `to_json()` method will return a string containing the formatted raw JSON result. 
 
+The file `test_passthrough.py` in the integration tests folder contains usage examples.
+
 ## Support
 If you have any questions or issues with this SDK please post on StackOverflow using the tag ["smartsheet-api"](http://stackoverflow.com/questions/tagged/smartsheet-api) or contact us directly at api@smartsheet.com.
 
