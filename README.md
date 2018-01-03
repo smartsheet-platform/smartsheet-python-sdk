@@ -74,17 +74,19 @@ Where `endpoint` is the specific API you wish to invoke, and `query_params` is a
 
 `json = ss_client.Passthrough.post(endpoint, payload, query_params)`
 
-Where `endpoint`is the specific API endpoint you wish to invoke, `payload` is a `JSONObject` or dictionary containing the JSON POST payload and `query_params` is an optional dictionary of query parameters
+Where `endpoint`is the specific API endpoint you wish to invoke, `payload` is a string, dictionary or `JSONObject` containing the JSON POST payload and `query_params` is an optional dictionary of query parameters
 
 `json = ss_client.Passthrough.put(endpoint, payload, query_parameters)`
 
-Where `endpoint`is the specific API endpoint you wish to invoke, `payload` is a `JSONObject` or dictionary containing the JSON PUT payload and `query_params` is an optional dictionary of query parameters
+Where `endpoint`is the specific API endpoint you wish to invoke, `payload` is a string, dictionary or `JSONObject` containing the JSON PUT payload and `query_params` is an optional dictionary of query parameters
 
 `json = ss_client.Passthrough.delete(endpoint)`
 
 Where `endpoint`is the specific API endpoint you wish to invoke
 
 The client object base URL gets prepended to the caller’s endpoint URL argument, so in the above `get` example, if endpoint is `'/sheets'` an HTTP GET is requested from the URL `https://api.smartsheet.com/2.0/sheets`
+
+All calls to passthrough methods return a `JSONObject` containing the JSON result. The `data` attribute contains the JSON result as a dictionary. For example, after a PUT operation the API's result message will be contained in `json.data['message']`. The `to_json()` method will return a string containing the formatted raw JSON result. 
 
 ## Support
 If you have any questions or issues with this SDK please post on StackOverflow using the tag ["smartsheet-api"](http://stackoverflow.com/questions/tagged/smartsheet-api) or contact us directly at api@smartsheet.com.
