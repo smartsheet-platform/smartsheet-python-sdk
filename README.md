@@ -64,15 +64,27 @@ See a sample application here: https://github.com/smartsheet-samples/python-read
 
 ## Passthrough Option
 
-There are times when you need to pass data back and forth, but either the SDK doesn't fit your needs or that feature from the UI hasn't been added to the SDK yet. For these times, the Smartsheet Python SDK has a passthrough option so you can pass raw JSON blobs back and forth. 
+There are times when you need to pass data back and forth, but either the SDK doesn't fit your needs or that feature from the UI hasn't been added to the SDK yet. For these times, the Smartsheet Python SDK has a passthrough option so you can pass and receive raw JSON blobs directly from the API. 
 
-To invoke the passthrough, your code needs to have the following structure:
+To invoke the passthrough, your code can call one of the following four methods:
 
-json = ss_client.Passthrough.xxx('/sheets', json)
+`json = ss_client.Passthrough.get(endpoint, query_params)`
 
-Where xxx can be get, post, put, or delete.
+Where `endpoint` is the specific API you wish to invoke, and `query_params` is an optional dictionary of query parameters
 
-The client object base URL gets prepended to the caller’s URL argument, so in the above example, an HTTP POST is sent to the URL https://api.smartsheet.com/2.0/sheets
+`json = ss_client.Passthrough.post(endpoint, payload, query_params)`
+
+Where `endpoint`is the specific API endpoint you wish to invoke, `payload` is a `JSONObject` or dictionary containing the JSON POST payload and `query_params` is an optional dictionary of query parameters
+
+`json = ss_client.Passthrough.put(endpoint, payload, query_parameters)`
+
+Where `endpoint`is the specific API endpoint you wish to invoke, `payload` is a `JSONObject` or dictionary containing the JSON PUT payload and `query_params` is an optional dictionary of query parameters
+
+`json = ss_client.Passthrough.delete(endpoint)`
+
+Where `endpoint`is the specific API endpoint you wish to invoke
+
+The client object base URL gets prepended to the caller’s endpoint URL argument, so in the above `get` example, if endpoint is `'/sheets'` an HTTP GET is requested from the URL `https://api.smartsheet.com/2.0/sheets`
 
 ## Support
 If you have any questions or issues with this SDK please post on StackOverflow using the tag ["smartsheet-api"](http://stackoverflow.com/questions/tagged/smartsheet-api) or contact us directly at api@smartsheet.com.
