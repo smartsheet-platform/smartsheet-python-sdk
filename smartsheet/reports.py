@@ -185,6 +185,7 @@ class Reports(object):
                 if not specified.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
+            modified_since(datetime): return reports modified after the specified modified_since
 
         Returns:
             IndexResult
@@ -218,6 +219,7 @@ class Reports(object):
                 if not specified.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
+            include_workspace_shares(bool): include Workspace shares
 
         Returns:
             IndexResult
@@ -308,8 +310,6 @@ class Reports(object):
         _op['path'] = '/reports/' + str(report_id) + '/shares/' + str(
             share_id)
         _op['json'] = share_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_share'
 
         expected = ['Result', 'Share']
 
@@ -352,7 +352,7 @@ class Reports(object):
         Returns:
             Result
         """
-        attributes = ['read_only_full_enabled','read_only_full_accessible_by']
+        attributes = ['read_only_full_enabled', 'read_only_full_accessible_by']
 
         fetch_first = False
         # check for incompleteness, fill in from current status if necessary
@@ -371,8 +371,6 @@ class Reports(object):
         _op['method'] = 'PUT'
         _op['path'] = '/reports/' + str(report_id) + '/publish'
         _op['json'] = report_publish_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'set_publish_status'
 
         expected = ['Result', 'ReportPublish']
 

@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,12 +17,10 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
 from ..util import prep
-from datetime import datetime
 import json
-import logging
 import six
+
 
 class SheetPublish(object):
 
@@ -33,24 +31,22 @@ class SheetPublish(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
         self._ical_enabled = False
         self._ical_url = None
         self._read_only_full_accessible_by = None
+        self._read_only_full_default_view = None
         self._read_only_full_enabled = False
+        self._read_only_full_show_toolbar = True
         self._read_only_full_url = None
         self._read_only_lite_enabled = False
+        self._read_only_lite_ssl_url = None
         self._read_only_lite_url = None
         self._read_write_accessible_by = None
-        self._read_write_enabled = False
-        self._read_write_url = None
-        self._read_only_lite_ssl_url = None
-        self._read_only_full_default_view = None
-        self._read_only_full_show_toolbar = True
         self._read_write_default_view = None
+        self._read_write_enabled = False
         self._read_write_show_toolbar = True
+        self._read_write_url = None
 
         if props:
             # account for alternate variable names from raw API response
@@ -62,74 +58,52 @@ class SheetPublish(object):
             if 'icalUrl' in props:
                 self.ical_url = props['icalUrl']
             if 'readOnlyFullAccessibleBy' in props:
-                self.read_only_accessible_by = props[
-                    'readOnlyFullAccessibleBy']
+                self.read_only_accessible_by = props['readOnlyFullAccessibleBy']
             if 'read_only_full_accessible_by' in props:
-                self.read_only_accessible_by = props[
-                    'read_only_full_accessible_by']
+                self.read_only_accessible_by = props['read_only_full_accessible_by']
+            if 'readOnlyFullDefaultView' in props:
+                self.read_only_full_default_view = props['readOnlyFullDefaultView']
+            if 'read_only_full_default_view' in props:
+                self.read_only_full_default_view = props['read_only_full_default_view']
             if 'readOnlyFullEnabled' in props:
-                self.read_only_full_enabled = props[
-                    'readOnlyFullEnabled']
+                self.read_only_full_enabled = props['readOnlyFullEnabled']
             if 'read_only_full_enabled' in props:
-                self.read_only_full_enabled = props[
-                    'read_only_full_enabled']
+                self.read_only_full_enabled = props['read_only_full_enabled']
+            if 'readOnlyFullShowToolbar' in props:
+                self.read_only_full_show_toolbar = props['readOnlyFullShowToolbar']
+            if 'read_only_full_show_toolbar' in props:
+                self.read_only_full_show_toolbar = props['read_only_full_show_toolbar']
             # read only
             if 'readOnlyFullUrl' in props:
-                self.read_only_full_url = props[
-                    'readOnlyFullUrl']
+                self.read_only_full_url = props['readOnlyFullUrl']
             if 'readOnlyLiteEnabled' in props:
-                self.read_only_lite_enabled = props[
-                    'readOnlyLiteEnabled']
+                self.read_only_lite_enabled = props['readOnlyLiteEnabled']
             if 'read_only_lite_enabled' in props:
-                self.read_only_lite_enabled = props[
-                    'read_only_lite_enabled']
+                self.read_only_lite_enabled = props['read_only_lite_enabled']
+            if 'readOnlyLiteSslUrl' in props:
+                self.read_only_lite_ssl_url = props['readOnlyLiteSslUrl']
             # read only
             if 'readOnlyLiteUrl' in props:
-                self.read_only_lite_url = props[
-                    'readOnlyLiteUrl']
+                self.read_only_lite_url = props['readOnlyLiteUrl']
             if 'readWriteAccessibleBy' in props:
-                self.read_write_accessible_by = props[
-                    'readWriteAccessibleBy']
+                self.read_write_accessible_by = props['readWriteAccessibleBy']
             if 'read_write_accessible_by' in props:
-                self.read_write_accessible_by = props[
-                    'read_write_accessible_by']
+                self.read_write_accessible_by = props['read_write_accessible_by']
+            if 'readWriteDefaultView' in props:
+                self.read_write_default_view = props['readWriteDefaultView']
+            if 'read_write_default_view' in props:
+                self.read_write_default_view = props['read_write_default_View']
             if 'readWriteEnabled' in props:
-                self.read_write_enabled = props[
-                    'readWriteEnabled']
+                self.read_write_enabled = props['readWriteEnabled']
             if 'read_write_enabled' in props:
-                self.read_write_enabled = props[
-                    'read_write_enabled']
+                self.read_write_enabled = props['read_write_enabled']
+            if 'readWriteShowToolbar' in props:
+                self.read_write_show_toolbar = props['readWriteShowToolbar']
+            if 'read_write_show_toolbar' in props:
+                self.read_write_show_toolbar = props['read_write_show_toolbar']
             # read only
             if 'readWriteUrl' in props:
-                self.read_write_url = props[
-                    'readWriteUrl']
-            if 'readOnlyLiteSslUrl' in props:
-                self.read_only_lite_ssl_url = props[
-                    'readOnlyLiteSslUrl']
-            if 'readOnlyFullDefaultView' in props:
-                self.read_only_full_default_view = props[
-                    'readOnlyFullDefaultView']
-            if 'read_only_full_default_view' in props:
-                self.read_only_full_default_view = props[
-                    'read_only_full_default_view']
-            if 'readOnlyFullShowToolbar' in props:
-                self.read_only_full_show_toolbar = props[
-                    'readOnlyFullShowToolbar']
-            if 'read_only_full_show_toolbar' in props:
-                self.read_only_full_show_toolbar = props[
-                    'read_only_full_show_toolbar']
-            if 'readWriteDefaultView' in props:
-                self.read_write_default_view = props[
-                    'readWriteDefaultView']
-            if 'read_write_default_view' in props:
-                self.read_write_default_view = props[
-                    'read_write_default_View']
-            if 'readWriteShowToolbar' in props:
-                self.read_write_show_toolbar = props[
-                    'readWriteShowToolbar']
-            if 'read_write_show_toolbar' in props:
-                self.read_write_show_toolbar = props[
-                    'read_write_show_toolbar']
+                self.read_write_url = props['readWriteUrl']
         # requests package Response object
         self.request_response = None
 
@@ -161,6 +135,15 @@ class SheetPublish(object):
             self._read_only_full_accessible_by = value
 
     @property
+    def read_only_full_default_view(self):
+        return self._read_only_full_default_view
+
+    @read_only_full_default_view.setter
+    def read_only_full_default_view(self, value):
+        if isinstance(value, six.string_types):
+            self._read_only_full_default_view = value
+
+    @property
     def read_only_full_enabled(self):
         return self._read_only_full_enabled
 
@@ -168,6 +151,15 @@ class SheetPublish(object):
     def read_only_full_enabled(self, value):
         if isinstance(value, bool):
             self._read_only_full_enabled = value
+
+    @property
+    def read_only_full_show_toolbar(self):
+        return self._read_only_full_show_toolbar
+
+    @read_only_full_show_toolbar.setter
+    def read_only_full_show_toolbar(self, value):
+        if isinstance(value, bool):
+            self._read_only_full_show_toolbar = value
 
     @property
     def read_only_full_url(self):
@@ -188,6 +180,15 @@ class SheetPublish(object):
             self._read_only_lite_enabled = value
 
     @property
+    def read_only_lite_ssl_url(self):
+        return self._read_only_lite_ssl_url
+
+    @read_only_lite_ssl_url.setter
+    def read_only_lite_ssl_url(self, value):
+        if isinstance(value, six.string_types):
+            self._read_only_lite_ssl_url = value
+
+    @property
     def read_only_lite_url(self):
         return self._read_only_lite_url
 
@@ -206,51 +207,6 @@ class SheetPublish(object):
             self._read_write_accessible_by = value
 
     @property
-    def read_write_enabled(self):
-        return self._read_write_enabled
-
-    @read_write_enabled.setter
-    def read_write_enabled(self, value):
-        if isinstance(value, bool):
-            self._read_write_enabled = value
-
-    @property
-    def read_write_url(self):
-        return self._read_write_url
-
-    @read_write_url.setter
-    def read_write_url(self, value):
-        if isinstance(value, six.string_types):
-            self._read_write_url = value
-
-    @property
-    def read_only_lite_ssl_url(self):
-        return self._read_only_lite_ssl_url
-
-    @read_only_lite_ssl_url.setter
-    def read_only_lite_ssl_url(self, value):
-        if isinstance(value, six.string_types):
-            self._read_only_lite_ssl_url = value
-
-    @property
-    def read_only_full_default_view(self):
-        return self._read_only_full_default_view
-
-    @read_only_full_default_view.setter
-    def read_only_full_default_view(self, value):
-        if isinstance(value, six.string_types):
-            self._read_only_full_default_view = value;
-
-    @property
-    def read_only_full_show_toolbar(self):
-        return self._read_only_full_show_toolbar
-
-    @read_only_full_show_toolbar.setter
-    def read_only_full_show_toolbar(self, value):
-        if isinstance(value, bool):
-            self._read_only_full_show_toolbar = value
-
-    @property
     def read_write_default_view(self):
         return self._read_write_default_view
 
@@ -258,6 +214,15 @@ class SheetPublish(object):
     def read_write_default_view(self, value):
         if isinstance(value, six.string_types):
             self._read_write_default_view = value
+
+    @property
+    def read_write_enabled(self):
+        return self._read_write_enabled
+
+    @read_write_enabled.setter
+    def read_write_enabled(self, value):
+        if isinstance(value, bool):
+            self._read_write_enabled = value
 
     @property
     def read_write_show_toolbar(self):
@@ -269,53 +234,31 @@ class SheetPublish(object):
             self._read_write_show_toolbar = value
 
     @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
+    def read_write_url(self):
+        return self._read_write_url
 
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        self._pre_request_filter = value
+    @read_write_url.setter
+    def read_write_url(self, value):
+        if isinstance(value, six.string_types):
+            self._read_write_url = value
 
     def to_dict(self, op_id=None, method=None):
         obj = {
             'icalEnabled': prep(self._ical_enabled),
             'icalUrl': prep(self._ical_url),
             'readOnlyFullAccessibleBy': prep(self._read_only_full_accessible_by),
+            'readOnlyFullDefaultView': prep(self._read_only_full_default_view),
             'readOnlyFullEnabled': prep(self._read_only_full_enabled),
+            'readOnlyFullShowToolbar': prep(self._read_only_full_show_toolbar),
             'readOnlyFullUrl': prep(self._read_only_full_url),
             'readOnlyLiteEnabled': prep(self._read_only_lite_enabled),
+            'readOnlyLiteSslUrl': prep(self._read_only_lite_ssl_url),
             'readOnlyLiteUrl': prep(self._read_only_lite_url),
             'readWriteAccessibleBy': prep(self._read_write_accessible_by),
-            'readWriteEnabled': prep(self._read_write_enabled),
-            'readWriteUrl': prep(self._read_write_url),
-            'readOnlyLiteSslUrl': prep(self._read_only_lite_ssl_url),
-            'readOnlyFullDefaultView': prep(self._read_only_full_default_view),
-            'readOnlyFullShowToolbar': prep(self._read_only_full_show_toolbar),
             'readWriteDefaultView': prep(self._read_write_default_view),
-            'readWriteShowToolbar': prep(self._read_write_show_toolbar)}
-
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'set_publish_status':
-            permitted = ['readOnlyLiteEnabled',
-                         'readOnlyFullAccessibleBy',
-                         'readOnlyFullEnabled',
-                         'readOnlyFullDefaultView',
-                         'readOnlyFullShowToolbar',
-                         'readWriteAccessibleBy',
-                         'readWriteEnabled',
-                         'readWriteDefaultView',
-                         'readWriteShowToolbar',
-                         'icalEnabled']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
+            'readWriteEnabled': prep(self._read_write_enabled),
+            'readWriteShowToolbar': prep(self._read_write_show_toolbar),
+            'readWriteUrl': prep(self._read_write_url)}
         return obj
 
     def to_json(self):

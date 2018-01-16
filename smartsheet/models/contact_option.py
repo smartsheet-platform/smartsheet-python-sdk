@@ -21,6 +21,7 @@ from ..util import prep
 import json
 import six
 
+
 class ContactOption(object):
 
     """Smartsheet ContactOption data model."""

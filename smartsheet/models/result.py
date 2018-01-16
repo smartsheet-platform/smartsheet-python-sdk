@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -40,10 +40,9 @@ from .sent_update_request import SentUpdateRequest
 from .sight_publish import SightPublish
 from ..types import TypedList
 from ..util import prep
-from datetime import datetime
 import json
-import logging
 import six
+
 
 class Result(object):
 
@@ -54,7 +53,6 @@ class Result(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
         self._dynamic_result_type = None
         if dynamic_result_type is not None:
@@ -139,6 +137,11 @@ class Result(object):
                 self._result = [GroupMember(x, self._base) for x in value]
             else:
                 self._result = GroupMember(value, self._base)
+        if self._dynamic_result_type == 'ReportPublish':
+            if isinstance(value, list):
+                self._result = [ReportPublish(x, self._base) for x in value]
+            else:
+                self._result = ReportPublish(value, self._base)
         if self._dynamic_result_type == 'Row':
             if isinstance(value, list):
                 self._result = [Row(x, self._base) for x in value]
@@ -164,6 +167,11 @@ class Result(object):
                 self._result = [SheetPublish(x, self._base) for x in value]
             else:
                 self._result = SheetPublish(value, self._base)
+        if self._dynamic_result_type == 'SightPublish':
+            if isinstance(value, list):
+                self._result = [SightPublish(x, self._base) for x in value]
+            else:
+                self._result = SightPublish(value, self._base)
         if self._dynamic_result_type == 'UpdateRequest':
             if isinstance(value, list):
                 self._result = [UpdateRequest(x, self._base) for x in value]
@@ -189,16 +197,6 @@ class Result(object):
                 self._result = [Workspace(x, self._base) for x in value]
             else:
                 self._result = Workspace(value, self._base)
-        if self._dynamic_result_type == 'ReportPublish':
-            if isinstance(value, list):
-                self._result = [ReportPublish(x, self._base) for x in value]
-            else:
-                self._result = ReportPublish(value, self._base)
-        if self._dynamic_result_type == 'SightPublish':
-            if isinstance(value, list):
-                self._result = [SightPublish(x, self._base) for x in value]
-            else:
-                self._result = SightPublish(value, self._base)
 
     @property
     def result_code(self):

@@ -20,8 +20,8 @@ from __future__ import absolute_import
 from ..util import prep
 from .error_result import ErrorResult
 import json
-import logging
 import six
+
 
 class BulkItemFailure(object):
 
@@ -33,16 +33,16 @@ class BulkItemFailure(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._index = None
         self._error = None
+        self._index = None
         self._row_id = None
 
         if props:
             # account for alternate variable names from raw API response
-            if 'index' in props:
-                self.index = props['index']
             if 'error' in props:
                 self.error = props['error']
+            if 'index' in props:
+                self.index = props['index']
             if 'rowId' in props:
                 self.row_id = props['rowId']
             if 'row_id' in props:
@@ -52,15 +52,6 @@ class BulkItemFailure(object):
         self.__initialized = True
 
     @property
-    def index(self):
-        return self._index
-
-    @index.setter
-    def index(self, value):
-        if isinstance(value, six.integer_types):
-            self._index = value
-
-    @property
     def error(self):
         return self._error
 
@@ -68,6 +59,15 @@ class BulkItemFailure(object):
     def error(self, value):
         if isinstance(value, dict):
             self._error = self._result = ErrorResult(value, self._base)
+
+    @property
+    def index(self):
+        return self._index
+
+    @index.setter
+    def index(self, value):
+        if isinstance(value, six.integer_types):
+            self._index = value
 
     @property
     def row_id(self):
@@ -80,8 +80,8 @@ class BulkItemFailure(object):
 
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'index': prep(self._index),
             'error': prep(self._error),
+            'index': prep(self._index),
             'rowId': prep(self._row_id)}
         return obj
 

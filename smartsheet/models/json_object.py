@@ -19,6 +19,7 @@ from __future__ import absolute_import
 import six
 import json
 
+
 class JSONObject(object):
 
     """Smartsheet JSONObject data model."""
@@ -51,4 +52,3 @@ class JSONObject(object):
 
     def __str__(self):
         return json.dumps(self.to_dict())
-

@@ -31,8 +31,8 @@ from ..util import prep
 from datetime import datetime
 from dateutil.parser import parse
 import json
-import logging
 import six
+
 
 class Sheet(object):
 
@@ -43,8 +43,6 @@ class Sheet(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
         self.allowed_values = {
             'access_level': [
@@ -96,19 +94,15 @@ class Sheet(object):
             if 'created_at' in props:
                 self.created_at = props['created_at']
             if 'dependenciesEnabled' in props:
-                self.dependencies_enabled = props[
-                    'dependenciesEnabled']
+                self.dependencies_enabled = props['dependenciesEnabled']
             if 'dependencies_enabled' in props:
-                self.dependencies_enabled = props[
-                    'dependencies_enabled']
+                self.dependencies_enabled = props['dependencies_enabled']
             if 'discussions' in props:
                 self.discussions = props['discussions']
             if 'effectiveAttachmentOptions' in props:
-                self.effective_attachment_options = props[
-                    'effectiveAttachmentOptions']
+                self.effective_attachment_options = props['effectiveAttachmentOptions']
             if 'effective_attachment_options' in props:
-                self.effective_attachment_options = props[
-                    'effective_attachment_options']
+                self.effective_attachment_options = props['effective_attachment_options']
             if 'favorite' in props:
                 self.favorite = props['favorite']
             if 'filters' in props:
@@ -148,19 +142,15 @@ class Sheet(object):
             if 'read_only' in props:
                 self.read_only = props['read_only']
             if 'resourceManagementEnabled' in props:
-                self.resource_management_enabled = props[
-                    'resourceManagementEnabled']
+                self.resource_management_enabled = props['resourceManagementEnabled']
             if 'resource_management_enabled' in props:
-                self.resource_management_enabled = props[
-                    'resource_management_enabled']
+                self.resource_management_enabled = props['resource_management_enabled']
             if 'rows' in props:
                 self.rows = props['rows']
             if 'showParentRowsForFilters' in props:
-                self.show_parent_rows_for_filters = props[
-                    'showParentRowsForFilters']
+                self.show_parent_rows_for_filters = props['showParentRowsForFilters']
             if 'show_parent_rows_for_filters' in props:
-                self.show_parent_rows_for_filters = props[
-                    'show_parent_rows_for_filters']
+                self.show_parent_rows_for_filters = props['show_parent_rows_for_filters']
             if 'source' in props:
                 self.source = props['source']
             if 'totalRowCount' in props:
@@ -496,34 +486,6 @@ class Sheet(object):
         if isinstance(value, six.integer_types):
             self._version = value
 
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        if self.attachments is not None:
-            # Attachment
-            for item in self.attachments:
-                item.pre_request_filter = value
-        if self.columns is not None:
-            # Column
-            for item in self.columns:
-                item.pre_request_filter = value
-        if self.discussions is not None:
-            # Discussion
-            for item in self.discussions:
-                item.pre_request_filter = value
-        if self.rows is not None:
-            # Row
-            for item in self.rows:
-                item.pre_request_filter = value
-        if self.source is not None:
-            self.source.pre_request_filter = value
-        if self.user_settings is not None:
-            self.user_settings.pre_request_filter = value
-        self._pre_request_filter = value
-
     def add_columns(self, list_of_columns):
         return self._base.Sheets.add_columns(self.id, list_of_columns)
 
@@ -544,9 +506,6 @@ class Sheet(object):
 
     def get_row(self, row_id, include=None, exclude=None):
         return self._base.Sheets.get_row(self.id, row_id, include, exclude)
-
-    def get_publish_status(self):
-        return self._base.Sheets.get_publish_status(self.id)
 
     def get_version(self):
         return self._base.Sheets.get_sheet_version(self.id)
@@ -600,25 +559,6 @@ class Sheet(object):
                 return col
 
     def to_dict(self, op_id=None, method=None):
-        req_filter = self.pre_request_filter
-        if req_filter:
-            if self.attachments is not None:
-                for item in self.attachments:
-                    item.pre_request_filter = req_filter
-            if self.columns is not None:
-                for item in self.columns:
-                    item.pre_request_filter = req_filter
-            if self.discussions is not None:
-                for item in self.discussions:
-                    item.pre_request_filter = req_filter
-            if self.rows is not None:
-                for item in self.rows:
-                    item.pre_request_filter = req_filter
-            if self.source is not None:
-                self.source.pre_request_filter = req_filter
-            if self.user_settings is not None:
-                self.user_settings.pre_request_filter = req_filter
-
         obj = {
             'accessLevel': prep(self._access_level),
             'attachments': prep(self._attachments),
@@ -626,8 +566,7 @@ class Sheet(object):
             'createdAt': prep(self._created_at),
             'dependenciesEnabled': prep(self._dependencies_enabled),
             'discussions': prep(self._discussions),
-            'effectiveAttachmentOptions': prep(
-                self._effective_attachment_options),
+            'effectiveAttachmentOptions': prep(self._effective_attachment_options),
             'favorite': prep(self._favorite),
             'filters': prep(self._filters),
             'fromId': prep(self._from_id),
@@ -640,88 +579,13 @@ class Sheet(object):
             'permalink': prep(self._permalink),
             'projectSettings': prep(self._project_settings),
             'readOnly': prep(self._read_only),
-            'resourceManagementEnabled': prep(
-                self._resource_management_enabled),
+            'resourceManagementEnabled': prep(self._resource_management_enabled),
             'rows': prep(self._rows),
-            'showParentRowsForFilters': prep(
-                self._show_parent_rows_for_filters),
+            'showParentRowsForFilters': prep(self._show_parent_rows_for_filters),
             'source': prep(self._source),
             'totalRowCount': prep(self._total_row_count),
             'userSettings': prep(self._user_settings),
             'version': prep(self._version)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'create_sheet':
-            permitted = ['name', 'columns']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_sheet_from_template':
-            permitted = ['name', 'fromId']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_sheet_in_folder':
-            permitted = ['name', 'columns']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_sheet_in_folder_from_template':
-            permitted = ['name', 'fromId']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_sheet_in_workspace':
-            permitted = ['name', 'columns']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_sheet_in_workspace_from_template':
-            permitted = ['name', 'fromId']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'update_sheet':
-            permitted = ['name', 'userSettings', 'projectSettings']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
         return obj
 
     def to_json(self):

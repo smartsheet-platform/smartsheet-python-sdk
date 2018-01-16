@@ -33,7 +33,6 @@ class PredecessorList(ObjectValue):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
         self._predecessors = TypedList(Predecessor)
 
@@ -64,16 +63,6 @@ class PredecessorList(ObjectValue):
         elif isinstance(value, Predecessor):
             self._predecessors.purge()
             self._predecessors.append(value)
-
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        for item in self.predecessors:
-            item.pre_request_filter = value
-        self._pre_request_filter = value
 
     def to_dict(self, op_id=None, method=None):
         parent_obj = super(PredecessorList, self).to_dict(op_id, method)

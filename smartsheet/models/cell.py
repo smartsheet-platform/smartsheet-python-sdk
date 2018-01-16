@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -31,8 +31,8 @@ from .boolean_object_value import BooleanObjectValue
 from ..types import TypedList
 from ..util import prep
 import json
-import logging
 import six
+
 
 class Cell(object):
 
@@ -43,8 +43,6 @@ class Cell(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
         self._column_id = None
         self._column_type = None
@@ -57,9 +55,9 @@ class Cell(object):
         self._link_in_from_cell = None
         self._links_out_to_cells = TypedList(CellLink)
         self._object_value = None
+        self._override_validation = False
         self._strict = True
         self._value = None
-        self._override_validation = False
 
         if props:
             # account for alternate variable names from raw API response
@@ -102,14 +100,14 @@ class Cell(object):
                 self.object_value = props['objectValue']
             if 'object_value' in props:
                 self.object_value = props['object_value']
-            if 'strict' in props:
-                self.strict = props['strict']
-            if 'value' in props:
-                self.value = props['value']
             if 'overrideValidation' in props:
                 self.override_validation = props['overrideValidation']
             if 'override_validation' in props:
                 self.override_validation = props['override_validation']
+            if 'strict' in props:
+                self.strict = props['strict']
+            if 'value' in props:
+                self.value = props['value']
         self.__initialized = True
 
     def __getattr__(self, key):
@@ -259,6 +257,15 @@ class Cell(object):
             self._object_value = BooleanObjectValue(value)
 
     @property
+    def override_validation(self):
+        return self._override_validation
+
+    @override_validation.setter
+    def override_validation(self, value):
+        if isinstance(value, bool):
+            self._override_validation = value
+
+    @property
     def strict(self):
         return self._strict
 
@@ -276,43 +283,7 @@ class Cell(object):
         if isinstance(value, (six.string_types, six.integer_types, float, bool)):
             self._value = value
 
-    @property
-    def override_validation(self):
-        return self._override_validation
-
-    @override_validation.setter
-    def override_validation(self, value):
-        if isinstance(value, bool):
-            self._override_validation = value
-
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        if self.hyperlink is not None:
-            self.hyperlink.pre_request_filter = value
-        if self.link_in_from_cell is not None:
-            self.link_in_from_cell.pre_request_filter = value
-        for item in self.links_out_to_cells:
-            item.pre_request_filter = value
-        if self.object_value is not None:
-            self.object_value.pre_request_filter = value
-        self._pre_request_filter = value
-
     def to_dict(self, op_id=None, method=None):
-        req_filter = self.pre_request_filter
-        if req_filter:
-            if self.hyperlink is not None:
-                self.hyperlink.pre_request_filter = req_filter
-            if self.link_in_from_cell is not None:
-                self.link_in_from_cell.pre_request_filter = req_filter
-            for item in self.links_out_to_cells:
-                item.pre_request_filter = req_filter
-            if self.object_value is not None:
-                self.object_value.pre_request_filter = req_filter
-
         obj = {
             'columnId': prep(self._column_id),
             'columnType': prep(self._column_type),
@@ -325,58 +296,9 @@ class Cell(object):
             'linkInFromCell': prep(self._link_in_from_cell),
             'linksOutToCells': prep(self._links_out_to_cells),
             'objectValue': prep(self._object_value),
+            'overrideValidation': prep(self._override_validation),
             'strict': prep(self._strict),
-            'value': prep(self._value),
-            'overrideValidation': prep(self._override_validation)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'add_rows':
-            permitted = ['columnId', 'value', 'objectValue', 'formula', 'strict',
-                         'format', 'hyperlink', 'overrideValidation']
-            # make formula, objectValue and value mutually exclusive
-            if self.formula is not None:
-                del obj['value']
-                del obj['objectValue']
-            elif self.object_value is not None:
-                del obj['formula']
-                del obj['value']
-            else:
-                del obj['formula']
-                del obj['objectValue']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'update_rows':
-            if self._link_in_from_cell is not None:
-                obj['value'] = None
-                permitted = ['columnId', 'value', 'linkInFromCell']
-            else:
-                permitted = ['columnId', 'value', 'objectValue', 'formula', 'strict',
-                             'format', 'hyperlink', 'overrideValidation']
-                # make formula, objectValue and value mutually exclusive
-                if self.formula is not None:
-                    del obj['value']
-                    del obj['objectValue']
-                elif self.object_value is not None:
-                    del obj['formula']
-                    del obj['value']
-                else:
-                    del obj['formula']
-                    del obj['objectValue']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
+            'value': prep(self._value)}
         return obj
 
     def to_json(self):

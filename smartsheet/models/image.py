@@ -21,6 +21,7 @@ from ..util import prep
 import json
 import six
 
+
 class Image(object):
 
     """Smartsheet Image data model."""
@@ -31,29 +32,47 @@ class Image(object):
         if base_obj is not None:
             self._base = base_obj
 
+        self._alt_text = None
+        self._height = 0
         self.__id = None
         self._width = 0
-        self._height = 0
-        self._alt_text = None
 
         if props:
             # account for alternate variable names from raw API response
-            if 'id' in props:
-                self.id = props['id']
-            if 'width' in props:
-                self.width = props['width']
-            if 'height' in props:
-                self.height = props['height']
             if 'altText' in props:
                 self.alt_text = props['altText']
             if 'alt_text' in props:
                 self.alt_text = props['alt_text']
+            if 'height' in props:
+                self.height = props['height']
+            if 'id' in props:
+                self.id = props['id']
+            if 'width' in props:
+                self.width = props['width']
 
     def __getattr__(self, key):
         if key == 'id':
             return self._id
         else:
             raise AttributeError(key)
+
+    @property
+    def alt_text(self):
+        return self._alt_text
+
+    @alt_text.setter
+    def alt_text(self, value):
+        if isinstance(value, six.string_types):
+            self._alt_text = value
+
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        if isinstance(value, six.integer_types):
+            self._height = value
 
     @property
     def _id(self):
@@ -73,30 +92,12 @@ class Image(object):
         if isinstance(value, six.integer_types):
             self._width = value
 
-    @property
-    def height(self):
-        return self._height
-
-    @height.setter
-    def height(self, value):
-        if isinstance(value, six.integer_types):
-            self._height = value
-
-    @property
-    def alt_text(self):
-        return self._alt_text
-
-    @alt_text.setter
-    def alt_text(self, value):
-        if isinstance(value, six.string_types):
-            self._alt_text = value
-
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'id': prep(self.__id),
-            'width': prep(self._width),
+            'altText' : prep(self._alt_text),
             'height': prep(self._height),
-            'altText' : prep(self._alt_text)}
+            'id': prep(self.__id),
+            'width': prep(self._width)}
         return obj
 
     def to_json(self):

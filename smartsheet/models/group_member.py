@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,12 +17,10 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
 from ..util import prep
-from datetime import datetime
 import json
-import logging
 import six
+
 
 class GroupMember(object):
 
@@ -33,8 +31,6 @@ class GroupMember(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
         self._email = None
         self._first_name = None
@@ -113,14 +109,6 @@ class GroupMember(object):
         if isinstance(value, six.string_types):
             self._name = value
 
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        self._pre_request_filter = value
-
     def to_dict(self, op_id=None, method=None):
         obj = {
             'email': prep(self._email),
@@ -128,19 +116,6 @@ class GroupMember(object):
             'id': prep(self.__id),
             'lastName': prep(self._last_name),
             'name': prep(self._name)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'create_group':
-            permitted = ['email']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
         return obj
 
     def to_json(self):

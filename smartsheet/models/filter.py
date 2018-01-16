@@ -20,10 +20,9 @@ from __future__ import absolute_import
 from .criteria import Criteria
 from ..types import TypedList
 from ..util import prep
-from datetime import datetime
 import json
-import logging
 import six
+
 
 class Filter(object):
 
@@ -34,7 +33,6 @@ class Filter(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
         self.allowed_values = {
             '_type': [

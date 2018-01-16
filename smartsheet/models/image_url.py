@@ -20,8 +20,8 @@ from __future__ import absolute_import
 from ..util import prep
 from .error_result import ErrorResult
 import json
-import logging
 import six
+
 
 class ImageUrl(object):
 
@@ -32,46 +32,36 @@ class ImageUrl(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._log = logging.getLogger(__name__)
 
-        self._image_id = None
-        self._width = 0
-        self._height = 0
-        self._url = None
         self._error = None
+        self._height = 0
+        self._image_id = None
+        self._url = None
+        self._width = 0
 
         if props:
             # account for alternate variable names from raw API response
+            if 'error' in props:
+                self.error = props['error']
+            if 'height' in props:
+                self.height = props['height']
             if 'imageId' in props:
                 self.image_id = props['imageId']
             if 'image_id' in props:
                 self.image_id = props['image_id']
-            if 'width' in props:
-                self.width = props['width']
-            if 'height' in props:
-                self.height = props['height']
             if 'url' in props:
                 self.url = props['url']
-            if 'error' in props:
-                self.error = props['error']
+            if 'width' in props:
+                self.width = props['width']
 
     @property
-    def image_id(self):
-        return self._image_id
+    def error(self):
+        return self._error
 
-    @image_id.setter
-    def image_id(self, value):
-        if isinstance(value, six.string_types):
-            self._image_id = value
-
-    @property
-    def width(self):
-        return self._width
-
-    @width.setter
-    def width(self, value):
-        if isinstance(value, six.integer_types):
-            self._width = value
+    @error.setter
+    def error(self, value):
+        if isinstance(value, dict):
+            self._error = ErrorResult(value, self._base)
 
     @property
     def height(self):
@@ -83,6 +73,15 @@ class ImageUrl(object):
             self._height = value
 
     @property
+    def image_id(self):
+        return self._image_id
+
+    @image_id.setter
+    def image_id(self, value):
+        if isinstance(value, six.string_types):
+            self._image_id = value
+
+    @property
     def url(self):
         return self._url
 
@@ -92,32 +91,21 @@ class ImageUrl(object):
             self._url = value
 
     @property
-    def error(self):
-        return self._error
+    def width(self):
+        return self._width
 
-    @error.setter
-    def error(self, value):
-        if isinstance(value, dict):
-            self._error = self._result = ErrorResult(value, self._base)
+    @width.setter
+    def width(self, value):
+        if isinstance(value, six.integer_types):
+            self._width = value
 
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'imageId': prep(self._image_id),
-            'width': prep(self._width),
+            'error': prep(self._error),
             'height': prep(self._height),
-            'url' : prep(self._url),
-            'error' : prep(self._error)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        permitted = ['imageId', 'width', 'height']
-        all_keys = list(obj.keys())
-        for key in all_keys:
-            if key not in permitted:
-                self._log.debug(
-                    'deleting %s from obj', key)
-                del obj[key]
-
+            'imageId': prep(self._image_id),
+            'url': prep(self._url),
+            'width': prep(self._width)}
         return obj
 
     def to_json(self):

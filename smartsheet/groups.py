@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0913
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,8 +18,6 @@
 from __future__ import absolute_import
 
 import logging
-import os.path
-import six
 from . import fresh_operation
 
 
@@ -68,8 +66,6 @@ class Groups(object):
         _op['method'] = 'POST'
         _op['path'] = '/groups'
         _op['json'] = group_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_group'
 
         expected = ['Result', 'Group']
 
@@ -181,8 +177,6 @@ class Groups(object):
         _op['method'] = 'PUT'
         _op['path'] = '/groups/' + str(group_id)
         _op['json'] = group_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_group'
 
         expected = ['Result', 'Group']
 

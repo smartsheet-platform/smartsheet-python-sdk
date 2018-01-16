@@ -16,10 +16,8 @@
 # under the License.
 
 from __future__ import absolute_import
-from ..types import TypedList
 from ..util import prep
 from .widget_content import WidgetContent
-import logging
 import six
 import json
 
@@ -45,29 +43,29 @@ class Widget(object):
                 'TITLE'
             ]}
 
+        self._contents = None
+        self._height = None
         self.__id = None
-        self._type = None
-        self._title = None
         self._show_title = None
         self._show_title_icon = None
+        self._title = None
         self._title_format = None
+        self._type = None
+        self._version = None
+        self._width = None
         self._x_position = None
         self._y_position = None
-        self._height = None
-        self._width = None
-        self._version = None
-        self._contents = None
 
         if props:
             # account for alternate variable names from raw API response
+            if 'contents' in props:
+                self.contents = props['contents']
+            if 'height' in props:
+                self.height = props['height']
             if 'id' in props:
                 self._id = props['id']
             if '_id' in props:
                 self._id = props['_id']
-            if 'type' in props:
-                self.type = props['type']
-            if 'title' in props:
-                self.title = props['title']
             if 'showTitle' in props:
                 self.show_title = props['showTitle']
             if 'show_title' in props:
@@ -76,10 +74,18 @@ class Widget(object):
                 self.show_title_icon = props['showTitleIcon']
             if 'show_title_icon' in props:
                 self.show_title_icon = props['show_title_icon']
+            if 'title' in props:
+                self.title = props['title']
             if 'titleFormat' in props:
                 self.title_format = props['titleFormat']
             if 'title_format' in props:
                 self.title_format = props['title_format']
+            if 'type' in props:
+                self.type = props['type']
+            if 'version' in props:
+                self.version = props['version']
+            if 'width' in props:
+                self.width = props['width']
             if 'xPosition' in props:
                 self.x_position = props['xPosition']
             if 'x_position' in props:
@@ -88,14 +94,6 @@ class Widget(object):
                 self.y_position = props['yPosition']
             if 'y_position' in props:
                 self.y_position = props['y_position']
-            if 'height' in props:
-                self.height = props['height']
-            if 'width' in props:
-                self.width = props['width']
-            if 'version' in props:
-                self.version = props['version']
-            if 'contents' in props:
-                self.contents = props['contents']
         self.__initialized = True
 
     def __getattr__(self, key):
@@ -105,6 +103,26 @@ class Widget(object):
             raise AttributeError(key)
 
     @property
+    def contents(self):
+        return self._contents
+
+    @contents.setter
+    def contents(self, value):
+        if isinstance(value, WidgetContent):
+            self._contents = value
+        elif isinstance(value, dict):
+            self._contents = WidgetContent(value, self._base)
+
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        if isinstance(value, six.integer_types):
+            self._height = value
+
+    @property
     def _id(self):
         return self.__id
 
@@ -112,29 +130,6 @@ class Widget(object):
     def _id(self, value):
         if isinstance(value, six.integer_types):
             self.__id = value
-
-    @property
-    def type(self):
-        return self._type
-
-    @type.setter
-    def type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['widget_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Widget `widget_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['widget_type']))
-            self._type = value
-
-    @property
-    def title(self):
-        return self._title
-
-    @title.setter
-    def title(self, value):
-        if isinstance(value, six.string_types):
-            self._title = value
 
     @property
     def show_title(self):
@@ -155,6 +150,15 @@ class Widget(object):
             self._show_title_icon = value
 
     @property
+    def title(self):
+        return self._title
+
+    @title.setter
+    def title(self, value):
+        if isinstance(value, six.string_types):
+            self._title = value
+
+    @property
     def title_format(self):
         return self._title_format
 
@@ -162,6 +166,38 @@ class Widget(object):
     def title_format(self, value):
         if isinstance(value, six.string_types):
             self._title_format = value
+
+    @property
+    def type(self):
+        return self._type
+
+    @type.setter
+    def type(self, value):
+        if isinstance(value, six.string_types):
+            if value not in self.allowed_values['widget_type']:
+                raise ValueError(
+                    ("`{0}` is an invalid value for Widget `widget_type`,"
+                     " must be one of {1}").format(
+                         value, self.allowed_values['widget_type']))
+            self._type = value
+
+    @property
+    def version(self):
+        return self._version
+
+    @version.setter
+    def version(self, value):
+        if isinstance(value, six.integer_types):
+            self._version = value
+
+    @property
+    def width(self):
+        return self._width
+
+    @width.setter
+    def width(self, value):
+        if isinstance(value, six.integer_types):
+            self._width = value
 
     @property
     def x_position(self):
@@ -181,58 +217,20 @@ class Widget(object):
         if isinstance(value, six.integer_types):
             self._y_position = value
 
-    @property
-    def height(self):
-        return self._height
-
-    @height.setter
-    def height(self, value):
-        if isinstance(value, six.integer_types):
-            self._height = value
-
-    @property
-    def width(self):
-        return self._width
-
-    @width.setter
-    def width(self,value):
-        if isinstance(value, six.integer_types):
-            self._width = value
-
-    @property
-    def version(self):
-        return self._version
-
-    @version.setter
-    def version(self, value):
-        if isinstance(value, six.integer_types):
-            self._version = value
-
-    @property
-    def contents(self):
-        return self._contents
-
-    @contents.setter
-    def contents(self, value):
-        if isinstance(value, WidgetContent):
-            self._contents = value
-        elif isinstance(value, dict):
-            self._contents = WidgetContent(value, self._base)
-
     def to_dict(self, op_id=None, method=None):
         obj = {
+            'contents': prep(self._contents),
             'id': prep(self.__id),
-            'type': prep(self._type),
-            'title': prep(self._title),
+            'height': prep(self._height),
             'showTitle': prep(self._show_title),
             'showTitleIcon': prep(self._show_title_icon),
+            'title': prep(self._title),
             'titleFormat': prep(self._title_format),
-            'xPosition': prep(self._x_position),
-            'yPosition': prep(self._y_position),
-            'height': prep(self._height),
+            'type': prep(self._type),
+            'version': prep(self._version),
             'width': prep(self._width),
-            'version' : prep(self._version),
-            'contents' : prep(self._contents)}
+            'xPosition': prep(self._x_position),
+            'yPosition': prep(self._y_position)}
         return obj
 
     def to_json(self):

@@ -19,10 +19,8 @@ from __future__ import absolute_import
 
 from ..util import prep
 from ..types import TypedList
-from .duration import Duration
 from datetime import datetime
 from dateutil.parser import parse
-import logging
 import six
 import json
 
@@ -35,8 +33,6 @@ class Schedule(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
         self.allowed_values = {
             'type': [
@@ -63,27 +59,22 @@ class Schedule(object):
                 'FOURTH',
                 'LAST']}
 
-        self._type = None
-        self._start_at = None
-        self._end_at = None
+        self._day_descriptors = TypedList(str)
         self._day_of_month = None
         self._day_ordinal = None
-        self._day_descriptors = TypedList(str)
-        self._repeat_every = None
+        self._end_at = None
         self._last_sent_at = None
+        self._next_send_at = None
+        self._repeat_every = None
+        self._start_at = None
+        self._type = None
 
         if props:
             # account for alternate variable names from raw API response
-            if 'type' in props:
-                self.type = props['type']
-            if 'startAt' in props:
-                self.start_at = props['startAt']
-            if 'start_at' in props:
-                self.start_at = props['start_at']
-            if 'endAt' in props:
-                self.end_at = props['endAt']
-            if 'end_at' in props:
-                self.end_at = props['end_at']
+            if 'dayDescriptors' in props:
+                self.day_descriptors = props['dayDescriptors']
+            if 'day_descriptors' in props:
+                self.day_descriptors = props['day_descriptors']
             if 'dayOfMonth' in props:
                 self.day_of_month = props['dayOfMonth']
             if 'day_of_month' in props:
@@ -92,14 +83,10 @@ class Schedule(object):
                 self.day_ordinal = props['dayOrdinal']
             if 'day_ordinal' in props:
                 self.day_ordinal = props['day_ordinal']
-            if 'dayDescriptors' in props:
-                self.day_descriptors = props['dayDescriptors']
-            if 'day_descriptors' in props:
-                self.day_descriptors = props['day_descriptors']
-            if 'repeatEvery' in props:
-                self.repeat_every = props['repeatEvery']
-            if 'repeat_every' in props:
-                self.repeat_every = props['repeat_every']
+            if 'endAt' in props:
+                self.end_at = props['endAt']
+            if 'end_at' in props:
+                self.end_at = props['end_at']
             if 'lastSentAt' in props:
                 self.last_sent_at = props['lastSentAt']
             if 'last_sent_at' in props:
@@ -108,70 +95,17 @@ class Schedule(object):
                 self.next_send_at = props['nextSendAt']
             if 'next_send_at' in props:
                 self.next_send_at = props['next_send_at']
+            if 'repeatEvery' in props:
+                self.repeat_every = props['repeatEvery']
+            if 'repeat_every' in props:
+                self.repeat_every = props['repeat_every']
+            if 'startAt' in props:
+                self.start_at = props['startAt']
+            if 'start_at' in props:
+                self.start_at = props['start_at']
+            if 'type' in props:
+                self.type = props['type']
         self.__initialized = True
-
-    @property
-    def type(self):
-        return self._type
-
-    @type.setter
-    def type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Schedule`type`,"
-                     " must be one of {1}").format(
-                        value, self.allowed_values['type']))
-            self._type = value
-
-    @property
-    def start_at(self):
-        return self._start_at
-
-    @start_at.setter
-    def start_at(self, value):
-        if isinstance(value, datetime):
-            self._start_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._start_at = value
-
-    @property
-    def end_at(self):
-        return self._end_at
-
-    @end_at.setter
-    def end_at(self, value):
-        if isinstance(value, datetime):
-            self._end_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._end_at = value
-
-    @property
-    def day_of_month(self):
-        return self._day_of_month
-
-    @day_of_month.setter
-    def day_of_month(self, value):
-        if isinstance(value, six.integer_types):
-            self._day_of_month = value
-
-    @property
-    def day_ordinal(self):
-        return self._day_ordinal
-
-    @day_ordinal.setter
-    def day_ordinal(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['day_ordinal']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Schedule`day_ordinal`,"
-                     " must be one of {1}").format(
-                        value, self.allowed_values['day_ordinal']))
-            self._day_ordinal = value
 
     @property
     def day_descriptors(self):
@@ -200,13 +134,40 @@ class Schedule(object):
                         value, self.allowed_values['day_descriptors']))
 
     @property
-    def repeat_every(self):
-        return self._repeat_every
+    def day_of_month(self):
+        return self._day_of_month
 
-    @repeat_every.setter
-    def repeat_every(self, value):
+    @day_of_month.setter
+    def day_of_month(self, value):
         if isinstance(value, six.integer_types):
-            self._repeat_every = value
+            self._day_of_month = value
+
+    @property
+    def day_ordinal(self):
+        return self._day_ordinal
+
+    @day_ordinal.setter
+    def day_ordinal(self, value):
+        if isinstance(value, six.string_types):
+            if value not in self.allowed_values['day_ordinal']:
+                raise ValueError(
+                    ("`{0}` is an invalid value for Schedule`day_ordinal`,"
+                     " must be one of {1}").format(
+                        value, self.allowed_values['day_ordinal']))
+            self._day_ordinal = value
+
+    @property
+    def end_at(self):
+        return self._end_at
+
+    @end_at.setter
+    def end_at(self, value):
+        if isinstance(value, datetime):
+            self._end_at = value
+        else:
+            if isinstance(value, six.string_types):
+                value = parse(value)
+                self._end_at = value
 
     @property
     def last_sent_at(self):
@@ -235,37 +196,52 @@ class Schedule(object):
                 self._next_send_at = value
 
     @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
+    def repeat_every(self):
+        return self._repeat_every
 
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        self._pre_request_filter = value
+    @repeat_every.setter
+    def repeat_every(self, value):
+        if isinstance(value, six.integer_types):
+            self._repeat_every = value
+
+    @property
+    def start_at(self):
+        return self._start_at
+
+    @start_at.setter
+    def start_at(self, value):
+        if isinstance(value, datetime):
+            self._start_at = value
+        else:
+            if isinstance(value, six.string_types):
+                value = parse(value)
+                self._start_at = value
+
+    @property
+    def type(self):
+        return self._type
+
+    @type.setter
+    def type(self, value):
+        if isinstance(value, six.string_types):
+            if value not in self.allowed_values['type']:
+                raise ValueError(
+                    ("`{0}` is an invalid value for Schedule`type`,"
+                     " must be one of {1}").format(
+                        value, self.allowed_values['type']))
+            self._type = value
 
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'type': prep(self._type),
-            'startAt': prep(self._start_at),
-            'endAt': prep(self._end_at),
-            'dayOfMonth': prep(self._day_of_month),
             'dayDescriptors': prep(self._day_descriptors),
+            'dayOfMonth': prep(self._day_of_month),
             'dayOrdinal': prep(self._day_ordinal),
-            'repeatEvery': prep(self._repeat_every),
+            'endAt': prep(self._end_at),
             'lastSentAt': prep(self._last_sent_at),
-            'nextSendAt': prep(self._next_send_at)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'create_update_request' or \
-                        self.pre_request_filter == 'update_update_request':
-            permitted = ['type','startAt','endAt','dayOfMonth','dayDescriptors','dayOrdinal','repeatEvery']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj', key)
-                    del obj[key]
-
+            'nextSendAt': prep(self._next_send_at),
+            'repeatEvery': prep(self._repeat_every),
+            'startAt': prep(self._start_at),
+            'type': prep(self._type)}
         return obj
 
     def to_json(self):

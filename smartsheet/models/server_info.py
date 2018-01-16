@@ -20,10 +20,8 @@ from __future__ import absolute_import
 from .format_tables import FormatTables
 from ..types import TypedList
 from ..util import prep
-from datetime import datetime
 import json
-import logging
-import six
+
 
 class ServerInfo(object):
 
@@ -34,7 +32,6 @@ class ServerInfo(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
         self._formats = None
         self._supported_locales = TypedList(str)
@@ -44,11 +41,9 @@ class ServerInfo(object):
             if 'formats' in props:
                 self.formats = props['formats']
             if 'supportedLocales' in props:
-                self.supported_locales = props[
-                    'supportedLocales']
+                self.supported_locales = props['supportedLocales']
             if 'supported_locales' in props:
-                self.supported_locales = props[
-                    'supported_locales']
+                self.supported_locales = props['supported_locales']
         # requests package Response object
         self.request_response = None
 

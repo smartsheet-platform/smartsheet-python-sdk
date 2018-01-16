@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -27,8 +27,8 @@ from ..util import prep
 from datetime import datetime
 from dateutil.parser import parse
 import json
-import logging
 import six
+
 
 class Row(object):
 
@@ -39,8 +39,6 @@ class Row(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
         self.allowed_values = {
             'access_level': [
@@ -94,11 +92,9 @@ class Row(object):
             if 'columns' in props:
                 self.columns = props['columns']
             if 'conditionalFormat' in props:
-                self.conditional_format = props[
-                    'conditionalFormat']
+                self.conditional_format = props['conditionalFormat']
             if 'conditional_format' in props:
-                self.conditional_format = props[
-                    'conditional_format']
+                self.conditional_format = props['conditional_format']
             # read only
             if 'createdAt' in props:
                 self.created_at = props['createdAt']
@@ -122,8 +118,7 @@ class Row(object):
             if 'inCriticalPath' in props:
                 self.in_critical_path = props['inCriticalPath']
             if 'in_critical_path' in props:
-                self.in_critical_path = props[
-                    'in_critical_path']
+                self.in_critical_path = props['in_critical_path']
             if 'indent' in props:
                 self.indent = props['indent']
             if 'locked' in props:
@@ -492,30 +487,6 @@ class Row(object):
         if isinstance(value, six.integer_types):
             self._version = value
 
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        if self.attachments is not None:
-            # Attachment
-            for item in self.attachments:
-                item.pre_request_filter = value
-        if self.cells is not None:
-            # Cell
-            for item in self.cells:
-                item.pre_request_filter = value
-        if self.columns is not None:
-            # Column
-            for item in self.columns:
-                item.pre_request_filter = value
-        if self.discussions is not None:
-            # Discussion
-            for item in self.discussions:
-                item.pre_request_filter = value
-        self._pre_request_filter = value
-
     def get_column(self, column_id):
         for cell in self.cells:
             if cell.column_id == column_id:
@@ -527,21 +498,6 @@ class Row(object):
                 self.cells[idx] = replacement_cell
 
     def to_dict(self, op_id=None, method=None):
-        req_filter = self.pre_request_filter
-        if req_filter:
-            if self.attachments is not None:
-                for item in self.attachments:
-                    item.pre_request_filter = req_filter
-            if self.cells is not None:
-                for item in self.cells:
-                    item.pre_request_filter = req_filter
-            if self.columns is not None:
-                for item in self.columns:
-                    item.pre_request_filter = req_filter
-            if self.discussions is not None:
-                for item in self.discussions:
-                    item.pre_request_filter = req_filter
-
         obj = {
             'above': prep(self._above),
             'accessLevel': prep(self._access_level),
@@ -571,33 +527,6 @@ class Row(object):
             'toBottom': prep(self._to_bottom),
             'toTop': prep(self._to_top),
             'version': prep(self._version)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'add_rows':
-            permitted = ['format', 'expanded', 'locked',
-                         'cells', 'toTop', 'toBottom', 'above', 'siblingId',
-                         'parentId']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'update_rows':
-            permitted = ['id', 'format', 'expanded',
-                         'locked', 'cells', 'toTop', 'toBottom', 'above',
-                         'siblingId', 'parentId', 'indent', 'outdent']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
         return obj
 
     def to_json(self):

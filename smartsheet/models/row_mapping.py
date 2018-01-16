@@ -17,12 +17,10 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
 from ..util import prep
-from datetime import datetime
 import json
-import logging
 import six
+
 
 class RowMapping(object):
 
@@ -33,7 +31,6 @@ class RowMapping(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
         self.__from = None
         self._to = None

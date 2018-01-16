@@ -23,7 +23,6 @@ from .user import User
 from .recipient import Recipient
 from datetime import datetime
 from dateutil.parser import parse
-import logging
 import six
 import json
 
@@ -43,47 +42,29 @@ class SentUpdateRequest(object):
                 'COMPLETE',
                 'CANCELED']}
 
-        self.__id = None
-        self._update_request_id = None
-        self._sent_at = None
-        self._sent_by = None
-        self._status = None
-        self._row_ids = TypedList(six.integer_types)
         self._column_ids = TypedList(six.integer_types)
+        self.__id = None
         self._include_attachments = None
         self._include_discussions = None
-        self._sent_to = None
-        self._subject = None
         self._message = None
+        self._row_ids = TypedList(six.integer_types)
+        self._sent_at = None
+        self._sent_by = None
+        self._sent_to = None
+        self._status = None
+        self._subject = None
+        self._update_request_id = None
 
         if props:
             # account for alternate variable names from raw API response
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'updateRequestId' in props:
-                self.update_request_id = props['updateRequestId']
-            if 'update_request_id' in props:
-                self.update_request_id = props['update_request_id']
-            if 'sentAt' in props:
-                self.sent_at = props['sentAt']
-            if 'sent_at' in props:
-                self.sent_at = props['sent_at']
-            if 'sendBy' in props:
-                self.sent_by = props['sentBy']
-            if 'send_by' in props:
-                self.sent_by = props['sent_by']
-            if 'status' in props:
-                self.status = props['status']
-            if 'rowIds' in props:
-                self.row_ids = props['rowIds']
-            if 'row_ids' in props:
-                self.row_ids = props['row_ids']
             if 'columnIds' in props:
                 self.column_ids = props['columnIds']
             if 'column_ids' in props:
                 self.column_ids = props['column_ids']
+            if 'id' in props:
+                self._id = props['id']
+            if '_id' in props:
+                self._id = props['_id']
             if 'includeAttachments' in props:
                 self.include_attachments = props['includeAttachments']
             if 'include_attachments' in props:
@@ -92,14 +73,32 @@ class SentUpdateRequest(object):
                 self.include_discussions = props['includeDiscussions']
             if 'include_discussions' in props:
                 self.include_discussions = props['include_discussions']
+            if 'message' in props:
+                self.message = props['message']
+            if 'rowIds' in props:
+                self.row_ids = props['rowIds']
+            if 'row_ids' in props:
+                self.row_ids = props['row_ids']
+            if 'sentAt' in props:
+                self.sent_at = props['sentAt']
+            if 'sent_at' in props:
+                self.sent_at = props['sent_at']
+            if 'sendBy' in props:
+                self.sent_by = props['sentBy']
+            if 'send_by' in props:
+                self.sent_by = props['sent_by']
             if 'sentTo' in props:
                 self.sent_to = props['sentTo']
             if 'sent_to' in props:
                 self.sent_to = props['sent_to']
+            if 'status' in props:
+                self.status = props['status']
             if 'subject' in props:
                 self.subject = props['subject']
-            if 'message' in props:
-                self.message = props['message']
+            if 'updateRequestId' in props:
+                self.update_request_id = props['updateRequestId']
+            if 'update_request_id' in props:
+                self.update_request_id = props['update_request_id']
         # requests package Response object
         self.request_response = None
         self.__initialized = True
@@ -111,6 +110,25 @@ class SentUpdateRequest(object):
             raise AttributeError(key)
 
     @property
+    def column_ids(self):
+        return self._column_ids
+
+    @column_ids.setter
+    def column_ids(self, value):
+        if isinstance(value, list):
+            self._column_ids.purge()
+            self._column_ids.extend([
+                (int(x)
+                 if not isinstance(x, int) else x) for x in value
+            ])
+        elif isinstance(value, TypedList):
+            self._column_ids.purge()
+            self._column_ids = value.to_list()
+        elif isinstance(value, int):
+            self._column_ids.purge()
+            self._column_ids.append(value)
+
+    @property
     def _id(self):
         return self.__id
 
@@ -120,13 +138,50 @@ class SentUpdateRequest(object):
             self.__id = value
 
     @property
-    def update_request_id(self):
-        return self._update_request_id
+    def include_attachments(self):
+        return self._include_attachments
 
-    @update_request_id.setter
-    def update_request_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._update_request_id = value
+    @include_attachments.setter
+    def include_attachments(self, value):
+        if isinstance(value, bool):
+            self._include_attachments = value
+
+    @property
+    def include_discussions(self):
+        return self._include_discussions
+
+    @include_discussions.setter
+    def include_discussions(self, value):
+        if isinstance(value, bool):
+            self._include_discussions = value
+
+    @property
+    def message(self):
+        return self._message
+
+    @message.setter
+    def message(self, value):
+        if isinstance(value, six.string_types):
+            self._message = value
+
+    @property
+    def row_ids(self):
+        return self._row_ids
+
+    @row_ids.setter
+    def row_ids(self, value):
+        if isinstance(value, list):
+            self._row_ids.purge()
+            self._row_ids.extend([
+                (int(x)
+                 if not isinstance(x, int) else x) for x in value
+            ])
+        elif isinstance(value, TypedList):
+            self._row_ids.purge()
+            self._row_ids = value.to_list()
+        elif isinstance(value, int):
+            self._row_ids.purge()
+            self._row_ids.append(value)
 
     @property
     def sent_at(self):
@@ -154,6 +209,17 @@ class SentUpdateRequest(object):
                 self._sent_by = User(value, self._base)
 
     @property
+    def sent_to(self):
+        return self._sent_to
+
+    @sent_to.setter
+    def sent_to(self, value):
+        if isinstance(value, Recipient):
+            self._sent_to = value
+        elif isinstance(value, dict):
+            self._sent_to = Recipient(value, self._base)
+
+    @property
     def status(self):
         return self._status
 
@@ -168,73 +234,6 @@ class SentUpdateRequest(object):
             self._status = value
 
     @property
-    def row_ids(self):
-        return self._row_ids
-
-    @row_ids.setter
-    def row_ids(self, value):
-        if isinstance(value, list):
-            self._row_ids.purge()
-            self._row_ids.extend([
-                (int(x)
-                 if not isinstance(x, int) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._row_ids.purge()
-            self._row_ids = value.to_list()
-        elif isinstance(value, int):
-            self._row_ids.purge()
-            self._row_ids.append(value)
-
-    @property
-    def column_ids(self):
-        return self._column_ids
-
-    @column_ids.setter
-    def column_ids(self, value):
-        if isinstance(value, list):
-            self._column_ids.purge()
-            self._column_ids.extend([
-                (int(x)
-                 if not isinstance(x, int) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._column_ids.purge()
-            self._column_ids = value.to_list()
-        elif isinstance(value, int):
-            self._column_ids.purge()
-            self._column_ids.append(value)
-
-    @property
-    def include_attachments(self):
-        return self._include_attachments
-
-    @include_attachments.setter
-    def include_attachments(self, value):
-        if isinstance(value, bool):
-            self._include_attachments = value
-
-    @property
-    def include_discussions(self):
-        return self._include_discussions
-
-    @include_discussions.setter
-    def include_discussions(self, value):
-        if isinstance(value, bool):
-            self._include_discussions = value
-
-    @property
-    def sent_to(self):
-        return self._sent_to
-
-    @sent_to.setter
-    def sent_to(self, value):
-        if isinstance(value, Recipient):
-            self._sent_to = value
-        elif isinstance(value, dict):
-            self._sent_to = Recipient(value, self._base)
-
-    @property
     def subject(self):
         return self._subject
 
@@ -244,28 +243,28 @@ class SentUpdateRequest(object):
             self._subject = value
 
     @property
-    def message(self):
-        return self._message
+    def update_request_id(self):
+        return self._update_request_id
 
-    @message.setter
-    def message(self, value):
-        if isinstance(value, six.string_types):
-            self._message = value
+    @update_request_id.setter
+    def update_request_id(self, value):
+        if isinstance(value, six.integer_types):
+            self._update_request_id = value
 
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'id': prep(self.__id),
-            'updateRequestId': prep(self._update_request_id),
-            'sentAt': prep(self._sent_at),
-            'sentBy': prep(self._sent_by),
-            'status': prep(self._status),
-            'rowIds': prep(self._row_ids),
             'columnIds': prep(self._column_ids),
+            'id': prep(self.__id),
             'includeAttachments': prep(self._include_attachments),
             'includeDiscussions': prep(self._include_discussions),
+            'message': prep(self._message),
+            'rowIds': prep(self._row_ids),
+            'sentAt': prep(self._sent_at),
+            'sentBy': prep(self._sent_by),
             'sentTo': prep(self._sent_to),
+            'status': prep(self._status),
             'subject': prep(self._subject),
-            'message': prep(self._message)}
+            'updateRequestId': prep(self._update_request_id)}
         return obj
 
     def to_json(self):

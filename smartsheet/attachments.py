@@ -22,7 +22,6 @@ from .models import Error, ErrorResult
 import requests
 import logging
 import os.path
-import six
 from . import fresh_operation
 
 
@@ -193,8 +192,6 @@ class Attachments(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/comments/' + str(
             comment_id) + '/attachments'
         _op['json'] = attachment_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'attach_url_to_comment'
 
         expected = ['Result', 'Attachment']
 
@@ -246,8 +243,6 @@ class Attachments(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows/' + str(
             row_id) + '/attachments'
         _op['json'] = attachment_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'attach_url_to_row'
 
         expected = ['Result', 'Attachment']
 
@@ -291,8 +286,6 @@ class Attachments(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/attachments'
         _op['json'] = attachment_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'attach_url_to_sheet'
 
         expected = ['Result', 'Attachment']
 

@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,13 +18,11 @@
 from __future__ import absolute_import
 
 from .user import User
-from ..types import TypedList
 from ..util import prep
 from datetime import datetime
-from dateutil.parser import parse
 import json
-import logging
 import six
+
 
 class Attachment(object):
 
@@ -35,8 +33,6 @@ class Attachment(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
         self.allowed_values = {
             'attachment_sub_type': [
@@ -262,22 +258,7 @@ class Attachment(object):
         if isinstance(value, six.integer_types):
             self._url_expires_in_millis = value
 
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        if self.created_by is not None:
-            self.created_by.pre_request_filter = value
-        self._pre_request_filter = value
-
     def to_dict(self, op_id=None, method=None):
-        req_filter = self.pre_request_filter
-        if req_filter:
-            if self.created_by is not None:
-                self.created_by.pre_request_filter = req_filter
-
         obj = {
             'attachmentSubType': prep(self._attachment_sub_type),
             'attachmentType': prep(self._attachment_type),
@@ -292,42 +273,6 @@ class Attachment(object):
             'sizeInKb': prep(self._size_in_kb),
             'url': prep(self._url),
             'urlExpiresInMillis': prep(self._url_expires_in_millis)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'attach_url_to_comment':
-            permitted = ['name', 'url', 'attachmentType',
-                         'attachmentSubType']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'attach_url_to_row':
-            permitted = ['name', 'description', 'url',
-                         'attachmentType', 'attachmentSubType']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'attach_url_to_sheet':
-            permitted = ['name', 'description', 'url',
-                         'attachmentType', 'attachmentSubType']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
         return obj
 
     def to_json(self):

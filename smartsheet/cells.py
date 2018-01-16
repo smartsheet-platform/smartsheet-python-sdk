@@ -19,8 +19,6 @@ from __future__ import absolute_import
 
 import logging
 from . import fresh_operation
-from io import BytesIO
-import os
 
 
 class Cells(object):
@@ -84,6 +82,8 @@ class Cells(object):
             column_id (int): Column ID
             file (string): path to image file.
             file_type (string): content type of image file
+            override_validation: override a column's validation property
+            alt_text: alternate text for the image
 
         Returns:
             Result
@@ -104,8 +104,8 @@ class Cells(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows/' + str(row_id) + \
                       '/columns/' + str(column_id) + '/cellimages'
-        _op['headers'] = {'content-type':file_type,
-                          'content-disposition':'attachment; filename="' + file + '"'}
+        _op['headers'] = {'content-type': file_type,
+                          'content-disposition': 'attachment; filename="' + file + '"'}
         _op['query_params']['altText'] = alt_text
         _op['query_params']['overrideValidation'] = override_validation
         _op['form_data'] = _data

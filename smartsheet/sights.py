@@ -19,6 +19,7 @@ import logging
 from . import fresh_operation
 from datetime import datetime
 
+
 class Sights(object):
 
     """Class for handling Sights operations."""
@@ -40,6 +41,7 @@ class Sights(object):
                 if not specified.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
+            modified_since(datetime): return sights modified since datetime
 
         Returns:
             IndexResult
@@ -93,8 +95,6 @@ class Sights(object):
         _op['method'] = 'PUT'
         _op['path'] = '/sights/' + str(sight_id)
         _op['json'] = sight_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_sight'
 
         expected = ['Result', 'Sight']
 
@@ -169,7 +169,7 @@ class Sights(object):
         return response
 
     def list_shares(self, sight_id, page_size=100, page=1,
-                    include_all=False, include_workspace_shares=False ):
+                    include_all=False, include_workspace_shares=False):
         """Get the list of all Users and Groups to whom the specified Sight is
         shared, and their access level.
 
@@ -181,6 +181,7 @@ class Sights(object):
                 if not specified.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
+            include_workspace_shares(bool): Include Workspace shares
 
         Returns:
             IndexResult
@@ -221,7 +222,7 @@ class Sights(object):
 
         return response
 
-    def share_sight(self, share_id, share_obj, send_email=False):
+    def share_sight(self, sight_id, share_obj, send_email=False):
         """Share the specified Sight.
 
         Share the specified Sight with the specified Users and
@@ -239,7 +240,7 @@ class Sights(object):
         """
         _op = fresh_operation('share_sight')
         _op['method'] = 'POST'
-        _op['path'] = '/sights/' + str(share_id) + '/shares'
+        _op['path'] = '/sights/' + str(sight_id) + '/shares'
         _op['query_params']['sendEmail'] = send_email
         _op['json'] = share_obj
 
@@ -271,8 +272,6 @@ class Sights(object):
         _op['method'] = 'PUT'
         _op['path'] = '/sights/' + str(sight_id) + '/shares/' + str(share_id)
         _op['json'] = share_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_share'
 
         expected = ['Result', 'Share']
 
@@ -334,7 +333,7 @@ class Sights(object):
         Returns:
             Result
         """
-        attributes = ['read_only_full_enabled','read_only_full_accessible_by']
+        attributes = ['read_only_full_enabled', 'read_only_full_accessible_by']
 
         fetch_first = False
         # check for incompleteness, fill in from current status if necessary
@@ -353,8 +352,6 @@ class Sights(object):
         _op['method'] = 'PUT'
         _op['path'] = '/sights/' + str(sight_id) + '/publish'
         _op['json'] = sight_publish_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'set_publish_status'
 
         expected = ['Result', 'SightPublish']
 

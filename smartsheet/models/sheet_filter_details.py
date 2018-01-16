@@ -23,6 +23,7 @@ from ..util import prep
 import json
 import six
 
+
 class SheetFilterDetails(object):
 
     """Smartsheet SheetFilterDetails data model."""
@@ -38,35 +39,21 @@ class SheetFilterDetails(object):
                 'AND',
                 'OR']}
 
-        self._operator = None
         self._criteria = TypedList(Criteria)
         self._include_parent = None
+        self._operator = None
 
         if props:
             # account for alternate variable names from raw API response
-            if 'operator' in props:
-                self.operator = props['operator']
             if 'criteria' in props:
                 self.criteria = props['criteria']
             if 'includeParent' in props:
                 self.include_parent = props['includeParent']
             if 'include_parent' in props:
                 self.include_parent = props['include_parent']
+            if 'operator' in props:
+                self.operator = props['operator']
         self.__initialized = True
-
-    @property
-    def operator(self):
-        return self._operator
-
-    @operator.setter
-    def operator(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['operator']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Filter`operator`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['operator']))
-            self._operator = value
 
     @property
     def criteria(self):
@@ -96,11 +83,25 @@ class SheetFilterDetails(object):
         if isinstance(value, bool):
             self._include_parent = value
 
+    @property
+    def operator(self):
+        return self._operator
+
+    @operator.setter
+    def operator(self, value):
+        if isinstance(value, six.string_types):
+            if value not in self.allowed_values['operator']:
+                raise ValueError(
+                    ("`{0}` is an invalid value for Filter`operator`,"
+                     " must be one of {1}").format(
+                         value, self.allowed_values['operator']))
+            self._operator = value
+
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'operator': prep(self._operator),
             'criteria': prep(self._criteria),
-            'includeParent': prep(self._include_parent)}
+            'includeParent': prep(self._include_parent),
+            'operator': prep(self._operator)}
         return obj
 
     def to_json(self):

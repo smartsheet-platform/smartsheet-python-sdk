@@ -19,8 +19,6 @@ from __future__ import absolute_import
 
 from .models.folder import Folder
 import logging
-import os.path
-import six
 from . import fresh_operation
 
 
@@ -88,8 +86,6 @@ class Folders(object):
         _op['method'] = 'POST'
         _op['path'] = '/folders/' + str(folder_id) + '/folders'
         _op['json'] = folder_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_folder_in_folder'
 
         expected = ['Result', 'Folder']
 
@@ -112,8 +108,6 @@ class Folders(object):
         _op['method'] = 'POST'
         _op['path'] = '/folders/' + str(folder_id) + '/sheets'
         _op['json'] = sheet_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_sheet_in_folder'
 
         expected = ['Result', 'Sheet']
 
@@ -153,8 +147,6 @@ class Folders(object):
         _op['path'] = '/folders/' + str(folder_id) + '/sheets'
         _op['query_params']['include'] = include
         _op['json'] = sheet_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_sheet_in_folder_from_template'
 
         expected = ['Result', 'Sheet']
 
@@ -252,8 +244,6 @@ class Folders(object):
         _op['method'] = 'POST'
         _op['path'] = '/folders/' + str(folder_id) + '/move'
         _op['json'] = container_destination_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'move_folder'
 
         expected = ['Result', 'Folder']
 
@@ -281,8 +271,6 @@ class Folders(object):
         _op['method'] = 'PUT'
         _op['path'] = '/folders/' + str(folder_id)
         _op['json'] = folder_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_folder'
 
         expected = ['Result', 'Folder']
 

@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,12 +17,10 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
 from ..util import prep
-from datetime import datetime
 import json
-import logging
 import six
+
 
 class SheetUserSettings(object):
 
@@ -33,32 +31,34 @@ class SheetUserSettings(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
+        self._applied_sheet_filter_id = None
         self._critical_path_enabled = None
         self._display_summary_tasks = None
-        self._applied_sheet_filter_id = None
 
         if props:
             # account for alternate variable names from raw API response
-            if 'criticalPathEnabled' in props:
-                self.critical_path_enabled = props[
-                    'criticalPathEnabled']
-            if 'critical_path_enabled' in props:
-                self.critical_path_enabled = props[
-                    'critical_path_enabled']
-            if 'displaySummaryTasks' in props:
-                self.display_summary_tasks = props[
-                    'displaySummaryTasks']
-            if 'display_summary_tasks' in props:
-                self.display_summary_tasks = props[
-                    'display_summary_tasks']
             if 'appliedSheetFilterId' in props:
-                self.applied_sheet_filter_id = props[
-                    'appliedSheetFilterId']
+                self.applied_sheet_filter_id = props['appliedSheetFilterId']
             if 'applied_sheet_filter_id' in props:
-                self.applied_sheet_filter_id = props[
-                    'applied_sheet_filter_id']
+                self.applied_sheet_filter_id = props['applied_sheet_filter_id']
+            if 'criticalPathEnabled' in props:
+                self.critical_path_enabled = props['criticalPathEnabled']
+            if 'critical_path_enabled' in props:
+                self.critical_path_enabled = props['critical_path_enabled']
+            if 'displaySummaryTasks' in props:
+                self.display_summary_tasks = props['displaySummaryTasks']
+            if 'display_summary_tasks' in props:
+                self.display_summary_tasks = props['display_summary_tasks']
+
+    @property
+    def applied_sheet_filter_id(self):
+        return self._applied_sheet_filter_id
+
+    @applied_sheet_filter_id.setter
+    def applied_sheet_filter_id(self, value):
+        if isinstance(value, six.integer_types):
+            self._applied_sheet_filter_id = value
 
     @property
     def critical_path_enabled(self):
@@ -78,21 +78,11 @@ class SheetUserSettings(object):
         if isinstance(value, bool):
             self._display_summary_tasks = value
 
-    @property
-    def applied_sheet_filter_id(self):
-        return self._applied_sheet_filter_id
-
-    @applied_sheet_filter_id.setter
-    def applied_sheet_filter_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._applied_sheet_filter_id = value
-
     def to_dict(self, op_id=None, method=None):
         obj = {
+            'appliedSheetFilterId': prep(self._applied_sheet_filter_id),
             'criticalPathEnabled': prep(self._critical_path_enabled),
-            'displaySummaryTasks': prep(self._display_summary_tasks),
-            'appliedSheetFilterId': prep(self._applied_sheet_filter_id)}
-
+            'displaySummaryTasks': prep(self._display_summary_tasks)}
         return obj
 
     def to_json(self):

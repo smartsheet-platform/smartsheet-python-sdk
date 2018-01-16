@@ -34,44 +34,34 @@ class ProjectSettings(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._working_days = TypedList(six.string_types)
-        self._non_working_days = TypedList(date)
         self._length_of_day = None
+        self._non_working_days = TypedList(date)
+        self._working_days = TypedList(six.string_types)
 
         if props:
             # account for alternate variable names from raw API response
-            if 'workingDays' in props:
-                self.working_days = props['workingDays']
-            if 'working_days' in props:
-                self.working_days = props['working_days']
-            if 'nonWorkingDays' in props:
-                self.non_working_days = props['nonWorkingDays']
-            if 'non_working_days' in props:
-                self.non_working_days = props['non_working_days']
             if 'lengthOfDay' in props:
                 self.length_of_day = props['lengthOfDay']
             if 'length_of_day' in props:
                 self.length_of_day = props['length_of_day']
+            if 'nonWorkingDays' in props:
+                self.non_working_days = props['nonWorkingDays']
+            if 'non_working_days' in props:
+                self.non_working_days = props['non_working_days']
+            if 'workingDays' in props:
+                self.working_days = props['workingDays']
+            if 'working_days' in props:
+                self.working_days = props['working_days']
         self.__initialized = True
 
     @property
-    def working_days(self):
-        return self._working_days
+    def length_of_day(self):
+        return self._length_of_day
 
-    @working_days.setter
-    def working_days(self, value):
-        if isinstance(value, list):
-            self._working_days.purge()
-            self._working_days.extend([
-                 (six.string_types(x, self._base)
-                  if not isinstance(x, six.string_types) else x) for x in value
-             ])
-        elif isinstance(value, TypedList):
-            self._working_days.purge()
-            self._working_days = value.to_list()
-        elif isinstance(value, six.string_types):
-            self._working_days.purge()
-            self._working_days.append(value)
+    @length_of_day.setter
+    def length_of_day(self, value):
+        if isinstance(value, (six.integer_types, float)):
+            self._length_of_day = value
 
     @property
     def non_working_days(self):
@@ -98,19 +88,29 @@ class ProjectSettings(object):
             self._non_working_days.append(value)
 
     @property
-    def length_of_day(self):
-        return self._length_of_day
+    def working_days(self):
+        return self._working_days
 
-    @length_of_day.setter
-    def length_of_day(self, value):
-        if isinstance(value, (six.integer_types, float)):
-            self._length_of_day = value
+    @working_days.setter
+    def working_days(self, value):
+        if isinstance(value, list):
+            self._working_days.purge()
+            self._working_days.extend([
+                 (six.string_types(x, self._base)
+                  if not isinstance(x, six.string_types) else x) for x in value
+             ])
+        elif isinstance(value, TypedList):
+            self._working_days.purge()
+            self._working_days = value.to_list()
+        elif isinstance(value, six.string_types):
+            self._working_days.purge()
+            self._working_days.append(value)
 
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'workingDays': prep(self._working_days),
+            'lengthOfDay': prep(self._length_of_day),
             'nonWorkingDays': prep(self._non_working_days),
-            'lengthOfDay': prep(self._length_of_day)}
+            'workingDays': prep(self._working_days)}
         return obj
 
     def to_json(self):

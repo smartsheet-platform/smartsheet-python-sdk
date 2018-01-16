@@ -35,16 +35,22 @@ class CellDataItem(object):
         if base_obj is not None:
             self._base = base_obj
 
+        self._cell = None
+        self._column_id = None
         self._label = None
         self._label_format = None
         self._object_value = None
-        self._cell = None
-        self._value_format = None
         self._order = None
-        self._column_id = None
+        self._value_format = None
 
         if props:
             # account for alternate variable names from raw API response
+            if 'cell' in props:
+                self.cell = props['cell']
+            if 'columnId' in props:
+                self.column_id = props['columnId']
+            if 'column_id' in props:
+                self.column_id = props['column_id']
             if 'label' in props:
                 self.label = props['label']
             if 'labelFormat' in props:
@@ -55,19 +61,33 @@ class CellDataItem(object):
                 self.object_value = props['objectValue']
             if 'object_value' in props:
                 self.object_value = props['object_value']
-            if 'cell' in props:
-                self.cell = props['cell']
+            if 'order' in props:
+                self.order = props['order']
             if 'valueFormat' in props:
                 self.value_format = props['valueFormat']
             if 'value_format' in props:
                 self.value_format = props['value_format']
-            if 'order' in props:
-                self.order = props['order']
-            if 'columnId' in props:
-                self.column_id = props['columnId']
-            if 'column_id' in props:
-                self.column_id = props['column_id']
         self.__initialized = True
+
+    @property
+    def cell(self):
+        return self._cell
+
+    @cell.setter
+    def cell(self, value):
+        if isinstance(value, Cell):
+            self._cell = value
+        elif isinstance(value, dict):
+            self._cell = Cell(value, self._base)
+
+    @property
+    def column_id(self):
+        return self._column_id
+
+    @column_id.setter
+    def column_id(self, value):
+        if isinstance(value, six.integer_types):
+            self._column_id = value
 
     @property
     def label(self):
@@ -103,15 +123,13 @@ class CellDataItem(object):
             self._object_value = BooleanObjectValue(value)
 
     @property
-    def cell(self):
-        return self._cell
+    def order(self):
+        return self._order
 
-    @cell.setter
-    def cell(self, value):
-        if isinstance(value, Cell):
-            self._cell = value
-        elif isinstance(value, dict):
-            self._cell = Cell(value, self._base)
+    @order.setter
+    def order(self, value):
+        if isinstance(value, six.integer_types):
+            self._order = value
 
     @property
     def value_format(self):
@@ -122,33 +140,15 @@ class CellDataItem(object):
         if isinstance(value, six.string_types):
             self._value_format = value
 
-    @property
-    def order(self):
-        return self._order
-
-    @order.setter
-    def order(self, value):
-        if isinstance(value, six.integer_types):
-            self._order = value
-
-    @property
-    def column_id(self):
-        return self._column_id
-
-    @column_id.setter
-    def column_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._column_id = value
-
     def to_dict(self, op_id=None, method=None):
         obj = {
+            'cell': prep(self._cell),
+            'columnId': prep(self._column_id),
             'label': prep(self._label),
             'labelFormat': prep(self._label_format),
             'objectValue': prep(self._object_value),
-            'cell': prep(self._cell),
-            'valueFormat': prep(self._value_format),
             'order': prep(self._order),
-            'columnId': prep(self._column_id)}
+            'valueFormat': prep(self._value_format)}
         return obj
 
     def to_json(self):

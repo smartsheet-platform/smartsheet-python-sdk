@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0913
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,7 +18,6 @@
 from __future__ import absolute_import
 
 import logging
-import os.path
 import six
 from . import fresh_operation
 
@@ -49,8 +48,6 @@ class Discussions(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/discussions/' + str(
             discussion_id) + '/comments'
         _op['json'] = comment_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'add_comment_to_discussion'
 
         expected = ['Result', 'Comment']
 
@@ -84,7 +81,6 @@ class Discussions(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/discussions/' + str(
             discussion_id) + '/comments'
         _op['files'] = {}
-        comment.pre_request_filter = 'add_comment_to_discussion_with_attachment'
         field_str = comment.to_json()
         _op['files']['comment'] = (None, six.StringIO(field_str), 'application/json')
         _op['files']['file'] = _file
@@ -117,8 +113,6 @@ class Discussions(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows/' + str(
             row_id) + '/discussions'
         _op['json'] = discussion_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_discussion_on_row'
 
         expected = ['Result', 'Discussion']
 
@@ -152,7 +146,6 @@ class Discussions(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows/' + str(
             row_id) + '/discussions'
         _op['files'] = {}
-        discussion.pre_request_filter = 'create_discussion_on_row_with_attachment'
         field_str = discussion.to_json()
         _op['files']['discussion'] = (None, six.StringIO(field_str), 'application/json')
         _op['files']['file'] = _file
@@ -180,8 +173,6 @@ class Discussions(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/discussions'
         _op['json'] = discussion_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_discussion_on_sheet'
 
         expected = ['Result', 'Discussion']
 
@@ -207,7 +198,6 @@ class Discussions(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/discussions'
         _op['files'] = {}
-        discussion.pre_request_filter = 'create_discussion_on_sheet_with_attachment'
         field_str = discussion.to_json()
         _op['files']['discussion'] = (None, six.StringIO(field_str), 'application/json')
         _op['files']['file'] = _file
@@ -388,7 +378,6 @@ class Discussions(object):
             sheet_id (int): Sheet ID
             comment_id (int): Comment ID
             comment_obj (Comment): Comment object with the following attributes:
-          * text (required)
 
         Returns:
             Result
@@ -397,8 +386,6 @@ class Discussions(object):
         _op['method'] = 'PUT'
         _op['path'] = '/sheets/' + str(sheet_id) + '/comments/' + str(comment_id)
         _op['json'] = comment_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_comment'
 
         expected = ['Result', 'Comment']
 

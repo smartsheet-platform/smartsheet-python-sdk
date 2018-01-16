@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -25,10 +25,8 @@ from .sight import Sight
 from .workspace import Workspace
 from ..types import TypedList
 from ..util import prep
-from datetime import datetime
 import json
-import logging
-import six
+
 
 class Home(object):
 
@@ -39,13 +37,12 @@ class Home(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
         self._folders = TypedList(Folder)
         self._reports = TypedList(Report)
         self._sheets = TypedList(Sheet)
-        self._templates = TypedList(Template)
         self._sights = TypedList(Sight)
+        self._templates = TypedList(Template)
         self._workspaces = TypedList(Workspace)
 
         if props:
@@ -55,10 +52,10 @@ class Home(object):
                 self.reports = props['reports']
             if 'sheets' in props:
                 self.sheets = props['sheets']
-            if 'templates' in props:
-                self.templates = props['templates']
             if 'sights' in props:
                 self.sights = props['sights']
+            if 'templates' in props:
+                self.templates = props['templates']
             if 'workspaces' in props:
                 self.workspaces = props['workspaces']
         # requests package Response object
@@ -122,25 +119,6 @@ class Home(object):
             self._sheets.append(value)
 
     @property
-    def templates(self):
-        return self._templates
-
-    @templates.setter
-    def templates(self, value):
-        if isinstance(value, list):
-            self._templates.purge()
-            self._templates.extend([
-                (Template(x, self._base)
-                 if not isinstance(x, Template) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._templates.purge()
-            self._templates = value.to_list()
-        elif isinstance(value, Template):
-            self._templates.purge()
-            self._templates.append(value)
-
-    @property
     def sights(self):
         return self._sights
 
@@ -158,6 +136,25 @@ class Home(object):
         elif isinstance(value, Sight):
             self._sights.purge()
             self._sights.append(value)
+
+    @property
+    def templates(self):
+        return self._templates
+
+    @templates.setter
+    def templates(self, value):
+        if isinstance(value, list):
+            self._templates.purge()
+            self._templates.extend([
+                (Template(x, self._base)
+                 if not isinstance(x, Template) else x) for x in value
+            ])
+        elif isinstance(value, TypedList):
+            self._templates.purge()
+            self._templates = value.to_list()
+        elif isinstance(value, Template):
+            self._templates.purge()
+            self._templates.append(value)
 
     @property
     def workspaces(self):
@@ -183,8 +180,8 @@ class Home(object):
             'folders': prep(self._folders),
             'reports': prep(self._reports),
             'sheets': prep(self._sheets),
-            'templates': prep(self._templates),
             'sights': prep(self._sights),
+            'templates': prep(self._templates),
             'workspaces': prep(self._workspaces)}
         return obj
 

@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -42,6 +42,7 @@ from ..util import prep
 import json
 import six
 
+
 class IndexResult(object):
 
     """Smartsheet IndexResult data model."""
@@ -51,11 +52,11 @@ class IndexResult(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
         self._dynamic_data_type = None
         if dynamic_data_type is not None:
             self._dynamic_data_type = dynamic_data_type
+
         self._data = TypedList(object)
         self._page_number = None
         self._page_size = None

@@ -19,7 +19,6 @@ from __future__ import absolute_import
 from ..util import prep
 from datetime import datetime
 from dateutil.parser import parse
-import logging
 import six
 import json
 
@@ -34,20 +33,20 @@ class WebhookStats(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._last_callback_attempt_retry_count = None
         self._last_callback_attempt = None
+        self._last_callback_attempt_retry_count = None
         self._last_successful_callback = None
 
         if props:
             # account for alternate variable names from raw API response
-            if 'lastCallbackAttemptRetryCount' in props:
-                self.last_callback_attempt_retry_count = props['lastCallbackAttemptRetryCount']
-            if 'last_callback_attempt_retry_count' in props:
-                self.last_callback_attempt_retry_count = props['last_callback_attempt_retry_count']
             if 'lastCallbackAttempt' in props:
                 self.last_callback_attempt = props['lastCallbackAttempt']
             if 'last_callback_attempt' in props:
                 self.last_callback_attempt = props['last_callback_attempt']
+            if 'lastCallbackAttemptRetryCount' in props:
+                self.last_callback_attempt_retry_count = props['lastCallbackAttemptRetryCount']
+            if 'last_callback_attempt_retry_count' in props:
+                self.last_callback_attempt_retry_count = props['last_callback_attempt_retry_count']
             if 'lastSuccessfulCallback' in props:
                 self.last_successful_callback = props['lastSuccessfulCallback']
             if 'last_successful_callback' in props:
@@ -56,15 +55,6 @@ class WebhookStats(object):
         # requests package Response object
         self.request_response = None
         self.__initialized = True
-
-    @property
-    def last_callback_attempt_retry_count(self):
-        return self._last_callback_attempt_retry_count
-
-    @last_callback_attempt_retry_count.setter
-    def last_callback_attempt_retry_count(self, value):
-        if isinstance(value, six.integer_types):
-            self._last_callback_attempt_retry_count = value
 
     @property
     def last_callback_attempt(self):
@@ -78,6 +68,15 @@ class WebhookStats(object):
             if isinstance(value, six.string_types):
                 value = parse(value)
                 self._last_callback_attempt = value
+
+    @property
+    def last_callback_attempt_retry_count(self):
+        return self._last_callback_attempt_retry_count
+
+    @last_callback_attempt_retry_count.setter
+    def last_callback_attempt_retry_count(self, value):
+        if isinstance(value, six.integer_types):
+            self._last_callback_attempt_retry_count = value
 
     @property
     def last_successful_callback(self):
@@ -94,8 +93,8 @@ class WebhookStats(object):
 
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'lastCallbackAttemptRetryCount': prep(self._last_callback_attempt_retry_count),
             'lastCallbackAttempt': prep(self._last_callback_attempt),
+            'lastCallbackAttemptRetryCount': prep(self._last_callback_attempt_retry_count),
             'lastSuccessfulCallback': prep(self._last_successful_callback)}
         return obj
 

@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2017 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -22,7 +22,6 @@ from ..util import prep
 from .widget import Widget
 from datetime import datetime
 from dateutil.parser import parse
-import logging
 import six
 import json
 
@@ -36,8 +35,6 @@ class Sight(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
         self.allowed_values = {
             'access_level': [
@@ -45,47 +42,47 @@ class Sight(object):
                 'ADMIN',
                 'OWNER']}
 
-        self.__id = None
-        self._name = None
-        self._column_count = None
-        self._widgets = TypedList(Widget)
-        self._favorite = None
         self._access_level = None
-        self._permalink = None
+        self._column_count = None
         self._created_at = None
+        self._favorite = None
+        self.__id = None
         self._modified_at = None
+        self._name = None
+        self._permalink = None
+        self._widgets = TypedList(Widget)
         self._workspace = None
 
         if props:
             # account for alternate variable names from raw API response
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'name' in props:
-                self.name = props['name']
-            if 'columnCount' in props:
-                self.column_count = props['columnCount']
-            if 'column_count' in props:
-                self.column_count = props['column_count']
-            if 'widgets' in props:
-                self.widgets = props['widgets']
-            if 'favorite' in props:
-                self.favorite = props['favorite']
             if 'accessLevel' in props:
                 self.access_level = props['accessLevel']
             if 'access_level' in props:
                 self.access_level = props['access_level']
-            if 'permalink' in props:
-                self.permalink = props['permalink']
+            if 'columnCount' in props:
+                self.column_count = props['columnCount']
+            if 'column_count' in props:
+                self.column_count = props['column_count']
             if 'createdAt' in props:
                 self.created_at = props['createdAt']
             if 'created_at' in props:
                 self.created_at = props['created_at']
+            if 'favorite' in props:
+                self.favorite = props['favorite']
+            if 'id' in props:
+                self._id = props['id']
+            if '_id' in props:
+                self._id = props['_id']
             if 'modifiedAt' in props:
                 self.modified_at = props['modifiedAt']
             if 'modified_at' in props:
                 self.modified_at = props['modified_at']
+            if 'name' in props:
+                self.name = props['name']
+            if 'permalink' in props:
+                self.permalink = props['permalink']
+            if 'widgets' in props:
+                self.widgets = props['widgets']
             if 'workspace' in props:
                 self.workspace = props['workspace']
         # requests package Response object
@@ -99,13 +96,49 @@ class Sight(object):
             raise AttributeError(key)
 
     @property
-    def name(self):
-        return self._name
+    def access_level(self):
+        return self._access_level
 
-    @name.setter
-    def name(self, value):
+    @access_level.setter
+    def access_level(self, value):
         if isinstance(value, six.string_types):
-            self._name = value
+            if value not in self.allowed_values['access_level']:
+                raise ValueError(
+                    ("`{0}` is an invalid value for Sight`access_level`,"
+                     " must be one of {1}").format(
+                         value, self.allowed_values['access_level']))
+            self._access_level = value
+
+    @property
+    def column_count(self):
+        return self._column_count
+
+    @column_count.setter
+    def column_count(self, value):
+        if isinstance(value, six.integer_types):
+            self._column_count = value
+
+    @property
+    def created_at(self):
+        return self._created_at
+
+    @created_at.setter
+    def created_at(self, value):
+        if isinstance(value, datetime):
+            self._created_at = value
+        else:
+            if isinstance(value, six.string_types):
+                value = parse(value)
+                self._created_at = value
+
+    @property
+    def favorite(self):
+        return self._favorite
+
+    @favorite.setter
+    def favorite(self, value):
+        if isinstance(value, bool):
+            self._favorite = value
 
     @property
     def _id(self):
@@ -117,13 +150,35 @@ class Sight(object):
             self.__id = value
 
     @property
-    def column_count(self):
-        return self._column_count
+    def modified_at(self):
+        return self._modified_at
 
-    @column_count.setter
-    def column_count(self, value):
-        if isinstance(value, six.integer_types):
-            self._column_count = value
+    @modified_at.setter
+    def modified_at(self, value):
+        if isinstance(value, datetime):
+            self._modified_at = value
+        else:
+            if isinstance(value, six.string_types):
+                value = parse(value)
+                self._modified_at = value
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        if isinstance(value, six.string_types):
+            self._name = value
+
+    @property
+    def permalink(self):
+        return self._permalink
+
+    @permalink.setter
+    def permalink(self, value):
+        if isinstance(value, six.string_types):
+            self._permalink = value
 
     @property
     def widgets(self):
@@ -145,64 +200,6 @@ class Sight(object):
             self._widgets.append(value)
 
     @property
-    def favorite(self):
-        return self._favorite
-
-    @favorite.setter
-    def favorite(self, value):
-        if isinstance(value, bool):
-            self._favorite = value
-
-    @property
-    def access_level(self):
-        return self._access_level
-
-    @access_level.setter
-    def access_level(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['access_level']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Sight`access_level`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['access_level']))
-            self._access_level = value
-
-    @property
-    def permalink(self):
-        return self._permalink
-
-    @permalink.setter
-    def permalink(self, value):
-        if isinstance(value, six.string_types):
-            self._permalink = value;
-
-    @property
-    def created_at(self):
-        return self._created_at
-
-    @created_at.setter
-    def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._created_at = value
-
-    @property
-    def modified_at(self):
-        return self._modified_at
-
-    @modified_at.setter
-    def modified_at(self, value):
-        if isinstance(value, datetime):
-            self._modified_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._modified_at = value
-
-    @property
     def workspace(self):
         return self._workspace
 
@@ -214,39 +211,18 @@ class Sight(object):
         elif isinstance(value, dict):
             self._workspace = Workspace(value, self._base)
 
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        self._pre_request_filter = value
-
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'id': prep(self.__id),
-            'name': prep(self._name),
-            'columnCount': prep(self._column_count),
-            'widgets': prep(self._widgets),
-            'favorite': prep(self._favorite),
             'accessLevel': prep(self._access_level),
-            'permalink': prep(self._permalink),
+            'columnCount': prep(self._column_count),
             'createdAt': prep(self._created_at),
+            'favorite': prep(self._favorite),
+            'id': prep(self.__id),
             'modifiedA_at': prep(self._modified_at),
+            'name': prep(self._name),
+            'permalink': prep(self._permalink),
+            'widgets': prep(self._widgets),
             'workspace': prep(self._workspace)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'update_sight':
-            permitted = ['name']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
         return obj
 
     def to_json(self):

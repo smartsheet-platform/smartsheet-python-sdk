@@ -22,6 +22,7 @@ from .object_value import ObjectValue
 import json
 import six
 
+
 class Contact(object):
 
     """Smartsheet Contact data model."""

@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -19,10 +19,9 @@ from __future__ import absolute_import
 
 from ..types import TypedList
 from ..util import prep
-from datetime import datetime
 import json
-import logging
 import six
+
 
 class Criteria(object):
 
@@ -33,7 +32,6 @@ class Criteria(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
         self.allowed_values = {
             'operator': [
@@ -69,13 +67,17 @@ class Criteria(object):
                 'IS_CURRENT_USER',
                 'IS_NOT_CURRENT_USER']}
 
+        self._column_id = None
         self._operator = None
         self._value1 = None
         self._value2 = None
         self._values = TypedList(str)
-        self._column_id = None
 
         if props:
+            if 'columnId' in props:
+                self.column_id = props['columnId']
+            if 'column_id' in props:
+                self.column_id = props['column_id']
             if 'operator' in props:
                 self.operator = props['operator']
             if 'value1' in props:
@@ -84,10 +86,15 @@ class Criteria(object):
                 self.value2 = props['value2']
             if 'values' in props:
                 self.values = props['values']
-            if 'columnId' in props:
-                self.column_id = props['columnId']
-            if 'column_id' in props:
-                self.column_id = props['column_id']
+
+    @property
+    def column_id(self):
+        return self._column_id
+
+    @column_id.setter
+    def column_id(self, value):
+        if isinstance(value, six.integer_types):
+            self._column_id = value
 
     @property
     def operator(self):
@@ -140,22 +147,13 @@ class Criteria(object):
             self._values.purge()
             self._values.append(value)
 
-    @property
-    def column_id(self):
-        return self._column_id
-
-    @column_id.setter
-    def column_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._column_id = value
-
     def to_dict(self, op_id=None, method=None):
         obj = {
+            'columnId': prep(self._column_id),
             'operator': prep(self._operator),
             'value1': prep(self._value1),
             'value2': prep(self._value2),
-            'values': prep(self._values),
-            'columnId': prep(self._column_id)}
+            'values': prep(self._values)}
         return obj
 
     def to_json(self):

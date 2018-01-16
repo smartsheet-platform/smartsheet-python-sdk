@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -25,8 +25,8 @@ from ..util import prep
 from datetime import datetime
 from dateutil.parser import parse
 import json
-import logging
 import six
+
 
 class Discussion(object):
 
@@ -37,8 +37,6 @@ class Discussion(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
         self.allowed_values = {
             'access_level': [
@@ -278,44 +276,7 @@ class Discussion(object):
         if isinstance(value, six.string_types):
             self._title = value
 
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        if self.comment is not None:
-            self.comment.pre_request_filter = value
-        if self.comment_attachments is not None:
-            # Attachment
-            for item in self.comment_attachments:
-                item.pre_request_filter = value
-        if self.comments is not None:
-            # Comment
-            for item in self.comments:
-                item.pre_request_filter = value
-        if self.created_by is not None:
-            self.created_by.pre_request_filter = value
-        if self.last_commented_user is not None:
-            self.last_commented_user.pre_request_filter = value
-        self._pre_request_filter = value
-
     def to_dict(self, op_id=None, method=None):
-        req_filter = self.pre_request_filter
-        if req_filter:
-            if self.comment is not None:
-                self.comment.pre_request_filter = req_filter
-            if self.comment_attachments is not None:
-                for item in self.comment_attachments:
-                    item.pre_request_filter = req_filter
-            if self.comments is not None:
-                for item in self.comments:
-                    item.pre_request_filter = req_filter
-            if self.created_by is not None:
-                self.created_by.pre_request_filter = req_filter
-            if self.last_commented_user is not None:
-                self.last_commented_user.pre_request_filter = req_filter
-
         obj = {
             'accessLevel': prep(self._access_level),
             'comment': prep(self._comment),
@@ -330,49 +291,6 @@ class Discussion(object):
             'parentType': prep(self._parent_type),
             'readOnly': prep(self._read_only),
             'title': prep(self._title)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'create_discussion_on_row':
-            permitted = ['title', 'comment']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_discussion_on_row_with_attachment':
-            permitted = ['title', 'comment']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_discussion_on_sheet':
-            permitted = ['title', 'comment']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_discussion_on_sheet_with_attachment':
-            permitted = ['title', 'comment']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
         return obj
 
     def to_json(self):

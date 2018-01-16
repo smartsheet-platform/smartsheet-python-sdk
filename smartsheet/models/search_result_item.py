@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -19,10 +19,9 @@ from __future__ import absolute_import
 
 from ..types import TypedList
 from ..util import prep
-from datetime import datetime
 import json
-import logging
 import six
+
 
 class SearchResultItem(object):
 
@@ -33,7 +32,6 @@ class SearchResultItem(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
         self.allowed_values = {
             'object_type': [
@@ -54,13 +52,13 @@ class SearchResultItem(object):
                 'template']}
 
         self._context_data = TypedList(str)
+        self._favorite = None
         self._object_id = None
         self._object_type = None
-        self._favorite = None
+        self._parent_object_favorite = None
         self._parent_object_id = None
         self._parent_object_name = None
         self._parent_object_type = None
-        self._parent_object_favorite = None
         self._text = None
 
         if props:
@@ -70,29 +68,26 @@ class SearchResultItem(object):
             if 'context_data' in props:
                 self.context_data = props['context_data']
             # read only
+            if 'favorite' in props:
+                self.favorite = props['favorite']
+            # read only
             if 'objectId' in props:
                 self.object_id = props['objectId']
             # read only
             if 'objectType' in props:
                 self.object_type = props['objectType']
             # read only
-            if 'favorite' in props:
-                self.favorite = props['favorite']
+            if 'parentObjectFavorite' in props:
+                self.parent_object_favorite = props['parentObjectFavorite']
             # read only
             if 'parentObjectId' in props:
                 self.parent_object_id = props['parentObjectId']
             # read only
             if 'parentObjectName' in props:
-                self.parent_object_name = props[
-                    'parentObjectName']
+                self.parent_object_name = props['parentObjectName']
             # read only
             if 'parentObjectType' in props:
-                self.parent_object_type = props[
-                    'parentObjectType']
-            # read only
-            if 'parentObjectFavorite' in props:
-                self.parent_object_favorite = props[
-                    'parentObjectFavorite']
+                self.parent_object_type = props['parentObjectType']
             if 'text' in props:
                 self.text = props['text']
 
@@ -114,6 +109,15 @@ class SearchResultItem(object):
         elif isinstance(value, str):
             self._context_data.purge()
             self._context_data.append(value)
+
+    @property
+    def favorite(self):
+        return self._favorite
+
+    @favorite.setter
+    def favorite(self, value):
+        if isinstance(value, bool):
+            self._favorite = value
 
     @property
     def object_id(self):
@@ -139,13 +143,13 @@ class SearchResultItem(object):
             self._object_type = value
 
     @property
-    def favorite(self):
-        return self._favorite
+    def parent_object_favorite(self):
+        return self._parent_object_favorite
 
-    @favorite.setter
-    def favorite(self, value):
+    @parent_object_favorite.setter
+    def parent_object_favorite(self, value):
         if isinstance(value, bool):
-            self._favorite = value
+            self._parent_object_favorite = value
 
     @property
     def parent_object_id(self):
@@ -180,15 +184,6 @@ class SearchResultItem(object):
             self._parent_object_type = value
 
     @property
-    def parent_object_favorite(self):
-        return self._parent_object_favorite
-
-    @parent_object_favorite.setter
-    def parent_object_favorite(self, value):
-        if isinstance(value, bool):
-            self._parent_object_favorite = value
-
-    @property
     def text(self):
         return self._text
 
@@ -200,13 +195,13 @@ class SearchResultItem(object):
     def to_dict(self, op_id=None, method=None):
         obj = {
             'contextData': prep(self._context_data),
+            'favorite': prep(self._favorite),
             'objectId': prep(self._object_id),
             'objectType': prep(self._object_type),
-            'favorite': prep(self._favorite),
+            'parentObjectFavorite': prep(self._parent_object_favorite),
             'parentObjectId': prep(self._parent_object_id),
             'parentObjectName': prep(self._parent_object_name),
             'parentObjectType': prep(self._parent_object_type),
-            'parentObjectFavorite': prep(self._parent_object_favorite),
             'text': prep(self._text)}
         return obj
 

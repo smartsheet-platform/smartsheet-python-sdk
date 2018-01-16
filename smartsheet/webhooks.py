@@ -18,6 +18,7 @@
 import logging
 from . import fresh_operation
 
+
 class Webhooks(object):
 
     """Class for handling Webhooks operations."""
@@ -28,7 +29,7 @@ class Webhooks(object):
         self._log = logging.getLogger(__name__)
 
     def list_webhooks(self, page_size=100, page=1,
-                    include_all=False):
+                      include_all=False):
         """Get the list of all Webhooks the User has access to, in alphabetical
         order, by name.
 
@@ -90,8 +91,6 @@ class Webhooks(object):
         _op['method'] = 'POST'
         _op['path'] = '/webhooks'
         _op['json'] = webhook_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_webhook'
 
         expected = ['Result', 'Webhook']
 
@@ -114,8 +113,6 @@ class Webhooks(object):
         _op['method'] = 'PUT'
         _op['path'] = '/webhooks/' + str(webhook_id)
         _op['json'] = webhook_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_webhook'
 
         expected = ['Result', 'Webhook']
 

@@ -21,8 +21,8 @@ from ..util import prep
 from ..types import TypedList
 from .image_url import ImageUrl
 import json
-import logging
 import six
+
 
 class ImageUrlMap(object):
 
@@ -34,31 +34,22 @@ class ImageUrlMap(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._url_expires_in_millis = 0
         self._image_urls = TypedList(ImageUrl)
+        self._url_expires_in_millis = 0
 
         if props:
             # account for alternate variable names from raw API response
-            if 'urlExpiresInMillis' in props:
-                self.url_expires_in_millis = props['urlExpiresInMillis']
-            if 'url_expires_in_millis' in props:
-                self.url_expires_in_millis = props['url_expires_in_millis']
             if 'imageUrls' in props:
                 self.image_urls = props['imageUrls']
             if 'image_urls' in props:
                 self.image_urls = props['image_urls']
+            if 'urlExpiresInMillis' in props:
+                self.url_expires_in_millis = props['urlExpiresInMillis']
+            if 'url_expires_in_millis' in props:
+                self.url_expires_in_millis = props['url_expires_in_millis']
         # requests package Response object
         self.request_response = None
         self.__initialized = True
-
-    @property
-    def url_expires_in_millis(self):
-        return self._url_expires_in_millis
-
-    @url_expires_in_millis.setter
-    def url_expires_in_millis(self, value):
-        if isinstance(value, six.integer_types):
-            self._url_expires_in_millis = value
 
     @property
     def image_urls(self):
@@ -79,10 +70,19 @@ class ImageUrlMap(object):
             self._image_urls.purge()
             self._image_urls.append(value)
 
+    @property
+    def url_expires_in_millis(self):
+        return self._url_expires_in_millis
+
+    @url_expires_in_millis.setter
+    def url_expires_in_millis(self, value):
+        if isinstance(value, six.integer_types):
+            self._url_expires_in_millis = value
+
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'urlExpiresInMillis': prep(self._url_expires_in_millis),
-            'imageUrls': prep(self._image_urls)}
+            'imageUrls': prep(self._image_urls),
+            'urlExpiresInMillis': prep(self._url_expires_in_millis)}
         return obj
 
     def to_json(self):

@@ -22,6 +22,7 @@ from .sheet_filter_details import SheetFilterDetails
 import json
 import six
 
+
 class SheetFilter(object):
 
     """Smartsheet SheetFilter data model."""
@@ -31,7 +32,6 @@ class SheetFilter(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
         self.allowed_values = {
             '_filter_type': [
@@ -39,23 +39,23 @@ class SheetFilter(object):
                 'PERSONAL',
                 'SHARED']}
 
+        self._filter_type = None
         self.__id = None
         self._name = None
-        self._filter_type = None
         self._query = None
 
         if props:
             # account for alternate variable names from raw API response
+            if 'filterType' in props:
+                self.filter_type = props['filterType']
+            if 'filter_type' in props:
+                self.filter_type = props['filter_type']
             if 'id' in props:
                 self._id = props['id']
             if '_id' in props:
                 self._id = props['_id']
             if 'name' in props:
                 self.name = props['name']
-            if 'filterType' in props:
-                self.filter_type = props['filterType']
-            if 'filter_type' in props:
-                self.filter_type = props['filter_type']
             if 'query' in props:
                 self.query = props['query']
         self.__initialized = True
@@ -65,6 +65,20 @@ class SheetFilter(object):
             return self._id
         else:
             raise AttributeError(key)
+
+    @property
+    def filter_type(self):
+        return self._filter_type
+
+    @filter_type.setter
+    def filter_type(self, value):
+        if isinstance(value, six.string_types):
+            if value not in self.allowed_values['_filter_type']:
+                raise ValueError(
+                    ("`{0}` is an invalid value for Filter`_filter_type`,"
+                     " must be one of {1}").format(
+                         value, self.allowed_values['_filter_type']))
+            self._filter_type = value
 
     @property
     def _id(self):
@@ -85,20 +99,6 @@ class SheetFilter(object):
             self._name = value
 
     @property
-    def filter_type(self):
-        return self._filter_type
-
-    @filter_type.setter
-    def filter_type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['_filter_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Filter`_filter_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['_filter_type']))
-            self._filter_type = value
-
-    @property
     def query(self):
         return self._query
 
@@ -111,9 +111,9 @@ class SheetFilter(object):
 
     def to_dict(self, op_id=None, method=None):
         obj = {
+            'filterType': prep(self._filter_type),
             'id': prep(self.__id),
             'name': prep(self._name),
-            'filterType': prep(self._filter_type),
             'query': prep(self._query)}
         return obj
 

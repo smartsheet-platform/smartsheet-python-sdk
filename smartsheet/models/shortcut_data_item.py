@@ -18,9 +18,9 @@
 from __future__ import absolute_import
 from ..util import prep
 from .hyperlink import Hyperlink
-import logging
 import six
 import json
+
 
 class ShortcutDataItem(object):
     """Smartsheet ShortcutDataItem data model."""
@@ -31,34 +31,54 @@ class ShortcutDataItem(object):
         if base_obj is not None:
             self._base = base_obj
 
+        self._attachment_type = None
+        self._hyperlink = None
         self._label = None
         self._label_format = None
-        self._attachment_type = None
         self._mime_type = None
-        self._hyperlink = None
         self._order = None
 
         if props:
             # account for alternate variable names from raw API response
+            if 'attachmentType' in props:
+                self.attachment_type = props['attachmentType']
+            if 'attachment_type' in props:
+                self.attachment_type = props['attachment_type']
+            if 'hyperlink' in props:
+                self.hyperlink = props['hyperlink']
             if 'label' in props:
                 self.label = props['label']
             if 'labelFormat' in props:
                 self.label_format = props['labelFormat']
             if 'label_format' in props:
                 self.label_format = props['label_format']
-            if 'attachmentType' in props:
-                self.attachment_type = props['attachmentType']
-            if 'attachment_type' in props:
-                self.attachment_type = props['attachment_type']
             if 'mimeType' in props:
                 self.mime_type = props['mimeType']
             if 'mime_type' in props:
                 self.mime_type = props['mime_type']
-            if 'hyperlink' in props:
-                self.hyperlink = props['hyperlink']
             if 'order' in props:
                 self.order = props['order']
         self.__initialized = True
+
+    @property
+    def attachment_type(self):
+        return self._attachment_type
+
+    @attachment_type.setter
+    def attachment_type(self, value):
+        if isinstance(value, six.string_types):
+            self._attachment_type = value
+
+    @property
+    def hyperlink(self):
+        return self._hyperlink
+
+    @hyperlink.setter
+    def hyperlink(self, value):
+        if isinstance(value, Hyperlink):
+            self._hyperlink = value
+        elif isinstance(value, dict):
+            self._hyperlink = Hyperlink(value, self._base)
 
     @property
     def label(self):
@@ -79,15 +99,6 @@ class ShortcutDataItem(object):
             self._label_format = value
 
     @property
-    def attachment_type(self):
-        return self._attachment_type
-
-    @attachment_type.setter
-    def attachment_type(self, value):
-        if isinstance(value, six.string_types):
-            self._attachment_type = value
-
-    @property
     def mime_type(self):
         return self._mime_type
 
@@ -95,17 +106,6 @@ class ShortcutDataItem(object):
     def mime_type(self, value):
         if isinstance(value, six.string_types):
             self._mime_type = value
-
-    @property
-    def hyperlink(self):
-        return self._hyperlink
-
-    @hyperlink.setter
-    def hyperlink(self, value):
-        if isinstance(value, Hyperlink):
-            self._hyperlink = value
-        elif isinstance(value, dict):
-            self._hyperlink = Hyperlink(value, self._base)
 
     @property
     def order(self):
@@ -118,11 +118,11 @@ class ShortcutDataItem(object):
 
     def to_dict(self, op_id=None, method=None):
         obj = {
+            'attachmentType': prep(self._attachment_type),
+            'hyperlink': prep(self._hyperlink),
             'label': prep(self._label),
             'labelFormat': prep(self._label_format),
-            'attachmentType': prep(self._attachment_type),
             'mimeType': prep(self._mime_type),
-            'hyperlink': prep(self._hyperlink),
             'order': prep(self._order)}
         return obj
 

@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,13 +18,11 @@
 from __future__ import absolute_import
 
 from .email import Email
-from .recipient import Recipient
 from ..types import TypedList
 from ..util import prep
-from datetime import datetime
 import json
-import logging
 import six
+
 
 class RowEmail(Email):
 
@@ -36,7 +34,6 @@ class RowEmail(Email):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
         self._column_ids = TypedList(int)
         self._include_attachments = False
@@ -50,17 +47,13 @@ class RowEmail(Email):
             if 'column_ids' in props:
                 self.column_ids = props['column_ids']
             if 'includeAttachments' in props:
-                self.include_attachments = props[
-                    'includeAttachments']
+                self.include_attachments = props['includeAttachments']
             if 'include_attachments' in props:
-                self.include_attachments = props[
-                    'include_attachments']
+                self.include_attachments = props['include_attachments']
             if 'includeDiscussions' in props:
-                self.include_discussions = props[
-                    'includeDiscussions']
+                self.include_discussions = props['includeDiscussions']
             if 'include_discussions' in props:
-                self.include_discussions = props[
-                    'include_discussions']
+                self.include_discussions = props['include_discussions']
             if 'layout' in props:
                 self.layout = props['layout']
 

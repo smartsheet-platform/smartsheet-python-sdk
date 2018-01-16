@@ -22,6 +22,7 @@ from ..util import null_filter
 import json
 import six
 
+
 class Hyperlink(object):
 
     """Smartsheet Hyperlink data model."""
@@ -31,7 +32,6 @@ class Hyperlink(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
         self._report_id = None
         self._sheet_id = None

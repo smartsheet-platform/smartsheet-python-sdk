@@ -19,8 +19,8 @@ from __future__ import absolute_import
 
 from ..util import prep
 import json
-import logging
 import six
+
 
 class SightPublish(object):
 
@@ -31,34 +31,36 @@ class SightPublish(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
+        self._read_only_full_accessible_by = None
         self._read_only_full_enabled = False
         self._read_only_full_url = None
-        self._read_only_full_accessible_by = None
 
         if props:
             # account for alternate variable names from raw API response
+            if 'readOnlyFullAccessibleBy' in props:
+                self.read_only_full_accessible_by = props['readOnlyFullAccessibleBy']
+            if 'read_only_full_accessible_by' in props:
+                self.read_only_full_accessible_by = props['read_only_full_accessible_by']
             if 'readOnlyFullEnabled' in props:
-                self.read_only_full_enabled = props[
-                    'readOnlyFullEnabled']
+                self.read_only_full_enabled = props['readOnlyFullEnabled']
             if 'read_only_full_enabled' in props:
-                self.read_only_full_enabled = props[
-                    'read_only_full_enabled']
+                self.read_only_full_enabled = props['read_only_full_enabled']
             # read only
             if 'readOnlyFullUrl' in props:
-                self.read_only_full_url = props[
-                    'readOnlyFullUrl']
-            if 'readOnlyFullAccessibleBy' in props:
-                self.read_only_full_accessible_by = props[
-                    'readOnlyFullAccessibleBy']
-            if 'read_only_full_accessible_by' in props:
-                self.read_only_full_accessible_by = props[
-                    'read_only_full_accessible_by']
+                self.read_only_full_url = props['readOnlyFullUrl']
         # requests package Response object
         self.request_response = None
         self.__initialized = True
+
+    @property
+    def read_only_full_accessible_by(self):
+        return self._read_only_full_accessible_by
+
+    @read_only_full_accessible_by.setter
+    def read_only_full_accessible_by(self, value):
+        if isinstance(value, six.string_types):
+            self._read_only_full_accessible_by = value
 
     @property
     def read_only_full_enabled(self):
@@ -78,41 +80,11 @@ class SightPublish(object):
         if isinstance(value, six.string_types):
             self._read_only_full_url = value
 
-    @property
-    def read_only_full_accessible_by(self):
-        return self._read_only_full_accessible_by
-
-    @read_only_full_accessible_by.setter
-    def read_only_full_accessible_by(self, value):
-        if isinstance(value, six.string_types):
-            self._read_only_full_accessible_by = value
-
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        self._pre_request_filter = value
-
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'readOnlyFullEnabled': prep(self._read_only_full_enabled),
             'readOnlyFullAccessibleBy': prep(self._read_only_full_accessible_by),
+            'readOnlyFullEnabled': prep(self._read_only_full_enabled),
             'readOnlyFullUrl': prep(self._read_only_full_url)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'set_publish_status':
-            permitted = ['readOnlyFullEnabled', 'readOnlyFullAccessibleBy']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
         return obj
 
     def to_json(self):

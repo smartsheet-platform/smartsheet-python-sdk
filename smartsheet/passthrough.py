@@ -20,6 +20,7 @@ import logging
 from .models import JSONObject
 from . import fresh_operation
 
+
 class Passthrough(object):
 
     """Class for handling Sheets operations."""

@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -25,8 +25,8 @@ from .template import Template
 from ..types import TypedList
 from ..util import prep
 import json
-import logging
 import six
+
 
 class Workspace(object):
 
@@ -37,8 +37,6 @@ class Workspace(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
         self.allowed_values = {
             'access_level': [
@@ -240,30 +238,6 @@ class Workspace(object):
             self._templates.purge()
             self._templates.append(value)
 
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        if self.folders is not None:
-            # Folder
-            for item in self.folders:
-                item.pre_request_filter = value
-        if self.reports is not None:
-            # Report
-            for item in self.reports:
-                item.pre_request_filter = value
-        if self.sheets is not None:
-            # Sheet
-            for item in self.sheets:
-                item.pre_request_filter = value
-        if self.templates is not None:
-            # Template
-            for item in self.templates:
-                item.pre_request_filter = value
-        self._pre_request_filter = value
-
     def to_dict(self, op_id=None, method=None):
         req_filter = self.pre_request_filter
         if req_filter:
@@ -291,29 +265,6 @@ class Workspace(object):
             'sheets': prep(self._sheets),
             'sights': prep(self._sights),
             'templates': prep(self._templates)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'create_workspace':
-            permitted = ['name']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'update_workspace':
-            permitted = ['name']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
         return obj
 
     def to_json(self):

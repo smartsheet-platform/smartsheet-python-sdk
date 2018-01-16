@@ -37,9 +37,9 @@ class WidgetContent(object):
             self._base = base_obj
 
         """Represents the CellLinkWidgetContent object."""
-        self._hyperlink = None
         self._cell_data = TypedList(CellDataItem)
         self._columns = TypedList(Column)
+        self._hyperlink = None
 
         """Represents the RichtextWidgetContent object."""
         self._html = None
@@ -51,66 +51,61 @@ class WidgetContent(object):
         self._html_content = None
 
         """Represents the ImageWidgetContent object."""
-        self._private_id = None
-        self._height = None
-        self._width = None
         self._file_name = None
         self._format = None
+        self._height = None
+        self._private_id = None
+        self._width = None
 
         """Represents the TitleWidgetContent object."""
         self._background_color = None
 
         if props:
             # account for alternate variable names from raw API response
-            if 'hyperlink' in props:
-                self.hyperlink = props['hyperlink']
             if 'cellData' in props:
                 self.cell_data = props['cellData']
             if 'cell_data' in props:
                 self.cell_data = props['cell_data']
             if 'columns' in props:
                 self.columns = props['columns']
+            if 'hyperlink' in props:
+                self.hyperlink = props['hyperlink']
+
             if 'html' in props:
                 self.html = props['html']
+
             if 'shortcutData' in props:
                 self.shortcut_data = props['shortcutData']
             if 'shortcut_data' in props:
                 self.shortcut_data = props['shortcut_data']
+
             if 'htmlContent' in props:
                 self.html_content = props['htmlContent']
             if 'html_content' in props:
                 self.html_content = props['html_content']
-            if 'privateId' in props:
-                self.private_id = props['privateId']
-            if 'private_id' in props:
-                self.private_id = props['private_id']
-            if 'height' in props:
-                self.height = props['height']
-            if 'width' in props:
-                self.width = props['width']
+
             if 'fileName' in props:
                 self.file_name = props['fileName']
             if 'file_name' in props:
                 self.file_name = props['file_name']
             if 'format' in props:
                 self.format = props['format']
+            if 'height' in props:
+                self.height = props['height']
+            if 'privateId' in props:
+                self.private_id = props['privateId']
+            if 'private_id' in props:
+                self.private_id = props['private_id']
+            if 'width' in props:
+                self.width = props['width']
+
             if 'backgroundColor' in props:
                 self.background_color = props['backgroundColor']
             if 'background_color' in props:
                 self.background_color = props['background_color']
         self.__initialized = True
 
-    @property
-    def hyperlink(self):
-        return self._hyperlink
-
-    @hyperlink.setter
-    def hyperlink(self, value):
-        if isinstance(value, Hyperlink):
-            self._hyperlink = value
-        elif isinstance(value, dict):
-            self._hyperlink = Hyperlink(value, self._base)
-
+    """Represents the CellLinkWidgetContent object."""
     @property
     def cell_data(self):
         return self._cell_data
@@ -150,6 +145,18 @@ class WidgetContent(object):
             self._columns.append(value)
 
     @property
+    def hyperlink(self):
+        return self._hyperlink
+
+    @hyperlink.setter
+    def hyperlink(self, value):
+        if isinstance(value, Hyperlink):
+            self._hyperlink = value
+        elif isinstance(value, dict):
+            self._hyperlink = Hyperlink(value, self._base)
+
+    """Represents the RichtextWidgetContent object."""
+    @property
     def html(self):
         return self._html
 
@@ -158,6 +165,7 @@ class WidgetContent(object):
         if isinstance(value, six.string_types):
             self._html = value
 
+    """Represents the ShortcutWidgetContent object."""
     @property
     def shortcut_data(self):
         return self._shortcut_data
@@ -177,6 +185,7 @@ class WidgetContent(object):
             self._shortcut_data.purge()
             self._shortcut_data.append(value)
 
+    """Represents the ReportWidgetContent object."""
     @property
     def html_content(self):
         return self._html_content
@@ -186,33 +195,7 @@ class WidgetContent(object):
         if isinstance(value, six.string_types):
             self._html_content = value
 
-    @property
-    def private_id(self):
-        return self._private_id
-
-    @private_id.setter
-    def private_id(self, value):
-        if isinstance(value, six.string_types):
-            self._private_id = value
-
-    @property
-    def height(self):
-        return self._height
-
-    @height.setter
-    def height(self, value):
-        if isinstance(value, six.integer_types):
-            self._height = value
-
-    @property
-    def width(self):
-        return self._width
-
-    @width.setter
-    def width(self, value):
-        if isinstance(value, six.integer_types):
-            self._width = value
-
+    """Represents the ImageWidgetContent object."""
     @property
     def file_name(self):
         return self._file_name
@@ -232,6 +215,34 @@ class WidgetContent(object):
             self._format = value
 
     @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        if isinstance(value, six.integer_types):
+            self._height = value
+
+    @property
+    def private_id(self):
+        return self._private_id
+
+    @private_id.setter
+    def private_id(self, value):
+        if isinstance(value, six.string_types):
+            self._private_id = value
+
+    @property
+    def width(self):
+        return self._width
+
+    @width.setter
+    def width(self, value):
+        if isinstance(value, six.integer_types):
+            self._width = value
+
+    """Represents the TitleWidgetContent object."""
+    @property
     def background_color(self):
         return self._background_color
 
@@ -242,17 +253,17 @@ class WidgetContent(object):
 
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'hyperlink': prep(self._hyperlink),
             'cellData': prep(self._cell_data),
             'columns': prep(self._columns),
+            'hyperlink': prep(self._hyperlink),
             'html': prep(self._html),
             'shortcutData': prep(self._shortcut_data),
             'htmlContent': prep(self._html_content),
-            'privateId': prep(self._private_id),
-            'height': prep(self._height),
-            'width': prep(self._width),
             'fileName': prep(self._file_name),
             'format': prep(self._format),
+            'height': prep(self._height),
+            'privateId': prep(self._private_id),
+            'width': prep(self._width),
             'backgroundColor': prep(self._background_color)}
         return obj
 

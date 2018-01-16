@@ -34,63 +34,36 @@ class Duration(ObjectValue):
         if base_obj is not None:
             self._base = base_obj
 
-        self._negative = None
-        self._elapsed = None
-        self._weeks = None
         self._days = None
+        self._elapsed = None
         self._hours = None
-        self._minutes = None
-        self._seconds = None
         self._milliseconds = None
+        self._minutes = None
+        self._negative = None
+        self._seconds = None
+        self._weeks = None
 
         if props:
-            if 'negative' in props:
-                self.negative = props['negative']
-            if 'elapsed' in props:
-                self.elapsed = props['elapsed']
-            if 'weeks' in props:
-                self.weeks = props['weeks']
             if 'days' in props:
                 self.days = props['days']
+            if 'elapsed' in props:
+                self.elapsed = props['elapsed']
             if 'hours' in props:
                 self.hours = props['hours']
-            if 'minutes' in props:
-                self.minutes = props['minutes']
-            if 'seconds' in props:
-                self.seconds = props['seconds']
             if 'milliseconds' in props:
                 self.milliseconds = props['milliseconds']
+            if 'minutes' in props:
+                self.minutes = props['minutes']
+            if 'negative' in props:
+                self.negative = props['negative']
+            if 'seconds' in props:
+                self.seconds = props['seconds']
+            if 'weeks' in props:
+                self.weeks = props['weeks']
         else:
             self.object_type = DURATION
 
         self.__initialized = True
-
-    @property
-    def negative(self):
-        return self._negative
-
-    @negative.setter
-    def negative(self, value):
-        if isinstance(value, bool):
-            self._negative = value
-
-    @property
-    def elapsed(self):
-        return self._elapsed
-
-    @elapsed.setter
-    def elapsed(self, value):
-        if isinstance(value, bool):
-            self._elapsed = value
-
-    @property
-    def weeks(self):
-        return self._weeks
-
-    @weeks.setter
-    def weeks(self, value):
-        if isinstance(value, (six.integer_types, float)):
-            self._weeks = value
 
     @property
     def days(self):
@@ -102,6 +75,15 @@ class Duration(ObjectValue):
             self._days = value
 
     @property
+    def elapsed(self):
+        return self._elapsed
+
+    @elapsed.setter
+    def elapsed(self, value):
+        if isinstance(value, bool):
+            self._elapsed = value
+
+    @property
     def hours(self):
         return self._hours
 
@@ -109,6 +91,15 @@ class Duration(ObjectValue):
     def hours(self, value):
         if isinstance(value, (six.integer_types, float)):
             self._hours = value
+
+    @property
+    def milliseconds(self):
+        return self._milliseconds
+
+    @milliseconds.setter
+    def milliseconds(self, value):
+        if isinstance(value, (six.integer_types, float)):
+            self._milliseconds = value
 
     @property
     def minutes(self):
@@ -120,6 +111,15 @@ class Duration(ObjectValue):
             self._minutes = value
 
     @property
+    def negative(self):
+        return self._negative
+
+    @negative.setter
+    def negative(self, value):
+        if isinstance(value, bool):
+            self._negative = value
+
+    @property
     def seconds(self):
         return self._seconds
 
@@ -129,25 +129,25 @@ class Duration(ObjectValue):
             self._seconds = value
 
     @property
-    def milliseconds(self):
-        return self._milliseconds
+    def weeks(self):
+        return self._weeks
 
-    @milliseconds.setter
-    def milliseconds(self, value):
+    @weeks.setter
+    def weeks(self, value):
         if isinstance(value, (six.integer_types, float)):
-            self._milliseconds = value
+            self._weeks = value
 
     def to_dict(self, op_id=None, method=None):
         parent_obj = super(Duration, self).to_dict(op_id, method)
         obj = {
-            'negative': prep(self._negative),
-            'elapsed': prep(self._elapsed),
-            'weeks': prep(self._weeks),
             'days': prep(self._days),
+            'elapsed': prep(self._elapsed),
             'hours': prep(self._hours),
+            'milliseconds': prep(self._milliseconds),
             'minutes': prep(self._minutes),
+            'negative': prep(self._negative),
             'seconds': prep(self._seconds),
-            'milliseconds': prep(self._milliseconds)}
+            'weeks': prep(self._weeks)}
         combo = parent_obj.copy()
         combo.update(obj)
         return combo

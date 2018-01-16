@@ -1,6 +1,6 @@
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -45,12 +45,14 @@ def prep(prop, op_id=None, method=None):
 
     return retval
 
+
 def null_filter(obj):
     filtered = {}
     for key, value in obj.items():
         if value is not None:
             filtered[key] = value
     return filtered
+
 
 def dump_message_headers(request):
     bytearr = bytearray()
@@ -59,14 +61,17 @@ def dump_message_headers(request):
         bytearr.extend(format_header(name, value))
     return bytearr.decode('utf-8')
 
+
 def coerce_to_bytes(data):
     if not isinstance(data, bytes) and hasattr(data, 'encode'):
         data = data.encode('utf-8')
     return data
 
+
 def format_header(name, value):
     return (coerce_to_bytes(name) + b': ' + coerce_to_bytes(value) +
             b'\r\n')
+
 
 def is_multipart(request):
     headers = dump_message_headers(request)
@@ -74,15 +79,17 @@ def is_multipart(request):
         return True
     return False
 
+
 def deprecated(func):
-    '''This is a decorator which can be used to mark functions
+    """This is a decorator which can be used to mark functions
     as deprecated. It will result in a warning being emitted
-    when the function is used.'''
+    when the function is used."""
     @functools.wraps(func)
     def new_func(*args, **kwargs):
-        warnings.simplefilter('always', DeprecationWarning) #turn off filter
-        warnings.warn("Call to deprecated function {}.".format(func.__name__), category=DeprecationWarning, stacklevel=2)
-        warnings.simplefilter('default', DeprecationWarning) #reset filter
+        warnings.simplefilter('always', DeprecationWarning)  # turn off filter
+        warnings.warn("Call to deprecated function {}.".format(func.__name__),
+                      category=DeprecationWarning, stacklevel=2)
+        warnings.simplefilter('default', DeprecationWarning)  # reset filter
         return func(*args, **kwargs)
 
     return new_func

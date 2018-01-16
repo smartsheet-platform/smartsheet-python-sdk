@@ -18,9 +18,9 @@
 from __future__ import absolute_import
 
 from ..util import prep
-import logging
 import six
 import json
+
 
 class WebhookSecret(object):
 
@@ -56,7 +56,7 @@ class WebhookSecret(object):
 
     def to_dict(self, op_id=None, method=None):
         obj = {
-            'sharedSecret':prep(self._shared_secret)}
+            'sharedSecret': prep(self._shared_secret)}
         return obj
 
     def to_json(self):
