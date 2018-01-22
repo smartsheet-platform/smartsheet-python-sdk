@@ -20,7 +20,6 @@ from __future__ import absolute_import
 import six
 import json
 
-from .object_value import ObjectValue
 from ..util import serialize
 from ..util import deserialize
 
@@ -31,8 +30,6 @@ class Contact(object):
 
     def __init__(self, props=None, base_obj=None):
         """Initialize the Contact model."""
-        if isinstance(super(Contact, self), ObjectValue):
-            super(Contact, self).__init__(props, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj

@@ -129,7 +129,7 @@ class TestRows:
         new_row.id = row.id
         new_row.cells = [smart.models.Cell]
         new_row.cells[0].column_id = row.cells[0].column_id
-        new_row.cells[0].value_is_null()
+        new_row.cells[0].set_value_null()
         new_row.to_bottom = True
         new_row.to_top = False
         action = smart.Sheets.update_rows(

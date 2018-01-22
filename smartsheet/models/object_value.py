@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2017 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -19,6 +19,10 @@ from __future__ import absolute_import
 
 import json
 import six
+
+from ..util import get_child_properties
+from ..util import serialize
+from ..types import ExplicitNull
 
 DATE = 1
 DATETIME = 2
@@ -65,20 +69,14 @@ def enum_object_value_type(object_type=None):
 class ObjectValue(object):
     """Smartsheet ObjectValue data model."""
 
-    def __init__(self, props=None, base_obj=None):
+    def __init__(self, object_type=None, base_obj=None):
         """Initialize the ObjectValue model."""
         self._base = None
         if base_obj is not None:
             self._base = base_obj
 
-        self._object_type = None
+        self._object_type = object_type
 
-        if props:
-            # account for alternate variable names from raw API response
-            if 'object_type' in props:
-                self.object_type = props['object_type']
-            if 'objectType' in props:
-                self.object_type = props['objectType']
         self.__initialized = True
 
     @property
@@ -92,13 +90,29 @@ class ObjectValue(object):
         else:
             self._object_type = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'objectType': _typeToName.get(self._object_type)}
-        return obj
+    def serialize(self):
+        # when serializing an objectValue object, change objectType to a string value
+        retval = {}
+        prop_list = get_child_properties(self)
+        for prop in prop_list:
+            prop_name = prop[0]
+            camel_case = prop[1]
+            prop_value = getattr(self, prop_name)
+            if prop_value is not None:
+                serialized = serialize(prop_value)
+                if isinstance(serialized, ExplicitNull):  # object forcing serialization of a null
+                    retval[camel_case] = None
+                elif serialized is not None:
+                    retval[camel_case] = serialized
+
+        retval['objectType'] = _typeToName.get(self._object_type)
+        return retval
+
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

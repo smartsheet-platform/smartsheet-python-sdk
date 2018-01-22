@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2017 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,11 +17,10 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-from ..types import TypedList
 from .predecessor import Predecessor
 from .object_value import *
-import json
+from ..util import deserialize
+from ..types import TypedList
 
 
 class PredecessorList(ObjectValue):
@@ -29,7 +28,7 @@ class PredecessorList(ObjectValue):
 
     def __init__(self, props=None, base_obj=None):
         """Initialize the PredecessorList model."""
-        super(PredecessorList, self).__init__(props, base_obj)
+        super(PredecessorList, self).__init__(PREDECESSOR_LIST, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj
@@ -37,11 +36,7 @@ class PredecessorList(ObjectValue):
         self._predecessors = TypedList(Predecessor)
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'predecessors' in props:
-                self.predecessors = props['predecessors']
-        else:
-            self.object_type = PREDECESSOR_LIST
+            deserialize(self, props)
 
         self.__initialized = True
 
@@ -63,17 +58,3 @@ class PredecessorList(ObjectValue):
         elif isinstance(value, Predecessor):
             self._predecessors.purge()
             self._predecessors.append(value)
-
-    def to_dict(self, op_id=None, method=None):
-        parent_obj = super(PredecessorList, self).to_dict(op_id, method)
-        obj = {
-            'predecessors': prep(self._predecessors)}
-        combo = parent_obj.copy()
-        combo.update(obj)
-        return combo
-
-    def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
-
-    def __str__(self):
-        return json.dumps(self.to_dict())

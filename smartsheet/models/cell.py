@@ -200,7 +200,8 @@ class Cell(object):
                     self._object_value = PredecessorList(value, self._base)
                 elif enum_object_type == CONTACT:
                     self._object_value = ContactObjectValue(value, self._base)
-                elif enum_object_type == DATE or enum_object_type == DATETIME or enum_object_type == ABSTRACT_DATETIME:
+                elif enum_object_type == DATE or enum_object_type == DATETIME or \
+                        enum_object_type == ABSTRACT_DATETIME:
                     self._object_value = DateObjectValue(value, enum_object_value_type, self._base)
                 else:
                     self._object_value = None
@@ -243,7 +244,7 @@ class Cell(object):
         if isinstance(value, (six.string_types, six.integer_types, float, bool, ExplicitNull)):
             self._value = value
 
-    def value_is_null(self):
+    def set_value_null(self):
         self.value = ExplicitNull()
 
     def to_dict(self):

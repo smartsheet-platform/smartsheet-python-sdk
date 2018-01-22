@@ -65,6 +65,19 @@ def prep(prop, op_id=None, method=None):
     return retval
 
 
+def get_child_properties(obj):
+    retval = []
+    prop_list = inspect.getmembers(obj.__class__, inspect.isdatadescriptor)
+    for prop in prop_list:
+        if isinstance(prop[1], property):
+            prop_name = prop[0]
+            camel_case = _underscore_to_camel(prop_name)
+            camel_case = camel_case.rstrip('_')  # trim trailing '_' from props with names eq. to built-ins
+            retval.append((prop_name, camel_case))
+
+    return retval
+
+
 def serialize(obj):
 
     retval = None
@@ -84,19 +97,17 @@ def serialize(obj):
 
     else:
         retval = {}
-        prop_list = inspect.getmembers(obj.__class__, inspect.isdatadescriptor)
+        prop_list = get_child_properties(obj)
         for prop in prop_list:
-            if isinstance(prop[1], property):
-                prop_name = prop[0]
-                prop_value = getattr(obj, prop_name)
-                if prop_value is not None:
-                    camel_case = _underscore_to_camel(prop_name)
-                    camel_case = camel_case.rstrip('_')  # trim trailing '_' from props with names eq. to built-ins
-                    serialized = serialize(prop_value)
-                    if isinstance(serialized, ExplicitNull):  # object forcing serialization of a null
-                        retval[camel_case] = None
-                    elif serialized is not None:
-                        retval[camel_case] = serialized
+            prop_name = prop[0]
+            camel_case = prop[1]
+            prop_value = getattr(obj, prop_name)
+            if prop_value is not None:
+                serialized = serialize(prop_value)
+                if isinstance(serialized, ExplicitNull):  # object forcing serialization of a null
+                    retval[camel_case] = None
+                elif serialized is not None:
+                    retval[camel_case] = serialized
 
     return retval
 

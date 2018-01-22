@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2017 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,10 +17,8 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
 from .object_value import *
-import six
-import json
+from ..util import deserialize
 
 
 class Duration(ObjectValue):
@@ -29,7 +27,7 @@ class Duration(ObjectValue):
 
     def __init__(self, props=None, base_obj=None):
         """Initialize the Duration model."""
-        super(Duration, self).__init__(props, base_obj)
+        super(Duration, self).__init__(DURATION, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj
@@ -44,24 +42,7 @@ class Duration(ObjectValue):
         self._weeks = None
 
         if props:
-            if 'days' in props:
-                self.days = props['days']
-            if 'elapsed' in props:
-                self.elapsed = props['elapsed']
-            if 'hours' in props:
-                self.hours = props['hours']
-            if 'milliseconds' in props:
-                self.milliseconds = props['milliseconds']
-            if 'minutes' in props:
-                self.minutes = props['minutes']
-            if 'negative' in props:
-                self.negative = props['negative']
-            if 'seconds' in props:
-                self.seconds = props['seconds']
-            if 'weeks' in props:
-                self.weeks = props['weeks']
-        else:
-            self.object_type = DURATION
+            deserialize(self, props)
 
         self.__initialized = True
 
@@ -136,24 +117,3 @@ class Duration(ObjectValue):
     def weeks(self, value):
         if isinstance(value, (six.integer_types, float)):
             self._weeks = value
-
-    def to_dict(self, op_id=None, method=None):
-        parent_obj = super(Duration, self).to_dict(op_id, method)
-        obj = {
-            'days': prep(self._days),
-            'elapsed': prep(self._elapsed),
-            'hours': prep(self._hours),
-            'milliseconds': prep(self._milliseconds),
-            'minutes': prep(self._minutes),
-            'negative': prep(self._negative),
-            'seconds': prep(self._seconds),
-            'weeks': prep(self._weeks)}
-        combo = parent_obj.copy()
-        combo.update(obj)
-        return combo
-
-    def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
-
-    def __str__(self):
-        return json.dumps(self.to_dict())

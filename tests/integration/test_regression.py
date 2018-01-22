@@ -2,6 +2,7 @@ import pytest
 import six
 import os.path
 from datetime import date
+from smartsheet.types import ExplicitNull
 
 _dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -47,7 +48,6 @@ class TestRegression:
         # add 'Task2' with 'Task1' predecessor
         p1 = smart.models.Predecessor()
         p1.type = 'FS'
-        p1.row_number = task1_row.row_number
         p1.row_id = task1_row.id
 
         predecessor_list = smart.models.PredecessorList()
@@ -75,12 +75,10 @@ class TestRegression:
         # add 'Task3' with 'Task1','Task2' predecessors
         p1 = smart.models.Predecessor()
         p1.type = 'FS'
-        p1.row_number = task1_row.row_number
         p1.row_id = task1_row.id
 
         p2 = smart.models.Predecessor()
         p2.type = 'FS'
-        p2.row_number = task2_row.row_number
         p2.row_id = task2_row.id
 
         predecessor_list = smart.models.PredecessorList()
@@ -108,11 +106,11 @@ class TestRegression:
         # clear the predecessor list from task 3
         row = smart.models.Row()
         row.id = task3_row.id
-        row.row_number = task3_row.row_number
         for col in sheet.columns:
             if col.type == 'PREDECESSOR':
                 row.cells.append({
-                    'column_id': col.id
+                    'column_id': col.id,
+                    'value': ExplicitNull()
                 })
                 break
 
@@ -154,7 +152,7 @@ class TestRegression:
         cell = smart.models.Cell()
         cell.column_id = col_id
         cell.link_in_from_cell = cell_link
-        cell.value_is_null()
+        cell.set_value_null()
 
         row = smart.models.Row()
         row.id = added_row.id
