@@ -17,9 +17,10 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
 import six
 import json
+
+from ..util import serialize
 
 
 class PrimitiveObjectValue(object):
@@ -44,13 +45,14 @@ class PrimitiveObjectValue(object):
         if isinstance(value, (six.string_types, six.integer_types, float, bool)):
             self._value = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'value': prep(self._value)}
-        return obj
+    def serialize(self):
+        return self._value
+
+    def to_dict(self):
+        return self._value
 
     def to_json(self):
-        return json.dumps(self._value, indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()
