@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class RowMapping(object):
@@ -32,33 +34,34 @@ class RowMapping(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.__from = None
+        self._from_ = None
         self._to = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'from' in props:
-                self._from = props['from']
-            if '_from' in props:
-                self._from = props['_from']
-            if 'to' in props:
-                self.to = props['to']
+            deserialize(self, props)
+
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'from':
-            return self._from
+            return self.from_
         else:
             raise AttributeError(key)
 
-    @property
-    def _from(self):
-        return self.__from
+    def __setattr__(self, key, value):
+        if key == 'from':
+            self.from_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
-    @_from.setter
-    def _from(self, value):
+    @property
+    def from_(self):
+        return self._from_
+
+    @from_.setter
+    def from_(self, value):
         if isinstance(value, six.integer_types):
-            self.__from = value
+            self._from_ = value
 
     @property
     def to(self):
@@ -69,14 +72,11 @@ class RowMapping(object):
         if isinstance(value, six.integer_types):
             self._to = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'from': prep(self.__from),
-            'to': prep(self._to)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

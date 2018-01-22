@@ -17,10 +17,12 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
-from ..util import prep
-import json
 import six
+import json
+
+from ..types import TypedList
+from ..util import serialize
+from ..util import deserialize
 
 
 class SearchResultItem(object):
@@ -62,34 +64,7 @@ class SearchResultItem(object):
         self._text = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'contextData' in props:
-                self.context_data = props['contextData']
-            if 'context_data' in props:
-                self.context_data = props['context_data']
-            # read only
-            if 'favorite' in props:
-                self.favorite = props['favorite']
-            # read only
-            if 'objectId' in props:
-                self.object_id = props['objectId']
-            # read only
-            if 'objectType' in props:
-                self.object_type = props['objectType']
-            # read only
-            if 'parentObjectFavorite' in props:
-                self.parent_object_favorite = props['parentObjectFavorite']
-            # read only
-            if 'parentObjectId' in props:
-                self.parent_object_id = props['parentObjectId']
-            # read only
-            if 'parentObjectName' in props:
-                self.parent_object_name = props['parentObjectName']
-            # read only
-            if 'parentObjectType' in props:
-                self.parent_object_type = props['parentObjectType']
-            if 'text' in props:
-                self.text = props['text']
+            deserialize(self, props)
 
     @property
     def context_data(self):
@@ -192,21 +167,11 @@ class SearchResultItem(object):
         if isinstance(value, six.string_types):
             self._text = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'contextData': prep(self._context_data),
-            'favorite': prep(self._favorite),
-            'objectId': prep(self._object_id),
-            'objectType': prep(self._object_type),
-            'parentObjectFavorite': prep(self._parent_object_favorite),
-            'parentObjectId': prep(self._parent_object_id),
-            'parentObjectName': prep(self._parent_object_name),
-            'parentObjectType': prep(self._parent_object_type),
-            'text': prep(self._text)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

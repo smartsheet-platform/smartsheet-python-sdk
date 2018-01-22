@@ -17,14 +17,16 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
-from ..util import prep
+import six
+import json
+
 from .column import Column
 from .cell_data_item import CellDataItem
 from .shortcut_data_item import ShortcutDataItem
 from .hyperlink import Hyperlink
-import six
-import json
+from ..types import TypedList
+from ..util import serialize
+from ..util import deserialize
 
 
 class WidgetContent(object):
@@ -52,7 +54,7 @@ class WidgetContent(object):
 
         """Represents the ImageWidgetContent object."""
         self._file_name = None
-        self._format = None
+        self._format_ = None
         self._height = None
         self._private_id = None
         self._width = None
@@ -61,49 +63,21 @@ class WidgetContent(object):
         self._background_color = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'cellData' in props:
-                self.cell_data = props['cellData']
-            if 'cell_data' in props:
-                self.cell_data = props['cell_data']
-            if 'columns' in props:
-                self.columns = props['columns']
-            if 'hyperlink' in props:
-                self.hyperlink = props['hyperlink']
+            deserialize(self, props)
 
-            if 'html' in props:
-                self.html = props['html']
-
-            if 'shortcutData' in props:
-                self.shortcut_data = props['shortcutData']
-            if 'shortcut_data' in props:
-                self.shortcut_data = props['shortcut_data']
-
-            if 'htmlContent' in props:
-                self.html_content = props['htmlContent']
-            if 'html_content' in props:
-                self.html_content = props['html_content']
-
-            if 'fileName' in props:
-                self.file_name = props['fileName']
-            if 'file_name' in props:
-                self.file_name = props['file_name']
-            if 'format' in props:
-                self.format = props['format']
-            if 'height' in props:
-                self.height = props['height']
-            if 'privateId' in props:
-                self.private_id = props['privateId']
-            if 'private_id' in props:
-                self.private_id = props['private_id']
-            if 'width' in props:
-                self.width = props['width']
-
-            if 'backgroundColor' in props:
-                self.background_color = props['backgroundColor']
-            if 'background_color' in props:
-                self.background_color = props['background_color']
         self.__initialized = True
+
+    def __getattr__(self, key):
+        if key == 'format':
+            return self.format_
+        else:
+            raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'format':
+            self.format_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     """Represents the CellLinkWidgetContent object."""
     @property
@@ -206,13 +180,13 @@ class WidgetContent(object):
             self._file_name = value
 
     @property
-    def format(self):
-        return self._format
+    def format_(self):
+        return self._format_
 
-    @format.setter
-    def format(self, value):
+    @format_.setter
+    def format_(self, value):
         if isinstance(value, six.string_types):
-            self._format = value
+            self._format_ = value
 
     @property
     def height(self):
@@ -251,24 +225,11 @@ class WidgetContent(object):
         if isinstance(value, six.string_types):
             self._background_color = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'cellData': prep(self._cell_data),
-            'columns': prep(self._columns),
-            'hyperlink': prep(self._hyperlink),
-            'html': prep(self._html),
-            'shortcutData': prep(self._shortcut_data),
-            'htmlContent': prep(self._html_content),
-            'fileName': prep(self._file_name),
-            'format': prep(self._format),
-            'height': prep(self._height),
-            'privateId': prep(self._private_id),
-            'width': prep(self._width),
-            'backgroundColor': prep(self._background_color)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

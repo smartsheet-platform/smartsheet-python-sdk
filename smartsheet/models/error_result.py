@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class ErrorResult(object):
@@ -41,29 +43,8 @@ class ErrorResult(object):
         self._status_code = None
 
         if props:
+            deserialize(self, props)
             # account for alternate variable names from raw API response
-            if 'code' in props:
-                self.code = props['code']
-            if 'errorCode' in props:
-                self.error_code = props['errorCode']
-            if 'message' in props:
-                self.message = props['message']
-            if 'name' in props:
-                self.name = props['name']
-            if 'recommendation' in props:
-                self.recommendation = props['recommendation']
-            if 'refId' in props:
-                self.ref_id = props['refId']
-            if 'ref_id' in props:
-                self.ref_id = props['ref_id']
-            if 'shouldRetry' in props:
-                self.should_retry = props['shouldRetry']
-            if 'should_retry' in props:
-                self.should_retry = props['should_retry']
-            if 'statusCode' in props:
-                self.status_code = props['statusCode']
-            if 'status_code' in props:
-                self.status_code = props['status_code']
 
     @property
     def code(self):
@@ -137,19 +118,11 @@ class ErrorResult(object):
         if isinstance(value, six.integer_types):
             self._status_code = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'code': prep(self._code),
-            'message': prep(self._message),
-            'name': prep(self._name),
-            'recommendation': prep(self._recommendation),
-            'refId':prep(self._ref_id),
-            'shouldRetry': prep(self._should_retry),
-            'statusCode': prep(self._status_code)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

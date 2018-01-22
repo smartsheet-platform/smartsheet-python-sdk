@@ -1,5 +1,4 @@
 import pytest
-import smartsheet
 
 @pytest.mark.usefixtures("smart_setup")
 class TestColumns:
@@ -50,11 +49,12 @@ class TestColumns:
         for idx, col in enumerate(TestColumns.test_columns):
             if col.title == 'Hotdog':
                 break
-        col.title = 'Brand of Hotdog'
+        new_col = smart.models.Column()
+        new_col.title = 'Brand of Hotdog'
         action = smart.Sheets.update_column(
             smart_setup['sheet'].id,
             col.id,
-            col
+            new_col
         )
         column = action.result
         assert action.message == 'SUCCESS'

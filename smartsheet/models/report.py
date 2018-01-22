@@ -17,6 +17,9 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .attachment import Attachment
 from .column import Column
 from .discussion import Discussion
@@ -25,11 +28,10 @@ from .sheet import Sheet
 from .sheet_user_settings import SheetUserSettings
 from .source import Source
 from ..types import TypedList
-from ..util import prep
+from ..util import deserialize
+from ..util import serialize
 from datetime import datetime
 from dateutil.parser import parse
-import json
-import six
 
 
 class Report(Sheet):
@@ -61,7 +63,7 @@ class Report(Sheet):
         self._favorite = None
         self._from_id = None
         self._gantt_enabled = None
-        self.__id = None
+        self._id_ = None
         self._modified_at = None
         self._name = None
         self._owner = None
@@ -78,99 +80,26 @@ class Report(Sheet):
         self._version = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'accessLevel' in props:
-                self.access_level = props['accessLevel']
-            if 'access_level' in props:
-                self.access_level = props['access_level']
-            if 'attachments' in props:
-                self.attachments = props['attachments']
-            if 'columns' in props:
-                self.columns = props['columns']
-            if 'createdAt' in props:
-                self.created_at = props['createdAt']
-            if 'created_at' in props:
-                self.created_at = props['created_at']
-            if 'dependenciesEnabled' in props:
-                self.dependencies_enabled = props['dependenciesEnabled']
-            if 'dependencies_enabled' in props:
-                self.dependencies_enabled = props['dependencies_enabled']
-            if 'discussions' in props:
-                self.discussions = props['discussions']
-            if 'effectiveAttachmentOptions' in props:
-                self.effective_attachment_options = props['effectiveAttachmentOptions']
-            if 'effective_attachment_options' in props:
-                self.effective_attachment_options = props['effective_attachment_options']
-            if 'favorite' in props:
-                self.favorite = props['favorite']
-            if 'fromId' in props:
-                self.from_id = props['fromId']
-            if 'from_id' in props:
-                self.from_id = props['from_id']
-            if 'ganttEnabled' in props:
-                self.gantt_enabled = props['ganttEnabled']
-            if 'gantt_enabled' in props:
-                self.gantt_enabled = props['gantt_enabled']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'modifiedAt' in props:
-                self.modified_at = props['modifiedAt']
-            if 'modified_at' in props:
-                self.modified_at = props['modified_at']
-            if 'name' in props:
-                self.name = props['name']
-            if 'owner' in props:
-                self.owner = props['owner']
-            if 'ownerId' in props:
-                self.owner_id = props['ownerId']
-            if 'owner_id' in props:
-                self.owner_id = props['owner_id']
-            if 'permalink' in props:
-                self.permalink = props['permalink']
-            if 'readOnly' in props:
-                self.read_only = props['readOnly']
-            if 'read_only' in props:
-                self.read_only = props['read_only']
-            if 'resourceManagementEnabled' in props:
-                self.resource_management_enabled = props['resourceManagementEnabled']
-            if 'resource_management_enabled' in props:
-                self.resource_management_enabled = props['resource_management_enabled']
-            if 'rows' in props:
-                self.rows = props['rows']
-            if 'showParentRowsForFilters' in props:
-                self.show_parent_rows_for_filters = props['showParentRowsForFilters']
-            if 'show_parent_rows_for_filters' in props:
-                self.show_parent_rows_for_filters = props['show_parent_rows_for_filters']
-            if 'source' in props:
-                self.source = props['source']
-            if 'sourceSheets' in props:
-                self.source_sheets = props['sourceSheets']
-            if 'source_sheets' in props:
-                self.source_sheets = props['source_sheets']
+            deserialize(self, props)
             if 'source_sheets' not in props and 'sourceSheets' not in props:
                 # props is a sheet or a list of sheets
                 self.source_sheets = props
-            if 'totalRowCount' in props:
-                self.total_row_count = props['totalRowCount']
-            if 'total_row_count' in props:
-                self.total_row_count = props['total_row_count']
-            if 'userSettings' in props:
-                self.user_settings = props['userSettings']
-            if 'user_settings' in props:
-                self.user_settings = props['user_settings']
-            if 'version' in props:
-                self.version = props['version']
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def access_level(self):
@@ -312,13 +241,13 @@ class Report(Sheet):
             self._gantt_enabled = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def modified_at(self):
@@ -474,40 +403,11 @@ class Report(Sheet):
         if isinstance(value, six.integer_types):
             self._version = value
 
-    def to_dict(self, op_id=None, method=None):
-        parent_obj = super(Report, self).to_dict(op_id, method)
-        obj = {
-            'accessLevel': prep(self._access_level),
-            'attachments': prep(self._attachments),
-            'columns': prep(self._columns),
-            'createdAt': prep(self._created_at),
-            'dependenciesEnabled': prep(self._dependencies_enabled),
-            'discussions': prep(self._discussions),
-            'effectiveAttachmentOptions': prep(self._effective_attachment_options),
-            'favorite': prep(self._favorite),
-            'fromId': prep(self._from_id),
-            'ganttEnabled': prep(self._gantt_enabled),
-            'id': prep(self.__id),
-            'modifiedAt': prep(self._modified_at),
-            'name': prep(self._name),
-            'owner': prep(self._owner),
-            'ownerId': prep(self._owner_id),
-            'permalink': prep(self._permalink),
-            'readOnly': prep(self._read_only),
-            'resourceManagementEnabled': prep(self._resource_management_enabled),
-            'rows': prep(self._rows),
-            'showParentRowsForFilters': prep(self._show_parent_rows_for_filters),
-            'source': prep(self._source),
-            'sourceSheets': prep(self._source_sheets),
-            'totalRowCount': prep(self._total_row_count),
-            'userSettings': prep(self._user_settings),
-            'version': prep(self._version)}
-        combo = parent_obj.copy()
-        combo.update(obj)
-        return combo
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

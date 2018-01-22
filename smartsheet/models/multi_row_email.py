@@ -17,10 +17,12 @@
 
 from __future__ import absolute_import
 
+import json
+
 from .row_email import RowEmail
 from ..types import TypedList
-from ..util import prep
-import json
+from ..util import serialize
+from ..util import deserialize
 
 
 class MultiRowEmail(RowEmail):
@@ -37,11 +39,7 @@ class MultiRowEmail(RowEmail):
         self._row_ids = TypedList(int)
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'rowIds' in props:
-                self.row_ids = props['rowIds']
-            if 'row_ids' in props:
-                self.row_ids = props['row_ids']
+            deserialize(self, props)
 
     @property
     def row_ids(self):
@@ -62,16 +60,11 @@ class MultiRowEmail(RowEmail):
             self._row_ids.purge()
             self._row_ids.append(value)
 
-    def to_dict(self, op_id=None, method=None):
-        parent_obj = super(MultiRowEmail, self).to_dict(op_id, method)
-        obj = {
-            'rowIds': prep(self._row_ids)}
-        combo = parent_obj.copy()
-        combo.update(obj)
-        return combo
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

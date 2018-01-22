@@ -17,6 +17,8 @@
 
 from __future__ import absolute_import
 
+import json
+
 from .folder import Folder
 from .report import Report
 from .sheet import Sheet
@@ -24,8 +26,8 @@ from .template import Template
 from .sight import Sight
 from .workspace import Workspace
 from ..types import TypedList
-from ..util import prep
-import json
+from ..util import serialize
+from ..util import deserialize
 
 
 class Home(object):
@@ -46,18 +48,8 @@ class Home(object):
         self._workspaces = TypedList(Workspace)
 
         if props:
-            if 'folders' in props:
-                self.folders = props['folders']
-            if 'reports' in props:
-                self.reports = props['reports']
-            if 'sheets' in props:
-                self.sheets = props['sheets']
-            if 'sights' in props:
-                self.sights = props['sights']
-            if 'templates' in props:
-                self.templates = props['templates']
-            if 'workspaces' in props:
-                self.workspaces = props['workspaces']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
 
@@ -175,18 +167,11 @@ class Home(object):
             self._workspaces.purge()
             self._workspaces.append(value)
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'folders': prep(self._folders),
-            'reports': prep(self._reports),
-            'sheets': prep(self._sheets),
-            'sights': prep(self._sights),
-            'templates': prep(self._templates),
-            'workspaces': prep(self._workspaces)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

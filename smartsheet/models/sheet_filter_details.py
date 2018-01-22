@@ -17,11 +17,13 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .criteria import Criteria
 from ..types import TypedList
-from ..util import prep
-import json
-import six
+from ..util import serialize
+from ..util import deserialize
 
 
 class SheetFilterDetails(object):
@@ -44,15 +46,8 @@ class SheetFilterDetails(object):
         self._operator = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'criteria' in props:
-                self.criteria = props['criteria']
-            if 'includeParent' in props:
-                self.include_parent = props['includeParent']
-            if 'include_parent' in props:
-                self.include_parent = props['include_parent']
-            if 'operator' in props:
-                self.operator = props['operator']
+            deserialize(self, props)
+
         self.__initialized = True
 
     @property
@@ -97,15 +92,11 @@ class SheetFilterDetails(object):
                          value, self.allowed_values['operator']))
             self._operator = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'criteria': prep(self._criteria),
-            'includeParent': prep(self._include_parent),
-            'operator': prep(self._operator)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

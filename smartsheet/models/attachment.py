@@ -17,11 +17,13 @@
 
 from __future__ import absolute_import
 
-from .user import User
-from ..util import prep
-from datetime import datetime
-import json
 import six
+import json
+
+from .user import User
+from ..util import serialize
+from ..util import deserialize
+from datetime import datetime
 
 
 class Attachment(object):
@@ -60,7 +62,7 @@ class Attachment(object):
         self._created_at = None
         self._created_by = None
         self._description = None
-        self.__id = None
+        self._id_ = None
         self._mime_type = None
         self._name = None
         self._parent_id = None
@@ -70,59 +72,23 @@ class Attachment(object):
         self._url_expires_in_millis = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'attachmentSubType' in props:
-                self.attachment_sub_type = props[
-                    'attachmentSubType']
-            if 'attachment_sub_type' in props:
-                self.attachment_sub_type = props[
-                    'attachment_sub_type']
-            if 'attachmentType' in props:
-                self.attachment_type = props['attachmentType']
-            if 'attachment_type' in props:
-                self.attachment_type = props['attachment_type']
-            # read only
-            if 'createdAt' in props:
-                self.created_at = props['createdAt']
-            if 'createdBy' in props:
-                self.created_by = props['createdBy']
-            if 'created_by' in props:
-                self.created_by = props['created_by']
-            if 'description' in props:
-                self.description = props['description']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            # read only
-            if 'mimeType' in props:
-                self.mime_type = props['mimeType']
-            if 'name' in props:
-                self.name = props['name']
-            # read only
-            if 'parentId' in props:
-                self.parent_id = props['parentId']
-            # read only
-            if 'parentType' in props:
-                self.parent_type = props['parentType']
-            # read only
-            if 'sizeInKb' in props:
-                self.size_in_kb = props['sizeInKb']
-            if 'url' in props:
-                self.url = props['url']
-            # read only
-            if 'urlExpiresInMillis' in props:
-                self.url_expires_in_millis = props[
-                    'urlExpiresInMillis']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def attachment_sub_type(self):
@@ -182,13 +148,13 @@ class Attachment(object):
             self._description = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def mime_type(self):
@@ -258,25 +224,11 @@ class Attachment(object):
         if isinstance(value, six.integer_types):
             self._url_expires_in_millis = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'attachmentSubType': prep(self._attachment_sub_type),
-            'attachmentType': prep(self._attachment_type),
-            'createdAt': prep(self._created_at),
-            'createdBy': prep(self._created_by),
-            'description': prep(self._description),
-            'id': prep(self.__id),
-            'mimeType': prep(self._mime_type),
-            'name': prep(self._name),
-            'parentId': prep(self._parent_id),
-            'parentType': prep(self._parent_type),
-            'sizeInKb': prep(self._size_in_kb),
-            'url': prep(self._url),
-            'urlExpiresInMillis': prep(self._url_expires_in_millis)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

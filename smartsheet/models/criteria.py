@@ -17,10 +17,12 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
-from ..util import prep
-import json
 import six
+import json
+
+from ..types import TypedList
+from ..util import serialize
+from ..util import deserialize
 
 
 class Criteria(object):
@@ -74,18 +76,7 @@ class Criteria(object):
         self._values = TypedList(str)
 
         if props:
-            if 'columnId' in props:
-                self.column_id = props['columnId']
-            if 'column_id' in props:
-                self.column_id = props['column_id']
-            if 'operator' in props:
-                self.operator = props['operator']
-            if 'value1' in props:
-                self.value1 = props['value1']
-            if 'value2' in props:
-                self.value2 = props['value2']
-            if 'values' in props:
-                self.values = props['values']
+            deserialize(self, props)
 
     @property
     def column_id(self):
@@ -147,17 +138,11 @@ class Criteria(object):
             self._values.purge()
             self._values.append(value)
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'columnId': prep(self._column_id),
-            'operator': prep(self._operator),
-            'value1': prep(self._value1),
-            'value2': prep(self._value2),
-            'values': prep(self._values)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

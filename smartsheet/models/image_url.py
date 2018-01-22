@@ -17,10 +17,12 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-from .error_result import ErrorResult
-import json
 import six
+import json
+
+from .error_result import ErrorResult
+from ..util import serialize
+from ..util import deserialize
 
 
 class ImageUrl(object):
@@ -40,19 +42,7 @@ class ImageUrl(object):
         self._width = 0
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'error' in props:
-                self.error = props['error']
-            if 'height' in props:
-                self.height = props['height']
-            if 'imageId' in props:
-                self.image_id = props['imageId']
-            if 'image_id' in props:
-                self.image_id = props['image_id']
-            if 'url' in props:
-                self.url = props['url']
-            if 'width' in props:
-                self.width = props['width']
+            deserialize(self, props)
 
     @property
     def error(self):
@@ -99,17 +89,11 @@ class ImageUrl(object):
         if isinstance(value, six.integer_types):
             self._width = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'error': prep(self._error),
-            'height': prep(self._height),
-            'imageId': prep(self._image_id),
-            'url': prep(self._url),
-            'width': prep(self._width)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

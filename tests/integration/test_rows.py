@@ -76,11 +76,15 @@ class TestRows:
         row = smart_setup['sheet_b'].get_row(TestRows.copied_row_id)
         assert row.request_response.status_code == 200
 
-        row.cells[0].value = 'Now for something completely different.'
+        new_row = smart.models.Row()
+        new_row.id = row.id
+        new_row.cells = [smart.models.Cell]
+        new_row.cells[0].column_id = row.cells[0].column_id
+        new_row.cells[0].value = 'Now for something completely different.'
         changed_cell_id = row.cells[0].column_id
         action = smart.Sheets.update_rows(
             smart_setup['sheet_b'].id,
-            [row]
+            [new_row]
         )
         assert action.message == 'SUCCESS'
         # now let's check the history
@@ -118,13 +122,19 @@ class TestRows:
 
     def test_update_rows(self, smart_setup):
         smart = smart_setup['smart']
-        row = smart_setup['sheet'].get_row(TestRows.added_row_with_dict.id)
-        row.to_bottom = True
-        row.to_top = False
 
+        row = smart_setup['sheet'].get_row(TestRows.added_row_with_dict.id)
+
+        new_row = smart.models.Row()
+        new_row.id = row.id
+        new_row.cells = [smart.models.Cell]
+        new_row.cells[0].column_id = row.cells[0].column_id
+        new_row.cells[0].value_is_null()
+        new_row.to_bottom = True
+        new_row.to_top = False
         action = smart.Sheets.update_rows(
             smart_setup['sheet'].id,
-            [row]
+            [new_row]
         )
         assert action.message == 'SUCCESS'
 
@@ -133,9 +143,11 @@ class TestRows:
         row = smart_setup['sheet'].get_row(TestRows.added_row_with_dict.id)
         cell = row.get_column(TestRows.sheet_primary_id)
         cell.value = 'sneaky, sis!'
-        row.set_column(TestRows.sheet_primary_id, cell)
+        new_row = smart.models.Row()
+        new_row.id = row.id
+        new_row.set_column(TestRows.sheet_primary_id, cell)
         action = smart.Sheets.update_rows(
             smart_setup['sheet'].id,
-            [row]
+            [new_row]
         )
         assert action.message == 'SUCCESS'

@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from .error_result import ErrorResult
-from ..util import prep
 import json
+
+from .error_result import ErrorResult
+from ..util import serialize
+from ..util import deserialize
 
 
 class Error(object):
@@ -36,14 +38,8 @@ class Error(object):
         self._result = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'requestResponse' in props:
-                self.request_response = props['requestResponse']
-            if 'request_response' in props:
-                self.request_response = props[
-                    'request_response']
-            if 'result' in props:
-                self.result = props['result']
+            deserialize(self, props)
+
         self.message = 'ERROR'
 
         # requests package Response object
@@ -71,14 +67,11 @@ class Error(object):
         else:
             self._result = ErrorResult(value, self._base)
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'requestResponse': prep(self._request_response),
-            'result': prep(self._result)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

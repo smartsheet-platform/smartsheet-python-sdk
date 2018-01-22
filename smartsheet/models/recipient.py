@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class Recipient(object):
@@ -36,13 +38,7 @@ class Recipient(object):
         self._group_id = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'email' in props:
-                self.email = props['email']
-            if 'groupId' in props:
-                self.group_id = props['groupId']
-            if 'group_id' in props:
-                self.group_id = props['group_id']
+            deserialize(self, props)
 
     @property
     def email(self):
@@ -62,14 +58,11 @@ class Recipient(object):
         if isinstance(value, six.integer_types):
             self._group_id = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'email': prep(self._email),
-            'groupId': prep(self._group_id)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

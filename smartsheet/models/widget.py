@@ -16,10 +16,13 @@
 # under the License.
 
 from __future__ import absolute_import
-from ..util import prep
-from .widget_content import WidgetContent
+
 import six
 import json
+
+from .widget_content import WidgetContent
+from ..util import serialize
+from ..util import deserialize
 
 
 class Widget(object):
@@ -45,7 +48,7 @@ class Widget(object):
 
         self._contents = None
         self._height = None
-        self.__id = None
+        self._id_ = None
         self._show_title = None
         self._show_title_icon = None
         self._title = None
@@ -57,50 +60,21 @@ class Widget(object):
         self._y_position = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'contents' in props:
-                self.contents = props['contents']
-            if 'height' in props:
-                self.height = props['height']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'showTitle' in props:
-                self.show_title = props['showTitle']
-            if 'show_title' in props:
-                self.show_title = props['show_title']
-            if 'showTitleIcon' in props:
-                self.show_title_icon = props['showTitleIcon']
-            if 'show_title_icon' in props:
-                self.show_title_icon = props['show_title_icon']
-            if 'title' in props:
-                self.title = props['title']
-            if 'titleFormat' in props:
-                self.title_format = props['titleFormat']
-            if 'title_format' in props:
-                self.title_format = props['title_format']
-            if 'type' in props:
-                self.type = props['type']
-            if 'version' in props:
-                self.version = props['version']
-            if 'width' in props:
-                self.width = props['width']
-            if 'xPosition' in props:
-                self.x_position = props['xPosition']
-            if 'x_position' in props:
-                self.x_position = props['x_position']
-            if 'yPosition' in props:
-                self.y_position = props['yPosition']
-            if 'y_position' in props:
-                self.y_position = props['y_position']
+            deserialize(self, props)
+
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def contents(self):
@@ -123,13 +97,13 @@ class Widget(object):
             self._height = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def show_title(self):
@@ -217,24 +191,11 @@ class Widget(object):
         if isinstance(value, six.integer_types):
             self._y_position = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'contents': prep(self._contents),
-            'id': prep(self.__id),
-            'height': prep(self._height),
-            'showTitle': prep(self._show_title),
-            'showTitleIcon': prep(self._show_title_icon),
-            'title': prep(self._title),
-            'titleFormat': prep(self._title_format),
-            'type': prep(self._type),
-            'version': prep(self._version),
-            'width': prep(self._width),
-            'xPosition': prep(self._x_position),
-            'yPosition': prep(self._y_position)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

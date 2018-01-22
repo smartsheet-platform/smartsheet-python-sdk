@@ -17,12 +17,14 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .auto_number_format import AutoNumberFormat
 from .contact_option import ContactOption
 from ..types import TypedList
-from ..util import prep
-import json
-import six
+from ..util import serialize
+from ..util import deserialize
 
 
 class Column(object):
@@ -81,9 +83,9 @@ class Column(object):
 
         self._auto_number_format = None
         self._contact_options = TypedList(ContactOption)
-        self.__format = None
+        self._format_ = None
         self._hidden = None
-        self.__id = None
+        self._id_ = None
         self._index = None
         self._locked = None
         self._locked_for_user = None
@@ -93,78 +95,37 @@ class Column(object):
         self._system_column_type = None
         self._tags = TypedList(str)
         self._title = None
-        self.__type = None
+        self._type_ = None
         self._width = None
         self._validation = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'autoNumberFormat' in props:
-                self.auto_number_format = props[
-                    'autoNumberFormat']
-            if 'auto_number_format' in props:
-                self.auto_number_format = props[
-                    'auto_number_format']
-            if 'contactOptions' in props:
-                self.contact_options = props['contactOptions']
-            if 'contact_options' in props:
-                self.contact_options = props['contact_options']
-            if 'format' in props:
-                self._format = props['format']
-            if '_format' in props:
-                self._format = props['_format']
-            if 'hidden' in props:
-                self.hidden = props['hidden']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'index' in props:
-                self.index = props['index']
-            if 'locked' in props:
-                self.locked = props['locked']
-            if 'lockedForUser' in props:
-                self.locked_for_user = props['lockedForUser']
-            if 'locked_for_user' in props:
-                self.locked_for_user = props['locked_for_user']
-            if 'options' in props:
-                self.options = props['options']
-            if 'primary' in props:
-                self.primary = props['primary']
-            if 'symbol' in props:
-                self.symbol = props['symbol']
-            if 'systemColumnType' in props:
-                self.system_column_type = props[
-                    'systemColumnType']
-            if 'system_column_type' in props:
-                self.system_column_type = props[
-                    'system_column_type']
-            if 'tags' in props:
-                self.tags = props['tags']
-            if 'title' in props:
-                self.title = props['title']
-            if 'type' in props:
-                self._type = props['type']
-            if '_type' in props:
-                self._type = props['_type']
-            if 'width' in props:
-                self.width = props['width']
-            if 'validation' in props:
-                self.validation = props['validation']
+            deserialize(self, props)
+        
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'format':
-            return self._format
+            return self.format_
         elif key == 'id':
-            return self._id
+            return self.id_
         elif key == 'type':
-            return self._type
+            return self.type_
         else:
             raise AttributeError(key)
-
+        
+    def __setattr__(self, key, value):
+        if key == 'format':
+            self.format_ = value 
+        elif key == 'id':
+            self.id_ = value
+        elif key == 'type':
+            self.type_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
+    
     @property
     def auto_number_format(self):
         return self._auto_number_format
@@ -196,13 +157,13 @@ class Column(object):
             self._contact_options.append(value)
 
     @property
-    def _format(self):
-        return self.__format
+    def format_(self):
+        return self._format_
 
-    @_format.setter
-    def _format(self, value):
+    @format_.setter
+    def format_(self, value):
         if isinstance(value, six.string_types):
-            self.__format = value
+            self._format_ = value
 
     @property
     def hidden(self):
@@ -214,13 +175,13 @@ class Column(object):
             self._hidden = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def index(self):
@@ -334,18 +295,18 @@ class Column(object):
             self._title = value
 
     @property
-    def _type(self):
-        return self.__type
+    def type_(self):
+        return self._type_
 
-    @_type.setter
-    def _type(self, value):
+    @type_.setter
+    def type_(self, value):
         if isinstance(value, six.string_types):
             if value not in self.allowed_values['_type']:
                 raise ValueError(
                     ("`{0}` is an invalid value for Column`_type`,"
                      " must be one of {1}").format(
                          value, self.allowed_values['_type']))
-            self.__type = value
+            self._type_ = value
 
     @property
     def width(self):
@@ -363,36 +324,13 @@ class Column(object):
     @validation.setter
     def validation(self, value):
         if isinstance(value, bool):
-            self._validation = value;
+            self._validation = value
 
-    def to_dict(self, op_id=None, method=None):
-        req_filter = self.pre_request_filter
-        if req_filter:
-            if self.auto_number_format is not None:
-                self.auto_number_format.pre_request_filter = req_filter
-
-        obj = {
-            'autoNumberFormat': prep(self._auto_number_format),
-            'contactOptions': prep(self._contact_options),
-            'format': prep(self.__format),
-            'hidden': prep(self._hidden),
-            'id': prep(self.__id),
-            'index': prep(self._index),
-            'locked': prep(self._locked),
-            'lockedForUser': prep(self._locked_for_user),
-            'options': prep(self._options),
-            'primary': prep(self._primary),
-            'symbol': prep(self._symbol),
-            'systemColumnType': prep(self._system_column_type),
-            'tags': prep(self._tags),
-            'title': prep(self._title),
-            'type': prep(self.__type),
-            'width': prep(self._width),
-            'validation': prep(self._validation)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

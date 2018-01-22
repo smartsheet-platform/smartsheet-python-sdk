@@ -53,8 +53,7 @@ class TestFolders:
             TestFolders.copied_folder.id,
             smart.models.ContainerDestination({
                 'destination_id': TestFolders.folder_created_in_folder.id,
-                'destination_type': 'folder',
-                'new_name': TestFolders.copied_folder.name
+                'destination_type': 'folder'
             })
         )
         move = action.result

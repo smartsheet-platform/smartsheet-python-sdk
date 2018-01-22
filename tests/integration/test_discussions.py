@@ -90,7 +90,6 @@ class TestDiscussions:
         smart = smart_setup['smart']
         url = smart.models.Attachment({
             'name': 'Cool site',
-            'description': 'You have to see this.',
             'url': 'http://www.smartsheet.com/',
             'attachment_type': 'LINK'
         })

@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class FormatDetails(object):
@@ -47,11 +49,7 @@ class FormatDetails(object):
         self._paper_size = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'paperSize' in props:
-                self.paper_size = props['paperSize']
-            if 'paper_size' in props:
-                self.paper_size = props['paper_size']
+            deserialize(self, props)
 
     @property
     def paper_size(self):
@@ -67,13 +65,11 @@ class FormatDetails(object):
                          value, self.allowed_values['paper_size']))
             self._paper_size = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'paperSize': prep(self._paper_size)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

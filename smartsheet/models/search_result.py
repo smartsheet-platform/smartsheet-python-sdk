@@ -17,11 +17,13 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .search_result_item import SearchResultItem
 from ..types import TypedList
-from ..util import prep
-import json
-import six
+from ..util import serialize
+from ..util import deserialize
 
 
 class SearchResult(object):
@@ -38,12 +40,8 @@ class SearchResult(object):
         self._total_count = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'results' in props:
-                self.results = props['results']
-            # read only
-            if 'totalCount' in props:
-                self.total_count = props['totalCount']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
 
@@ -75,14 +73,11 @@ class SearchResult(object):
         if isinstance(value, six.integer_types):
             self._total_count = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'results': prep(self._results),
-            'totalCount': prep(self._total_count)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

@@ -17,12 +17,14 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
+import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 from ..types import TypedList
 from datetime import datetime
 from dateutil.parser import parse
-import six
-import json
 
 
 class Schedule(object):
@@ -67,45 +69,24 @@ class Schedule(object):
         self._next_send_at = None
         self._repeat_every = None
         self._start_at = None
-        self._type = None
+        self._type_ = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'dayDescriptors' in props:
-                self.day_descriptors = props['dayDescriptors']
-            if 'day_descriptors' in props:
-                self.day_descriptors = props['day_descriptors']
-            if 'dayOfMonth' in props:
-                self.day_of_month = props['dayOfMonth']
-            if 'day_of_month' in props:
-                self.day_of_month = props['day_of_month']
-            if 'dayOrdinal' in props:
-                self.day_ordinal = props['dayOrdinal']
-            if 'day_ordinal' in props:
-                self.day_ordinal = props['day_ordinal']
-            if 'endAt' in props:
-                self.end_at = props['endAt']
-            if 'end_at' in props:
-                self.end_at = props['end_at']
-            if 'lastSentAt' in props:
-                self.last_sent_at = props['lastSentAt']
-            if 'last_sent_at' in props:
-                self.last_sent_at = props['last_sent_at']
-            if 'nextSendAt' in props:
-                self.next_send_at = props['nextSendAt']
-            if 'next_send_at' in props:
-                self.next_send_at = props['next_send_at']
-            if 'repeatEvery' in props:
-                self.repeat_every = props['repeatEvery']
-            if 'repeat_every' in props:
-                self.repeat_every = props['repeat_every']
-            if 'startAt' in props:
-                self.start_at = props['startAt']
-            if 'start_at' in props:
-                self.start_at = props['start_at']
-            if 'type' in props:
-                self.type = props['type']
+            deserialize(self, props)
+
         self.__initialized = True
+
+    def __getattr__(self, key):
+        if key == 'type':
+            return self.type_
+        else:
+            raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'type':
+            self.type_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def day_descriptors(self):
@@ -218,34 +199,24 @@ class Schedule(object):
                 self._start_at = value
 
     @property
-    def type(self):
-        return self._type
+    def type_(self):
+        return self._type_
 
-    @type.setter
-    def type(self, value):
+    @type_.setter
+    def type_(self, value):
         if isinstance(value, six.string_types):
             if value not in self.allowed_values['type']:
                 raise ValueError(
                     ("`{0}` is an invalid value for Schedule`type`,"
                      " must be one of {1}").format(
                         value, self.allowed_values['type']))
-            self._type = value
+            self._type_ = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'dayDescriptors': prep(self._day_descriptors),
-            'dayOfMonth': prep(self._day_of_month),
-            'dayOrdinal': prep(self._day_ordinal),
-            'endAt': prep(self._end_at),
-            'lastSentAt': prep(self._last_sent_at),
-            'nextSendAt': prep(self._next_send_at),
-            'repeatEvery': prep(self._repeat_every),
-            'startAt': prep(self._start_at),
-            'type': prep(self._type)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

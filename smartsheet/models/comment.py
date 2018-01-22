@@ -17,14 +17,16 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .attachment import Attachment
 from .user import User
 from ..types import TypedList
-from ..util import prep
+from ..util import serialize
+from ..util import deserialize
 from datetime import datetime
 from dateutil.parser import parse
-import json
-import six
 
 
 class Comment(object):
@@ -41,45 +43,28 @@ class Comment(object):
         self._created_at = None
         self._created_by = None
         self._discussion_id = None
-        self.__id = None
+        self._id_ = None
         self._modified_at = None
         self._text = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'attachments' in props:
-                self.attachments = props['attachments']
-            if 'createdAt' in props:
-                self.created_at = props['createdAt']
-            if 'created_at' in props:
-                self.created_at = props['created_at']
-            if 'createdBy' in props:
-                self.created_by = props['createdBy']
-            if 'created_by' in props:
-                self.created_by = props['created_by']
-            if 'discussionId' in props:
-                self.discussion_id = props['discussionId']
-            if 'discussion_id' in props:
-                self.discussion_id = props['discussion_id']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'modifiedAt' in props:
-                self.modified_at = props['modifiedAt']
-            if 'modified_at' in props:
-                self.modified_at = props['modified_at']
-            if 'text' in props:
-                self.text = props['text']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def attachments(self):
@@ -134,13 +119,13 @@ class Comment(object):
             self._discussion_id = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def modified_at(self):
@@ -164,19 +149,11 @@ class Comment(object):
         if isinstance(value, six.string_types):
             self._text = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'attachments': prep(self._attachments),
-            'createdAt': prep(self._created_at),
-            'createdBy': prep(self._created_by),
-            'discussionId': prep(self._discussion_id),
-            'id': prep(self.__id),
-            'modifiedAt': prep(self._modified_at),
-            'text': prep(self._text)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

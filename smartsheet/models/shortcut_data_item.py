@@ -16,10 +16,13 @@
 # under the License.
 
 from __future__ import absolute_import
-from ..util import prep
-from .hyperlink import Hyperlink
+
 import six
 import json
+
+from .hyperlink import Hyperlink
+from ..util import serialize
+from ..util import deserialize
 
 
 class ShortcutDataItem(object):
@@ -39,25 +42,8 @@ class ShortcutDataItem(object):
         self._order = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'attachmentType' in props:
-                self.attachment_type = props['attachmentType']
-            if 'attachment_type' in props:
-                self.attachment_type = props['attachment_type']
-            if 'hyperlink' in props:
-                self.hyperlink = props['hyperlink']
-            if 'label' in props:
-                self.label = props['label']
-            if 'labelFormat' in props:
-                self.label_format = props['labelFormat']
-            if 'label_format' in props:
-                self.label_format = props['label_format']
-            if 'mimeType' in props:
-                self.mime_type = props['mimeType']
-            if 'mime_type' in props:
-                self.mime_type = props['mime_type']
-            if 'order' in props:
-                self.order = props['order']
+            deserialize(self, props)
+
         self.__initialized = True
 
     @property
@@ -116,18 +102,11 @@ class ShortcutDataItem(object):
         if isinstance(value, six.integer_types):
             self._order = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'attachmentType': prep(self._attachment_type),
-            'hyperlink': prep(self._hyperlink),
-            'label': prep(self._label),
-            'labelFormat': prep(self._label_format),
-            'mimeType': prep(self._mime_type),
-            'order': prep(self._order)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

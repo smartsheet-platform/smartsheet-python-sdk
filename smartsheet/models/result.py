@@ -17,6 +17,9 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .alternate_email import AlternateEmail
 from .attachment import Attachment
 from .column import Column
@@ -39,9 +42,8 @@ from .report_publish import ReportPublish
 from .sent_update_request import SentUpdateRequest
 from .sight_publish import SightPublish
 from ..types import TypedList
-from ..util import prep
-import json
-import six
+from ..util import serialize
+from ..util import deserialize
 
 
 class Result(object):
@@ -63,17 +65,8 @@ class Result(object):
         self._version = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'message' in props:
-                self.message = props['message']
-            if 'result' in props:
-                self.result = props['result']
-            if 'resultCode' in props:
-                self.result_code = props['resultCode']
-            if 'result_code' in props:
-                self.result_code = props['result_code']
-            if 'version' in props:
-                self.version = props['version']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
 
@@ -221,16 +214,11 @@ class Result(object):
         """Simplify difference between Result and IndexResult"""
         return self._result
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'message': prep(self._message),
-            'result': prep(self._result),
-            'resultCode': prep(self._result_code),
-            'version': prep(self._version)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

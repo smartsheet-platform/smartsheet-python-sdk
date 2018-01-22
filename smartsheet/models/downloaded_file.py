@@ -17,11 +17,13 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
 import contextlib
-import json
 import os.path
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class DownloadedFile(object):
@@ -41,22 +43,8 @@ class DownloadedFile(object):
         self._result_code = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'downloadDirectory' in props:
-                self.download_directory = props[
-                    'downloadDirectory']
-            if 'download_directory' in props:
-                self.download_directory = props[
-                    'download_directory']
-            if 'filename' in props:
-                self.filename = props['filename']
-            if 'message' in props:
-                self.message = props['message']
-            if 'resp' in props:
-                self.resp = props['resp']
-            # read only
-            if 'resultCode' in props:
-                self.result_code = props['resultCode']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
 
@@ -114,17 +102,11 @@ class DownloadedFile(object):
                 for chunk in self.resp.iter_content(chunksize):
                     dlfile.write(chunk)
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'downloadDirectory': prep(self._download_directory),
-            'filename': prep(self._filename),
-            'message': prep(self._message),
-            'resp': prep(self._resp),
-            'resultCode': prep(self._result_code)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

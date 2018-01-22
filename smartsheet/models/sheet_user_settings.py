@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class SheetUserSettings(object):
@@ -37,19 +39,7 @@ class SheetUserSettings(object):
         self._display_summary_tasks = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'appliedSheetFilterId' in props:
-                self.applied_sheet_filter_id = props['appliedSheetFilterId']
-            if 'applied_sheet_filter_id' in props:
-                self.applied_sheet_filter_id = props['applied_sheet_filter_id']
-            if 'criticalPathEnabled' in props:
-                self.critical_path_enabled = props['criticalPathEnabled']
-            if 'critical_path_enabled' in props:
-                self.critical_path_enabled = props['critical_path_enabled']
-            if 'displaySummaryTasks' in props:
-                self.display_summary_tasks = props['displaySummaryTasks']
-            if 'display_summary_tasks' in props:
-                self.display_summary_tasks = props['display_summary_tasks']
+            deserialize(self, props)
 
     @property
     def applied_sheet_filter_id(self):
@@ -78,15 +68,11 @@ class SheetUserSettings(object):
         if isinstance(value, bool):
             self._display_summary_tasks = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'appliedSheetFilterId': prep(self._applied_sheet_filter_id),
-            'criticalPathEnabled': prep(self._critical_path_enabled),
-            'displaySummaryTasks': prep(self._display_summary_tasks)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

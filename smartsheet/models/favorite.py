@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class Favorite(object):
@@ -42,25 +44,24 @@ class Favorite(object):
                 'sight']}
 
         self._object_id = None
-        self.__type = None
+        self._type_ = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'objectId' in props:
-                self.object_id = props['objectId']
-            if 'object_id' in props:
-                self.object_id = props['object_id']
-            if 'type' in props:
-                self._type = props['type']
-            if '_type' in props:
-                self._type = props['_type']
+            deserialize(self, props)
+
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'type':
-            return self._type
+            return self.type_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'type':
+            self.type_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def object_id(self):
@@ -72,27 +73,24 @@ class Favorite(object):
             self._object_id = value
 
     @property
-    def _type(self):
-        return self.__type
+    def type_(self):
+        return self._type_
 
-    @_type.setter
-    def _type(self, value):
+    @type_.setter
+    def type_(self, value):
         if isinstance(value, six.string_types):
             if value not in self.allowed_values['_type']:
                 raise ValueError(
                     ("`{0}` is an invalid value for Favorite`_type`,"
                      " must be one of {1}").format(
                          value, self.allowed_values['_type']))
-            self.__type = value
+            self._type_ = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'objectId': prep(self._object_id),
-            'type': prep(self.__type)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

@@ -17,13 +17,15 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
-from ..util import prep
-from .webhook_stats import WebhookStats
-from datetime import datetime
-from dateutil.parser import parse
 import six
 import json
+
+from .webhook_stats import WebhookStats
+from ..types import TypedList
+from ..util import serialize
+from ..util import deserialize
+from datetime import datetime
+from dateutil.parser import parse
 
 
 class Webhook(object):
@@ -43,7 +45,7 @@ class Webhook(object):
         self._disabled_details = None
         self._enabled = None
         self._events = TypedList(six.string_types)
-        self.__id = None
+        self._id_ = None
         self._modified_at = None
         self._name = None
         self._scope = None
@@ -54,57 +56,7 @@ class Webhook(object):
         self._version = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'apiClientId' in props:
-                self.api_client_id = props['apiClientId']
-            if 'api_client_id' in props:
-                self.api_client_id = props['api_client_id']
-            if 'apiClientName' in props:
-                self.api_client_name = props['apiClientName']
-            if 'api_client_name' in props:
-                self.api_client_name = props['api_client_name']
-            if 'callbackUrl' in props:
-                self.callback_url = props['callbackUrl']
-            if 'callback_url' in props:
-                self.callback_url = props['callback_url']
-            if 'createdAt' in props:
-                self.created_at = props['createdAt']
-            if 'created_at' in props:
-                self.created_at = props['created_at']
-            if 'disabledDetails' in props:
-                self.disabled_details = props['disabledDetails']
-            if 'disabled_details' in props:
-                self.disabled_details = props['disabled_details']
-            if 'enabled' in props:
-                self.enabled = props['enabled']
-            if 'events' in props:
-                self.events = props['events']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'modifiedAt' in props:
-                self.modified_at = props['modifiedAt']
-            if 'modified_at' in props:
-                self.modified_at = props['modified_at']
-            if 'name' in props:
-                self.name = props['name']
-            if 'scope' in props:
-                self.scope = props['scope']
-            if 'scopeObjectId' in props:
-                self.scope_object_id = props['scopeObjectId']
-            if 'scope_object_id' in props:
-                self.scope_object_id = props['scope_object_id']
-            if 'sharedSecret' in props:
-                self.shared_secret = props['sharedSecret']
-            if 'shared_secret' in props:
-                self.shared_secret = props['shared_secret']
-            if 'stats' in props:
-                self.stats = props['stats']
-            if 'status' in props:
-                self.status = props['status']
-            if 'version' in props:
-                self.version = props['version']
+            deserialize(self, props)
 
         # requests package Response object
         self.request_response = None
@@ -112,9 +64,15 @@ class Webhook(object):
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def api_client_id(self):
@@ -194,13 +152,13 @@ class Webhook(object):
             self._events.append(value)
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def modified_at(self):
@@ -280,28 +238,11 @@ class Webhook(object):
         if isinstance(value, six.integer_types):
             self._version = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'apiClientId': prep(self._api_client_id),
-            'apiClientName': prep(self._api_client_name),
-            'callbackUrl': prep(self._callback_url),
-            'createdAt': prep(self._created_at),
-            'disabledDetails': prep(self._disabled_details),
-            'enabled': prep(self._enabled),
-            'events': prep(self._events),
-            'id': prep(self.__id),
-            'modifiedAt': prep(self._modified_at),
-            'name': prep(self._name),
-            'scope': prep(self._scope),
-            'scopeObjectId': prep(self._scope_object_id),
-            'sharedSecret': prep(self._shared_secret),
-            'stats': prep(self._stats),
-            'status': prep(self._status),
-            'version': prep(self._version)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

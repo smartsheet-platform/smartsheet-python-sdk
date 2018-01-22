@@ -35,6 +35,7 @@ from .models import Error, ErrorResult
 from .session import pinned_session
 from .types import TypedList
 from .util import is_multipart
+from .util import serialize
 from . import (
     __version__,
     __api_base__,
@@ -352,12 +353,7 @@ class Smartsheet(object):
                 _op['path'] = _op['path'].replace('{' + key + '}', str(val))
 
         if _op['json']:
-            if isinstance(_op['json'], (list, TypedList)):
-                _op['json'] = [
-                    x.to_dict(_op['id'], _op['method']) for x in _op['json']
-                ]
-            else:
-                _op['json'] = _op['json'].to_dict(_op['id'], _op['method'])
+            _op['json'] = serialize(_op['json'])
 
         if _op['query_params']:
             for key, val in six.iteritems(_op['query_params']):

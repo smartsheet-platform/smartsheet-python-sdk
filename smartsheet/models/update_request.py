@@ -17,14 +17,16 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .multi_row_email import MultiRowEmail
-from ..util import prep
 from .user import User
 from .schedule import Schedule
+from ..util import serialize
+from ..util import deserialize
 from datetime import datetime
 from dateutil.parser import parse
-import json
-import six
 
 
 class UpdateRequest(MultiRowEmail):
@@ -39,40 +41,29 @@ class UpdateRequest(MultiRowEmail):
             self._base = base_obj
 
         self._created_at = None
-        self.__id = None
+        self._id_ = None
         self._modified_at = None
         self._schedule = None
         self._sent_by = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'createdAt' in props:
-                self.created_at = props['createdAt']
-            if 'created_at' in props:
-                self.created_at = props['created_at']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'modifiedAt' in props:
-                self.modified_at = props['modifiedAt']
-            if 'modified_at' in props:
-                self.modified_at = props['modified_at']
-            if 'schedule' in props:
-                self.schedule = props['schedule']
-            if 'sentBy' in props:
-                self.sent_by = props['sentBy']
-            if 'sent_by' in props:
-                self.sent_by = props['sent_by']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def created_at(self):
@@ -88,13 +79,13 @@ class UpdateRequest(MultiRowEmail):
                 self._created_at = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def modified_at(self):
@@ -133,20 +124,11 @@ class UpdateRequest(MultiRowEmail):
             if isinstance(value, dict):
                 self._sent_by = User(value, self._base)
 
-    def to_dict(self, op_id=None, method=None):
-        parent_obj = super(UpdateRequest, self).to_dict(op_id, method)
-        obj = {
-            'createdAt': prep(self._created_at),
-            'id': prep(self.__id),
-            'modifiedAt': prep(self._modified_at),
-            'schedule': prep(self._schedule),
-            'sentBy': prep(self._sent_by)}
-        combo = parent_obj.copy()
-        combo.update(obj)
-        return combo
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

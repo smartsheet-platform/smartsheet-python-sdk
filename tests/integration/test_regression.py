@@ -154,6 +154,7 @@ class TestRegression:
         cell = smart.models.Cell()
         cell.column_id = col_id
         cell.link_in_from_cell = cell_link
+        cell.value_is_null()
 
         row = smart.models.Row()
         row.id = added_row.id

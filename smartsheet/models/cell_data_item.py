@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2017 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -16,14 +16,17 @@
 # under the License.
 
 from __future__ import absolute_import
-from ..util import prep
+
+import six
+import json
+
 from .cell import Cell
 from .object_value import ObjectValue
 from .string_object_value import StringObjectValue
 from .boolean_object_value import BooleanObjectValue
 from .number_object_value import NumberObjectValue
-import six
-import json
+from ..util import serialize
+from ..util import deserialize
 
 
 class CellDataItem(object):
@@ -44,29 +47,8 @@ class CellDataItem(object):
         self._value_format = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'cell' in props:
-                self.cell = props['cell']
-            if 'columnId' in props:
-                self.column_id = props['columnId']
-            if 'column_id' in props:
-                self.column_id = props['column_id']
-            if 'label' in props:
-                self.label = props['label']
-            if 'labelFormat' in props:
-                self.label_format = props['labelFormat']
-            if 'label_format' in props:
-                self.label_format = props['label_format']
-            if 'objectValue' in props:
-                self.object_value = props['objectValue']
-            if 'object_value' in props:
-                self.object_value = props['object_value']
-            if 'order' in props:
-                self.order = props['order']
-            if 'valueFormat' in props:
-                self.value_format = props['valueFormat']
-            if 'value_format' in props:
-                self.value_format = props['value_format']
+            deserialize(self, props)
+
         self.__initialized = True
 
     @property
@@ -140,19 +122,11 @@ class CellDataItem(object):
         if isinstance(value, six.string_types):
             self._value_format = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'cell': prep(self._cell),
-            'columnId': prep(self._column_id),
-            'label': prep(self._label),
-            'labelFormat': prep(self._label_format),
-            'objectValue': prep(self._object_value),
-            'order': prep(self._order),
-            'valueFormat': prep(self._value_format)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

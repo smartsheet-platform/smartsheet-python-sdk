@@ -17,10 +17,12 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-from .duration import Duration
 import six
 import json
+
+from .duration import Duration
+from ..util import serialize
+from ..util import deserialize
 
 
 class Predecessor(object):
@@ -47,25 +49,8 @@ class Predecessor(object):
         self._type = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'inCriticalPath' in props:
-                self.in_critical_path = props['inCriticalPath']
-            if 'in_critical_path' in props:
-                self.in_critical_path = props['in_critical_path']
-            if 'invalid' in props:
-                self.invalid = props['invalid']
-            if 'lag' in props:
-                self.lag = props['lag']
-            if 'rowId' in props:
-                self.row_id = props['rowId']
-            if 'row_id' in props:
-                self.row_id = props['row_id']
-            if 'rowNumber' in props:
-                self.row_number = props['rowNumber']
-            if 'row_number' in props:
-                self.row_number = props['row_number']
-            if 'type' in props:
-                self.type = props['type']
+            deserialize(self, props)
+
         self.__initialized = True
 
     @property
@@ -122,18 +107,11 @@ class Predecessor(object):
         if isinstance(value, six.string_types):
             self._type = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'inCriticalPath': prep(self._in_critical_path),
-            'invalid': prep(self._invalid),
-            'lag': prep(self._lag),
-            'rowId': prep(self._row_id),
-            'rowNumber': prep(self._row_number),
-            'type': prep(self._type)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

@@ -17,12 +17,14 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
+import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 from ..types import TypedList
 from datetime import date
 from dateutil.parser import parse
-import six
-import json
 
 
 class ProjectSettings(object):
@@ -39,19 +41,8 @@ class ProjectSettings(object):
         self._working_days = TypedList(six.string_types)
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'lengthOfDay' in props:
-                self.length_of_day = props['lengthOfDay']
-            if 'length_of_day' in props:
-                self.length_of_day = props['length_of_day']
-            if 'nonWorkingDays' in props:
-                self.non_working_days = props['nonWorkingDays']
-            if 'non_working_days' in props:
-                self.non_working_days = props['non_working_days']
-            if 'workingDays' in props:
-                self.working_days = props['workingDays']
-            if 'working_days' in props:
-                self.working_days = props['working_days']
+            deserialize(self, props)
+
         self.__initialized = True
 
     @property
@@ -106,15 +97,11 @@ class ProjectSettings(object):
             self._working_days.purge()
             self._working_days.append(value)
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'lengthOfDay': prep(self._length_of_day),
-            'nonWorkingDays': prep(self._non_working_days),
-            'workingDays': prep(self._working_days)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

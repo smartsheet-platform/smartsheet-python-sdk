@@ -17,11 +17,13 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-from ..types import TypedList
-from .image_url import ImageUrl
-import json
 import six
+import json
+
+from .image_url import ImageUrl
+from ..util import serialize
+from ..util import deserialize
+from ..types import TypedList
 
 
 class ImageUrlMap(object):
@@ -38,15 +40,8 @@ class ImageUrlMap(object):
         self._url_expires_in_millis = 0
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'imageUrls' in props:
-                self.image_urls = props['imageUrls']
-            if 'image_urls' in props:
-                self.image_urls = props['image_urls']
-            if 'urlExpiresInMillis' in props:
-                self.url_expires_in_millis = props['urlExpiresInMillis']
-            if 'url_expires_in_millis' in props:
-                self.url_expires_in_millis = props['url_expires_in_millis']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
@@ -79,14 +74,11 @@ class ImageUrlMap(object):
         if isinstance(value, six.integer_types):
             self._url_expires_in_millis = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'imageUrls': prep(self._image_urls),
-            'urlExpiresInMillis': prep(self._url_expires_in_millis)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

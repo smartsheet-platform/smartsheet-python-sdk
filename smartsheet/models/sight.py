@@ -17,13 +17,15 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
-from ..util import prep
-from .widget import Widget
-from datetime import datetime
-from dateutil.parser import parse
 import six
 import json
+
+from .widget import Widget
+from ..types import TypedList
+from ..util import serialize
+from ..util import deserialize
+from datetime import datetime
+from dateutil.parser import parse
 
 
 class Sight(object):
@@ -46,7 +48,7 @@ class Sight(object):
         self._column_count = None
         self._created_at = None
         self._favorite = None
-        self.__id = None
+        self._id_ = None
         self._modified_at = None
         self._name = None
         self._permalink = None
@@ -54,46 +56,23 @@ class Sight(object):
         self._workspace = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'accessLevel' in props:
-                self.access_level = props['accessLevel']
-            if 'access_level' in props:
-                self.access_level = props['access_level']
-            if 'columnCount' in props:
-                self.column_count = props['columnCount']
-            if 'column_count' in props:
-                self.column_count = props['column_count']
-            if 'createdAt' in props:
-                self.created_at = props['createdAt']
-            if 'created_at' in props:
-                self.created_at = props['created_at']
-            if 'favorite' in props:
-                self.favorite = props['favorite']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'modifiedAt' in props:
-                self.modified_at = props['modifiedAt']
-            if 'modified_at' in props:
-                self.modified_at = props['modified_at']
-            if 'name' in props:
-                self.name = props['name']
-            if 'permalink' in props:
-                self.permalink = props['permalink']
-            if 'widgets' in props:
-                self.widgets = props['widgets']
-            if 'workspace' in props:
-                self.workspace = props['workspace']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def access_level(self):
@@ -141,13 +120,13 @@ class Sight(object):
             self._favorite = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def modified_at(self):
@@ -211,22 +190,11 @@ class Sight(object):
         elif isinstance(value, dict):
             self._workspace = Workspace(value, self._base)
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'accessLevel': prep(self._access_level),
-            'columnCount': prep(self._column_count),
-            'createdAt': prep(self._created_at),
-            'favorite': prep(self._favorite),
-            'id': prep(self.__id),
-            'modifiedA_at': prep(self._modified_at),
-            'name': prep(self._name),
-            'permalink': prep(self._permalink),
-            'widgets': prep(self._widgets),
-            'workspace': prep(self._workspace)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

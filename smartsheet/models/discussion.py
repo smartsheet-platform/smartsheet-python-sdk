@@ -17,15 +17,17 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .attachment import Attachment
 from .comment import Comment
 from .user import User
 from ..types import TypedList
-from ..util import prep
+from ..util import serialize
+from ..util import deserialize
 from datetime import datetime
 from dateutil.parser import parse
-import json
-import six
 
 
 class Discussion(object):
@@ -52,7 +54,7 @@ class Discussion(object):
         self._comment_count = None
         self._comments = TypedList(Comment)
         self._created_by = None
-        self.__id = None
+        self._id_ = None
         self._last_commented_at = None
         self._last_commented_user = None
         self._parent_id = None
@@ -61,68 +63,23 @@ class Discussion(object):
         self._title = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'accessLevel' in props:
-                self.access_level = props['accessLevel']
-            if 'access_level' in props:
-                self.access_level = props['access_level']
-            if 'comment' in props:
-                self.comment = props['comment']
-            if 'commentAttachments' in props:
-                self.comment_attachments = props[
-                    'commentAttachments']
-            if 'comment_attachments' in props:
-                self.comment_attachments = props[
-                    'comment_attachments']
-            if 'commentCount' in props:
-                self.comment_count = props['commentCount']
-            if 'comment_count' in props:
-                self.comment_count = props['comment_count']
-            if 'comments' in props:
-                self.comments = props['comments']
-            if 'createdBy' in props:
-                self.created_by = props['createdBy']
-            if 'created_by' in props:
-                self.created_by = props['created_by']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'lastCommentedAt' in props:
-                self.last_commented_at = props[
-                    'lastCommentedAt']
-            if 'last_commented_at' in props:
-                self.last_commented_at = props[
-                    'last_commented_at']
-            if 'lastCommentedUser' in props:
-                self.last_commented_user = props[
-                    'lastCommentedUser']
-            if 'last_commented_user' in props:
-                self.last_commented_user = props[
-                    'last_commented_user']
-            if 'parentId' in props:
-                self.parent_id = props['parentId']
-            if 'parent_id' in props:
-                self.parent_id = props['parent_id']
-            if 'parentType' in props:
-                self.parent_type = props['parentType']
-            if 'parent_type' in props:
-                self.parent_type = props['parent_type']
-            if 'readOnly' in props:
-                self.read_only = props['readOnly']
-            if 'read_only' in props:
-                self.read_only = props['read_only']
-            if 'title' in props:
-                self.title = props['title']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def access_level(self):
@@ -208,13 +165,13 @@ class Discussion(object):
             self._created_by = User(value, self._base)
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def last_commented_at(self):
@@ -276,25 +233,11 @@ class Discussion(object):
         if isinstance(value, six.string_types):
             self._title = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'accessLevel': prep(self._access_level),
-            'comment': prep(self._comment),
-            'commentAttachments': prep(self._comment_attachments),
-            'commentCount':prep(self._comment_count),
-            'comments': prep(self._comments),
-            'createdBy': prep(self._created_by),
-            'id': prep(self.__id),
-            'lastCommentedAt': prep(self._last_commented_at),
-            'lastCommentedUser': prep(self._last_commented_user),
-            'parentId': prep(self._parent_id),
-            'parentType': prep(self._parent_type),
-            'readOnly': prep(self._read_only),
-            'title': prep(self._title)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

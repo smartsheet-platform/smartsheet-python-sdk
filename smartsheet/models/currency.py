@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class Currency(object):
@@ -63,10 +65,7 @@ class Currency(object):
         self._symbol = None
 
         if props:
-            if 'code' in props:
-                self.code = props['code']
-            if 'symbol' in props:
-                self.symbol = props['symbol']
+            deserialize(self, props)
 
     @property
     def code(self):
@@ -91,14 +90,11 @@ class Currency(object):
         if isinstance(value, six.string_types):
             self._symbol = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'code': prep(self._code),
-            'symbol': prep(self._symbol)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

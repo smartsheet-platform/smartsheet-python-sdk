@@ -17,15 +17,17 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .folder import Folder
 from .report import Report
 from .sheet import Sheet
 from .sight import Sight
 from .template import Template
 from ..types import TypedList
-from ..util import prep
-import json
-import six
+from ..util import serialize
+from ..util import deserialize
 
 
 class Workspace(object):
@@ -49,7 +51,7 @@ class Workspace(object):
         self._access_level = None
         self._favorite = None
         self._folders = TypedList(Folder)
-        self.__id = None
+        self._id_ = None
         self._name = None
         self._permalink = None
         self._reports = TypedList(Report)
@@ -58,40 +60,23 @@ class Workspace(object):
         self._templates = TypedList(Template)
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'accessLevel' in props:
-                self.access_level = props['accessLevel']
-            if 'access_level' in props:
-                self.access_level = props['access_level']
-            if 'favorite' in props:
-                self.favorite = props['favorite']
-            if 'folders' in props:
-                self.folders = props['folders']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'name' in props:
-                self.name = props['name']
-            if 'permalink' in props:
-                self.permalink = props['permalink']
-            if 'reports' in props:
-                self.reports = props['reports']
-            if 'sheets' in props:
-                self.sheets = props['sheets']
-            if 'sights' in props:
-                self.sights = props['sights']
-            if 'templates' in props:
-                self.templates = props['templates']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def access_level(self):
@@ -136,13 +121,13 @@ class Workspace(object):
             self._folders.append(value)
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def name(self):
@@ -238,37 +223,11 @@ class Workspace(object):
             self._templates.purge()
             self._templates.append(value)
 
-    def to_dict(self, op_id=None, method=None):
-        req_filter = self.pre_request_filter
-        if req_filter:
-            if self.folders is not None:
-                for item in self.folders:
-                    item.pre_request_filter = req_filter
-            if self.reports is not None:
-                for item in self.reports:
-                    item.pre_request_filter = req_filter
-            if self.sheets is not None:
-                for item in self.sheets:
-                    item.pre_request_filter = req_filter
-            if self.templates is not None:
-                for item in self.templates:
-                    item.pre_request_filter = req_filter
-
-        obj = {
-            'accessLevel': prep(self._access_level),
-            'favorite': prep(self._favorite),
-            'folders': prep(self._folders),
-            'id': prep(self.__id),
-            'name': prep(self._name),
-            'permalink': prep(self._permalink),
-            'reports': prep(self._reports),
-            'sheets': prep(self._sheets),
-            'sights': prep(self._sights),
-            'templates': prep(self._templates)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

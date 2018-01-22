@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class ContainerDestination(object):
@@ -43,20 +45,7 @@ class ContainerDestination(object):
         self._new_name = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'destinationId' in props:
-                self.destination_id = props['destinationId']
-            if 'destination_id' in props:
-                self.destination_id = props['destination_id']
-            if 'destinationType' in props:
-                self.destination_type = props['destinationType']
-            if 'destination_type' in props:
-                self.destination_type = props[
-                    'destination_type']
-            if 'newName' in props:
-                self.new_name = props['newName']
-            if 'new_name' in props:
-                self.new_name = props['new_name']
+            deserialize(self, props)
 
     @property
     def destination_id(self):
@@ -90,15 +79,11 @@ class ContainerDestination(object):
         if isinstance(value, six.string_types):
             self._new_name = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'destinationId': prep(self._destination_id),
-            'destinationType': prep(self._destination_type),
-            'newName': prep(self._new_name)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

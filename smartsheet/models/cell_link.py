@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class CellLink(object):
@@ -50,25 +52,7 @@ class CellLink(object):
         self._status = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'columnId' in props:
-                self.column_id = props['columnId']
-            if 'column_id' in props:
-                self.column_id = props['column_id']
-            if 'rowId' in props:
-                self.row_id = props['rowId']
-            if 'row_id' in props:
-                self.row_id = props['row_id']
-            if 'sheetId' in props:
-                self.sheet_id = props['sheetId']
-            if 'sheet_id' in props:
-                self.sheet_id = props['sheet_id']
-            if 'sheetName' in props:
-                self.sheet_name = props['sheetName']
-            if 'sheet_name' in props:
-                self.sheet_name = props['sheet_name']
-            if 'status' in props:
-                self.status = props['status']
+            deserialize(self, props)
 
     @property
     def column_id(self):
@@ -120,17 +104,11 @@ class CellLink(object):
                          value, self.allowed_values['status']))
             self._status = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'columnId': prep(self._column_id),
-            'rowId': prep(self._row_id),
-            'sheetId': prep(self._sheet_id),
-            'sheetName': prep(self._sheet_name),
-            'status': prep(self._status)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

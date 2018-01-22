@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class AlternateEmail(object):
@@ -32,28 +34,28 @@ class AlternateEmail(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._confirmed = False
+        self._confirmed = None
         self._email = None
-        self.__id = None
+        self._id_ = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'confirmed' in props:
-                self.confirmed = props['confirmed']
-            if 'email' in props:
-                self.email = props['email']
-            # read only
-            if 'id' in props:
-                self._id = props['id']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def confirmed(self):
@@ -74,23 +76,19 @@ class AlternateEmail(object):
             self._email = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'confirmed': prep(self._confirmed),
-            'email': prep(self._email),
-            'id': prep(self.__id)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

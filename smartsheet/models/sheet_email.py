@@ -17,13 +17,15 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .email import Email
 from .format_details import FormatDetails
 from .recipient import Recipient
 from ..types import TypedList
-from ..util import prep
-import json
-import six
+from ..util import serialize
+from ..util import deserialize
 
 
 class SheetEmail(Email):
@@ -51,34 +53,21 @@ class SheetEmail(Email):
         self._subject = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'ccMe' in props:
-                self.cc_me = props['ccMe']
-            if 'cc_me' in props:
-                self.cc_me = props['cc_me']
-            if 'format' in props:
-                self._format = props['format']
-            if '_format' in props:
-                self._format = props['_format']
-            if 'formatDetails' in props:
-                self.format_details = props['formatDetails']
-            if 'format_details' in props:
-                self.format_details = props['format_details']
-            if 'message' in props:
-                self.message = props['message']
-            if 'sendTo' in props:
-                self.send_to = props['sendTo']
-            if 'send_to' in props:
-                self.send_to = props['send_to']
-            if 'subject' in props:
-                self.subject = props['subject']
+            deserialize(self, props)
+
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'format':
-            return self._format
+            return self.format_
         else:
             raise AttributeError(key)
+        
+    def __setattr__(self, key, value):
+        if key == 'format':
+            self.format_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def cc_me(self):
@@ -90,11 +79,11 @@ class SheetEmail(Email):
             self._cc_me = value
 
     @property
-    def _format(self):
+    def format_(self):
         return self.__format
 
-    @_format.setter
-    def _format(self, value):
+    @format_.setter
+    def format_(self, value):
         if isinstance(value, six.string_types):
             if value not in self.allowed_values['_format']:
                 raise ValueError(
@@ -151,21 +140,11 @@ class SheetEmail(Email):
         if isinstance(value, six.string_types):
             self._subject = value
 
-    def to_dict(self, op_id=None, method=None):
-        parent_obj = super(SheetEmail, self).to_dict(op_id, method)
-        obj = {
-            'ccMe': prep(self._cc_me),
-            'message': prep(self._message),
-            'format': prep(self.__format),
-            'formatDetails': prep(self._format_details),
-            'sendTo': prep(self._send_to),
-            'subject': prep(self._subject)}
-        combo = parent_obj.copy()
-        combo.update(obj)
-        return combo
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

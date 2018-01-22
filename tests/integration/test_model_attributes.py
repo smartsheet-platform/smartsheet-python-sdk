@@ -21,8 +21,8 @@ class TestModelAttributes:
         # discussions, discussions
         # expanded, expanded
         # filtered_out, filteredOut
-        # _format, format
-        # _id, id
+        # format, format
+        # id, id
         # in_critical_path, inCriticalPath
         # locked, locked
         # locked_for_user, lockedForUser
@@ -69,8 +69,8 @@ class TestModelAttributes:
         assert isinstance(model.discussions[0], smart.models.Discussion)
         assert model.expanded == True
         assert model.filtered_out == True
-        assert model._format == 'foo'
-        assert model._id == 19082
+        assert model.format == 'foo'
+        assert model.id == 19082
         assert model.in_critical_path == True
         assert model.locked == True
         assert model.locked_for_user == True
@@ -103,8 +103,8 @@ class TestModelAttributes:
             'version': 19082,
             'access_level': 'VIEWER',
             'conditional_format': 'foo',
-            '_format': 'foo',
-            '_id': 19082,
+            'format': 'foo',
+            'id': 19082,
             'in_critical_path': True,
             'parent_id': 19082,
             'sibling_id': 19082,
@@ -121,8 +121,8 @@ class TestModelAttributes:
         assert isinstance(model.discussions[0], smart.models.Discussion)
         assert model.expanded == True
         assert model.filtered_out == True
-        assert model._format == 'foo'
-        assert model._id == 19082
+        assert model.format == 'foo'
+        assert model.id == 19082
         assert model.in_critical_path == True
         assert model.locked == True
         assert model.locked_for_user == True
@@ -164,7 +164,7 @@ class TestModelAttributes:
         # column_type, columnType
         # conditional_format, conditionalFormat
         # display_value, displayValue
-        # _format, format
+        # format, format
         # formula, formula
         # hyperlink, hyperlink
         # link_in_from_cell, linkInFromCell
@@ -189,7 +189,7 @@ class TestModelAttributes:
         assert model.column_type == 'foo'
         assert model.conditional_format == 'foo'
         assert model.display_value == 'foo'
-        assert model._format == 'foo'
+        assert model.format == 'foo'
         assert model.formula == 'foo'
         assert isinstance(model.hyperlink, smart.models.Hyperlink)
         assert isinstance(model.link_in_from_cell, smart.models.CellLink)
@@ -216,7 +216,7 @@ class TestModelAttributes:
             'strict': True,
             'value': 'foo',
             'column_id': 19082,
-            '_format': 'foo',
+            'format': 'foo',
             'link_in_from_cell': smart.models.CellLink(),
             'links_out_to_cells': smart.models.CellLink()
         })
@@ -225,7 +225,7 @@ class TestModelAttributes:
         assert model.column_type == 'foo'
         assert model.conditional_format == 'foo'
         assert model.display_value == 'foo'
-        assert model._format == 'foo'
+        assert model.format == 'foo'
         assert model.formula == 'foo'
         assert isinstance(model.hyperlink, smart.models.Hyperlink)
         assert isinstance(model.link_in_from_cell, smart.models.CellLink)
@@ -262,7 +262,7 @@ class TestModelAttributes:
         assert model.email == 'foo'
         assert model.first_name == 'foo'
         assert model.group_admin == True
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.last_name == 'foo'
         assert model.licensed_sheet_creator == True
         assert model.name == 'foo'
@@ -280,7 +280,7 @@ class TestModelAttributes:
             'status': 'ACTIVE',
             'first_name': 'foo',
             'group_admin': True,
-            '_id': 19082,
+            'id': 19082,
             'last_name': 'foo',
             'licensed_sheet_creator': True,
             'resource_viewer': True
@@ -290,7 +290,7 @@ class TestModelAttributes:
         assert model.email == 'foo'
         assert model.first_name == 'foo'
         assert model.group_admin == True
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.last_name == 'foo'
         assert model.licensed_sheet_creator == True
         assert model.name == 'foo'
@@ -317,7 +317,7 @@ class TestModelAttributes:
         })
 
         assert model.description == 'foo'
-        assert model._id == 19082
+        assert model.id == 19082
         assert isinstance(model.members[0], smart.models.GroupMember)
         assert model.name == 'foo'
         assert model.owner == 'foo'
@@ -337,7 +337,7 @@ class TestModelAttributes:
         })
 
         assert model.description == 'foo'
-        assert model._id == 19082
+        assert model.id == 19082
         assert isinstance(model.members[0], smart.models.GroupMember)
         assert model.name == 'foo'
         assert model.owner == 'foo'
@@ -411,7 +411,7 @@ class TestModelAttributes:
         # favorite, favorite
         # from_id, fromId
         # gantt_enabled, ganttEnabled
-        # _id, id
+        # id, id
         # modified_at, modifiedAt
         # name, name
         # owner, owner
@@ -459,7 +459,7 @@ class TestModelAttributes:
         assert model.favorite == True
         assert model.from_id == 19082
         assert model.gantt_enabled == True
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.name == 'foo'
         assert model.owner == 'foo'
         assert model.owner_id == 19082
@@ -503,7 +503,7 @@ class TestModelAttributes:
             'effective_attachment_options': ['foo'],
             'from_id': 19082,
             'gantt_enabled': True,
-            '_id': 19082,
+            'id': 19082,
             'owner_id': 19082,
             'read_only': True,
             'resource_management_enabled': True,
@@ -521,7 +521,7 @@ class TestModelAttributes:
         assert model.favorite == True
         assert model.from_id == 19082
         assert model.gantt_enabled == True
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.name == 'foo'
         assert model.owner == 'foo'
         assert model.owner_id == 19082
@@ -541,11 +541,11 @@ class TestModelAttributes:
         # cc_me, ccMe
         # email, email
         # group_id, groupId
-        # _id, id
+        # id, id
         # message, message
         # name, name
         # subject, subject
-        # _type, type
+        # type, type
         # user_id, userId
         model = smart.models.Share({
             'accessLevel': 'VIEWER',
@@ -564,11 +564,11 @@ class TestModelAttributes:
         assert model.cc_me == True
         assert model.email == 'foo'
         assert model.group_id == 19082
-        assert model._id == 'foo'
+        assert model.id == 'foo'
         assert model.message == 'foo'
         assert model.name == 'foo'
         assert model.subject == 'foo'
-        assert model._type == 'USER'
+        assert model.type == 'USER'
         assert model.user_id == 19082
         as_dict = model.to_dict()
         assert isinstance(as_dict, dict)
@@ -583,8 +583,8 @@ class TestModelAttributes:
             'access_level': 'VIEWER',
             'cc_me': True,
             'group_id': 19082,
-            '_id': 'foo',
-            '_type': 'USER',
+            'id': 'foo',
+            'type': 'USER',
             'user_id': 19082
         })
 
@@ -592,24 +592,24 @@ class TestModelAttributes:
         assert model.cc_me == True
         assert model.email == 'foo'
         assert model.group_id == 19082
-        assert model._id == 'foo'
+        assert model.id == 'foo'
         assert model.message == 'foo'
         assert model.name == 'foo'
         assert model.subject == 'foo'
-        assert model._type == 'USER'
+        assert model.type == 'USER'
         assert model.user_id == 19082
 
     def test_source(self, smart_setup):
         smart = smart_setup['smart']
-        # _id, id
-        # _type, type
+        # id, id
+        # type, type
         model = smart.models.Source({
             'id': 19082,
             'type': 'sheet'
         })
 
-        assert model._id == 19082
-        assert model._type == 'sheet'
+        assert model.id == 19082
+        assert model.type == 'sheet'
         as_dict = model.to_dict()
         assert isinstance(as_dict, dict)
 
@@ -620,8 +620,8 @@ class TestModelAttributes:
             'type': 'sheet'
         })
 
-        assert model._id == 19082
-        assert model._type == 'sheet'
+        assert model.id == 19082
+        assert model.type == 'sheet'
 
     def test_report(self, smart_setup):
         smart = smart_setup['smart']
@@ -633,7 +633,7 @@ class TestModelAttributes:
         # dependencies_enabled, dependenciesEnabled
         # discussions, discussions
         # version, version
-        # _id, id
+        # id, id
         # gantt_enabled, ganttEnabled
         # show_parent_rows_for_filters, showParentRowsForFilters
         # created_at, createdAt
@@ -683,7 +683,7 @@ class TestModelAttributes:
         assert model.dependencies_enabled == True
         assert isinstance(model.discussions[0], smart.models.Discussion)
         assert model.version == 19082
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.gantt_enabled == True
         assert model.show_parent_rows_for_filters == True
         assert model.name == 'foo'
@@ -729,7 +729,7 @@ class TestModelAttributes:
             'from_id': 19082,
             'owner_id': 19082,
             'dependencies_enabled': True,
-            '_id': 19082,
+            'id': 19082,
             'gantt_enabled': True,
             'show_parent_rows_for_filters': True,
             'total_row_count': 19082,
@@ -747,7 +747,7 @@ class TestModelAttributes:
         assert model.dependencies_enabled == True
         assert isinstance(model.discussions[0], smart.models.Discussion)
         assert model.version == 19082
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.gantt_enabled == True
         assert model.show_parent_rows_for_filters == True
         assert model.name == 'foo'
@@ -768,7 +768,7 @@ class TestModelAttributes:
         smart = smart_setup['smart']
         # criteria, criteria
         # exclude_selected, excludeSelected
-        # _type, type
+        # type, type
         # values, values
         model = smart.models.Filter({
             'criteria': smart.models.Criteria(),
@@ -779,7 +779,7 @@ class TestModelAttributes:
 
         assert isinstance(model.criteria[0], smart.models.Criteria)
         assert model.exclude_selected == True
-        assert model._type == 'LIST'
+        assert model.type == 'LIST'
         assert model.values[0] == 'foo'
         model.values = 'foo'
         assert model.values[0] == 'foo'
@@ -796,19 +796,19 @@ class TestModelAttributes:
             'criteria': smart.models.Criteria(),
             'values': ['foo'],
             'exclude_selected': True,
-            '_type': 'LIST'
+            'type': 'LIST'
         })
 
         assert isinstance(model.criteria[0], smart.models.Criteria)
         assert model.exclude_selected == True
-        assert model._type == 'LIST'
+        assert model.type == 'LIST'
         assert model.values[0] == 'foo'
 
     def test_folder(self, smart_setup):
         smart = smart_setup['smart']
         # favorite, favorite
         # folders, folders
-        # _id, id
+        # id, id
         # name, name
         # permalink, permalink
         # reports, reports
@@ -827,7 +827,7 @@ class TestModelAttributes:
 
         assert model.favorite == True
         assert isinstance(model.folders[0], smart.models.Folder)
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.name == 'foo'
         assert model.permalink == 'foo'
         assert isinstance(model.reports[0], smart.models.Report)
@@ -846,12 +846,12 @@ class TestModelAttributes:
             'reports': smart.models.Report(),
             'sheets': smart.models.Sheet(),
             'templates': smart.models.Template(),
-            '_id': 19082
+            'id': 19082
         })
 
         assert model.favorite == True
         assert isinstance(model.folders[0], smart.models.Folder)
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.name == 'foo'
         assert model.permalink == 'foo'
         assert isinstance(model.reports[0], smart.models.Report)
@@ -861,9 +861,9 @@ class TestModelAttributes:
     def test_column(self, smart_setup):
         smart = smart_setup['smart']
         # auto_number_format, autoNumberFormat
-        # _format, format
+        # format, format
         # hidden, hidden
-        # _id, id
+        # id, id
         # index, index
         # locked, locked
         # locked_for_user, lockedForUser
@@ -873,7 +873,7 @@ class TestModelAttributes:
         # system_column_type, systemColumnType
         # tags, tags
         # title, title
-        # _type, type
+        # type, type
         # width, width
         model = smart.models.Column({
             'autoNumberFormat': smart.models.AutoNumberFormat(),
@@ -894,9 +894,9 @@ class TestModelAttributes:
         })
 
         assert isinstance(model.auto_number_format, smart.models.AutoNumberFormat)
-        assert model._format == 'foo'
+        assert model.format == 'foo'
         assert model.hidden == True
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.index == 19082
         assert model.locked == True
         assert model.locked_for_user == True
@@ -906,7 +906,7 @@ class TestModelAttributes:
         assert model.system_column_type == 'AUTO_NUMBER'
         assert model.tags[0] == 'foo'
         assert model.title == 'foo'
-        assert model._type == 'TEXT_NUMBER'
+        assert model.type == 'TEXT_NUMBER'
         assert model.width == 19082
         model.autoNumberFormat = {}
         assert isinstance(model.auto_number_format, smart.models.AutoNumberFormat)
@@ -938,17 +938,17 @@ class TestModelAttributes:
             'title': 'foo',
             'width': 19082,
             'auto_number_format': smart.models.AutoNumberFormat(),
-            '_format': 'foo',
-            '_id': 19082,
+            'format': 'foo',
+            'id': 19082,
             'locked_for_user': True,
             'system_column_type': 'AUTO_NUMBER',
-            '_type': 'TEXT_NUMBER'
+            'type': 'TEXT_NUMBER'
         })
 
         assert isinstance(model.auto_number_format, smart.models.AutoNumberFormat)
-        assert model._format == 'foo'
+        assert model.format == 'foo'
         assert model.hidden == True
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.index == 19082
         assert model.locked == True
         assert model.locked_for_user == True
@@ -958,7 +958,7 @@ class TestModelAttributes:
         assert model.system_column_type == 'AUTO_NUMBER'
         assert model.tags[0] == 'foo'
         assert model.title == 'foo'
-        assert model._type == 'TEXT_NUMBER'
+        assert model.type == 'TEXT_NUMBER'
         assert model.width == 19082
 
     def test_result(self, smart_setup):
@@ -994,7 +994,7 @@ class TestModelAttributes:
     def test_contact(self, smart_setup):
         smart = smart_setup['smart']
         # email, email
-        # _id, id
+        # id, id
         # name, name
         model = smart.models.Contact({
             'email': 'foo',
@@ -1003,7 +1003,7 @@ class TestModelAttributes:
         })
 
         assert model.email == 'foo'
-        assert model._id == 'foo'
+        assert model.id == 'foo'
         assert model.name == 'foo'
         as_dict = model.to_dict()
         assert isinstance(as_dict, dict)
@@ -1013,11 +1013,11 @@ class TestModelAttributes:
         model = smart.models.Contact({
             'email': 'foo',
             'name': 'foo',
-            '_id': 'foo'
+            'id': 'foo'
         })
 
         assert model.email == 'foo'
-        assert model._id == 'foo'
+        assert model.id == 'foo'
         assert model.name == 'foo'
 
     def test_comment(self, smart_setup):
@@ -1026,7 +1026,7 @@ class TestModelAttributes:
         # created_at, createdAt
         # created_by, createdBy
         # discussion_id, discussionId
-        # _id, id
+        # id, id
         # modified_at, modifiedAt
         # text, text
         model = smart.models.Comment({
@@ -1040,7 +1040,7 @@ class TestModelAttributes:
         assert isinstance(model.attachments[0], smart.models.Attachment)
         assert isinstance(model.created_by, smart.models.User)
         assert model.discussion_id == 19082
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.text == 'foo'
         model.createdBy = {}
         assert isinstance(model.created_by, smart.models.User)
@@ -1054,25 +1054,25 @@ class TestModelAttributes:
             'text': 'foo',
             'created_by': smart.models.User(),
             'discussion_id': 19082,
-            '_id': 19082
+            'id': 19082
         })
 
         assert isinstance(model.attachments[0], smart.models.Attachment)
         assert isinstance(model.created_by, smart.models.User)
         assert model.discussion_id == 19082
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.text == 'foo'
 
     def test_account(self, smart_setup):
         smart = smart_setup['smart']
-        # _id, id
+        # id, id
         # name, name
         model = smart.models.Account({
             'id': 19082,
             'name': 'foo'
         })
 
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.name == 'foo'
         as_dict = model.to_dict()
         assert isinstance(as_dict, dict)
@@ -1081,10 +1081,10 @@ class TestModelAttributes:
         smart = smart_setup['smart']
         model = smart.models.Account({
             'name': 'foo',
-            '_id': 19082
+            'id': 19082
         })
 
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.name == 'foo'
 
     def test_version(self, smart_setup):
@@ -1141,7 +1141,7 @@ class TestModelAttributes:
         smart = smart_setup['smart']
         # access_level, accessLevel
         # description, description
-        # _id, id
+        # id, id
         # name, name
         model = smart.models.Template({
             'accessLevel': 'VIEWER',
@@ -1152,7 +1152,7 @@ class TestModelAttributes:
 
         assert model.access_level == 'VIEWER'
         assert model.description == 'foo'
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.name == 'foo'
         as_dict = model.to_dict()
         assert isinstance(as_dict, dict)
@@ -1163,12 +1163,12 @@ class TestModelAttributes:
             'description': 'foo',
             'name': 'foo',
             'access_level': 'VIEWER',
-            '_id': 19082
+            'id': 19082
         })
 
         assert model.access_level == 'VIEWER'
         assert model.description == 'foo'
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.name == 'foo'
 
     def test_row_email(self, smart_setup):
@@ -1260,14 +1260,14 @@ class TestModelAttributes:
     def test_favorite(self, smart_setup):
         smart = smart_setup['smart']
         # object_id, objectId
-        # _type, type
+        # type, type
         model = smart.models.Favorite({
             'objectId': 19082,
             'type': 'workspace'
         })
 
         assert model.object_id == 19082
-        assert model._type == 'workspace'
+        assert model.type == 'workspace'
         as_dict = model.to_dict()
         assert isinstance(as_dict, dict)
 
@@ -1275,11 +1275,11 @@ class TestModelAttributes:
         smart = smart_setup['smart']
         model = smart.models.Favorite({
             'object_id': 19082,
-            '_type': 'workspace'
+            'type': 'workspace'
         })
 
         assert model.object_id == 19082
-        assert model._type == 'workspace'
+        assert model.type == 'workspace'
 
     def test_hyperlink(self, smart_setup):
         smart = smart_setup['smart']
@@ -1339,7 +1339,7 @@ class TestModelAttributes:
         # access_level, accessLevel
         # favorite, favorite
         # folders, folders
-        # _id, id
+        # id, id
         # name, name
         # permalink, permalink
         # reports, reports
@@ -1360,7 +1360,7 @@ class TestModelAttributes:
         assert model.access_level == 'VIEWER'
         assert model.favorite == True
         assert isinstance(model.folders[0], smart.models.Folder)
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.name == 'foo'
         assert model.permalink == 'foo'
         assert isinstance(model.reports[0], smart.models.Report)
@@ -1380,13 +1380,13 @@ class TestModelAttributes:
             'sheets': smart.models.Sheet(),
             'templates': smart.models.Template(),
             'access_level': 'VIEWER',
-            '_id': 19082
+            'id': 19082
         })
 
         assert model.access_level == 'VIEWER'
         assert model.favorite == True
         assert isinstance(model.folders[0], smart.models.Folder)
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.name == 'foo'
         assert model.permalink == 'foo'
         assert isinstance(model.reports[0], smart.models.Report)
@@ -1401,12 +1401,12 @@ class TestModelAttributes:
         # modified_at, modifiedAt
         # columns, columns
         # row_number, rowNumber
-        # _format, format
+        # format, format
         # expanded, expanded
         # access_level, accessLevel
         # version, version
         # discussions, discussions
-        # _id, id
+        # id, id
         # parent_id, parentId
         # sheet_id, sheetId
         # to_top, toTop
@@ -1449,12 +1449,12 @@ class TestModelAttributes:
         assert model.sibling_id == 19082
         assert isinstance(model.columns[0], smart.models.Column)
         assert model.row_number == 19082
-        assert model._format == 'foo'
+        assert model.format == 'foo'
         assert model.expanded == True
         assert model.access_level == 'VIEWER'
         assert model.version == 19082
         assert isinstance(model.discussions[0], smart.models.Discussion)
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.parent_id == 19082
         assert model.sheet_id == 19082
         assert model.to_top == True
@@ -1486,9 +1486,9 @@ class TestModelAttributes:
             'attachments': smart.models.Attachment(),
             'in_critical_path': True,
             'sibling_id': 19082,
-            '_format': 'foo',
+            'format': 'foo',
             'access_level': 'VIEWER',
-            '_id': 19082,
+            'id': 19082,
             'parent_id': 19082,
             'sheet_id': 19082,
             'to_top': True,
@@ -1501,12 +1501,12 @@ class TestModelAttributes:
         assert model.sibling_id == 19082
         assert isinstance(model.columns[0], smart.models.Column)
         assert model.row_number == 19082
-        assert model._format == 'foo'
+        assert model.format == 'foo'
         assert model.expanded == True
         assert model.access_level == 'VIEWER'
         assert model.version == 19082
         assert isinstance(model.discussions[0], smart.models.Discussion)
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.parent_id == 19082
         assert model.sheet_id == 19082
         assert model.to_top == True
@@ -1580,7 +1580,7 @@ class TestModelAttributes:
         # conditional_format, conditionalFormat
         # value, value
         # column_id, columnId
-        # _format, format
+        # format, format
         # strict, strict
         # display_value, displayValue
         # links_out_to_cells, linksOutToCells
@@ -1607,7 +1607,7 @@ class TestModelAttributes:
         assert model.conditional_format == 'foo'
         assert model.value == 'foo'
         assert model.column_id == 19082
-        assert model._format == 'foo'
+        assert model.format == 'foo'
         assert model.strict == True
         assert model.display_value == 'foo'
         assert isinstance(model.links_out_to_cells[0], smart.models.CellLink)
@@ -1634,7 +1634,7 @@ class TestModelAttributes:
             'link_in_from_cell': smart.models.CellLink(),
             'virtual_column_id': 19082,
             'column_id': 19082,
-            '_format': 'foo',
+            'format': 'foo',
             'links_out_to_cells': smart.models.CellLink()
         })
 
@@ -1645,7 +1645,7 @@ class TestModelAttributes:
         assert model.conditional_format == 'foo'
         assert model.value == 'foo'
         assert model.column_id == 19082
-        assert model._format == 'foo'
+        assert model.format == 'foo'
         assert model.strict == True
         assert model.display_value == 'foo'
         assert isinstance(model.links_out_to_cells[0], smart.models.CellLink)
@@ -1653,14 +1653,14 @@ class TestModelAttributes:
 
     def test_row_mapping(self, smart_setup):
         smart = smart_setup['smart']
-        # _from, from
+        # from_, from
         # to, to
         model = smart.models.RowMapping({
             'from': 19082,
             'to': 19082
         })
 
-        assert model._from == 19082
+        assert model.from_ == 19082
         assert model.to == 19082
         as_dict = model.to_dict()
         assert isinstance(as_dict, dict)
@@ -1669,10 +1669,10 @@ class TestModelAttributes:
         smart = smart_setup['smart']
         model = smart.models.RowMapping({
             'to': 19082,
-            '_from': 19082
+            'from': 19082
         })
 
-        assert model._from == 19082
+        assert model.from_ == 19082
         assert model.to == 19082
 
     def test_o_auth_error(self, smart_setup):
@@ -1711,7 +1711,7 @@ class TestModelAttributes:
         # comment_attachments, commentAttachments
         # comments, comments
         # created_by, createdBy
-        # _id, id
+        # id, id
         # last_commented_at, lastCommentedAt
         # last_commented_user, lastCommentedUser
         # parent_id, parentId
@@ -1737,7 +1737,7 @@ class TestModelAttributes:
         assert isinstance(model.comment_attachments[0], smart.models.Attachment)
         assert isinstance(model.comments[0], smart.models.Comment)
         assert isinstance(model.created_by, smart.models.User)
-        assert model._id == 19082
+        assert model.id == 19082
         assert isinstance(model.last_commented_user, smart.models.User)
         assert model.parent_id == 19082
         assert model.parent_type == 'foo'
@@ -1761,7 +1761,7 @@ class TestModelAttributes:
             'access_level': 'VIEWER',
             'comment_attachments': smart.models.Attachment(),
             'created_by': smart.models.User(),
-            '_id': 19082,
+            'id': 19082,
             'last_commented_user': smart.models.User(),
             'parent_id': 19082,
             'parent_type': 'foo',
@@ -1773,7 +1773,7 @@ class TestModelAttributes:
         assert isinstance(model.comment_attachments[0], smart.models.Attachment)
         assert isinstance(model.comments[0], smart.models.Comment)
         assert isinstance(model.created_by, smart.models.User)
-        assert model._id == 19082
+        assert model.id == 19082
         assert isinstance(model.last_commented_user, smart.models.User)
         assert model.parent_id == 19082
         assert model.parent_type == 'foo'
@@ -1787,7 +1787,7 @@ class TestModelAttributes:
         # created_at, createdAt
         # created_by, createdBy
         # description, description
-        # _id, id
+        # id, id
         # mime_type, mimeType
         # name, name
         # parent_id, parentId
@@ -1814,7 +1814,7 @@ class TestModelAttributes:
         assert model.attachment_type == 'BOX_COM'
         assert isinstance(model.created_by, smart.models.User)
         assert model.description == 'foo'
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.mime_type == 'foo'
         assert model.name == 'foo'
         assert model.parent_id == 19082
@@ -1841,14 +1841,14 @@ class TestModelAttributes:
             'attachment_sub_type': 'DOCUMENT',
             'attachment_type': 'BOX_COM',
             'created_by': smart.models.User(),
-            '_id': 19082
+            'id': 19082
         })
 
         assert model.attachment_sub_type == 'DOCUMENT'
         assert model.attachment_type == 'BOX_COM'
         assert isinstance(model.created_by, smart.models.User)
         assert model.description == 'foo'
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.mime_type == 'foo'
         assert model.name == 'foo'
         assert model.parent_id == 19082
@@ -1863,7 +1863,7 @@ class TestModelAttributes:
         # send_to, sendTo
         # subject, subject
         # format_details, formatDetails
-        # _format, format
+        # format, format
         # cc_me, ccMe
         model = smart.models.SheetEmail({
             'message': 'foo',
@@ -1878,7 +1878,7 @@ class TestModelAttributes:
         assert isinstance(model.send_to[0], smart.models.Recipient)
         assert model.subject == 'foo'
         assert isinstance(model.format_details, smart.models.FormatDetails)
-        assert model._format == 'PDF'
+        assert model.format == 'PDF'
         assert model.cc_me == True
         model.formatDetails = {}
         assert isinstance(model.format_details, smart.models.FormatDetails)
@@ -1892,7 +1892,7 @@ class TestModelAttributes:
             'subject': 'foo',
             'send_to': smart.models.Recipient(),
             'format_details': smart.models.FormatDetails(),
-            '_format': 'PDF',
+            'format': 'PDF',
             'cc_me': True
         })
 
@@ -1900,7 +1900,7 @@ class TestModelAttributes:
         assert isinstance(model.send_to[0], smart.models.Recipient)
         assert model.subject == 'foo'
         assert isinstance(model.format_details, smart.models.FormatDetails)
-        assert model._format == 'PDF'
+        assert model.format == 'PDF'
         assert model.cc_me == True
 
     def test_access_token(self, smart_setup):
@@ -1968,7 +1968,7 @@ class TestModelAttributes:
         # conditional_format, conditionalFormat
         # value, value
         # column_id, columnId
-        # _format, format
+        # format, format
         # strict, strict
         # display_value, displayValue
         # links_out_to_cells, linksOutToCells
@@ -1995,7 +1995,7 @@ class TestModelAttributes:
         assert model.conditional_format == 'foo'
         assert model.value == 'foo'
         assert model.column_id == 19082
-        assert model._format == 'foo'
+        assert model.format == 'foo'
         assert model.strict == True
         assert model.display_value == 'foo'
         assert isinstance(model.links_out_to_cells[0], smart.models.CellLink)
@@ -2024,7 +2024,7 @@ class TestModelAttributes:
             'link_in_from_cell': smart.models.CellLink(),
             'modified_by': smart.models.User(),
             'column_id': 19082,
-            '_format': 'foo',
+            'format': 'foo',
             'links_out_to_cells': smart.models.CellLink()
         })
 
@@ -2035,7 +2035,7 @@ class TestModelAttributes:
         assert model.conditional_format == 'foo'
         assert model.value == 'foo'
         assert model.column_id == 19082
-        assert model._format == 'foo'
+        assert model.format == 'foo'
         assert model.strict == True
         assert model.display_value == 'foo'
         assert isinstance(model.links_out_to_cells[0], smart.models.CellLink)
@@ -2048,7 +2048,7 @@ class TestModelAttributes:
         # email, email
         # first_name, firstName
         # group_admin, groupAdmin
-        # _id, id
+        # id, id
         # last_name, lastName
         # licensed_sheet_creator, licensedSheetCreator
         # locale, locale
@@ -2075,7 +2075,7 @@ class TestModelAttributes:
         assert model.email == 'foo'
         assert model.first_name == 'foo'
         assert model.group_admin == True
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.last_name == 'foo'
         assert model.licensed_sheet_creator == True
         assert model.locale == 'foo'
@@ -2097,7 +2097,7 @@ class TestModelAttributes:
             'status': 'ACTIVE',
             'first_name': 'foo',
             'group_admin': True,
-            '_id': 19082,
+            'id': 19082,
             'last_name': 'foo',
             'licensed_sheet_creator': True,
             'resource_viewer': True,
@@ -2109,7 +2109,7 @@ class TestModelAttributes:
         assert model.email == 'foo'
         assert model.first_name == 'foo'
         assert model.group_admin == True
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.last_name == 'foo'
         assert model.licensed_sheet_creator == True
         assert model.locale == 'foo'
@@ -2121,7 +2121,7 @@ class TestModelAttributes:
         smart = smart_setup['smart']
         # email, email
         # first_name, firstName
-        # _id, id
+        # id, id
         # last_name, lastName
         # name, name
         model = smart.models.GroupMember({
@@ -2134,7 +2134,7 @@ class TestModelAttributes:
 
         assert model.email == 'foo'
         assert model.first_name == 'foo'
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.last_name == 'foo'
         assert model.name == 'foo'
         as_dict = model.to_dict()
@@ -2146,13 +2146,13 @@ class TestModelAttributes:
             'email': 'foo',
             'name': 'foo',
             'first_name': 'foo',
-            '_id': 19082,
+            'id': 19082,
             'last_name': 'foo'
         })
 
         assert model.email == 'foo'
         assert model.first_name == 'foo'
-        assert model._id == 19082
+        assert model.id == 19082
         assert model.last_name == 'foo'
         assert model.name == 'foo'
 
@@ -2207,9 +2207,9 @@ class TestModelAttributes:
         # index, index
         # symbol, symbol
         # width, width
-        # _format, format
-        # _type, type
-        # _id, id
+        # format, format
+        # type, type
+        # id, id
         # title, title
         # locked_for_user, lockedForUser
         # hidden, hidden
@@ -2217,7 +2217,7 @@ class TestModelAttributes:
         # system_column_type, systemColumnType
         # locked, locked
         # virtual_id, virtualId
-        # _filter, filter
+        # filter, filter
         # options, options
         # auto_number_format, autoNumberFormat
         model = smart.models.ReportColumn({
@@ -2246,9 +2246,9 @@ class TestModelAttributes:
         assert model.index == 19082
         assert model.symbol == 'STAR'
         assert model.width == 19082
-        assert model._format == 'foo'
-        assert model._type == 'TEXT_NUMBER'
-        assert model._id == 19082
+        assert model.format == 'foo'
+        assert model.type == 'TEXT_NUMBER'
+        assert model.id == 19082
         assert model.title == 'foo'
         assert model.locked_for_user == True
         assert model.hidden == True
@@ -2256,7 +2256,7 @@ class TestModelAttributes:
         assert model.system_column_type == 'AUTO_NUMBER'
         assert model.locked == True
         assert model.virtual_id == 19082
-        assert isinstance(model._filter, smart.models.Filter)
+        assert isinstance(model.filter, smart.models.Filter)
         assert model.options[0] == 'foo'
         assert isinstance(model.auto_number_format, smart.models.AutoNumberFormat)
         model.tags = 'foo'
@@ -2266,7 +2266,7 @@ class TestModelAttributes:
         model.tags = tmplist
         assert model.tags[0] == 'foo'
         model.filter = {}
-        assert isinstance(model._filter, smart.models.Filter)
+        assert isinstance(model.filter, smart.models.Filter)
         model.options = 'foo'
         assert model.options[0] == 'foo'
         tmplist = smartsheet.types.TypedList(str)
@@ -2291,13 +2291,13 @@ class TestModelAttributes:
             'locked': True,
             'options': ['foo'],
             'sheet_name_column': True,
-            '_format': 'foo',
-            '_type': 'TEXT_NUMBER',
-            '_id': 19082,
+            'format': 'foo',
+            'type': 'TEXT_NUMBER',
+            'id': 19082,
             'locked_for_user': True,
             'system_column_type': 'AUTO_NUMBER',
             'virtual_id': 19082,
-            '_filter': smart.models.Filter(),
+            'filter': smart.models.Filter(),
             'auto_number_format': smart.models.AutoNumberFormat()
         })
 
@@ -2306,9 +2306,9 @@ class TestModelAttributes:
         assert model.index == 19082
         assert model.symbol == 'STAR'
         assert model.width == 19082
-        assert model._format == 'foo'
-        assert model._type == 'TEXT_NUMBER'
-        assert model._id == 19082
+        assert model.format == 'foo'
+        assert model.type == 'TEXT_NUMBER'
+        assert model.id == 19082
         assert model.title == 'foo'
         assert model.locked_for_user == True
         assert model.hidden == True
@@ -2316,7 +2316,7 @@ class TestModelAttributes:
         assert model.system_column_type == 'AUTO_NUMBER'
         assert model.locked == True
         assert model.virtual_id == 19082
-        assert isinstance(model._filter, smart.models.Filter)
+        assert isinstance(model.filter, smart.models.Filter)
         assert model.options[0] == 'foo'
         assert isinstance(model.auto_number_format, smart.models.AutoNumberFormat)
 
@@ -2561,22 +2561,22 @@ class TestModelAttributes:
 
     def test_update_request(self, smart_setup):
         smart = smart_setup['smart']
-        # _id, id
+        # id, id
         model = smart.models.UpdateRequest({
             'id': 19082
         })
 
-        assert model._id == 19082
+        assert model.id == 19082
         as_dict = model.to_dict()
         assert isinstance(as_dict, dict)
 
     def test_update_request_snake(self, smart_setup):
         smart = smart_setup['smart']
         model = smart.models.UpdateRequest({
-            '_id': 19082
+            'id': 19082
         })
 
-        assert model._id == 19082
+        assert model.id == 19082
 
     def test_format_details(self, smart_setup):
         smart = smart_setup['smart']
@@ -2661,7 +2661,7 @@ class TestModelAttributes:
         smart = smart_setup['smart']
         # confirmed, confirmed
         # email, email
-        # _id, id
+        # id, id
         model = smart.models.AlternateEmail({
             'confirmed': True,
             'email': 'foo',
@@ -2670,7 +2670,7 @@ class TestModelAttributes:
 
         assert model.confirmed == True
         assert model.email == 'foo'
-        assert model._id == 19082
+        assert model.id == 19082
         as_dict = model.to_dict()
         assert isinstance(as_dict, dict)
 
@@ -2684,7 +2684,7 @@ class TestModelAttributes:
 
         assert model.confirmed == True
         assert model.email == 'foo'
-        assert model._id == 19082
+        assert model.id == 19082
 
     def test_search_result_item(self, smart_setup):
         smart = smart_setup['smart']

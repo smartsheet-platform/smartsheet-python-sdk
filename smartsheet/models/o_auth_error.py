@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class OAuthError(object):
@@ -46,16 +48,8 @@ class OAuthError(object):
         self._error_description = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'error' in props:
-                self.error = props['error']
-            if 'errorCode' in props:
-                self.error_code = props['errorCode']
-            if 'error_code' in props:
-                self.error_code = props['error_code']
-            if 'error_description' in props:
-                self.error_description = props[
-                    'error_description']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
 
@@ -91,15 +85,11 @@ class OAuthError(object):
         if isinstance(value, six.string_types):
             self._error_description = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'error': prep(self._error),
-            'errorCode': prep(self._error_code),
-            'error_description': prep(self._error_description)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

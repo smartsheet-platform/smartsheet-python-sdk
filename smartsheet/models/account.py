@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class Account(object):
@@ -32,33 +34,34 @@ class Account(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.__id = None
+        self._id_ = None
         self._name = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'name' in props:
-                self.name = props['name']
+            deserialize(self, props)
+
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
 
-    @property
-    def _id(self):
-        return self.__id
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
-    @_id.setter
-    def _id(self, value):
+    @property
+    def id_(self):
+        return self._id_
+
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def name(self):
@@ -69,14 +72,11 @@ class Account(object):
         if isinstance(value, six.string_types):
             self._name = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'id': prep(self.__id),
-            'name': prep(self._name)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

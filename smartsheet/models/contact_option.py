@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2017 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class ContactOption(object):
@@ -36,11 +38,8 @@ class ContactOption(object):
         self._name = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'email' in props:
-                self.email = props['email']
-            if 'name' in props:
-                self.name = props['name']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
@@ -63,14 +62,11 @@ class ContactOption(object):
         if isinstance(value, six.string_types):
             self._name = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'email': prep(self._email),
-            'name': prep(self._name)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

@@ -17,10 +17,12 @@
 
 from __future__ import absolute_import
 
-from .account import Account
-from ..util import prep
-import json
 import six
+import json
+
+from .account import Account
+from ..util import serialize
+from ..util import deserialize
 
 
 class UserProfile(object):
@@ -44,7 +46,7 @@ class UserProfile(object):
         self._email = None
         self._first_name = None
         self._group_admin = None
-        self.__id = None
+        self._id_ = None
         self._last_name = None
         self._licensed_sheet_creator = None
         self._locale = None
@@ -53,56 +55,23 @@ class UserProfile(object):
         self._time_zone = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'account' in props:
-                self.account = props['account']
-            if 'admin' in props:
-                self.admin = props['admin']
-            if 'email' in props:
-                self.email = props['email']
-            if 'firstName' in props:
-                self.first_name = props['firstName']
-            if 'first_name' in props:
-                self.first_name = props['first_name']
-            if 'groupAdmin' in props:
-                self.group_admin = props['groupAdmin']
-            if 'group_admin' in props:
-                self.group_admin = props['group_admin']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'lastName' in props:
-                self.last_name = props['lastName']
-            if 'last_name' in props:
-                self.last_name = props['last_name']
-            if 'licensedSheetCreator' in props:
-                self.licensed_sheet_creator = props[
-                    'licensedSheetCreator']
-            if 'licensed_sheet_creator' in props:
-                self.licensed_sheet_creator = props[
-                    'licensed_sheet_creator']
-            if 'locale' in props:
-                self.locale = props['locale']
-            if 'resourceViewer' in props:
-                self.resource_viewer = props['resourceViewer']
-            if 'resource_viewer' in props:
-                self.resource_viewer = props['resource_viewer']
-            if 'status' in props:
-                self.status = props['status']
-            if 'timeZone' in props:
-                self.time_zone = props['timeZone']
-            if 'time_zone' in props:
-                self.time_zone = props['time_zone']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def account(self):
@@ -152,13 +121,13 @@ class UserProfile(object):
             self._group_admin = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def last_name(self):
@@ -219,24 +188,11 @@ class UserProfile(object):
         if isinstance(value, six.string_types):
             self._time_zone = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'account': prep(self._account),
-            'admin': prep(self._admin),
-            'email': prep(self._email),
-            'firstName': prep(self._first_name),
-            'groupAdmin': prep(self._group_admin),
-            'id': prep(self.__id),
-            'lastName': prep(self._last_name),
-            'licensedSheetCreator': prep(self._licensed_sheet_creator),
-            'locale': prep(self._locale),
-            'resourceViewer': prep(self._resource_viewer),
-            'status': prep(self._status),
-            'timeZone': prep(self._time_zone)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

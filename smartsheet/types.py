@@ -80,3 +80,9 @@ class TypedList(collections.MutableSequence):
 
     def __str__(self):
         return json.dumps(self.__store)
+
+
+class ExplicitNull(object):
+
+    def __init__(self):
+        pass

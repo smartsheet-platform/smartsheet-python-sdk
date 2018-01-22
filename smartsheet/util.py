@@ -15,13 +15,32 @@
 # under the License.
 
 from __future__ import absolute_import
+
 import logging
-from datetime import date
-from datetime import datetime
 import warnings
 import functools
+import re
+import six
+import inspect
 
-LOG = logging.getLogger('util')
+from datetime import date
+from datetime import datetime
+from .types import TypedList
+from .types import ExplicitNull
+
+_log = logging.getLogger('util')
+_primitive_types = (six.string_types, six.integer_types, float, bool, ExplicitNull)
+_list_types = (TypedList, list)
+
+
+def _camel_to_underscore(name):
+    camel_pat = re.compile(r'([A-Z])')
+    return camel_pat.sub(lambda x: '_' + x.group(1).lower(), name)
+
+
+def _underscore_to_camel(name):
+    under_pat = re.compile(r'_([a-z])')
+    return under_pat.sub(lambda x: x.group(1).upper(), name)
 
 
 def prep(prop, op_id=None, method=None):
@@ -44,6 +63,53 @@ def prep(prop, op_id=None, method=None):
         retval = prop
 
     return retval
+
+
+def serialize(obj):
+
+    retval = None
+
+    if hasattr(obj, 'serialize'):
+        retval = obj.serialize()
+
+    elif isinstance(obj, (datetime, date)):
+        retval = obj.isoformat()
+
+    elif isinstance(obj, _primitive_types):
+        retval = obj
+
+    elif isinstance(obj, _list_types):
+        if len(obj):
+            retval = [serialize(x) for x in obj]
+
+    else:
+        retval = {}
+        prop_list = inspect.getmembers(obj.__class__, inspect.isdatadescriptor)
+        for prop in prop_list:
+            if isinstance(prop[1], property):
+                prop_name = prop[0]
+                prop_value = getattr(obj, prop_name)
+                if prop_value is not None:
+                    camel_case = _underscore_to_camel(prop_name)
+                    camel_case = camel_case.rstrip('_')  # trim trailing '_' from props with names eq. to built-ins
+                    serialized = serialize(prop_value)
+                    if isinstance(serialized, ExplicitNull):  # object forcing serialization of a null
+                        retval[camel_case] = None
+                    elif serialized is not None:
+                        retval[camel_case] = serialized
+
+    return retval
+
+
+def deserialize(obj, props):
+    if isinstance(props, dict):
+        for key, value in props.items():
+            key_ = _camel_to_underscore(key)
+            if hasattr(obj, key_):
+                setattr(obj, key_, value)
+
+            else:
+                _log.info('object \'%s\' is missing property \'%s\'', obj.__class__.__name__, key_)
 
 
 def null_filter(obj):

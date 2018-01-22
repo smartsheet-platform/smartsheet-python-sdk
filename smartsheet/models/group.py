@@ -17,13 +17,15 @@
 
 from __future__ import absolute_import
 
-from .group_member import GroupMember
+import six
+import json
+
 from ..types import TypedList
-from ..util import prep
+from ..util import serialize
+from ..util import deserialize
+from .group_member import GroupMember
 from datetime import datetime
 from dateutil.parser import parse
-import json
-import six
 
 
 class Group(object):
@@ -38,7 +40,7 @@ class Group(object):
 
         self._created_at = None
         self._description = None
-        self.__id = None
+        self._id_ = None
         self._members = TypedList(GroupMember)
         self._modified_at = None
         self._name = None
@@ -46,39 +48,23 @@ class Group(object):
         self._owner_id = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'createdAt' in props:
-                self.created_at = props['createdAt']
-            if 'created_at' in props:
-                self.created_at = props['created_at']
-            if 'description' in props:
-                self.description = props['description']
-            # read only
-            if 'id' in props:
-                self._id = props['id']
-            if 'members' in props:
-                self.members = props['members']
-            if 'modifiedAt' in props:
-                self.modified_at = props['modifiedAt']
-            if 'modified_at' in props:
-                self.modified_at = props['modified_at']
-            if 'name' in props:
-                self.name = props['name']
-            if 'owner' in props:
-                self.owner = props['owner']
-            if 'ownerId' in props:
-                self.owner_id = props['ownerId']
-            if 'owner_id' in props:
-                self.owner_id = props['owner_id']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def created_at(self):
@@ -103,13 +89,13 @@ class Group(object):
             self._description = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def members(self):
@@ -170,20 +156,11 @@ class Group(object):
         if isinstance(value, six.integer_types):
             self._owner_id = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'createdAt': prep(self._created_at),
-            'description': prep(self._description),
-            'id': prep(self.__id),
-            'members': prep(self._members),
-            'modifiedAt': prep(self._modified_at),
-            'name': prep(self._name),
-            'owner': prep(self._owner),
-            'ownerId': prep(self._owner_id)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

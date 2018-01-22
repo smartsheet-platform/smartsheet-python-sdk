@@ -17,10 +17,12 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
-from ..util import prep
-import json
 import six
+import json
+
+from ..types import TypedList
+from ..util import serialize
+from ..util import deserialize
 
 
 class Template(object):
@@ -53,7 +55,7 @@ class Template(object):
         self._categories = TypedList(six.string_types)
         self._description = None
         self._global_template = None
-        self.__id = None
+        self._id_ = None
         self._image = None
         self._large_image = None
         self._locale = None
@@ -62,46 +64,21 @@ class Template(object):
         self._type = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'accessLevel' in props:
-                self.access_level = props['accessLevel']
-            if 'access_level' in props:
-                self.access_level = props['access_level']
-            if 'blank' in props:
-                self.blank = props['blank']
-            if 'categories' in props:
-                self.categories = props['categories']
-            if 'description' in props:
-                self.description = props['description']
-            if 'globalTemplate' in props:
-                self.global_template = props['globalTemplate']
-            if 'global_template' in props:
-                self.global_template = props['global_template']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'image' in props:
-                self.image = props['image']
-            if 'largeImage' in props:
-                self.large_image = props['largeImage']
-            if 'large_image' in props:
-                self.large_image = props['large_image']
-            if 'locale' in props:
-                self.locale = props['locale']
-            if 'name' in props:
-                self.name = props['name']
-            if 'tags' in props:
-                self.tags = props['tags']
-            if 'type' in props:
-                self.type = props['type']
+            deserialize(self, props)
+
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def access_level(self):
@@ -169,13 +146,13 @@ class Template(object):
             self._global_template = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def image(self):
@@ -246,24 +223,11 @@ class Template(object):
                          value, self.allowed_values['type']))
             self._type = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'accessLevel': prep(self._access_level),
-            'blank': prep(self._blank),
-            'categories': prep(self._categories),
-            'description': prep(self._description),
-            'globalTemplate': prep(self._global_template),
-            'id': prep(self.__id),
-            'image': prep(self._image),
-            'largeImage': prep(self._large_image),
-            'locale': prep(self._locale),
-            'name': prep(self._name),
-            'tags': prep(self._tags),
-            'type': prep(self._type)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

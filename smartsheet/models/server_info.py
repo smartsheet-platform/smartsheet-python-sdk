@@ -17,10 +17,12 @@
 
 from __future__ import absolute_import
 
+import json
+
 from .format_tables import FormatTables
 from ..types import TypedList
-from ..util import prep
-import json
+from ..util import serialize
+from ..util import deserialize
 
 
 class ServerInfo(object):
@@ -37,13 +39,8 @@ class ServerInfo(object):
         self._supported_locales = TypedList(str)
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'formats' in props:
-                self.formats = props['formats']
-            if 'supportedLocales' in props:
-                self.supported_locales = props['supportedLocales']
-            if 'supported_locales' in props:
-                self.supported_locales = props['supported_locales']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
 
@@ -77,14 +74,11 @@ class ServerInfo(object):
             self._supported_locales.purge()
             self._supported_locales.append(value)
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'formats': prep(self._formats),
-            'supportedLocales': prep(self._supported_locales)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

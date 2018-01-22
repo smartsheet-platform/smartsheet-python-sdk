@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,10 +17,12 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-from .object_value import ObjectValue
-import json
 import six
+import json
+
+from .object_value import ObjectValue
+from ..util import serialize
+from ..util import deserialize
 
 
 class Contact(object):
@@ -36,28 +38,27 @@ class Contact(object):
             self._base = base_obj
 
         self._email = None
-        self.__id = None
+        self._id_ = None
         self._name = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'email' in props:
-                self.email = props['email']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'name' in props:
-                self.name = props['name']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def email(self):
@@ -69,13 +70,13 @@ class Contact(object):
             self._email = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.string_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def name(self):
@@ -86,20 +87,11 @@ class Contact(object):
         if isinstance(value, six.string_types):
             self._name = value
 
-    def to_dict(self, op_id=None, method=None):
-        parent_obj = {}
-        if isinstance(super(Contact, self), ObjectValue):
-            parent_obj = super(Contact, self).to_dict(op_id, method)
-        obj = {
-            'email': prep(self._email),
-            'id': prep(self.__id),
-            'name': prep(self._name)}
-        combo = parent_obj.copy()
-        combo.update(obj)
-        return combo
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

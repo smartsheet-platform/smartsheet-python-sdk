@@ -17,12 +17,14 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .currency import Currency
 from .font_family import FontFamily
 from ..types import TypedList
-from ..util import prep
-import json
-import six
+from ..util import serialize
+from ..util import deserialize
 
 
 class FormatTables(object):
@@ -52,56 +54,7 @@ class FormatTables(object):
         self._vertical_align = TypedList(str)
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'bold' in props:
-                self.bold = props['bold']
-            if 'color' in props:
-                self.color = props['color']
-            if 'currency' in props:
-                self.currency = props['currency']
-            if 'decimalCount' in props:
-                self.decimal_count = props['decimalCount']
-            if 'decimal_count' in props:
-                self.decimal_count = props['decimal_count']
-            if 'defaults' in props:
-                self.defaults = props['defaults']
-            if 'fontFamily' in props:
-                self.font_family = props['fontFamily']
-            if 'font_family' in props:
-                self.font_family = props['font_family']
-            if 'fontSize' in props:
-                self.font_size = props['fontSize']
-            if 'font_size' in props:
-                self.font_size = props['font_size']
-            if 'horizontalAlign' in props:
-                self.horizontal_align = props['horizontalAlign']
-            if 'horizontal_align' in props:
-                self.horizontal_align = props[
-                    'horizontal_align']
-            if 'italic' in props:
-                self.italic = props['italic']
-            if 'numberFormat' in props:
-                self.number_format = props['numberFormat']
-            if 'number_format' in props:
-                self.number_format = props['number_format']
-            if 'strikethrough' in props:
-                self.strikethrough = props['strikethrough']
-            if 'textWrap' in props:
-                self.text_wrap = props['textWrap']
-            if 'text_wrap' in props:
-                self.text_wrap = props['text_wrap']
-            if 'thousandsSeparator' in props:
-                self.thousands_separator = props[
-                    'thousandsSeparator']
-            if 'thousands_separator' in props:
-                self.thousands_separator = props[
-                    'thousands_separator']
-            if 'underline' in props:
-                self.underline = props['underline']
-            if 'verticalAlign' in props:
-                self.vertical_align = props['verticalAlign']
-            if 'vertical_align' in props:
-                self.vertical_align = props['vertical_align']
+            deserialize(self, props)
 
     @property
     def bold(self):
@@ -378,27 +331,11 @@ class FormatTables(object):
             self._vertical_align.purge()
             self._vertical_align.append(value)
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'bold': prep(self._bold),
-            'color': prep(self._color),
-            'currency': prep(self._currency),
-            'decimalCount': prep(self._decimal_count),
-            'defaults': prep(self._defaults),
-            'fontFamily': prep(self._font_family),
-            'fontSize': prep(self._font_size),
-            'horizontalAlign': prep(self._horizontal_align),
-            'italic': prep(self._italic),
-            'numberFormat': prep(self._number_format),
-            'strikethrough': prep(self._strikethrough),
-            'textWrap': prep(self._text_wrap),
-            'thousandsSeparator': prep(self._thousands_separator),
-            'underline': prep(self._underline),
-            'verticalAlign': prep(self._vertical_align)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

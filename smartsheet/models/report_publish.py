@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class ReportPublish(object):
@@ -39,26 +41,8 @@ class ReportPublish(object):
         self._read_only_full_url = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'readOnlyFullAccessibleBy' in props:
-                self.read_only_full_accessible_by = props['readOnlyFullAccessibleBy']
-            if 'read_only_full_accessible_by' in props:
-                self.read_only_full_accessible_by = props['read_only_full_accessible_by']
-            if 'readOnlyFullDefaultView' in props:
-                self.read_only_full_default_view = props['readOnlyFullDefaultView']
-            if 'read_only_full_default_view' in props:
-                self.read_only_full_default_view = props['read_only_full_default_view']
-            if 'readOnlyFullEnabled' in props:
-                self.read_only_full_enabled = props['readOnlyFullEnabled']
-            if 'read_only_full_enabled' in props:
-                self.read_only_full_enabled = props['read_only_full_enabled']
-            if 'readOnlyFullShowToolbar' in props:
-                self.read_only_full_show_toolbar = props['readOnlyFullShowToolbar']
-            if 'read_only_full_show_toolbar' in props:
-                self.read_only_full_show_toolbar = props['read_only_full_show_toolbar']
-            # read only
-            if 'readOnlyFullUrl' in props:
-                self.read_only_full_url = props['readOnlyFullUrl']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
@@ -108,17 +92,11 @@ class ReportPublish(object):
         if isinstance(value, six.string_types):
             self._read_only_full_url = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'readOnlyFullAccessibleBy': prep(self._read_only_full_accessible_by),
-            'readOnlyFullDefaultView': prep(self._read_only_full_default_view),
-            'readOnlyFullEnabled': prep(self._read_only_full_enabled),
-            'readOnlyFullShowToolbar': prep(self._read_only_full_show_toolbar),
-            'readOnlyFullUrl': prep(self._read_only_full_url)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

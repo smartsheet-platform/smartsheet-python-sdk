@@ -16,11 +16,14 @@
 # under the License.
 
 from __future__ import absolute_import
-from ..util import prep
-from datetime import datetime
-from dateutil.parser import parse
+
 import six
 import json
+
+from ..util import serialize
+from ..util import deserialize
+from datetime import datetime
+from dateutil.parser import parse
 
 
 class WebhookStats(object):
@@ -38,19 +41,7 @@ class WebhookStats(object):
         self._last_successful_callback = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'lastCallbackAttempt' in props:
-                self.last_callback_attempt = props['lastCallbackAttempt']
-            if 'last_callback_attempt' in props:
-                self.last_callback_attempt = props['last_callback_attempt']
-            if 'lastCallbackAttemptRetryCount' in props:
-                self.last_callback_attempt_retry_count = props['lastCallbackAttemptRetryCount']
-            if 'last_callback_attempt_retry_count' in props:
-                self.last_callback_attempt_retry_count = props['last_callback_attempt_retry_count']
-            if 'lastSuccessfulCallback' in props:
-                self.last_successful_callback = props['lastSuccessfulCallback']
-            if 'last_successful_callback' in props:
-                self.last_successful_callback = props['last_successful_callback']
+            deserialize(self, props)
 
         # requests package Response object
         self.request_response = None
@@ -91,15 +82,11 @@ class WebhookStats(object):
                 value = parse(value)
                 self._last_successful_callback = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'lastCallbackAttempt': prep(self._last_callback_attempt),
-            'lastCallbackAttemptRetryCount': prep(self._last_callback_attempt_retry_count),
-            'lastSuccessfulCallback': prep(self._last_successful_callback)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

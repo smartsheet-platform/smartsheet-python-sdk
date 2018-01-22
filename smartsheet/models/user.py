@@ -17,13 +17,15 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
+from .alternate_email import AlternateEmail
 from ..types import TypedList
-from ..util import prep
+from ..util import serialize
+from ..util import deserialize
 from datetime import datetime
 from dateutil.parser import parse
-from .alternate_email import AlternateEmail
-import json
-import six
 
 
 class User(object):
@@ -48,7 +50,7 @@ class User(object):
         self._email = None
         self._first_name = None
         self._group_admin = None
-        self.__id = None
+        self._id_ = None
         self._last_login = None
         self._last_name = None
         self._licensed_sheet_creator = None
@@ -58,64 +60,21 @@ class User(object):
         self._status = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'admin' in props:
-                self.admin = props['admin']
-            if 'alternateEmails' in props:
-                self.alternate_emails = props['alternateEmails']
-            if 'alternate_emails' in props:
-                self.alternate_emails = props['alternate_emails']
-            if 'customWelcomeScreenViewed' in props:
-                self.custom_welcome_screen_viewed = props['customWelcomeScreenViewed']
-            if 'custom_welcome_screen_viewed' in props:
-                self.custom_welcome_screen_viewed = props['custom_welcome_screen_viewed']
-            if 'email' in props:
-                self.email = props['email']
-            if 'firstName' in props:
-                self.first_name = props['firstName']
-            if 'first_name' in props:
-                self.first_name = props['first_name']
-            if 'groupAdmin' in props:
-                self.group_admin = props['groupAdmin']
-            if 'group_admin' in props:
-                self.group_admin = props['group_admin']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'lastLogin' in props:
-                self.last_login = props['lastLogin']
-            if 'last_login' in props:
-                self.last_login = props['last_login']
-            if 'lastName' in props:
-                self.last_name = props['lastName']
-            if 'last_name' in props:
-                self.last_name = props['last_name']
-            if 'licensedSheetCreator' in props:
-                self.licensed_sheet_creator = props[
-                    'licensedSheetCreator']
-            if 'licensed_sheet_creator' in props:
-                self.licensed_sheet_creator = props[
-                    'licensed_sheet_creator']
-            if 'name' in props:
-                self.name = props['name']
-            if 'resourceViewer' in props:
-                self.resource_viewer = props['resourceViewer']
-            if 'resource_viewer' in props:
-                self.resource_viewer = props['resource_viewer']
-            if 'sheetCount' in props:
-                self.sheet_count = props['sheetCount']
-            if 'sheet_count' in props:
-                self.sheet_count = props['sheet_count']
-            if 'status' in props:
-                self.status = props['status']
+            deserialize(self, props)
+
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def admin(self):
@@ -186,13 +145,13 @@ class User(object):
             self._group_admin = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def last_login(self):
@@ -266,26 +225,11 @@ class User(object):
                          value, self.allowed_values['status']))
             self._status = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'admin': prep(self._admin),
-            'alternateEmails': prep(self._alternate_emails),
-            'customWelcomeScreenViewed': prep(self._custom_welcome_screen_viewed),
-            'email': prep(self._email),
-            'firstName': prep(self._first_name),
-            'groupAdmin': prep(self._group_admin),
-            'id': prep(self.__id),
-            'lastLogin': prep(self._last_login),
-            'lastName': prep(self._last_name),
-            'licensedSheetCreator': prep(self._licensed_sheet_creator),
-            'name': prep(self._name),
-            'resourceViewer': prep(self._resource_viewer),
-            'sheetCount': prep(self.sheet_count),
-            'status': prep(self._status)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

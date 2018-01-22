@@ -1,5 +1,4 @@
 import pytest
-import smartsheet
 import os.path
 
 _dir = os.path.dirname(os.path.abspath(__file__))

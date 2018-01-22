@@ -17,12 +17,14 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .row import Row
 from .bulk_item_failure import BulkItemFailure
 from ..types import TypedList
-from ..util import prep
-import json
-import six
+from ..util import serialize
+from ..util import deserialize
 
 
 class BulkItemResult(object):
@@ -46,21 +48,8 @@ class BulkItemResult(object):
         self._version = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'failedItems' in props:
-                self.failed_items = props['failedItems']
-            if 'failed_items' in props:
-                self.failed_items = props['failed_items']
-            if 'message' in props:
-                self.message = props['message']
-            if 'result' in props:
-                self.result = props['result']
-            if 'resultCode' in props:
-                self.result_code = props['resultCode']
-            if 'result_code' in props:
-                self.result_code = props['result_code']
-            if 'version' in props:
-                self.version = props['version']
+            deserialize(self, props)
+
         self.__initialized = True
 
     @property
@@ -118,17 +107,11 @@ class BulkItemResult(object):
         """Simplify difference between Result and IndexResult"""
         return self._result
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'failedItems':prep(self._failed_items),
-            'message': prep(self._message),
-            'result': prep(self._result),
-            'resultCode': prep(self._result_code),
-            'version': prep(self._version)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

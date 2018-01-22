@@ -17,11 +17,13 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .email import Email
 from ..types import TypedList
-from ..util import prep
-import json
-import six
+from ..util import serialize
+from ..util import deserialize
 
 
 class RowEmail(Email):
@@ -41,21 +43,7 @@ class RowEmail(Email):
         self._layout = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'columnIds' in props:
-                self.column_ids = props['columnIds']
-            if 'column_ids' in props:
-                self.column_ids = props['column_ids']
-            if 'includeAttachments' in props:
-                self.include_attachments = props['includeAttachments']
-            if 'include_attachments' in props:
-                self.include_attachments = props['include_attachments']
-            if 'includeDiscussions' in props:
-                self.include_discussions = props['includeDiscussions']
-            if 'include_discussions' in props:
-                self.include_discussions = props['include_discussions']
-            if 'layout' in props:
-                self.layout = props['layout']
+            deserialize(self, props)
 
     @property
     def column_ids(self):
@@ -103,19 +91,11 @@ class RowEmail(Email):
         if isinstance(value, six.string_types):
             self._layout = value
 
-    def to_dict(self, op_id=None, method=None):
-        parent_obj = super(RowEmail, self).to_dict(op_id, method)
-        obj = {
-            'columnIds': prep(self._column_ids),
-            'includeAttachments': prep(self._include_attachments),
-            'includeDiscussions': prep(self._include_discussions),
-            'layout' : prep(self._layout)}
-        combo = parent_obj.copy()
-        combo.update(obj)
-        return combo
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

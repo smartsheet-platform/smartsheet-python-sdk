@@ -17,10 +17,12 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-from .sheet_filter_details import SheetFilterDetails
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
+from .sheet_filter_details import SheetFilterDetails
 
 
 class SheetFilter(object):
@@ -40,31 +42,26 @@ class SheetFilter(object):
                 'SHARED']}
 
         self._filter_type = None
-        self.__id = None
+        self._id_ = None
         self._name = None
         self._query = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'filterType' in props:
-                self.filter_type = props['filterType']
-            if 'filter_type' in props:
-                self.filter_type = props['filter_type']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'name' in props:
-                self.name = props['name']
-            if 'query' in props:
-                self.query = props['query']
+            deserialize(self, props)
+
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def filter_type(self):
@@ -81,13 +78,13 @@ class SheetFilter(object):
             self._filter_type = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def name(self):
@@ -109,16 +106,11 @@ class SheetFilter(object):
         elif isinstance(value, dict):
             self._query = SheetFilterDetails(value, self._base)
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'filterType': prep(self._filter_type),
-            'id': prep(self.__id),
-            'name': prep(self._name),
-            'query': prep(self._query)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

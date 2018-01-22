@@ -17,11 +17,13 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .row_mapping import RowMapping
 from ..types import TypedList
-from ..util import prep
-import json
-import six
+from ..util import serialize
+from ..util import deserialize
 
 
 class CopyOrMoveRowResult(object):
@@ -38,17 +40,8 @@ class CopyOrMoveRowResult(object):
         self._row_mappings = TypedList(RowMapping)
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'destinationSheetId' in props:
-                self.destination_sheet_id = props[
-                    'destinationSheetId']
-            if 'destination_sheet_id' in props:
-                self.destination_sheet_id = props[
-                    'destination_sheet_id']
-            if 'rowMappings' in props:
-                self.row_mappings = props['rowMappings']
-            if 'row_mappings' in props:
-                self.row_mappings = props['row_mappings']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
 
@@ -80,14 +73,11 @@ class CopyOrMoveRowResult(object):
             self._row_mappings.purge()
             self._row_mappings.append(value)
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'destinationSheetId': prep(self._destination_sheet_id),
-            'rowMappings': prep(self._row_mappings)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

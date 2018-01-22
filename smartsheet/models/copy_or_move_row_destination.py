@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class CopyOrMoveRowDestination(object):
@@ -35,11 +37,7 @@ class CopyOrMoveRowDestination(object):
         self._sheet_id = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'sheetId' in props:
-                self.sheet_id = props['sheetId']
-            if 'sheet_id' in props:
-                self.sheet_id = props['sheet_id']
+            deserialize(self, props)
 
     @property
     def sheet_id(self):
@@ -50,13 +48,11 @@ class CopyOrMoveRowDestination(object):
         if isinstance(value, six.integer_types):
             self._sheet_id = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'sheetId': prep(self._sheet_id)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

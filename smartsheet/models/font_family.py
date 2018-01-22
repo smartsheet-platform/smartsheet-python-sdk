@@ -17,10 +17,12 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
-from ..util import prep
-import json
 import six
+import json
+
+from ..types import TypedList
+from ..util import serialize
+from ..util import deserialize
 
 
 class FontFamily(object):
@@ -37,10 +39,7 @@ class FontFamily(object):
         self._traits = TypedList(str)
 
         if props:
-            if 'name' in props:
-                self.name = props['name']
-            if 'traits' in props:
-                self.traits = props['traits']
+            deserialize(self, props)
 
     @property
     def name(self):
@@ -70,14 +69,11 @@ class FontFamily(object):
             self._traits.purge()
             self._traits.append(value)
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'name': prep(self._name),
-            'traits': prep(self._traits)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

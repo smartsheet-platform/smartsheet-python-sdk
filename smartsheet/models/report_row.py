@@ -17,16 +17,18 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .attachment import Attachment
 from .cell import Cell
 from .column import Column
 from .discussion import Discussion
 from .row import Row
 from ..types import TypedList
-from ..util import prep
+from ..util import serialize
+from ..util import deserialize
 from datetime import datetime
-import json
-import six
 
 
 class ReportRow(Row):
@@ -58,8 +60,8 @@ class ReportRow(Row):
         self._discussions = TypedList(Discussion)
         self._expanded = None
         self._filtered_out = None
-        self.__format = None
-        self.__id = None
+        self._format_ = None
+        self._id_ = None
         self._in_critical_path = None
         self._locked = None
         self._locked_for_user = None
@@ -74,89 +76,25 @@ class ReportRow(Row):
         self._version = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'above' in props:
-                self.above = props['above']
-            if 'accessLevel' in props:
-                self.access_level = props['accessLevel']
-            if 'access_level' in props:
-                self.access_level = props['access_level']
-            if 'attachments' in props:
-                self.attachments = props['attachments']
-            if 'cells' in props:
-                self.cells = props['cells']
-            if 'columns' in props:
-                self.columns = props['columns']
-            # read only
-            if 'conditionalFormat' in props:
-                self.conditional_format = props['conditionalFormat']
-            if 'conditional_format' in props:
-                self.conditional_format = props['conditional_format']
-            if 'createdAt' in props:
-                self.created_at = props['createdAt']
-            if 'discussions' in props:
-                self.discussions = props['discussions']
-            if 'expanded' in props:
-                self.expanded = props['expanded']
-            # read only
-            if 'filteredOut' in props:
-                self.filtered_out = props['filteredOut']
-            if 'format' in props:
-                self._format = props['format']
-            if '_format' in props:
-                self._format = props['_format']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'inCriticalPath' in props:
-                self.in_critical_path = props['inCriticalPath']
-            if 'in_critical_path' in props:
-                self.in_critical_path = props['in_critical_path']
-            if 'locked' in props:
-                self.locked = props['locked']
-            # read only
-            if 'lockedForUser' in props:
-                self.locked_for_user = props['lockedForUser']
-            # read only
-            if 'modifiedAt' in props:
-                self.modified_at = props['modifiedAt']
-            if 'parentId' in props:
-                self.parent_id = props['parentId']
-            if 'parent_id' in props:
-                self.parent_id = props['parent_id']
-            if 'permalink' in props:
-                self.permalink = props['permalink']
-            # read only
-            if 'rowNumber' in props:
-                self.row_number = props['rowNumber']
-            if 'sheetId' in props:
-                self.sheet_id = props['sheetId']
-            if 'sheet_id' in props:
-                self.sheet_id = props['sheet_id']
-            if 'siblingId' in props:
-                self.sibling_id = props['siblingId']
-            if 'sibling_id' in props:
-                self.sibling_id = props['sibling_id']
-            if 'toBottom' in props:
-                self.to_bottom = props['toBottom']
-            if 'to_bottom' in props:
-                self.to_bottom = props['to_bottom']
-            if 'toTop' in props:
-                self.to_top = props['toTop']
-            if 'to_top' in props:
-                self.to_top = props['to_top']
-            if 'version' in props:
-                self.version = props['version']
+            deserialize(self, props)
+
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'format':
-            return self._format
+            return self.format_
         elif key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'format':
+            self.format_ = value
+        elif key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def above(self):
@@ -294,22 +232,22 @@ class ReportRow(Row):
             self._filtered_out = value
 
     @property
-    def _format(self):
-        return self.__format
+    def format_(self):
+        return self._format_
 
-    @_format.setter
-    def _format(self, value):
+    @format_.setter
+    def format_(self, value):
         if isinstance(value, six.string_types):
-            self.__format = value
+            self._format_ = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def in_critical_path(self):
@@ -419,39 +357,11 @@ class ReportRow(Row):
         if isinstance(value, six.integer_types):
             self._version = value
 
-    def to_dict(self, op_id=None, method=None):
-        parent_obj = super(ReportRow, self).to_dict(op_id, method)
-        obj = {
-            'above': prep(self._above),
-            'accessLevel': prep(self._access_level),
-            'attachments': prep(self._attachments),
-            'cells': prep(self._cells),
-            'columns': prep(self._columns),
-            'conditionalFormat': prep(self._conditional_format),
-            'createdAt': prep(self._created_at),
-            'discussions': prep(self._discussions),
-            'expanded': prep(self._expanded),
-            'filteredOut': prep(self._filtered_out),
-            'format': prep(self.__format),
-            'id': prep(self.__id),
-            'inCriticalPath': prep(self._in_critical_path),
-            'locked': prep(self._locked),
-            'lockedForUser': prep(self._locked_for_user),
-            'modifiedAt': prep(self._modified_at),
-            'parentId': prep(self._parent_id),
-            'permalink': prep(self._permalink),
-            'rowNumber': prep(self._row_number),
-            'sheetId': prep(self._sheet_id),
-            'siblingId': prep(self._sibling_id),
-            'toBottom': prep(self._to_bottom),
-            'toTop': prep(self._to_top),
-            'version': prep(self._version)}
-        combo = parent_obj.copy()
-        combo.update(obj)
-        return combo
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

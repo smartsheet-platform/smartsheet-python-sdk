@@ -17,16 +17,18 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .cell import Cell
 from .cell_link import CellLink
 from .hyperlink import Hyperlink
 from .user import User
 from ..types import TypedList
-from ..util import prep
+from ..util import serialize
+from ..util import deserialize
 from datetime import datetime
 from dateutil.parser import parse
-import json
-import six
 
 
 class CellHistory(Cell):
@@ -44,7 +46,7 @@ class CellHistory(Cell):
         self._column_type = None
         self._conditional_format = None
         self._display_value = None
-        self.__format = None
+        self._format_ = None
         self._formula = None
         self._hyperlink = None
         self._link_in_from_cell = None
@@ -55,55 +57,20 @@ class CellHistory(Cell):
         self._value = None
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'columnId' in props:
-                self.column_id = props['columnId']
-            if 'column_id' in props:
-                self.column_id = props['column_id']
-            # read only
-            if 'columnType' in props:
-                self.column_type = props['columnType']
-            # read only
-            if 'conditionalFormat' in props:
-                self.conditional_format = props['conditionalFormat']
-            # read only
-            if 'displayValue' in props:
-                self.display_value = props['displayValue']
-            if 'format' in props:
-                self._format = props['format']
-            if '_format' in props:
-                self._format = props['_format']
-            if 'formula' in props:
-                self.formula = props['formula']
-            if 'hyperlink' in props:
-                self.hyperlink = props['hyperlink']
-            if 'linkInFromCell' in props:
-                self.link_in_from_cell = props['linkInFromCell']
-            if 'link_in_from_cell' in props:
-                self.link_in_from_cell = props['link_in_from_cell']
-            if 'linksOutToCells' in props:
-                self.links_out_to_cells = props['linksOutToCells']
-            if 'links_out_to_cells' in props:
-                self.links_out_to_cells = props['links_out_to_cells']
-            if 'modifiedAt' in props:
-                self.modified_at = props['modifiedAt']
-            if 'modified_at' in props:
-                self.modified_at = props['modified_at']
-            if 'modifiedBy' in props:
-                self.modified_by = props['modifiedBy']
-            if 'modified_by' in props:
-                self.modified_by = props['modified_by']
-            if 'strict' in props:
-                self.strict = props['strict']
-            if 'value' in props:
-                self.value = props['value']
+            deserialize(self, props)
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'format':
-            return self._format
+            return self.format_
         else:
             raise AttributeError(key)
+
+    def __setattr__(self, key, value):
+        if key == 'format':
+            self.format_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
 
     @property
     def column_id(self):
@@ -142,13 +109,13 @@ class CellHistory(Cell):
             self._display_value = value
 
     @property
-    def _format(self):
-        return self.__format
+    def format_(self):
+        return self._format_
 
-    @_format.setter
-    def _format(self, value):
+    @format_.setter
+    def format_(self, value):
         if isinstance(value, six.string_types):
-            self.__format = value
+            self._format_ = value
 
     @property
     def formula(self):
@@ -242,28 +209,11 @@ class CellHistory(Cell):
         if isinstance(value, (six.string_types, six.integer_types, float, bool)):
             self._value = value
 
-    def to_dict(self, op_id=None, method=None):
-        parent_obj = super(CellHistory, self).to_dict(op_id, method)
-        obj = {
-            'columnId': prep(self._column_id),
-            'columnType': prep(self._column_type),
-            'conditionalFormat': prep(self._conditional_format),
-            'displayValue': prep(self._display_value),
-            'format': prep(self.__format),
-            'formula': prep(self._formula),
-            'hyperlink': prep(self._hyperlink),
-            'linkInFromCell': prep(self._link_in_from_cell),
-            'linksOutToCells': prep(self._links_out_to_cells),
-            'modifiedAt': prep(self._modified_at),
-            'modifiedBy': prep(self._modified_by),
-            'strict': prep(self._strict),
-            'value': prep(self._value)}
-        combo = parent_obj.copy()
-        combo.update(obj)
-        return combo
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

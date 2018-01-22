@@ -17,14 +17,16 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .report import Report
 from .sheet import Sheet
 from .sight import Sight
 from .template import Template
 from ..types import TypedList
-from ..util import prep
-import json
-import six
+from ..util import serialize
+from ..util import deserialize
 
 
 class Folder(object):
@@ -39,7 +41,7 @@ class Folder(object):
 
         self._favorite = None
         self._folders = TypedList(Folder)
-        self.__id = None
+        self._id_ = None
         self._name = None
         self._permalink = None
         self._reports = TypedList(Report)
@@ -48,37 +50,24 @@ class Folder(object):
         self._templates = TypedList(Template)
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'favorite' in props:
-                self.favorite = props['favorite']
-            if 'folders' in props:
-                self.folders = props['folders']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'name' in props:
-                self.name = props['name']
-            if 'permalink' in props:
-                self.permalink = props['permalink']
-            if 'reports' in props:
-                self.reports = props['reports']
-            if 'sheets' in props:
-                self.sheets = props['sheets']
-            if 'sights' in props:
-                self.sights = props['sights']
-            if 'templates' in props:
-                self.templates = props['templates']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
-
+        
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(__class__, self).__setattr__(key, value)
+            
     @property
     def favorite(self):
         return self._favorite
@@ -108,13 +97,13 @@ class Folder(object):
             self._folders.append(value)
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_
 
-    @_id.setter
-    def _id(self, value):
+    @id_.setter
+    def id_(self, value):
         if isinstance(value, six.integer_types):
-            self.__id = value
+            self._id_ = value
 
     @property
     def name(self):
@@ -213,21 +202,11 @@ class Folder(object):
     def create_folder(self, folder_obj):
         return self._base.Folders.create_folder_in_folder(self.id, folder_obj)
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'favorite': prep(self._favorite),
-            'folders': prep(self._folders),
-            'id': prep(self.__id),
-            'name': prep(self._name),
-            'permalink': prep(self._permalink),
-            'reports': prep(self._reports),
-            'sheets': prep(self._sheets),
-            'sights': prep(self._sights),
-            'templates': prep(self._templates)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class Version(object):
@@ -35,8 +37,8 @@ class Version(object):
         self._version = None
 
         if props:
-            if 'version' in props:
-                self.version = props['version']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
 
@@ -49,13 +51,11 @@ class Version(object):
         if isinstance(value, six.integer_types):
             self._version = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'version': prep(self._version)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

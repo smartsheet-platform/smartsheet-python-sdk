@@ -17,9 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
 import six
+import json
+
+from ..util import serialize
+from ..util import deserialize
 
 
 class AccessToken(object):
@@ -42,14 +44,8 @@ class AccessToken(object):
         self._token_type = None
 
         if props:
-            if 'access_token' in props:
-                self.access_token = props['access_token']
-            if 'expires_in' in props:
-                self.expires_in = props['expires_in']
-            if 'refresh_token' in props:
-                self.refresh_token = props['refresh_token']
-            if 'token_type' in props:
-                self.token_type = props['token_type']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
 
@@ -94,16 +90,11 @@ class AccessToken(object):
                          value, self.allowed_values['token_type']))
             self._token_type = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'access_token': prep(self._access_token),
-            'expires_in': prep(self._expires_in),
-            'refresh_token': prep(self._refresh_token),
-            'token_type': prep(self._token_type)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

@@ -17,6 +17,9 @@
 
 from __future__ import absolute_import
 
+import six
+import json
+
 from .alternate_email import AlternateEmail
 from .attachment import Attachment
 from .cell_history import CellHistory
@@ -38,9 +41,8 @@ from .user import User
 from .webhook import Webhook
 from .workspace import Workspace
 from ..types import TypedList
-from ..util import prep
-import json
-import six
+from ..util import serialize
+from ..util import deserialize
 
 
 class IndexResult(object):
@@ -64,25 +66,9 @@ class IndexResult(object):
         self._total_pages = None
 
         if props:
+            deserialize(self, props)
             # account for alternate variable names from raw API response
-            if 'data' in props:
-                self.data = props['data']
-            if 'pageNumber' in props:
-                self.page_number = props['pageNumber']
-            if 'page_number' in props:
-                self.page_number = props['page_number']
-            if 'pageSize' in props:
-                self.page_size = props['pageSize']
-            if 'page_size' in props:
-                self.page_size = props['page_size']
-            if 'totalCount' in props:
-                self.total_count = props['totalCount']
-            if 'total_count' in props:
-                self.total_count = props['total_count']
-            if 'totalPages' in props:
-                self.total_pages = props['totalPages']
-            if 'total_pages' in props:
-                self.total_pages = props['total_pages']
+
         # requests package Response object
         self.request_response = None
 
@@ -234,17 +220,11 @@ class IndexResult(object):
         """Simplify difference between Result and IndexResult"""
         return self._data
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'data': prep(self._data),
-            'pageNumber': prep(self._page_number),
-            'pageSize': prep(self._page_size),
-            'totalCount': prep(self._total_count),
-            'totalPages': prep(self._total_pages)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()
