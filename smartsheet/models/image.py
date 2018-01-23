@@ -52,7 +52,7 @@ class Image(object):
         if key == 'id':
             self.id_ = value
         else:
-            super(__class__, self).__setattr__(key, value)
+            super(Image, self).__setattr__(key, value)
 
     @property
     def alt_text(self):

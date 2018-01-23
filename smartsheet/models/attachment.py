@@ -88,7 +88,7 @@ class Attachment(object):
         if key == 'id':
             self.id_ = value
         else:
-            super(__class__, self).__setattr__(key, value)
+            super(Attachment, self).__setattr__(key, value)
 
     @property
     def attachment_sub_type(self):

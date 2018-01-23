@@ -77,7 +77,7 @@ class WidgetContent(object):
         if key == 'format':
             self.format_ = value
         else:
-            super(__class__, self).__setattr__(key, value)
+            super(WidgetContent, self).__setattr__(key, value)
 
     """Represents the CellLinkWidgetContent object."""
     @property

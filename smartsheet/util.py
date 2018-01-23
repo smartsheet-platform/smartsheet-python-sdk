@@ -123,14 +123,6 @@ def deserialize(obj, props):
                 _log.info('object \'%s\' is missing property \'%s\'', obj.__class__.__name__, key_)
 
 
-def null_filter(obj):
-    filtered = {}
-    for key, value in obj.items():
-        if value is not None:
-            filtered[key] = value
-    return filtered
-
-
 def dump_message_headers(request):
     bytearr = bytearray()
     headers = request.headers.copy()

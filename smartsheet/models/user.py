@@ -74,7 +74,7 @@ class User(object):
         if key == 'id':
             self.id_ = value
         else:
-            super(__class__, self).__setattr__(key, value)
+            super(User, self).__setattr__(key, value)
 
     @property
     def admin(self):

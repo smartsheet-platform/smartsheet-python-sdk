@@ -66,8 +66,8 @@ class Folder(object):
         if key == 'id':
             self.id_ = value
         else:
-            super(__class__, self).__setattr__(key, value)
-            
+            super(Folder, self).__setattr__(key, value)
+
     @property
     def favorite(self):
         return self._favorite

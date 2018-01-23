@@ -98,7 +98,7 @@ class Sheet(object):
         if key == 'id':
             self.id_ = value
         else:
-            super(__class__, self).__setattr__(key, value)
+            super(Sheet, self).__setattr__(key, value)
 
     @property
     def access_level(self):

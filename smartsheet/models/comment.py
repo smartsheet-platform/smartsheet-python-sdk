@@ -64,7 +64,7 @@ class Comment(object):
         if key == 'id':
             self.id_ = value
         else:
-            super(__class__, self).__setattr__(key, value)
+            super(Comment, self).__setattr__(key, value)
 
     @property
     def attachments(self):

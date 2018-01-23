@@ -52,7 +52,7 @@ class RowMapping(object):
         if key == 'from':
             self.from_ = value
         else:
-            super(__class__, self).__setattr__(key, value)
+            super(RowMapping, self).__setattr__(key, value)
 
     @property
     def from_(self):

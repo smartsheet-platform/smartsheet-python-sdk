@@ -94,7 +94,7 @@ class ReportRow(Row):
         elif key == 'id':
             self.id_ = value
         else:
-            super(__class__, self).__setattr__(key, value)
+            super(ReportRow, self).__setattr__(key, value)
 
     @property
     def above(self):

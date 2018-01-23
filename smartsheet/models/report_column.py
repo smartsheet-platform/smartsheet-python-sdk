@@ -129,7 +129,7 @@ class ReportColumn(Column):
         elif key == 'type':
             self.type_ = value
         else:
-            super(__class__, self).__setattr__(key, value)
+            super(ReportColumn, self).__setattr__(key, value)
 
     @property
     def auto_number_format(self):

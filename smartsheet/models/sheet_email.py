@@ -67,7 +67,7 @@ class SheetEmail(Email):
         if key == 'format':
             self.format_ = value
         else:
-            super(__class__, self).__setattr__(key, value)
+            super(SheetEmail, self).__setattr__(key, value)
 
     @property
     def cc_me(self):

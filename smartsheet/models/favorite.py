@@ -61,7 +61,7 @@ class Favorite(object):
         if key == 'type':
             self.type_ = value
         else:
-            super(__class__, self).__setattr__(key, value)
+            super(Favorite, self).__setattr__(key, value)
 
     @property
     def object_id(self):

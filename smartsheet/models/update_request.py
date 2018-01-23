@@ -63,7 +63,7 @@ class UpdateRequest(MultiRowEmail):
         if key == 'id':
             self.id_ = value
         else:
-            super(__class__, self).__setattr__(key, value)
+            super(UpdateRequest, self).__setattr__(key, value)
 
     @property
     def created_at(self):

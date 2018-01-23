@@ -70,7 +70,7 @@ class CellHistory(Cell):
         if key == 'format':
             self.format_ = value
         else:
-            super(__class__, self).__setattr__(key, value)
+            super(CellHistory, self).__setattr__(key, value)
 
     @property
     def column_id(self):
