@@ -169,18 +169,7 @@ class Cell(object):
 
     @links_out_to_cells.setter
     def links_out_to_cells(self, value):
-        if isinstance(value, list):
-            self._links_out_to_cells.purge()
-            self._links_out_to_cells.extend([
-                 (CellLink(x, self._base)
-                  if not isinstance(x, CellLink) else x) for x in value
-             ])
-        elif isinstance(value, TypedList):
-            self._links_out_to_cells.purge()
-            self._links_out_to_cells = value.to_list()
-        elif isinstance(value, CellLink):
-            self._links_out_to_cells.purge()
-            self._links_out_to_cells.append(value)
+        self._links_out_to_cells.load(value)
 
     @property
     def object_value(self):

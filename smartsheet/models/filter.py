@@ -69,18 +69,7 @@ class Filter(object):
 
     @criteria.setter
     def criteria(self, value):
-        if isinstance(value, list):
-            self._criteria.purge()
-            self._criteria.extend([
-                (Criteria(x, self._base)
-                 if not isinstance(x, Criteria) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._criteria.purge()
-            self._criteria = value.to_list()
-        elif isinstance(value, Criteria):
-            self._criteria.purge()
-            self._criteria.append(value)
+        self._criteria.load(value)
 
     @property
     def exclude_selected(self):
@@ -111,18 +100,7 @@ class Filter(object):
 
     @values.setter
     def values(self, value):
-        if isinstance(value, list):
-            self._values.purge()
-            self._values.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._values.purge()
-            self._values = value.to_list()
-        elif isinstance(value, str):
-            self._values.purge()
-            self._values.append(value)
+        self._values.load(value)
 
     def to_dict(self):
         return serialize(self)

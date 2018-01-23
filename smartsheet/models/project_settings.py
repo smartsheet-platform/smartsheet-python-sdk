@@ -60,23 +60,12 @@ class ProjectSettings(object):
 
     @non_working_days.setter
     def non_working_days(self, value):
-        if isinstance(value, list):
-            self._non_working_days.purge()
-            for x in value:
-                if isinstance(x, six.string_types):
-                    x = parse(x).date()
-                if isinstance(x, date):
-                    self._non_working_days.extend([x])
-        elif isinstance(value, TypedList):
-            self._non_working_days.purge()
-            self._non_working_days = value.to_list()
-        elif isinstance(value, date):
-            self._non_working_days.purge()
-            self._non_working_days.append(value)
-        elif isinstance(value, six.string_types):
+        if isinstance(value, six.string_types):
             value = parse(value).date()
             self._non_working_days.purge()
             self._non_working_days.append(value)
+        else:
+            self._non_working_days.load(value)
 
     @property
     def working_days(self):
@@ -84,18 +73,7 @@ class ProjectSettings(object):
 
     @working_days.setter
     def working_days(self, value):
-        if isinstance(value, list):
-            self._working_days.purge()
-            self._working_days.extend([
-                 (six.string_types(x, self._base)
-                  if not isinstance(x, six.string_types) else x) for x in value
-             ])
-        elif isinstance(value, TypedList):
-            self._working_days.purge()
-            self._working_days = value.to_list()
-        elif isinstance(value, six.string_types):
-            self._working_days.purge()
-            self._working_days.append(value)
+        self._working_days.load(value)
 
     def to_dict(self):
         return serialize(self)

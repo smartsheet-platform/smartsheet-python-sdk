@@ -213,18 +213,7 @@ class ReportColumn(Column):
 
     @options.setter
     def options(self, value):
-        if isinstance(value, list):
-            self._options.purge()
-            self._options.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._options.purge()
-            self._options = value.to_list()
-        elif isinstance(value, str):
-            self._options.purge()
-            self._options.append(value)
+        self._options.load(value)
 
     @property
     def primary(self):
@@ -278,18 +267,7 @@ class ReportColumn(Column):
 
     @tags.setter
     def tags(self, value):
-        if isinstance(value, list):
-            self._tags.purge()
-            self._tags.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._tags.purge()
-            self._tags = value.to_list()
-        elif isinstance(value, str):
-            self._tags.purge()
-            self._tags.append(value)
+        self._tags.load(value)
 
     @property
     def title(self):

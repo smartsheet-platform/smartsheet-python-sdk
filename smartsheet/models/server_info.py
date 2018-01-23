@@ -61,18 +61,7 @@ class ServerInfo(object):
 
     @supported_locales.setter
     def supported_locales(self, value):
-        if isinstance(value, list):
-            self._supported_locales.purge()
-            self._supported_locales.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._supported_locales.purge()
-            self._supported_locales = value.to_list()
-        elif isinstance(value, str):
-            self._supported_locales.purge()
-            self._supported_locales.append(value)
+        self._supported_locales.load(value)
 
     def to_dict(self):
         return serialize(self)

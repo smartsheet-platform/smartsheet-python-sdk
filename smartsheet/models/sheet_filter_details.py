@@ -56,18 +56,7 @@ class SheetFilterDetails(object):
 
     @criteria.setter
     def criteria(self, value):
-        if isinstance(value, list):
-            self._criteria.purge()
-            self._criteria.extend([
-                (Criteria(x)
-                 if not isinstance(x, Criteria) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._criteria.purge()
-            self._criteria = value.to_list()
-        elif isinstance(value, Criteria):
-            self._criteria.purge()
-            self._criteria.append(value)
+        self._criteria.load(value)
 
     @property
     def include_parent(self):

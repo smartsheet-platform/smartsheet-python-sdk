@@ -109,18 +109,7 @@ class Template(object):
 
     @categories.setter
     def categories(self, value):
-        if isinstance(value, list):
-            self._categories.purge()
-            self._categories.extend([
-                (six.string_types(x, self._base)
-                 if not isinstance(x, six.string_types) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._categories.purge()
-            self._categories = value.to_list()
-        elif isinstance(value, six.string_types):
-            self._categories.purge()
-            self._categories.append(value)
+        self._categories.load(value)
 
     @property
     def description(self):
@@ -196,18 +185,7 @@ class Template(object):
 
     @tags.setter
     def tags(self, value):
-        if isinstance(value, list):
-            self._tags.purge()
-            self._tags.extend([
-                (six.string_types(x, self._base)
-                 if not isinstance(x, six.string_types) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._tags.purge()
-            self._tags = value.to_list()
-        elif isinstance(value, six.string_types):
-            self._tags.purge()
-            self._tags.append(value)
+        self._tags.load(value)
 
     @property
     def type(self):

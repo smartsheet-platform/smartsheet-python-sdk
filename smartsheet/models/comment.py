@@ -72,18 +72,7 @@ class Comment(object):
 
     @attachments.setter
     def attachments(self, value):
-        if isinstance(value, list):
-            self._attachments.purge()
-            self._attachments.extend([
-                (Attachment(x, self._base)
-                 if not isinstance(x, Attachment) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._attachments.purge()
-            self._attachments = value.to_list()
-        elif isinstance(value, Attachment):
-            self._attachments.purge()
-            self._attachments.append(value)
+        self._attachments.load(value)
 
     @property
     def created_at(self):

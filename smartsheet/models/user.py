@@ -91,18 +91,7 @@ class User(object):
 
     @alternate_emails.setter
     def alternate_emails(self, value):
-        if isinstance(value, list):
-            self._alternate_emails.purge()
-            self._alternate_emails.extend([
-                (AlternateEmail(x, self._base)
-                 if not isinstance(x, AlternateEmail) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._alternate_emails.purge()
-            self._alternate_emails = value.to_list()
-        elif isinstance(value, AlternateEmail):
-            self._alternate_emails.purge()
-            self._alternate_emails.append(value)
+        self._alternate_emails.load(value)
 
     @property
     def custom_welcome_screen_viewed(self):

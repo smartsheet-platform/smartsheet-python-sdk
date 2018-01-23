@@ -52,18 +52,7 @@ class ImageUrlMap(object):
 
     @image_urls.setter
     def image_urls(self, value):
-        if isinstance(value, list):
-            self._image_urls.purge()
-            self._image_urls.extend([
-                (ImageUrl(x, self._base)
-                 if not isinstance(x, ImageUrl) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._image_urls.purge()
-            self._image_urls = value.to_list()
-        elif isinstance(value, ImageUrl):
-            self._image_urls.purge()
-            self._image_urls.append(value)
+        self._image_urls.load(value)
 
     @property
     def url_expires_in_millis(self):

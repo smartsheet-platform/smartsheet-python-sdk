@@ -120,18 +120,7 @@ class Sheet(object):
 
     @attachments.setter
     def attachments(self, value):
-        if isinstance(value, list):
-            self._attachments.purge()
-            self._attachments.extend([
-                (Attachment(x, self._base)
-                 if not isinstance(x, Attachment) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._attachments.purge()
-            self._attachments = value.to_list()
-        elif isinstance(value, Attachment):
-            self._attachments.purge()
-            self._attachments.append(value)
+        self._attachments.load(value)
 
     @property
     def columns(self):
@@ -139,18 +128,7 @@ class Sheet(object):
 
     @columns.setter
     def columns(self, value):
-        if isinstance(value, list):
-            self._columns.purge()
-            self._columns.extend([
-                (Column(x, self._base)
-                 if not isinstance(x, Column) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._columns.purge()
-            self._columns = value.to_list()
-        elif isinstance(value, Column):
-            self._columns.purge()
-            self._columns.append(value)
+        self._columns.load(value)
 
     @property
     def created_at(self):
@@ -180,18 +158,7 @@ class Sheet(object):
 
     @discussions.setter
     def discussions(self, value):
-        if isinstance(value, list):
-            self._discussions.purge()
-            self._discussions.extend([
-                (Discussion(x, self._base)
-                 if not isinstance(x, Discussion) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._discussions.purge()
-            self._discussions = value.to_list()
-        elif isinstance(value, Discussion):
-            self._discussions.purge()
-            self._discussions.append(value)
+        self._discussions.load(value)
 
     @property
     def effective_attachment_options(self):
@@ -199,18 +166,7 @@ class Sheet(object):
 
     @effective_attachment_options.setter
     def effective_attachment_options(self, value):
-        if isinstance(value, list):
-            self._effective_attachment_options.purge()
-            self._effective_attachment_options.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._effective_attachment_options.purge()
-            self._effective_attachment_options = value.to_list()
-        elif isinstance(value, str):
-            self._effective_attachment_options.purge()
-            self._effective_attachment_options.append(value)
+        self._effective_attachment_options.load(value)
 
     @property
     def favorite(self):
@@ -227,18 +183,7 @@ class Sheet(object):
 
     @filters.setter
     def filters(self, value):
-        if isinstance(value, list):
-            self._filters.purge()
-            self._filters.extend([
-                (SheetFilter(x, self._base)
-                 if not isinstance(x, SheetFilter) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._filters.purge()
-            self._filters = value.to_list()
-        elif isinstance(value, SheetFilter):
-            self._filters.purge()
-            self._filters.append(value)
+        self._filters.load(value)
 
     @property
     def from_id(self):
@@ -351,18 +296,7 @@ class Sheet(object):
 
     @rows.setter
     def rows(self, value):
-        if isinstance(value, list):
-            self._rows.purge()
-            self._rows.extend([
-                (Row(x, self._base)
-                 if not isinstance(x, Row) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._rows.purge()
-            self._rows = value.to_list()
-        elif isinstance(value, Row):
-            self._rows.purge()
-            self._rows.append(value)
+        self._rows.load(value)
 
     @property
     def show_parent_rows_for_filters(self):

@@ -60,18 +60,7 @@ class CopyOrMoveRowResult(object):
 
     @row_mappings.setter
     def row_mappings(self, value):
-        if isinstance(value, list):
-            self._row_mappings.purge()
-            self._row_mappings.extend([
-                (RowMapping(x, self._base)
-                 if not isinstance(x, RowMapping) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._row_mappings.purge()
-            self._row_mappings = value.to_list()
-        elif isinstance(value, RowMapping):
-            self._row_mappings.purge()
-            self._row_mappings.append(value)
+        self._row_mappings.load(value)
 
     def to_dict(self):
         return serialize(self)

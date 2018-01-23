@@ -165,18 +165,7 @@ class Sight(object):
 
     @widgets.setter
     def widgets(self, value):
-        if isinstance(value, list):
-            self._widgets.purge()
-            self._widgets.extend([
-                (Widget(x, self._base)
-                 if not isinstance(x, Widget) else x) for x in value
-             ])
-        elif isinstance(value, TypedList):
-            self._widgets.purge()
-            self._widgets = value.to_list()
-        elif isinstance(value, Widget):
-            self._widgets.purge()
-            self._widgets.append(value)
+        self._widgets.load(value)
 
     @property
     def workspace(self):

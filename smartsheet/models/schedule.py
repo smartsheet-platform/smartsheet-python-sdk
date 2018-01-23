@@ -94,19 +94,7 @@ class Schedule(object):
 
     @day_descriptors.setter
     def day_descriptors(self, value):
-        if isinstance(value, list):
-            self._day_descriptors.purge()
-            self._day_descriptors.extend([
-                (str(x)
-                 if not isinstance(x, six.string_types) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._day_descriptors.purge()
-            self._day_descriptors = value.to_list()
-        elif isinstance(value, str):
-            self._day_descriptors.purge()
-            self._day_descriptors.append(value)
-
+        self._day_descriptors.load(value)
         for string in self._day_descriptors:
             if string not in self.allowed_values['day_descriptors']:
                 raise ValueError(

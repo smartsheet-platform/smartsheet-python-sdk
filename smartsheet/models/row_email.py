@@ -51,18 +51,7 @@ class RowEmail(Email):
 
     @column_ids.setter
     def column_ids(self, value):
-        if isinstance(value, list):
-            self._column_ids.purge()
-            self._column_ids.extend([
-                (int(x)
-                 if not isinstance(x, int) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._column_ids.purge()
-            self._column_ids = value.to_list()
-        elif isinstance(value, int):
-            self._column_ids.purge()
-            self._column_ids.append(value)
+        self._column_ids.load(value)
 
     @property
     def include_attachments(self):

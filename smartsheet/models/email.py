@@ -68,18 +68,7 @@ class Email(object):
 
     @send_to.setter
     def send_to(self, value):
-        if isinstance(value, list):
-            self._send_to.purge()
-            self._send_to.extend([
-                (Recipient(x, self._base)
-                 if not isinstance(x, Recipient) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._send_to.purge()
-            self._send_to = value.to_list()
-        elif isinstance(value, Recipient):
-            self._send_to.purge()
-            self._send_to.append(value)
+        self._send_to.load(value)
 
     @property
     def subject(self):

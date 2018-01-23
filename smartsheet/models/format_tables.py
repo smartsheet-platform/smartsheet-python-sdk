@@ -62,18 +62,7 @@ class FormatTables(object):
 
     @bold.setter
     def bold(self, value):
-        if isinstance(value, list):
-            self._bold.purge()
-            self._bold.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._bold.purge()
-            self._bold = value.to_list()
-        elif isinstance(value, str):
-            self._bold.purge()
-            self._bold.append(value)
+        self._bold.load(value)
 
     @property
     def color(self):
@@ -81,18 +70,7 @@ class FormatTables(object):
 
     @color.setter
     def color(self, value):
-        if isinstance(value, list):
-            self._color.purge()
-            self._color.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._color.purge()
-            self._color = value.to_list()
-        elif isinstance(value, str):
-            self._color.purge()
-            self._color.append(value)
+        self._color.load(value)
 
     @property
     def currency(self):
@@ -100,18 +78,7 @@ class FormatTables(object):
 
     @currency.setter
     def currency(self, value):
-        if isinstance(value, list):
-            self._currency.purge()
-            self._currency.extend([
-                (Currency(x, self._base)
-                 if not isinstance(x, Currency) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._currency.purge()
-            self._currency = value.to_list()
-        elif isinstance(value, Currency):
-            self._currency.purge()
-            self._currency.append(value)
+        self._currency.load(value)
 
     @property
     def decimal_count(self):
@@ -119,18 +86,7 @@ class FormatTables(object):
 
     @decimal_count.setter
     def decimal_count(self, value):
-        if isinstance(value, list):
-            self._decimal_count.purge()
-            self._decimal_count.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._decimal_count.purge()
-            self._decimal_count = value.to_list()
-        elif isinstance(value, str):
-            self._decimal_count.purge()
-            self._decimal_count.append(value)
+        self._decimal_count.load(value)
 
     @property
     def defaults(self):
@@ -147,18 +103,7 @@ class FormatTables(object):
 
     @font_family.setter
     def font_family(self, value):
-        if isinstance(value, list):
-            self._font_family.purge()
-            self._font_family.extend([
-                (FontFamily(x, self._base)
-                 if not isinstance(x, FontFamily) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._font_family.purge()
-            self._font_family = value.to_list()
-        elif isinstance(value, FontFamily):
-            self._font_family.purge()
-            self._font_family.append(value)
+        self._font_family.load(value)
 
     @property
     def font_size(self):
@@ -166,18 +111,7 @@ class FormatTables(object):
 
     @font_size.setter
     def font_size(self, value):
-        if isinstance(value, list):
-            self._font_size.purge()
-            self._font_size.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._font_size.purge()
-            self._font_size = value.to_list()
-        elif isinstance(value, str):
-            self._font_size.purge()
-            self._font_size.append(value)
+        self._font_size.load(value)
 
     @property
     def horizontal_align(self):
@@ -185,18 +119,7 @@ class FormatTables(object):
 
     @horizontal_align.setter
     def horizontal_align(self, value):
-        if isinstance(value, list):
-            self._horizontal_align.purge()
-            self._horizontal_align.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._horizontal_align.purge()
-            self._horizontal_align = value.to_list()
-        elif isinstance(value, str):
-            self._horizontal_align.purge()
-            self._horizontal_align.append(value)
+        self._horizontal_align.load(value)
 
     @property
     def italic(self):
@@ -204,18 +127,7 @@ class FormatTables(object):
 
     @italic.setter
     def italic(self, value):
-        if isinstance(value, list):
-            self._italic.purge()
-            self._italic.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._italic.purge()
-            self._italic = value.to_list()
-        elif isinstance(value, str):
-            self._italic.purge()
-            self._italic.append(value)
+        self._italic.load(value)
 
     @property
     def number_format(self):
@@ -223,18 +135,7 @@ class FormatTables(object):
 
     @number_format.setter
     def number_format(self, value):
-        if isinstance(value, list):
-            self._number_format.purge()
-            self._number_format.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._number_format.purge()
-            self._number_format = value.to_list()
-        elif isinstance(value, str):
-            self._number_format.purge()
-            self._number_format.append(value)
+        self._number_format.load(value)
 
     @property
     def strikethrough(self):
@@ -242,18 +143,7 @@ class FormatTables(object):
 
     @strikethrough.setter
     def strikethrough(self, value):
-        if isinstance(value, list):
-            self._strikethrough.purge()
-            self._strikethrough.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._strikethrough.purge()
-            self._strikethrough = value.to_list()
-        elif isinstance(value, str):
-            self._strikethrough.purge()
-            self._strikethrough.append(value)
+        self._strikethrough.load(value)
 
     @property
     def text_wrap(self):
@@ -261,18 +151,7 @@ class FormatTables(object):
 
     @text_wrap.setter
     def text_wrap(self, value):
-        if isinstance(value, list):
-            self._text_wrap.purge()
-            self._text_wrap.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._text_wrap.purge()
-            self._text_wrap = value.to_list()
-        elif isinstance(value, str):
-            self._text_wrap.purge()
-            self._text_wrap.append(value)
+        self._text_wrap.load(value)
 
     @property
     def thousands_separator(self):
@@ -280,18 +159,7 @@ class FormatTables(object):
 
     @thousands_separator.setter
     def thousands_separator(self, value):
-        if isinstance(value, list):
-            self._thousands_separator.purge()
-            self._thousands_separator.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._thousands_separator.purge()
-            self._thousands_separator = value.to_list()
-        elif isinstance(value, str):
-            self._thousands_separator.purge()
-            self._thousands_separator.append(value)
+        self._thousands_separator.load(value)
 
     @property
     def underline(self):
@@ -299,18 +167,7 @@ class FormatTables(object):
 
     @underline.setter
     def underline(self, value):
-        if isinstance(value, list):
-            self._underline.purge()
-            self._underline.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._underline.purge()
-            self._underline = value.to_list()
-        elif isinstance(value, str):
-            self._underline.purge()
-            self._underline.append(value)
+        self._underline.load(value)
 
     @property
     def vertical_align(self):
@@ -318,18 +175,7 @@ class FormatTables(object):
 
     @vertical_align.setter
     def vertical_align(self, value):
-        if isinstance(value, list):
-            self._vertical_align.purge()
-            self._vertical_align.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._vertical_align.purge()
-            self._vertical_align = value.to_list()
-        elif isinstance(value, str):
-            self._vertical_align.purge()
-            self._vertical_align.append(value)
+        self._vertical_align.load(value)
 
     def to_dict(self):
         return serialize(self)

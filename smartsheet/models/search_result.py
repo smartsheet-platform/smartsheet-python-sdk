@@ -51,18 +51,7 @@ class SearchResult(object):
 
     @results.setter
     def results(self, value):
-        if isinstance(value, list):
-            self._results.purge()
-            self._results.extend([
-                (SearchResultItem(x, self._base)
-                 if not isinstance(x, SearchResultItem) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._results.purge()
-            self._results = value.to_list()
-        elif isinstance(value, SearchResultItem):
-            self._results.purge()
-            self._results.append(value)
+        self._results.load(value)
 
     @property
     def total_count(self):

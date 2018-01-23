@@ -86,18 +86,7 @@ class WidgetContent(object):
 
     @cell_data.setter
     def cell_data(self, value):
-        if isinstance(value, list):
-            self._cell_data.purge()
-            self._cell_data.extend([
-                (CellDataItem(x, self._base)
-                 if not isinstance(x, CellDataItem) else x) for x in value
-             ])
-        elif isinstance(value, TypedList):
-            self._cell_data.purge()
-            self._cell_data = value.to_list()
-        elif isinstance(value, CellDataItem):
-            self._cell_data.purge()
-            self._cell_data.append(value)
+        self._cell_data.load(value)
 
     @property
     def columns(self):
@@ -105,18 +94,7 @@ class WidgetContent(object):
 
     @columns.setter
     def columns(self, value):
-        if isinstance(value, list):
-            self._columns.purge()
-            self._columns.extend([
-                (Column(x, self._base)
-                 if not isinstance(x, Column) else x) for x in value
-             ])
-        elif isinstance(value, TypedList):
-            self._columns.purge()
-            self._columns = value.to_list()
-        elif isinstance(value, Column):
-            self._columns.purge()
-            self._columns.append(value)
+        self._columns.load(value)
 
     @property
     def hyperlink(self):
@@ -146,18 +124,7 @@ class WidgetContent(object):
 
     @shortcut_data.setter
     def shortcut_data(self, value):
-        if isinstance(value, list):
-            self._shortcut_data.purge()
-            self._shortcut_data.extend([
-                (ShortcutDataItem(x, self._base)
-                 if not isinstance(x, ShortcutDataItem) else x) for x in value
-             ])
-        elif isinstance(value, TypedList):
-            self._shortcut_data.purge()
-            self._shortcut_data = value.to_list()
-        elif isinstance(value, ShortcutDataItem):
-            self._shortcut_data.purge()
-            self._shortcut_data.append(value)
+        self._shortcut_data.load(value)
 
     """Represents the ReportWidgetContent object."""
     @property

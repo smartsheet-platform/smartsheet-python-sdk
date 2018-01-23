@@ -56,18 +56,7 @@ class FontFamily(object):
 
     @traits.setter
     def traits(self, value):
-        if isinstance(value, list):
-            self._traits.purge()
-            self._traits.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._traits.purge()
-            self._traits = value.to_list()
-        elif isinstance(value, str):
-            self._traits.purge()
-            self._traits.append(value)
+        self._traits.load(value)
 
     def to_dict(self):
         return serialize(self)

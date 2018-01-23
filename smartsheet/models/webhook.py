@@ -138,18 +138,7 @@ class Webhook(object):
 
     @events.setter
     def events(self, value):
-        if isinstance(value, list):
-            self._events.purge()
-            self._events.extend([
-                (six.string_types(x, self._base)
-                 if not isinstance(x, six.string_types) else x) for x in value
-             ])
-        elif isinstance(value, TypedList):
-            self._events.purge()
-            self._events = value.to_list()
-        elif isinstance(value, six.string_types):
-            self._events.purge()
-            self._events.append(value)
+        self._events.load(value)
 
     @property
     def id_(self):

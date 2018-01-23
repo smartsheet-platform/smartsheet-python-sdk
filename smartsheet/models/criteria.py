@@ -125,18 +125,7 @@ class Criteria(object):
 
     @values.setter
     def values(self, value):
-        if isinstance(value, list):
-            self._values.purge()
-            self._values.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._values.purge()
-            self._values = value.to_list()
-        elif isinstance(value, str):
-            self._values.purge()
-            self._values.append(value)
+        self._values.load(value)
 
     def to_dict(self):
         return serialize(self)

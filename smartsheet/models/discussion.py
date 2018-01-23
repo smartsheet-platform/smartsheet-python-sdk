@@ -112,18 +112,7 @@ class Discussion(object):
 
     @comment_attachments.setter
     def comment_attachments(self, value):
-        if isinstance(value, list):
-            self._comment_attachments.purge()
-            self._comment_attachments.extend([
-                (Attachment(x, self._base)
-                 if not isinstance(x, Attachment) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._comment_attachments.purge()
-            self._comment_attachments = value.to_list()
-        elif isinstance(value, Attachment):
-            self._comment_attachments.purge()
-            self._comment_attachments.append(value)
+        self._comment_attachments.load(value)
 
     @property
     def comment_count(self):
@@ -140,18 +129,7 @@ class Discussion(object):
 
     @comments.setter
     def comments(self, value):
-        if isinstance(value, list):
-            self._comments.purge()
-            self._comments.extend([
-                (Comment(x, self._base)
-                 if not isinstance(x, Comment) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._comments.purge()
-            self._comments = value.to_list()
-        elif isinstance(value, Comment):
-            self._comments.purge()
-            self._comments.append(value)
+        self._comments.load(value)
 
     @property
     def created_by(self):

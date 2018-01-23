@@ -74,6 +74,21 @@ class TypedList(collections.MutableSequence):
     def to_list(self):
         return self.__store
 
+    def load(self, value):
+        if isinstance(value, list):
+            self.purge()
+            self.extend([
+                (item if isinstance(item, self.item_type) else self.item_type(item)) for item in value
+            ])
+        elif isinstance(value, TypedList):
+            self.purge()
+            self.extend(value.to_list())
+        elif isinstance(value, self.item_type):
+            self.purge()
+            self.append(value)
+        else:
+            raise ValueError("Can't load to TypedList(%s) from '%s'", self.item_type, value)
+
     def __repr__(self):
         tmp = json.dumps(self.__store)
         return "TypedList(item_type=%s, contents=%s)" % (self.item_type, tmp)

@@ -103,18 +103,7 @@ class Group(object):
 
     @members.setter
     def members(self, value):
-        if isinstance(value, list):
-            self._members.purge()
-            self._members.extend([
-                (GroupMember(x, self._base)
-                 if not isinstance(x, GroupMember) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._members.purge()
-            self._members = value.to_list()
-        elif isinstance(value, GroupMember):
-            self._members.purge()
-            self._members.append(value)
+        self._members.load(value)
 
     @property
     def modified_at(self):

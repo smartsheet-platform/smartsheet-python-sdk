@@ -83,18 +83,7 @@ class Folder(object):
 
     @folders.setter
     def folders(self, value):
-        if isinstance(value, list):
-            self._folders.purge()
-            self._folders.extend([
-                (Folder(x, self._base)
-                 if not isinstance(x, Folder) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._folders.purge()
-            self._folders = value.to_list()
-        elif isinstance(value, Folder):
-            self._folders.purge()
-            self._folders.append(value)
+        self._folders.load(value)
 
     @property
     def id_(self):
@@ -129,18 +118,7 @@ class Folder(object):
 
     @reports.setter
     def reports(self, value):
-        if isinstance(value, list):
-            self._reports.purge()
-            self._reports.extend([
-                (Report(x, self._base)
-                 if not isinstance(x, Report) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._reports.purge()
-            self._reports = value.to_list()
-        elif isinstance(value, Report):
-            self._reports.purge()
-            self._reports.append(value)
+        self._reports.load(value)
 
     @property
     def sheets(self):
@@ -148,18 +126,7 @@ class Folder(object):
 
     @sheets.setter
     def sheets(self, value):
-        if isinstance(value, list):
-            self._sheets.purge()
-            self._sheets.extend([
-                (Sheet(x, self._base)
-                 if not isinstance(x, Sheet) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._sheets.purge()
-            self._sheets = value.to_list()
-        elif isinstance(value, Sheet):
-            self._sheets.purge()
-            self._sheets.append(value)
+        self._sheets.load(value)
 
     @property
     def sights(self):
@@ -167,18 +134,7 @@ class Folder(object):
 
     @sights.setter
     def sights(self, value):
-        if isinstance(value, list):
-            self._sights.purge()
-            self._sights.extend([
-                (Sight(x, self._base)
-                 if not isinstance(x, Sight) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._sights.purge()
-            self._sights = value.to_list()
-        elif isinstance(value, Sight):
-            self._sights.purge()
-            self._sights.append(value)
+        self._sights.load(value)
 
     @property
     def templates(self):
@@ -186,18 +142,7 @@ class Folder(object):
 
     @templates.setter
     def templates(self, value):
-        if isinstance(value, list):
-            self._templates.purge()
-            self._templates.extend([
-                (Template(x, self._base)
-                 if not isinstance(x, Template) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._templates.purge()
-            self._templates = value.to_list()
-        elif isinstance(value, Template):
-            self._templates.purge()
-            self._templates.append(value)
+        self._templates.load(value)
 
     def create_folder(self, folder_obj):
         return self._base.Folders.create_folder_in_folder(self.id, folder_obj)

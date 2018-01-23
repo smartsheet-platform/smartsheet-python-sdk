@@ -46,15 +46,4 @@ class PredecessorList(ObjectValue):
 
     @predecessors.setter
     def predecessors(self, value):
-        if isinstance(value, list):
-            self._predecessors.purge()
-            self._predecessors.extend([
-                 (Predecessor(x, self._base)
-                  if not isinstance(x, Predecessor) else x) for x in value
-             ])
-        elif isinstance(value, TypedList):
-            self._predecessors.purge()
-            self._predecessors = value.to_list()
-        elif isinstance(value, Predecessor):
-            self._predecessors.purge()
-            self._predecessors.append(value)
+        self._predecessors.load(value)

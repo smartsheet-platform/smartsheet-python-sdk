@@ -131,18 +131,7 @@ class Row(object):
 
     @attachments.setter
     def attachments(self, value):
-        if isinstance(value, list):
-            self._attachments.purge()
-            self._attachments.extend([
-                (Attachment(x, self._base)
-                 if not isinstance(x, Attachment) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._attachments.purge()
-            self._attachments = value.to_list()
-        elif isinstance(value, Attachment):
-            self._attachments.purge()
-            self._attachments.append(value)
+        self._attachments.load(value)
 
     @property
     def cells(self):
@@ -150,18 +139,7 @@ class Row(object):
 
     @cells.setter
     def cells(self, value):
-        if isinstance(value, list):
-            self._cells.purge()
-            self._cells.extend([
-                (Cell(x, self._base)
-                 if not isinstance(x, Cell) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._cells.purge()
-            self._cells = value.to_list()
-        elif isinstance(value, Cell):
-            self._cells.purge()
-            self._cells.append(value)
+        self._cells.load(value)
 
     @property
     def columns(self):
@@ -169,18 +147,7 @@ class Row(object):
 
     @columns.setter
     def columns(self, value):
-        if isinstance(value, list):
-            self._columns.purge()
-            self._columns.extend([
-                (Column(x, self._base)
-                 if not isinstance(x, Column) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._columns.purge()
-            self._columns = value.to_list()
-        elif isinstance(value, Column):
-            self._columns.purge()
-            self._columns.append(value)
+        self._columns.load(value)
 
     @property
     def conditional_format(self):
@@ -221,18 +188,7 @@ class Row(object):
 
     @discussions.setter
     def discussions(self, value):
-        if isinstance(value, list):
-            self._discussions.purge()
-            self._discussions.extend([
-                (Discussion(x, self._base)
-                 if not isinstance(x, Discussion) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._discussions.purge()
-            self._discussions = value.to_list()
-        elif isinstance(value, Discussion):
-            self._discussions.purge()
-            self._discussions.append(value)
+        self._discussions.load(value)
 
     @property
     def expanded(self):

@@ -143,18 +143,7 @@ class Column(object):
 
     @contact_options.setter
     def contact_options(self, value):
-        if isinstance(value, list):
-            self._contact_options.purge()
-            self._contact_options.extend([
-                (ContactOption(x)
-                 if not isinstance(x, ContactOption) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._contact_options.purge()
-            self._contact_options = value.to_list()
-        elif isinstance(value, ContactOption):
-            self._contact_options.purge()
-            self._contact_options.append(value)
+        self._contact_options.load(value)
 
     @property
     def format_(self):
@@ -216,18 +205,7 @@ class Column(object):
 
     @options.setter
     def options(self, value):
-        if isinstance(value, list):
-            self._options.purge()
-            self._options.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._options.purge()
-            self._options = value.to_list()
-        elif isinstance(value, str):
-            self._options.purge()
-            self._options.append(value)
+        self._options.load(value)
 
     @property
     def primary(self):
@@ -272,18 +250,7 @@ class Column(object):
 
     @tags.setter
     def tags(self, value):
-        if isinstance(value, list):
-            self._tags.purge()
-            self._tags.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._tags.purge()
-            self._tags = value.to_list()
-        elif isinstance(value, str):
-            self._tags.purge()
-            self._tags.append(value)
+        self._tags.load(value)
 
     @property
     def title(self):

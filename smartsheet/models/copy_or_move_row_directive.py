@@ -47,18 +47,7 @@ class CopyOrMoveRowDirective(object):
 
     @row_ids.setter
     def row_ids(self, value):
-        if isinstance(value, list):
-            self._row_ids.purge()
-            self._row_ids.extend([
-                (int(x)
-                 if not isinstance(x, int) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._row_ids.purge()
-            self._row_ids = value.to_list()
-        elif isinstance(value, int):
-            self._row_ids.purge()
-            self._row_ids.append(value)
+        self._row_ids.load(value)
 
     @property
     def to(self):

@@ -72,18 +72,7 @@ class SearchResultItem(object):
 
     @context_data.setter
     def context_data(self, value):
-        if isinstance(value, list):
-            self._context_data.purge()
-            self._context_data.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._context_data.purge()
-            self._context_data = value.to_list()
-        elif isinstance(value, str):
-            self._context_data.purge()
-            self._context_data.append(value)
+        self._context_data.load(value)
 
     @property
     def favorite(self):
