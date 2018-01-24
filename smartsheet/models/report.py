@@ -17,21 +17,14 @@
 
 from __future__ import absolute_import
 
-import six
 import json
 
-from .attachment import Attachment
-from .column import Column
-from .discussion import Discussion
-from .row import Row
+from .report_column import ReportColumn
+from .report_row import ReportRow
 from .sheet import Sheet
-from .sheet_user_settings import SheetUserSettings
-from .source import Source
 from ..types import TypedList
 from ..util import deserialize
 from ..util import serialize
-from datetime import datetime
-from dateutil.parser import parse
 
 
 class Report(Sheet):
@@ -40,44 +33,14 @@ class Report(Sheet):
 
     def __init__(self, props=None, base_obj=None):
         """Initialize the Report model."""
-        super(Report, self).__init__(props, base_obj)
+        super(Report, self).__init__(None, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'access_level': [
-                'VIEWER',
-                'EDITOR',
-                'EDITOR_SHARE',
-                'ADMIN',
-                'OWNER']}
-
-        self._access_level = None
-        self._attachments = TypedList(Attachment)
-        self._columns = TypedList(Column)
-        self._created_at = None
-        self._dependencies_enabled = None
-        self._discussions = TypedList(Discussion)
-        self._effective_attachment_options = TypedList(str)
-        self._favorite = None
-        self._from_id = None
-        self._gantt_enabled = None
-        self._id_ = None
-        self._modified_at = None
-        self._name = None
-        self._owner = None
-        self._owner_id = None
-        self._permalink = None
-        self._read_only = None
-        self._resource_management_enabled = None
-        self._rows = TypedList(Row)
-        self._show_parent_rows_for_filters = None
-        self._source = None
+        self._columns = TypedList(ReportColumn)
+        self._rows = TypedList(ReportRow)
         self._source_sheets = TypedList(Sheet)
-        self._total_row_count = None
-        self._user_settings = None
-        self._version = None
 
         if props:
             deserialize(self, props)
@@ -85,40 +48,6 @@ class Report(Sheet):
         # requests package Response object
         self.request_response = None
         self.__initialized = True
-
-    def __getattr__(self, key):
-        if key == 'id':
-            return self.id_
-        else:
-            raise AttributeError(key)
-
-    def __setattr__(self, key, value):
-        if key == 'id':
-            self.id_ = value
-        else:
-            super(Report, self).__setattr__(key, value)
-
-    @property
-    def access_level(self):
-        return self._access_level
-
-    @access_level.setter
-    def access_level(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['access_level']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Report`access_level`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['access_level']))
-            self._access_level = value
-
-    @property
-    def attachments(self):
-        return self._attachments
-
-    @attachments.setter
-    def attachments(self, value):
-        self._attachments.load(value)
 
     @property
     def columns(self):
@@ -129,147 +58,6 @@ class Report(Sheet):
         self._columns.load(value)
 
     @property
-    def created_at(self):
-        return self._created_at
-
-    @created_at.setter
-    def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._created_at = value
-
-    @property
-    def dependencies_enabled(self):
-        return self._dependencies_enabled
-
-    @dependencies_enabled.setter
-    def dependencies_enabled(self, value):
-        if isinstance(value, bool):
-            self._dependencies_enabled = value
-
-    @property
-    def discussions(self):
-        return self._discussions
-
-    @discussions.setter
-    def discussions(self, value):
-        self._discussions.load(value)
-
-    @property
-    def effective_attachment_options(self):
-        return self._effective_attachment_options
-
-    @effective_attachment_options.setter
-    def effective_attachment_options(self, value):
-        self._effective_attachment_options.load(value)
-
-    @property
-    def favorite(self):
-        return self._favorite
-
-    @favorite.setter
-    def favorite(self, value):
-        if isinstance(value, bool):
-            self._favorite = value
-
-    @property
-    def from_id(self):
-        return self._from_id
-
-    @from_id.setter
-    def from_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._from_id = value
-
-    @property
-    def gantt_enabled(self):
-        return self._gantt_enabled
-
-    @gantt_enabled.setter
-    def gantt_enabled(self, value):
-        if isinstance(value, bool):
-            self._gantt_enabled = value
-
-    @property
-    def id_(self):
-        return self._id_
-
-    @id_.setter
-    def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
-
-    @property
-    def modified_at(self):
-        return self._modified_at
-
-    @modified_at.setter
-    def modified_at(self, value):
-        if isinstance(value, datetime):
-            self._modified_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._modified_at = value
-
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
-
-    @property
-    def owner(self):
-        return self._owner
-
-    @owner.setter
-    def owner(self, value):
-        if isinstance(value, six.string_types):
-            self._owner = value
-
-    @property
-    def owner_id(self):
-        return self._owner_id
-
-    @owner_id.setter
-    def owner_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._owner_id = value
-
-    @property
-    def permalink(self):
-        return self._permalink
-
-    @permalink.setter
-    def permalink(self, value):
-        if isinstance(value, six.string_types):
-            self._permalink = value
-
-    @property
-    def read_only(self):
-        return self._read_only
-
-    @read_only.setter
-    def read_only(self, value):
-        if isinstance(value, bool):
-            self._read_only = value
-
-    @property
-    def resource_management_enabled(self):
-        return self._resource_management_enabled
-
-    @resource_management_enabled.setter
-    def resource_management_enabled(self, value):
-        if isinstance(value, bool):
-            self._resource_management_enabled = value
-
-    @property
     def rows(self):
         return self._rows
 
@@ -278,61 +66,12 @@ class Report(Sheet):
         self._rows.load(value)
 
     @property
-    def show_parent_rows_for_filters(self):
-        return self._show_parent_rows_for_filters
-
-    @show_parent_rows_for_filters.setter
-    def show_parent_rows_for_filters(self, value):
-        if isinstance(value, bool):
-            self._show_parent_rows_for_filters = value
-
-    @property
-    def source(self):
-        return self._source
-
-    @source.setter
-    def source(self, value):
-        if isinstance(value, Source):
-            self._source = value
-        else:
-            self._source = Source(value, self._base)
-
-    @property
     def source_sheets(self):
         return self._source_sheets
 
     @source_sheets.setter
     def source_sheets(self, value):
         self._source_sheets.load(value)
-
-    @property
-    def total_row_count(self):
-        return self._total_row_count
-
-    @total_row_count.setter
-    def total_row_count(self, value):
-        if isinstance(value, six.integer_types):
-            self._total_row_count = value
-
-    @property
-    def user_settings(self):
-        return self._user_settings
-
-    @user_settings.setter
-    def user_settings(self, value):
-        if isinstance(value, SheetUserSettings):
-            self._user_settings = value
-        else:
-            self._user_settings = SheetUserSettings(value, self._base)
-
-    @property
-    def version(self):
-        return self._version
-
-    @version.setter
-    def version(self, value):
-        if isinstance(value, six.integer_types):
-            self._version = value
 
     def to_dict(self):
         return serialize(self)

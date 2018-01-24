@@ -20,15 +20,11 @@ from __future__ import absolute_import
 import six
 import json
 
-from .attachment import Attachment
-from .cell import Cell
-from .column import Column
-from .discussion import Discussion
 from .row import Row
+from .report_cell import ReportCell
 from ..types import TypedList
 from ..util import serialize
 from ..util import deserialize
-from datetime import datetime
 
 
 class ReportRow(Row):
@@ -37,95 +33,18 @@ class ReportRow(Row):
 
     def __init__(self, props=None, base_obj=None):
         """Initialize the ReportRow model."""
-        super(ReportRow, self).__init__(props, base_obj)
+        super(ReportRow, self).__init__(None, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'access_level': [
-                'VIEWER',
-                'EDITOR',
-                'EDITOR_SHARE',
-                'ADMIN',
-                'OWNER']}
-
-        self._above = None
-        self._access_level = None
-        self._attachments = TypedList(Attachment)
-        self._cells = TypedList(Cell)
-        self._columns = TypedList(Column)
-        self._conditional_format = None
-        self._created_at = None
-        self._discussions = TypedList(Discussion)
-        self._expanded = None
-        self._filtered_out = None
-        self._format_ = None
-        self._id_ = None
-        self._in_critical_path = None
-        self._locked = None
-        self._locked_for_user = None
-        self._modified_at = None
-        self._parent_id = None
-        self._permalink = None
-        self._row_number = None
+        self._cells = TypedList(ReportCell)
         self._sheet_id = None
-        self._sibling_id = None
-        self._to_bottom = None
-        self._to_top = None
-        self._version = None
 
         if props:
             deserialize(self, props)
 
         self.__initialized = True
-
-    def __getattr__(self, key):
-        if key == 'format':
-            return self.format_
-        elif key == 'id':
-            return self.id_
-        else:
-            raise AttributeError(key)
-
-    def __setattr__(self, key, value):
-        if key == 'format':
-            self.format_ = value
-        elif key == 'id':
-            self.id_ = value
-        else:
-            super(ReportRow, self).__setattr__(key, value)
-
-    @property
-    def above(self):
-        return self._above
-
-    @above.setter
-    def above(self, value):
-        if isinstance(value, bool):
-            self._above = value
-
-    @property
-    def access_level(self):
-        return self._access_level
-
-    @access_level.setter
-    def access_level(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['access_level']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for ReportRow`access_level`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['access_level']))
-            self._access_level = value
-
-    @property
-    def attachments(self):
-        return self._attachments
-
-    @attachments.setter
-    def attachments(self, value):
-        self._attachments.load(value)
 
     @property
     def cells(self):
@@ -136,139 +55,6 @@ class ReportRow(Row):
         self._cells.load(value)
 
     @property
-    def columns(self):
-        return self._columns
-
-    @columns.setter
-    def columns(self, value):
-        self._columns.load(value)
-
-    @property
-    def conditional_format(self):
-        return self._conditional_format
-
-    @conditional_format.setter
-    def conditional_format(self, value):
-        if isinstance(value, six.string_types):
-            self._conditional_format = value
-
-    @property
-    def created_at(self):
-        return self._created_at
-
-    @created_at.setter
-    def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
-
-    @property
-    def discussions(self):
-        return self._discussions
-
-    @discussions.setter
-    def discussions(self, value):
-        self._discussions.load(value)
-
-    @property
-    def expanded(self):
-        return self._expanded
-
-    @expanded.setter
-    def expanded(self, value):
-        if isinstance(value, bool):
-            self._expanded = value
-
-    @property
-    def filtered_out(self):
-        return self._filtered_out
-
-    @filtered_out.setter
-    def filtered_out(self, value):
-        if isinstance(value, bool):
-            self._filtered_out = value
-
-    @property
-    def format_(self):
-        return self._format_
-
-    @format_.setter
-    def format_(self, value):
-        if isinstance(value, six.string_types):
-            self._format_ = value
-
-    @property
-    def id_(self):
-        return self._id_
-
-    @id_.setter
-    def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
-
-    @property
-    def in_critical_path(self):
-        return self._in_critical_path
-
-    @in_critical_path.setter
-    def in_critical_path(self, value):
-        if isinstance(value, bool):
-            self._in_critical_path = value
-
-    @property
-    def locked(self):
-        return self._locked
-
-    @locked.setter
-    def locked(self, value):
-        if isinstance(value, bool):
-            self._locked = value
-
-    @property
-    def locked_for_user(self):
-        return self._locked_for_user
-
-    @locked_for_user.setter
-    def locked_for_user(self, value):
-        if isinstance(value, bool):
-            self._locked_for_user = value
-
-    @property
-    def modified_at(self):
-        return self._modified_at
-
-    @modified_at.setter
-    def modified_at(self, value):
-        if isinstance(value, datetime):
-            self._modified_at = value
-
-    @property
-    def parent_id(self):
-        return self._parent_id
-
-    @parent_id.setter
-    def parent_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._parent_id = value
-
-    @property
-    def permalink(self):
-        return self._permalink
-
-    @permalink.setter
-    def permalink(self, value):
-        if isinstance(value, six.string_types):
-            self._permalink = value
-
-    @property
-    def row_number(self):
-        return self._row_number
-
-    @row_number.setter
-    def row_number(self, value):
-        if isinstance(value, six.integer_types):
-            self._row_number = value
-
-    @property
     def sheet_id(self):
         return self._sheet_id
 
@@ -276,42 +62,6 @@ class ReportRow(Row):
     def sheet_id(self, value):
         if isinstance(value, six.integer_types):
             self._sheet_id = value
-
-    @property
-    def sibling_id(self):
-        return self._sibling_id
-
-    @sibling_id.setter
-    def sibling_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._sibling_id = value
-
-    @property
-    def to_bottom(self):
-        return self._to_bottom
-
-    @to_bottom.setter
-    def to_bottom(self, value):
-        if isinstance(value, bool):
-            self._to_bottom = value
-
-    @property
-    def to_top(self):
-        return self._to_top
-
-    @to_top.setter
-    def to_top(self, value):
-        if isinstance(value, bool):
-            self._to_top = value
-
-    @property
-    def version(self):
-        return self._version
-
-    @version.setter
-    def version(self, value):
-        if isinstance(value, six.integer_types):
-            self._version = value
 
     def to_dict(self):
         return serialize(self)

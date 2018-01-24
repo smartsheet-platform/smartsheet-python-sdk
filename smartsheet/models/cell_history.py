@@ -21,10 +21,7 @@ import six
 import json
 
 from .cell import Cell
-from .cell_link import CellLink
-from .hyperlink import Hyperlink
 from .user import User
-from ..types import TypedList
 from ..util import serialize
 from ..util import deserialize
 from datetime import datetime
@@ -37,124 +34,17 @@ class CellHistory(Cell):
 
     def __init__(self, props=None, base_obj=None):
         """Initialize the CellHistory model."""
-        super(CellHistory, self).__init__(props, base_obj)
+        super(CellHistory, self).__init__(None, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj
 
-        self._column_id = None
-        self._column_type = None
-        self._conditional_format = None
-        self._display_value = None
-        self._format_ = None
-        self._formula = None
-        self._hyperlink = None
-        self._link_in_from_cell = None
-        self._links_out_to_cells = TypedList(CellLink)
         self._modified_at = None
         self._modified_by = None
-        self._strict = True
-        self._value = None
 
         if props:
             deserialize(self, props)
         self.__initialized = True
-
-    def __getattr__(self, key):
-        if key == 'format':
-            return self.format_
-        else:
-            raise AttributeError(key)
-
-    def __setattr__(self, key, value):
-        if key == 'format':
-            self.format_ = value
-        else:
-            super(CellHistory, self).__setattr__(key, value)
-
-    @property
-    def column_id(self):
-        return self._column_id
-
-    @column_id.setter
-    def column_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._column_id = value
-
-    @property
-    def column_type(self):
-        return self._column_type
-
-    @column_type.setter
-    def column_type(self, value):
-        if isinstance(value, six.string_types):
-            self._column_type = value
-
-    @property
-    def conditional_format(self):
-        return self._conditional_format
-
-    @conditional_format.setter
-    def conditional_format(self, value):
-        if isinstance(value, six.string_types):
-            self._conditional_format = value
-
-    @property
-    def display_value(self):
-        return self._display_value
-
-    @display_value.setter
-    def display_value(self, value):
-        if isinstance(value, six.string_types):
-            self._display_value = value
-
-    @property
-    def format_(self):
-        return self._format_
-
-    @format_.setter
-    def format_(self, value):
-        if isinstance(value, six.string_types):
-            self._format_ = value
-
-    @property
-    def formula(self):
-        return self._formula
-
-    @formula.setter
-    def formula(self, value):
-        if isinstance(value, six.string_types):
-            self._formula = value
-
-    @property
-    def hyperlink(self):
-        return self._hyperlink
-
-    @hyperlink.setter
-    def hyperlink(self, value):
-        if isinstance(value, Hyperlink):
-            self._hyperlink = value
-        else:
-            self._hyperlink = Hyperlink(value, self._base)
-
-    @property
-    def link_in_from_cell(self):
-        return self._link_in_from_cell
-
-    @link_in_from_cell.setter
-    def link_in_from_cell(self, value):
-        if isinstance(value, CellLink):
-            self._link_in_from_cell = value
-        else:
-            self._link_in_from_cell = CellLink(value, self._base)
-
-    @property
-    def links_out_to_cells(self):
-        return self._links_out_to_cells
-
-    @links_out_to_cells.setter
-    def links_out_to_cells(self, value):
-        self._links_out_to_cells.load(value)
 
     @property
     def modified_at(self):
@@ -179,24 +69,6 @@ class CellHistory(Cell):
             self._modified_by = value
         else:
             self._modified_by = User(value, self._base)
-
-    @property
-    def strict(self):
-        return self._strict
-
-    @strict.setter
-    def strict(self, value):
-        if isinstance(value, bool):
-            self._strict = value
-
-    @property
-    def value(self):
-        return self._value
-
-    @value.setter
-    def value(self, value):
-        if isinstance(value, (six.string_types, six.integer_types, float, bool)):
-            self._value = value
 
     def to_dict(self):
         return serialize(self)

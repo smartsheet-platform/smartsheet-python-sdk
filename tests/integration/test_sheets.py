@@ -285,12 +285,7 @@ class TestSheets:
                     'type': 'TEXT_NUMBER'
                 }, {
                     'title': 'Year Released',
-                    'type': 'TEXT_NUMBER',
-                    'filter': smart.models.Filter({
-                        'type': 'LIST',
-                        'excludeSelected': False,
-                        'values': [1977]
-                    })
+                    'type': 'TEXT_NUMBER'
                 }, {
                     'title': 'Characters Featured',
                     'type': 'PICKLIST',

@@ -31,7 +31,7 @@ class MultiRowEmail(RowEmail):
 
     def __init__(self, props=None, base_obj=None):
         """Initialize the MultiRowEmail model."""
-        super(MultiRowEmail, self).__init__(props, base_obj)
+        super(MultiRowEmail, self).__init__(None, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj

@@ -654,7 +654,7 @@ class TestModelAttributes:
             'sourceSheets': smart.models.Sheet(),
             'fromId': 19082,
             'ownerId': 19082,
-            'columns': smart.models.Column(),
+            'columns': smart.models.ReportColumn(),
             'dependenciesEnabled': True,
             'discussions': smart.models.Discussion(),
             'version': 19082,
@@ -666,7 +666,7 @@ class TestModelAttributes:
             'totalRowCount': 19082,
             'favorite': True,
             'accessLevel': 'VIEWER',
-            'rows': smart.models.Row(),
+            'rows': smart.models.ReportRow(),
             'readOnly': True,
             'permalink': 'foo',
             'source': smart.models.Source(),
@@ -715,13 +715,13 @@ class TestModelAttributes:
     def test_report_snake(self, smart_setup):
         smart = smart_setup['smart']
         model = smart.models.Report({
-            'columns': smart.models.Column(),
+            'columns': smart.models.ReportColumn(),
             'discussions': smart.models.Discussion(),
             'version': 19082,
             'name': 'foo',
             'attachments': smart.models.Attachment(),
             'favorite': True,
-            'rows': smart.models.Row(),
+            'rows': smart.models.ReportRow(),
             'permalink': 'foo',
             'source': smart.models.Source(),
             'owner': 'foo',
@@ -1421,7 +1421,7 @@ class TestModelAttributes:
         # attachments, attachments
         model = smart.models.ReportRow({
             'inCriticalPath': True,
-            'cells': smart.models.Cell(),
+            'cells': smart.models.ReportCell(),
             'siblingId': 19082,
             'columns': smart.models.Column(),
             'rowNumber': 19082,
@@ -1472,7 +1472,7 @@ class TestModelAttributes:
     def test_report_row_snake(self, smart_setup):
         smart = smart_setup['smart']
         model = smart.models.ReportRow({
-            'cells': smart.models.Cell(),
+            'cells': smart.models.ReportCell(),
             'columns': smart.models.Column(),
             'rowNumber': 19082,
             'expanded': True,
@@ -2217,7 +2217,6 @@ class TestModelAttributes:
         # system_column_type, systemColumnType
         # locked, locked
         # virtual_id, virtualId
-        # filter, filter
         # options, options
         # auto_number_format, autoNumberFormat
         model = smart.models.ReportColumn({
@@ -2236,7 +2235,6 @@ class TestModelAttributes:
             'systemColumnType': 'AUTO_NUMBER',
             'locked': True,
             'virtualId': 19082,
-            'filter': smart.models.Filter(),
             'options': ['foo'],
             'autoNumberFormat': smart.models.AutoNumberFormat()
         })
@@ -2256,7 +2254,6 @@ class TestModelAttributes:
         assert model.system_column_type == 'AUTO_NUMBER'
         assert model.locked == True
         assert model.virtual_id == 19082
-        assert isinstance(model.filter, smart.models.Filter)
         assert model.options[0] == 'foo'
         assert isinstance(model.auto_number_format, smart.models.AutoNumberFormat)
         model.tags = 'foo'
@@ -2265,8 +2262,6 @@ class TestModelAttributes:
         tmplist.append('foo')
         model.tags = tmplist
         assert model.tags[0] == 'foo'
-        model.filter = {}
-        assert isinstance(model.filter, smart.models.Filter)
         model.options = 'foo'
         assert model.options[0] == 'foo'
         tmplist = smartsheet.types.TypedList(str)
@@ -2297,7 +2292,6 @@ class TestModelAttributes:
             'locked_for_user': True,
             'system_column_type': 'AUTO_NUMBER',
             'virtual_id': 19082,
-            'filter': smart.models.Filter(),
             'auto_number_format': smart.models.AutoNumberFormat()
         })
 
@@ -2316,7 +2310,6 @@ class TestModelAttributes:
         assert model.system_column_type == 'AUTO_NUMBER'
         assert model.locked == True
         assert model.virtual_id == 19082
-        assert isinstance(model.filter, smart.models.Filter)
         assert model.options[0] == 'foo'
         assert isinstance(model.auto_number_format, smart.models.AutoNumberFormat)
 

@@ -34,7 +34,7 @@ class SheetEmail(Email):
 
     def __init__(self, props=None, base_obj=None):
         """Initialize the SheetEmail model."""
-        super(SheetEmail, self).__init__(props, base_obj)
+        super(SheetEmail, self).__init__(None, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj
@@ -45,12 +45,8 @@ class SheetEmail(Email):
                 'PDF_GANTT',
                 'EXCEL']}
 
-        self._cc_me = False
-        self.__format = None
+        self._format_ = None
         self._format_details = None
-        self._message = None
-        self._send_to = TypedList(Recipient)
-        self._subject = None
 
         if props:
             deserialize(self, props)
@@ -70,17 +66,8 @@ class SheetEmail(Email):
             super(SheetEmail, self).__setattr__(key, value)
 
     @property
-    def cc_me(self):
-        return self._cc_me
-
-    @cc_me.setter
-    def cc_me(self, value):
-        if isinstance(value, bool):
-            self._cc_me = value
-
-    @property
     def format_(self):
-        return self.__format
+        return self._format_
 
     @format_.setter
     def format_(self, value):
@@ -90,7 +77,7 @@ class SheetEmail(Email):
                     ("`{0}` is an invalid value for SheetEmail`_format`,"
                      " must be one of {1}").format(
                          value, self.allowed_values['_format']))
-            self.__format = value
+            self._format_ = value
 
     @property
     def format_details(self):
@@ -102,32 +89,6 @@ class SheetEmail(Email):
             self._format_details = value
         else:
             self._format_details = FormatDetails(value, self._base)
-
-    @property
-    def message(self):
-        return self._message
-
-    @message.setter
-    def message(self, value):
-        if isinstance(value, six.string_types):
-            self._message = value
-
-    @property
-    def send_to(self):
-        return self._send_to
-
-    @send_to.setter
-    def send_to(self, value):
-        self._send_to.load(value)
-
-    @property
-    def subject(self):
-        return self._subject
-
-    @subject.setter
-    def subject(self, value):
-        if isinstance(value, six.string_types):
-            self._subject = value
 
     def to_dict(self):
         return serialize(self)

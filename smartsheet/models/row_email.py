@@ -32,7 +32,7 @@ class RowEmail(Email):
 
     def __init__(self, props=None, base_obj=None):
         """Initialize the RowEmail model."""
-        super(RowEmail, self).__init__(props, base_obj)
+        super(RowEmail, self).__init__(None, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj
