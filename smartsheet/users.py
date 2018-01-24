@@ -208,8 +208,8 @@ class Users(object):
 
         return response
 
-    def list_org_sheets(self, page_size=100, page=1,
-                        include_all=False, modified_since=None):
+    def list_org_sheets(self, page_size=None, page=None,
+                        include_all=None, modified_since=None):
         """Get a list of all Sheets owned by an organization.
 
         Get the list of all Sheets owned by the members of the
@@ -217,9 +217,8 @@ class Users(object):
 
         Args:
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
             modified_since(datetime): list organization sheets modified since datetime
@@ -243,17 +242,16 @@ class Users(object):
 
         return response
 
-    def list_users(self, email=None, page_size=100, page=1,
-                   include_all=False, include=None):
+    def list_users(self, email=None, page_size=None, page=None,
+                   include_all=None, include=None):
         """Get the list of Users in the organization.
 
         Args:
             email (list[str]): Comma separated list of email
                 addresses on which to filter the results.
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
             include(list[str]): optional include parameter, only current

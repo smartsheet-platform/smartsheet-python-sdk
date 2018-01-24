@@ -255,8 +255,8 @@ class Discussions(object):
 
         return response
 
-    def get_all_discussions(self, sheet_id, include=None, page_size=100,
-                            page=1, include_all=False):
+    def get_all_discussions(self, sheet_id, include=None, page_size=None,
+                            page=None, include_all=None):
         """Get a list of all Discussions on the specified Sheet.
 
         Get a list of all Discussions associated with the specified
@@ -268,9 +268,8 @@ class Discussions(object):
                 optional elements to include in the response. Valid list
                 values: comments, attachments
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -335,7 +334,7 @@ class Discussions(object):
         return response
 
     def get_row_discussions(self, sheet_id, row_id, include=None,
-                            page_size=100, page=1, include_all=False):
+                            page_size=None, page=None, include_all=None):
         """Get a list of all Discussions associated with the specified Row.
 
         Args:
@@ -346,9 +345,8 @@ class Discussions(object):
                 values: comments, attachments. (Attachments is effective
                 only if comments is present, otherwise ignored.)
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 

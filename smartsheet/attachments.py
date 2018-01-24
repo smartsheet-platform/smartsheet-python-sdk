@@ -360,8 +360,8 @@ class Attachments(object):
 
         return response
 
-    def list_all_attachments(self, sheet_id, page_size=100, page=1,
-                             include_all=False):
+    def list_all_attachments(self, sheet_id, page_size=None, page=None,
+                             include_all=None):
         """Get a list of Attachments for a Sheet.
 
         Get a list of all Attachments for the specified Sheet,
@@ -370,9 +370,8 @@ class Attachments(object):
         Args:
             sheet_id (int): Sheet ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -394,7 +393,7 @@ class Attachments(object):
         return response
 
     def list_attachment_versions(self, sheet_id, attachment_id,
-                                 page_size=100, page=1, include_all=False):
+                                 page_size=None, page=None, include_all=None):
         """Get a list of versions for an Attachment.
 
         Get a list of all versions of the given Attachment ID, in
@@ -404,9 +403,8 @@ class Attachments(object):
             sheet_id (int): Sheet ID
             attachment_id (int): Attachment ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -429,7 +427,7 @@ class Attachments(object):
         return response
 
     def list_discussion_attachments(self, sheet_id, discussion_id,
-                                    page_size=100, page=1, include_all=False):
+                                    page_size=None, page=None, include_all=None):
         """Get a list of Attachments for the Sheet Discussion.
 
         Get a list of all Attachments for the specified Sheet
@@ -439,9 +437,8 @@ class Attachments(object):
             sheet_id (int): Sheet ID
             discussion_id (int): Discussion ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -463,17 +460,16 @@ class Attachments(object):
 
         return response
 
-    def list_row_attachments(self, sheet_id, row_id, page_size=100, page=1,
-                             include_all=False):
+    def list_row_attachments(self, sheet_id, row_id, page_size=None, page=None,
+                             include_all=None):
         """Get a list of all Attachments for the specified Sheet Row.
 
         Args:
             sheet_id (int): Sheet ID
             row_id (int): Row ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 

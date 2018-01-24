@@ -362,17 +362,16 @@ class Sheets(object):
 
         return response
 
-    def get_columns(self, sheet_id, include=None, page_size=100, page=1,
-                    include_all=False):
+    def get_columns(self, sheet_id, include=None, page_size=None, page=None,
+                    include_all=None):
         """Get all columns belonging to the specified Sheet.
 
         Args:
             sheet_id (int): Sheet ID
             include (str): (future)
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -466,7 +465,7 @@ class Sheets(object):
         return response
 
     def get_sheet(self, sheet_id, include=None, exclude=None, row_ids=None,
-                  row_numbers=None, column_ids=None, page_size=100, page=1):
+                  row_numbers=None, column_ids=None, page_size=None, page=None):
         """Get the specified Sheet.
 
         Get the specified Sheet. Returns the Sheet, including Rows,
@@ -491,9 +490,8 @@ class Sheets(object):
                 columns in the 'columns' array, and individual rows' 'cells'
                 array will only contain cells in the specified columns.
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
 
         Returns:
             Sheet
@@ -653,17 +651,16 @@ class Sheets(object):
 
         return response
 
-    def list_shares(self, sheet_id, page_size=100, page=1,
-                    include_all=False, include_workspace_shares=False):
+    def list_shares(self, sheet_id, page_size=None, page=None,
+                    include_all=None, include_workspace_shares=False):
         """Get the list of all Users and Groups to whom the specified Sheet is
         shared, and their access level.
 
         Args:
             sheet_id (int): Sheet ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
             include_workspace_shares(bool): Include Workspace shares
@@ -687,8 +684,8 @@ class Sheets(object):
 
         return response
 
-    def list_sheets(self, include=None, page_size=100, page=1,
-                    include_all=False, modified_since=None):
+    def list_sheets(self, include=None, page_size=None, page=None,
+                    include_all=None, modified_since=None):
         """Get the list of all Sheets the User has access to, in alphabetical
         order, by name.
 
@@ -697,9 +694,8 @@ class Sheets(object):
                 optional elements to include in the response. Valid list
                 values: ownerInfo, sheetVersion, source.
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
             modified_since(datetime): Return sheets modified since provided datetime
@@ -1105,16 +1101,15 @@ class Sheets(object):
 
         return response
 
-    def list_update_requests(self, sheet_id, page_size=100, page=1,
-                             include_all=False):
+    def list_update_requests(self, sheet_id, page_size=None, page=None,
+                             include_all=None):
         """Get the list of all Sheet UpdateRequests.
 
         Args:
             sheet_id (int): Sheet ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all(bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -1219,16 +1214,15 @@ class Sheets(object):
 
         return response
 
-    def list_sent_update_requests(self, sheet_id, page_size=100, page=1,
-                                  include_all=False):
+    def list_sent_update_requests(self, sheet_id, page_size=None, page=None,
+                                  include_all=None):
         """Get the list of all Sent UpdateRequests.
 
         Args:
             sheet_id (int): Sheet ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -1289,16 +1283,15 @@ class Sheets(object):
 
         return response
 
-    def list_filters(self, sheet_id, page_size=100, page=1,
-                     include_all=False):
+    def list_filters(self, sheet_id, page_size=None, page=None,
+                     include_all=None):
         """Returns a list of all saved sheet filters
 
         Args:
             sheet_id (int): Sheet ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -1377,7 +1370,7 @@ class Sheets(object):
 
     def get_sheet_by_name(self, name, include=None, exclude=None,
                           row_ids=None, row_numbers=None, column_ids=None,
-                          page_size=100, page=1):
+                          page_size=None, page=None):
         """For those times when you don't know the Sheet Id.
 
         Note: returns the first matching name found.

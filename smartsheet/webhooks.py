@@ -28,16 +28,15 @@ class Webhooks(object):
         self._base = smartsheet_obj
         self._log = logging.getLogger(__name__)
 
-    def list_webhooks(self, page_size=100, page=1,
-                      include_all=False):
+    def list_webhooks(self, page_size=None, page=None,
+                      include_all=None):
         """Get the list of all Webhooks the User has access to, in alphabetical
         order, by name.
 
         Args:
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 

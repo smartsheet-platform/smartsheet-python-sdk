@@ -30,15 +30,14 @@ class Templates(object):
         self._base = smartsheet_obj
         self._log = logging.getLogger(__name__)
 
-    def list_public_templates(self, page_size=100, page=1,
-                              include_all=False):
+    def list_public_templates(self, page_size=None, page=None,
+                              include_all=None):
         """Get the list of public Templates to which the User has access.
 
         Args:
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -59,16 +58,15 @@ class Templates(object):
 
         return response
 
-    def list_user_created_templates(self, page_size=100, page=1,
-                                    include_all=False):
+    def list_user_created_templates(self, page_size=None, page=None,
+                                    include_all=None):
         """Get the list of user-created Templates to which the user has
         access.
 
         Args:
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 

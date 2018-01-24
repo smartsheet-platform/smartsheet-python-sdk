@@ -142,15 +142,14 @@ class Home(object):
 
         return response
 
-    def list_folders(self, page_size=100, page=1, include_all=False):
+    def list_folders(self, page_size=None, page=None, include_all=None):
         """Gets a list of top-level child Folders within the user's Sheets
         folder.
 
         Args:
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 

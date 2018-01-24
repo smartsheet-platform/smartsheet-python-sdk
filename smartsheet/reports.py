@@ -53,7 +53,7 @@ class Reports(object):
 
         return response
 
-    def get_report(self, report_id, page_size=100, page=1, include=None):
+    def get_report(self, report_id, page_size=None, page=None, include=None):
         """Get the specified Report, including one page of Rows.
 
         Get the specified Report, including one page of Rows, and
@@ -63,9 +63,8 @@ class Reports(object):
         Args:
             report_id (int): Report ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include (list[str]): A comma-separated list of
                 optional elements to include in the response. Valid list
                 values: discussions, attachments, format, sheetVersion(requires sourceSheets),
@@ -172,7 +171,7 @@ class Reports(object):
 
         return response
 
-    def list_reports(self, page_size=100, page=1, include_all=False, modified_since=None):
+    def list_reports(self, page_size=None, page=None, include_all=None, modified_since=None):
         """Get the list of all Reports accessible by the User.
 
         Get the list of all Reports that the User has access to, in
@@ -180,9 +179,8 @@ class Reports(object):
 
         Args:
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
             modified_since(datetime): return reports modified after the specified modified_since
@@ -206,17 +204,16 @@ class Reports(object):
 
         return response
 
-    def list_shares(self, report_id, page_size=100, page=1,
-                    include_all=False, include_workspace_shares=False):
+    def list_shares(self, report_id, page_size=None, page=None,
+                    include_all=None, include_workspace_shares=False):
         """Get a list of all Users and Groups to whom the specified Report is
         shared, and their access level.
 
         Args:
             report_id (int): Report ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
             include_workspace_shares(bool): include Workspace shares

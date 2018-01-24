@@ -270,17 +270,16 @@ class Workspaces(object):
 
         return response
 
-    def list_folders(self, workspace_id, page_size=100, page=1,
-                     include_all=False):
+    def list_folders(self, workspace_id, page_size=None, page=None,
+                     include_all=None):
         """Get a list of top-level child Folders within the specified
         Workspace.
 
         Args:
             workspace_id (int): Workspace ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -301,17 +300,16 @@ class Workspaces(object):
 
         return response
 
-    def list_shares(self, workspace_id, page_size=100, page=1,
-                    include_all=False):
+    def list_shares(self, workspace_id, page_size=None, page=None,
+                    include_all=None):
         """Get a list of all Users and Groups to whom the specified Workspace
         is shared, and their access level.
 
         Args:
             workspace_id (int): Workspace ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -331,14 +329,13 @@ class Workspaces(object):
 
         return response
 
-    def list_workspaces(self, page_size=100, page=1, include_all=False):
+    def list_workspaces(self, page_size=None, page=None, include_all=None):
         """Get the list of Workspaces the authenticated User may access.
 
         Args:
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
