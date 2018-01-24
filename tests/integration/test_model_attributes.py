@@ -764,46 +764,6 @@ class TestModelAttributes:
         assert model.resource_management_enabled == True
         assert isinstance(model.user_settings, smart.models.SheetUserSettings)
 
-    def test__filter(self, smart_setup):
-        smart = smart_setup['smart']
-        # criteria, criteria
-        # exclude_selected, excludeSelected
-        # type, type
-        # values, values
-        model = smart.models.Filter({
-            'criteria': smart.models.Criteria(),
-            'excludeSelected': True,
-            'type': 'LIST',
-            'values': ['foo']
-        })
-
-        assert isinstance(model.criteria[0], smart.models.Criteria)
-        assert model.exclude_selected == True
-        assert model.type == 'LIST'
-        assert model.values[0] == 'foo'
-        model.values = 'foo'
-        assert model.values[0] == 'foo'
-        tmplist = smartsheet.types.TypedList(str)
-        tmplist.append('foo')
-        model.values = tmplist
-        assert model.values[0] == 'foo'
-        as_dict = model.to_dict()
-        assert isinstance(as_dict, dict)
-
-    def test__filter_snake(self, smart_setup):
-        smart = smart_setup['smart']
-        model = smart.models.Filter({
-            'criteria': smart.models.Criteria(),
-            'values': ['foo'],
-            'exclude_selected': True,
-            'type': 'LIST'
-        })
-
-        assert isinstance(model.criteria[0], smart.models.Criteria)
-        assert model.exclude_selected == True
-        assert model.type == 'LIST'
-        assert model.values[0] == 'foo'
-
     def test_folder(self, smart_setup):
         smart = smart_setup['smart']
         # favorite, favorite

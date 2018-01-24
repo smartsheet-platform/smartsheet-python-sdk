@@ -48,7 +48,6 @@ from .email import Email
 from .error import Error
 from .error_result import ErrorResult
 from .favorite import Favorite
-from .filter import Filter
 from .folder import Folder
 from .font_family import FontFamily
 from .format_details import FormatDetails
