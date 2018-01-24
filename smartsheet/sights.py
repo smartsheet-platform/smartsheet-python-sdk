@@ -176,7 +176,7 @@ class Sights(object):
             sight_id (int): Sight ID
             page_size (int): The maximum number of items to
                 return per page.
-            page (int): Which page to return. 
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
             include_workspace_shares(bool): Include Workspace shares

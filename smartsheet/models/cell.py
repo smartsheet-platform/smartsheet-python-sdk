@@ -136,10 +136,13 @@ class Cell(object):
 
     @hyperlink.setter
     def hyperlink(self, value):
-        if isinstance(value, Hyperlink):
+        if isinstance(value, (Hyperlink, ExplicitNull)):
             self._hyperlink = value
         else:
             self._hyperlink = Hyperlink(value, self._base)
+
+    def set_hyperlink_null(self):
+        self.hyperlink = ExplicitNull()
 
     @property
     def image(self):
@@ -158,10 +161,13 @@ class Cell(object):
 
     @link_in_from_cell.setter
     def link_in_from_cell(self, value):
-        if isinstance(value, CellLink):
+        if isinstance(value, (CellLink, ExplicitNull)):
             self._link_in_from_cell = value
         else:
             self._link_in_from_cell = CellLink(value, self._base)
+
+    def set_link_in_from_cell_null(self):
+        self.link_in_from_cell = ExplicitNull()
 
     @property
     def links_out_to_cells(self):
