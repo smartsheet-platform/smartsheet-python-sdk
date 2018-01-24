@@ -87,7 +87,7 @@ class Groups(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/groups/' + str(group_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -157,7 +157,7 @@ class Groups(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/groups/' + str(group_id) + '/members/' + str(user_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 

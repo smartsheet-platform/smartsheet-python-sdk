@@ -294,7 +294,7 @@ class Sheets(object):
         _op['query_params']['ids'] = ids
         _op['query_params']['ignoreRowsNotFound'] = ignore_rows_not_found
 
-        expected = 'Result'
+        expected = ['Result', 'NumberObjectValue']
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -314,7 +314,7 @@ class Sheets(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/sheets/' + str(sheet_id) + '/shares/' + str(share_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -333,7 +333,7 @@ class Sheets(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/sheets/' + str(sheet_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -828,7 +828,7 @@ class Sheets(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows/emails'
         _op['json'] = multi_row_email_obj
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -850,7 +850,7 @@ class Sheets(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/emails'
         _op['json'] = sheet_email_obj
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -1191,7 +1191,7 @@ class Sheets(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests/' + str(update_request_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -1283,7 +1283,7 @@ class Sheets(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/sheets/' + str(sheet_id) + '/sentupdaterequests/' + str(sent_update_request_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -1353,7 +1353,7 @@ class Sheets(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/sheets/' + str(sheet_id) + '/filters/' + str(filter_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 

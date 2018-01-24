@@ -19,8 +19,8 @@ from __future__ import absolute_import
 
 import six
 import json
+import importlib
 
-from .row import Row
 from .bulk_item_failure import BulkItemFailure
 from ..types import TypedList
 from ..util import serialize
@@ -78,11 +78,12 @@ class BulkItemResult(object):
 
     @result.setter
     def result(self, value):
-        if self._dynamic_result_type == 'Row':
-            if isinstance(value, list):
-                self._result = [Row(x, self._base) for x in value]
-            else:
-                self._result = Row(value, self._base)
+        class_ = getattr(importlib.import_module(
+            'smartsheet.models'), self._dynamic_result_type)
+        if isinstance(value, list):
+            self._result = [class_(x, self._base) for x in value]
+        else:
+            self._result = class_(value, self._base)
 
     @property
     def result_code(self):

@@ -19,28 +19,9 @@ from __future__ import absolute_import
 
 import six
 import json
+import logging
+import importlib
 
-from .alternate_email import AlternateEmail
-from .attachment import Attachment
-from .column import Column
-from .comment import Comment
-from .discussion import Discussion
-from .favorite import Favorite
-from .folder import Folder
-from .group import Group
-from .group_member import GroupMember
-from .row import Row
-from .share import Share
-from .sheet import Sheet
-from .sheet_publish import SheetPublish
-from .update_request import UpdateRequest
-from .user import User
-from .webhook import Webhook
-from .webhook_secret import WebhookSecret
-from .workspace import Workspace
-from .report_publish import ReportPublish
-from .sent_update_request import SentUpdateRequest
-from .sight_publish import SightPublish
 from ..types import TypedList
 from ..util import serialize
 from ..util import deserialize
@@ -55,6 +36,8 @@ class Result(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
+
+        self._log = logging.getLogger(__name__)
 
         self._dynamic_result_type = None
         if dynamic_result_type is not None:
@@ -85,111 +68,15 @@ class Result(object):
 
     @result.setter
     def result(self, value):
-        if self._dynamic_result_type == 'AlternateEmail':
+        if self._dynamic_result_type is None:
+            self._log.debug('result provided but _dynamic_result_type is None. (%s)', value)
+        else:
+            class_ = getattr(importlib.import_module(
+                'smartsheet.models'), self._dynamic_result_type)
             if isinstance(value, list):
-                self._result = [AlternateEmail(x, self._base) for x in value]
+                self._result = [class_(x, self._base) for x in value]
             else:
-                self._result = AlternateEmail(value, self._base)
-        if self._dynamic_result_type == 'Attachment':
-            if isinstance(value, list):
-                self._result = [Attachment(x, self._base) for x in value]
-            else:
-                self._result = Attachment(value, self._base)
-        if self._dynamic_result_type == 'Column':
-            if isinstance(value, list):
-                self._result = [Column(x, self._base) for x in value]
-            else:
-                self._result = Column(value, self._base)
-        if self._dynamic_result_type == 'Comment':
-            if isinstance(value, list):
-                self._result = [Comment(x, self._base) for x in value]
-            else:
-                self._result = Comment(value, self._base)
-        if self._dynamic_result_type == 'Discussion':
-            if isinstance(value, list):
-                self._result = [Discussion(x, self._base) for x in value]
-            else:
-                self._result = Discussion(value, self._base)
-        if self._dynamic_result_type == 'Favorite':
-            if isinstance(value, list):
-                self._result = [Favorite(x, self._base) for x in value]
-            else:
-                self._result = Favorite(value, self._base)
-        if self._dynamic_result_type == 'Folder':
-            if isinstance(value, list):
-                self._result = [Folder(x, self._base) for x in value]
-            else:
-                self._result = Folder(value, self._base)
-        if self._dynamic_result_type == 'Group':
-            if isinstance(value, list):
-                self._result = [Group(x, self._base) for x in value]
-            else:
-                self._result = Group(value, self._base)
-        if self._dynamic_result_type == 'GroupMember':
-            if isinstance(value, list):
-                self._result = [GroupMember(x, self._base) for x in value]
-            else:
-                self._result = GroupMember(value, self._base)
-        if self._dynamic_result_type == 'ReportPublish':
-            if isinstance(value, list):
-                self._result = [ReportPublish(x, self._base) for x in value]
-            else:
-                self._result = ReportPublish(value, self._base)
-        if self._dynamic_result_type == 'Row':
-            if isinstance(value, list):
-                self._result = [Row(x, self._base) for x in value]
-            else:
-                self._result = Row(value, self._base)
-        if self._dynamic_result_type == 'SentUpdateRequest':
-            if isinstance(value, list):
-                self._result = [SentUpdateRequest(x, self._base) for x in value]
-            else:
-                self._result = SentUpdateRequest(value, self._base)
-        if self._dynamic_result_type == 'Share':
-            if isinstance(value, list):
-                self._result = [Share(x, self._base) for x in value]
-            else:
-                self._result = Share(value, self._base)
-        if self._dynamic_result_type == 'Sheet':
-            if isinstance(value, list):
-                self._result = [Sheet(x, self._base) for x in value]
-            else:
-                self._result = Sheet(value, self._base)
-        if self._dynamic_result_type == 'SheetPublish':
-            if isinstance(value, list):
-                self._result = [SheetPublish(x, self._base) for x in value]
-            else:
-                self._result = SheetPublish(value, self._base)
-        if self._dynamic_result_type == 'SightPublish':
-            if isinstance(value, list):
-                self._result = [SightPublish(x, self._base) for x in value]
-            else:
-                self._result = SightPublish(value, self._base)
-        if self._dynamic_result_type == 'UpdateRequest':
-            if isinstance(value, list):
-                self._result = [UpdateRequest(x, self._base) for x in value]
-            else:
-                self._result = UpdateRequest(value, self._base)
-        if self._dynamic_result_type == 'User':
-            if isinstance(value, list):
-                self._result = [User(x, self._base) for x in value]
-            else:
-                self._result = User(value, self._base)
-        if self._dynamic_result_type == 'Webhook':
-            if isinstance(value, list):
-                self._result = [Webhook(x, self._base) for x in value]
-            else:
-                self._result = Webhook(value, self._base)
-        if self._dynamic_result_type == 'WebhookSecret':
-            if isinstance(value, list):
-                self._result = [WebhookSecret(x, self._base) for x in value]
-            else:
-                self._result = WebhookSecret(value, self._base)
-        if self._dynamic_result_type == 'Workspace':
-            if isinstance(value, list):
-                self._result = [Workspace(x, self._base) for x in value]
-            else:
-                self._result = Workspace(value, self._base)
+                self._result = class_(value, self._base)
 
     @property
     def result_code(self):

@@ -226,7 +226,7 @@ class Discussions(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/discussions/' + str(
             discussion_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -249,7 +249,7 @@ class Discussions(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/comments/' + str(
             comment_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 

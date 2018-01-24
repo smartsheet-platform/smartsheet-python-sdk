@@ -19,27 +19,8 @@ from __future__ import absolute_import
 
 import six
 import json
+import importlib
 
-from .alternate_email import AlternateEmail
-from .attachment import Attachment
-from .cell_history import CellHistory
-from .column import Column
-from .contact import Contact
-from .discussion import Discussion
-from .favorite import Favorite
-from .folder import Folder
-from .group import Group
-from .report import Report
-from .sent_update_request import SentUpdateRequest
-from .share import Share
-from .sheet import Sheet
-from .sheet_filter import SheetFilter
-from .sight import Sight
-from .template import Template
-from .update_request import UpdateRequest
-from .user import User
-from .webhook import Webhook
-from .workspace import Workspace
 from ..types import TypedList
 from ..util import serialize
 from ..util import deserialize
@@ -78,106 +59,12 @@ class IndexResult(object):
 
     @data.setter
     def data(self, value):
-        if self._dynamic_data_type == 'AlternateEmail':
-            if isinstance(value, list):
-                self._data = [AlternateEmail(x, self._base) for x in value]
-            else:
-                self._data = AlternateEmail(value, self._base)
-        if self._dynamic_data_type == 'Attachment':
-            if isinstance(value, list):
-                self._data = [Attachment(x, self._base) for x in value]
-            else:
-                self._data = Attachment(value, self._base)
-        if self._dynamic_data_type == 'CellHistory':
-            if isinstance(value, list):
-                self._data = [CellHistory(x, self._base) for x in value]
-            else:
-                self._data = CellHistory(value, self._base)
-        if self._dynamic_data_type == 'Column':
-            if isinstance(value, list):
-                self._data = [Column(x, self._base) for x in value]
-            else:
-                self._data = Column(value, self._base)
-        if self._dynamic_data_type == 'Contact':
-            if isinstance(value, list):
-                self._data = [Contact(x, self._base) for x in value]
-            else:
-                self._data = Contact(value, self._base)
-        if self._dynamic_data_type == 'Discussion':
-            if isinstance(value, list):
-                self._data = [Discussion(x, self._base) for x in value]
-            else:
-                self._data = Discussion(value, self._base)
-        if self._dynamic_data_type == 'Favorite':
-            if isinstance(value, list):
-                self._data = [Favorite(x, self._base) for x in value]
-            else:
-                self._data = Favorite(value, self._base)
-        if self._dynamic_data_type == 'Folder':
-            if isinstance(value, list):
-                self._data = [Folder(x, self._base) for x in value]
-            else:
-                self._data = Folder(value, self._base)
-        if self._dynamic_data_type == 'Group':
-            if isinstance(value, list):
-                self._data = [Group(x, self._base) for x in value]
-            else:
-                self._data = Group(value, self._base)
-        if self._dynamic_data_type == 'Report':
-            if isinstance(value, list):
-                self._data = [Report(x, self._base) for x in value]
-            else:
-                self._data = Report(value, self._base)
-        if self._dynamic_data_type == 'SentUpdateRequest':
-            if isinstance(value, list):
-                self._data = [SentUpdateRequest(x, self._base) for x in value]
-            else:
-                self._data = SentUpdateRequest(value, self._base)
-        if self._dynamic_data_type == 'Share':
-            if isinstance(value, list):
-                self._data = [Share(x, self._base) for x in value]
-            else:
-                self._data = Share(value, self._base)
-        if self._dynamic_data_type == 'Sheet':
-            if isinstance(value, list):
-                self._data = [Sheet(x, self._base) for x in value]
-            else:
-                self._data = Sheet(value, self._base)
-        if self._dynamic_data_type == 'SheetFilter':
-            if isinstance(value, list):
-                self._data = [SheetFilter(x, self._base) for x in value]
-            else:
-                self._data = SheetFilter(value, self._base)
-        if self._dynamic_data_type == 'Sight':
-            if isinstance(value, list):
-                self._data = [Sight(x, self._base) for x in value]
-            else:
-                self._data = Sight(value, self._base)
-        if self._dynamic_data_type == 'Template':
-            if isinstance(value, list):
-                self._data = [Template(x, self._base) for x in value]
-            else:
-                self._data = Template(value, self._base)
-        if self._dynamic_data_type == 'UpdateRequest':
-            if isinstance(value, list):
-                self._data = [UpdateRequest(x, self._base) for x in value]
-            else:
-                self._data = UpdateRequest(value, self._base)
-        if self._dynamic_data_type == 'User':
-            if isinstance(value, list):
-                self._data = [User(x, self._base) for x in value]
-            else:
-                self._data = User(value, self._base)
-        if self._dynamic_data_type == 'Webhook':
-            if isinstance(value, list):
-                self._data = [Webhook(x, self._base) for x in value]
-            else:
-                self._data = Webhook(value, self._base)
-        if self._dynamic_data_type == 'Workspace':
-            if isinstance(value, list):
-                self._data = [Workspace(x, self._base) for x in value]
-            else:
-                self._data = Workspace(value, self._base)
+        class_ = getattr(importlib.import_module(
+            'smartsheet.models'), self._dynamic_data_type)
+        if isinstance(value, list):
+            self._data = [class_(x, self._base) for x in value]
+        else:
+            self._data = class_(value, self._base)
 
     @property
     def page_number(self):

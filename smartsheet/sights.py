@@ -116,7 +116,7 @@ class Sights(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/sights/' + str(sight_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -294,7 +294,7 @@ class Sights(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/sights/' + str(sight_id) + '/shares/' + str(share_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 

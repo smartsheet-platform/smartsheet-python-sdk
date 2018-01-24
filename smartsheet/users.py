@@ -127,7 +127,7 @@ class Users(object):
         _op['path'] = '/users/' + str(user_id) + '/alternateemails/' + str(
             alternate_email_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -314,7 +314,7 @@ class Users(object):
         _op['query_params']['transferSheets'] = transfer_sheets
         _op['query_params']['removeFromSharing'] = remove_from_sharing
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 

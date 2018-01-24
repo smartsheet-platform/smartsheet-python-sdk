@@ -33,7 +33,6 @@ import json
 from .exceptions import *
 from .models import Error, ErrorResult
 from .session import pinned_session
-from .types import TypedList
 from .util import is_multipart
 from .util import serialize
 from . import (

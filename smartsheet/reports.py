@@ -47,7 +47,7 @@ class Reports(object):
         _op['path'] = '/reports/' + str(report_id) + '/shares/' + str(
             share_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -256,7 +256,7 @@ class Reports(object):
         _op['path'] = '/reports/' + str(report_id) + '/emails'
         _op['json'] = sheet_email_obj
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 

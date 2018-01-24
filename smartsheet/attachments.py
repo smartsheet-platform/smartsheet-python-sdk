@@ -309,7 +309,7 @@ class Attachments(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/attachments/' + str(
             attachment_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -333,7 +333,7 @@ class Attachments(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/attachments/' + str(
             attachment_id) + '/versions'
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
