@@ -24,8 +24,8 @@ install:
 
 script:
   - smartsheet-sdk-tests/travis_scripts/start_wiremock.sh
-  - coverage run --source=smartsheet setup.py test -a tests/integration
-  # - coverage run --source=smartsheet setup.py test # use this line instead to enable mock api tests
+  # - coverage run --source=smartsheet setup.py test -a tests/integration
+  - coverage run --source=smartsheet setup.py test # use this line instead to enable mock api tests
 
 after_success:
   - coveralls --verbose
