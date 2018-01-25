@@ -109,7 +109,7 @@ class Cells(object):
         _op['query_params']['overrideValidation'] = override_validation
         _op['form_data'] = _data
 
-        expected = ['Result', 'Cell']
+        expected = ['Result', 'Row']
 
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)

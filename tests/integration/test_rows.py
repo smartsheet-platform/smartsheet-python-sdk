@@ -28,8 +28,10 @@ class TestRows:
     def test_add_row_with_dict(self, smart_setup):
         smart = smart_setup['smart']
         action = smart_setup['sheet'].add_rows({
-            'column_id': TestRows.sheet_primary_id,
-            'value': 'Row added with dict',
+            'cells': [{
+                'column_id': TestRows.sheet_primary_id,
+                'value': 'Row added with dict'
+            }],
             'to_top': True
         })
         TestRows.added_row_with_dict = action.result[0]

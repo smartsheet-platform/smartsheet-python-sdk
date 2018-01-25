@@ -53,7 +53,7 @@ class BulkItemFailure(object):
     @error.setter
     def error(self, value):
         if isinstance(value, dict):
-            self._error = self._result = ErrorResult(value, self._base)
+            self._error = ErrorResult(value, self._base)
 
     @property
     def index(self):
