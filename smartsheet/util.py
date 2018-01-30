@@ -26,10 +26,9 @@ import inspect
 from datetime import date
 from datetime import datetime
 from .types import TypedList
-from .types import ExplicitNull
 
 _log = logging.getLogger('util')
-_primitive_types = (six.string_types, six.integer_types, float, bool, ExplicitNull)
+_primitive_types = (six.string_types, six.integer_types, float, bool)
 _list_types = (TypedList, list)
 
 
@@ -91,6 +90,9 @@ def serialize(obj):
     elif isinstance(obj, _primitive_types):
         retval = obj
 
+    elif hasattr(obj, 'is_explicit_null'):
+        retval = obj
+
     elif isinstance(obj, _list_types):
         if len(obj):
             retval = [serialize(x) for x in obj]
@@ -104,7 +106,7 @@ def serialize(obj):
             prop_value = getattr(obj, prop_name)
             if prop_value is not None:
                 serialized = serialize(prop_value)
-                if isinstance(serialized, ExplicitNull):  # object forcing serialization of a null
+                if hasattr(serialized, 'is_explicit_null'):  # object forcing serialization of a null
                     retval[camel_case] = None
                 elif serialized is not None:
                     retval[camel_case] = serialized

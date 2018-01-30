@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -43,8 +41,10 @@ class Favorite(object):
                 'template',
                 'sight']}
 
-        self._object_id = None
-        self._type_ = None
+        self._object_id = Number()
+        self._type_ = String(
+            accept=self.allowed_values['_type']
+        )
 
         if props:
             deserialize(self, props)
@@ -65,26 +65,19 @@ class Favorite(object):
 
     @property
     def object_id(self):
-        return self._object_id
+        return self._object_id.value
 
     @object_id.setter
     def object_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._object_id = value
+        self._object_id.value = value
 
     @property
     def type_(self):
-        return self._type_
+        return self._type_.value
 
     @type_.setter
     def type_(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Favorite`_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['_type']))
-            self._type_ = value
+        self._type_.value = value
 
     def to_dict(self):
         return serialize(self)

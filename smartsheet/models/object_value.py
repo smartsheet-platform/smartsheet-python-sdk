@@ -20,9 +20,9 @@ from __future__ import absolute_import
 import json
 import six
 
+from .explicit_null import ExplicitNull
 from ..util import get_child_properties
 from ..util import serialize
-from ..types import ExplicitNull
 
 DATE = 1
 DATETIME = 2

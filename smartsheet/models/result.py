@@ -17,12 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-import logging
-import importlib
-
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -42,10 +37,10 @@ class Result(object):
         self._dynamic_result_type = None
         if dynamic_result_type is not None:
             self._dynamic_result_type = dynamic_result_type
-        self._message = None
+        self._message = String()
         self._result = TypedList(object)
-        self._result_code = None
-        self._version = None
+        self._result_code = Number()
+        self._version = Number()
 
         if props:
             deserialize(self, props)
@@ -55,12 +50,11 @@ class Result(object):
 
     @property
     def message(self):
-        return self._message
+        return self._message.value
 
     @message.setter
     def message(self, value):
-        if isinstance(value, six.string_types):
-            self._message = value
+        self._message.value = value
 
     @property
     def result(self):
@@ -80,21 +74,19 @@ class Result(object):
 
     @property
     def result_code(self):
-        return self._result_code
+        return self._result_code.value
 
     @result_code.setter
     def result_code(self, value):
-        if isinstance(value, six.integer_types):
-            self._result_code = value
+        self._result_code.value = value
 
     @property
     def version(self):
-        return self._version
+        return self._version.value
 
     @version.setter
     def version(self, value):
-        if isinstance(value, six.integer_types):
-            self._version = value
+        self._version.value = value
 
     @property
     def data(self):

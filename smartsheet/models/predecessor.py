@@ -17,10 +17,8 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .duration import Duration
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -41,12 +39,14 @@ class Predecessor(object):
                 'SS',
                 'SS']}
 
-        self._in_critical_path = None
-        self._invalid = None
-        self._lag = None
-        self._row_id = None
-        self._row_number = None
-        self._type = None
+        self._in_critical_path = Boolean()
+        self._invalid = Boolean()
+        self._lag = TypedObject(Duration)
+        self._row_id = Number()
+        self._row_number = Number()
+        self._type = String(
+            accept=self.allowed_values['type']
+        )
 
         if props:
             deserialize(self, props)
@@ -55,57 +55,51 @@ class Predecessor(object):
 
     @property
     def in_critical_path(self):
-        return self._in_critical_path
+        return self._in_critical_path.value
 
     @in_critical_path.setter
     def in_critical_path(self, value):
-        if isinstance(value, bool):
-            self._in_critical_path = value
+        self._in_critical_path.value = value
 
     @property
     def invalid(self):
-        return self._invalid
+        return self._invalid.value
 
     @invalid.setter
     def invalid(self, value):
-        if isinstance(value, bool):
-            self._invalid = value
+            self._invalid.value = value
 
     @property
     def lag(self):
-        return self._lag
+        return self._lag.value
 
     @lag.setter
     def lag(self, value):
-        if isinstance(value, Duration):
-            self._lag = value
+        self._lag.value = value
 
     @property
     def row_id(self):
-        return self._row_id
+        return self._row_id.value
 
     @row_id.setter
     def row_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._row_id = value
+        self._row_id.value = value
 
     @property
     def row_number(self):
-        return self._row_number
+        return self._row_number.value
 
     @row_number.setter
     def row_number(self, value):
-        if isinstance(value, six.integer_types):
-            self._row_number = value
+        self._row_number.value = value
 
     @property
     def type(self):
-        return self._type
+        return self._type.value
 
     @type.setter
     def type(self, value):
-        if isinstance(value, six.string_types):
-            self._type = value
+        self._type.value = value
 
     def to_dict(self):
         return serialize(self)

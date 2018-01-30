@@ -17,10 +17,8 @@
 
 from __future__ import absolute_import
 
-import json
-
 from .copy_or_move_row_destination import CopyOrMoveRowDestination
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -36,7 +34,7 @@ class CopyOrMoveRowDirective(object):
             self._base = base_obj
 
         self._row_ids = TypedList(int)
-        self._to = None
+        self._to = TypedObject(CopyOrMoveRowDestination)
 
         if props:
             deserialize(self, props)
@@ -51,14 +49,11 @@ class CopyOrMoveRowDirective(object):
 
     @property
     def to(self):
-        return self._to
+        return self._to.value
 
     @to.setter
     def to(self, value):
-        if isinstance(value, CopyOrMoveRowDestination):
-            self._to = value
-        else:
-            self._to = CopyOrMoveRowDestination(value, self._base)
+        self._to.value = value
 
     def to_dict(self):
         return serialize(self)

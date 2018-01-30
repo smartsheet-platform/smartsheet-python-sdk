@@ -17,15 +17,10 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 from .group_member import GroupMember
-from datetime import datetime
-from dateutil.parser import parse
 
 
 class Group(object):
@@ -38,14 +33,14 @@ class Group(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._created_at = None
-        self._description = None
-        self._id_ = None
+        self._created_at = Timestamp()
+        self._description = String()
+        self._id_ = Number()
         self._members = TypedList(GroupMember)
-        self._modified_at = None
-        self._name = None
-        self._owner = None
-        self._owner_id = None
+        self._modified_at = Timestamp()
+        self._name = String()
+        self._owner = String()
+        self._owner_id = Number()
 
         if props:
             deserialize(self, props)
@@ -68,34 +63,27 @@ class Group(object):
 
     @property
     def created_at(self):
-        return self._created_at
+        return self._created_at.value
 
     @created_at.setter
     def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._created_at = value
+        self._created_at.value = value
 
     @property
     def description(self):
-        return self._description
+        return self._description.value
 
     @description.setter
     def description(self, value):
-        if isinstance(value, six.string_types):
-            self._description = value
+        self._description.value = value
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def members(self):
@@ -107,43 +95,35 @@ class Group(object):
 
     @property
     def modified_at(self):
-        return self._modified_at
+        return self._modified_at.value
 
     @modified_at.setter
     def modified_at(self, value):
-        if isinstance(value, datetime):
-            self._modified_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._modified_at = value
+        self._modified_at.value = value
 
     @property
     def name(self):
-        return self._name
+        return self._name.value
 
     @name.setter
     def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+        self._name.value = value
 
     @property
     def owner(self):
-        return self._owner
+        return self._owner.value
 
     @owner.setter
     def owner(self, value):
-        if isinstance(value, six.string_types):
-            self._owner = value
+        self._owner.value = value
 
     @property
     def owner_id(self):
-        return self._owner_id
+        return self._owner_id.value
 
     @owner_id.setter
     def owner_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._owner_id = value
+        self._owner_id.value = value
 
     def to_dict(self):
         return serialize(self)

@@ -17,11 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-import importlib
-
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -41,10 +37,10 @@ class IndexResult(object):
             self._dynamic_data_type = dynamic_data_type
 
         self._data = TypedList(object)
-        self._page_number = None
-        self._page_size = None
-        self._total_count = None
-        self._total_pages = None
+        self._page_number = Number()
+        self._page_size = Number()
+        self._total_count = Number()
+        self._total_pages = Number()
 
         if props:
             deserialize(self, props)
@@ -68,39 +64,35 @@ class IndexResult(object):
 
     @property
     def page_number(self):
-        return self._page_number
+        return self._page_number.value
 
     @page_number.setter
     def page_number(self, value):
-        if isinstance(value, six.integer_types):
-            self._page_number = value
+        self._page_number.value = value
 
     @property
     def page_size(self):
-        return self._page_size
+        return self._page_size.value
 
     @page_size.setter
     def page_size(self, value):
-        if isinstance(value, six.integer_types):
-            self._page_size = value
+        self._page_size.value = value
 
     @property
     def total_count(self):
-        return self._total_count
+        return self._total_count.value
 
     @total_count.setter
     def total_count(self, value):
-        if isinstance(value, six.integer_types):
-            self._total_count = value
+        self._total_count.value = value
 
     @property
     def total_pages(self):
-        return self._total_pages
+        return self._total_pages.value
 
     @total_pages.setter
     def total_pages(self, value):
-        if isinstance(value, six.integer_types):
-            self._total_pages = value
+        self._total_pages.value = value
 
     @property
     def result(self):

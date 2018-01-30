@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -40,44 +38,38 @@ class ContainerDestination(object):
                 'workspace',
                 'folder']}
 
-        self._destination_id = None
-        self._destination_type = None
-        self._new_name = None
+        self._destination_id = Number()
+        self._destination_type = String(
+            accept=self.allowed_values['destination_type']
+        )
+        self._new_name = String()
 
         if props:
             deserialize(self, props)
 
     @property
     def destination_id(self):
-        return self._destination_id
+        return self._destination_id.value
 
     @destination_id.setter
     def destination_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._destination_id = value
+        self._destination_id.value = value
 
     @property
     def destination_type(self):
-        return self._destination_type
+        return self._destination_type.value
 
     @destination_type.setter
     def destination_type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['destination_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for ContainerDestination`destination_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['destination_type']))
-            self._destination_type = value
+        self._destination_type.value = value
 
     @property
     def new_name(self):
-        return self._new_name
+        return self._new_name.value
 
     @new_name.setter
     def new_name(self, value):
-        if isinstance(value, six.string_types):
-            self._new_name = value
+        self._new_name.value = value
 
     def to_dict(self):
         return serialize(self)

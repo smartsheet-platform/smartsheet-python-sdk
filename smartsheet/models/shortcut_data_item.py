@@ -17,10 +17,8 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .hyperlink import Hyperlink
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -34,12 +32,25 @@ class ShortcutDataItem(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._attachment_type = None
-        self._hyperlink = None
-        self._label = None
-        self._label_format = None
-        self._mime_type = None
-        self._order = None
+        self.allowed_values = {
+            '_type': [
+                'FILE',
+                'GOOGLE_DRIVE',
+                'LINK',
+                'BOX_COM',
+                'DROPBOX',
+                'EVERNOTE',
+                'EGNYTE',
+                'SMARTSHEET']}
+
+        self._attachment_type = String(
+            accept=self.allowed_values['_type']
+        )
+        self._hyperlink = TypedObject(Hyperlink)
+        self._label = String()
+        self._label_format = String()
+        self._mime_type = String()
+        self._order = Number()
 
         if props:
             deserialize(self, props)
@@ -48,59 +59,51 @@ class ShortcutDataItem(object):
 
     @property
     def attachment_type(self):
-        return self._attachment_type
+        return self._attachment_type.value
 
     @attachment_type.setter
     def attachment_type(self, value):
-        if isinstance(value, six.string_types):
-            self._attachment_type = value
+        self._attachment_type.value = value
 
     @property
     def hyperlink(self):
-        return self._hyperlink
+        return self._hyperlink.value
 
     @hyperlink.setter
     def hyperlink(self, value):
-        if isinstance(value, Hyperlink):
-            self._hyperlink = value
-        elif isinstance(value, dict):
-            self._hyperlink = Hyperlink(value, self._base)
+        self._hyperlink.value = value
 
     @property
     def label(self):
-        return self._label
+        return self._label.value
 
     @label.setter
     def label(self, value):
-        if isinstance(value, six.string_types):
-            self._label = value
+        self._label.value = value
 
     @property
     def label_format(self):
-        return self._label_format
+        return self._label_format.value
 
     @label_format.setter
     def label_format(self, value):
-        if isinstance(value, six.string_types):
-            self._label_format = value
+        self._label_format.value = value
 
     @property
     def mime_type(self):
-        return self._mime_type
+        return self._mime_type.value
 
     @mime_type.setter
     def mime_type(self, value):
-        if isinstance(value, six.string_types):
-            self._mime_type = value
+        self._mime_type.value = value
 
     @property
     def order(self):
-        return self._order
+        return self._order.value
 
     @order.setter
     def order(self, value):
-        if isinstance(value, six.integer_types):
-            self._order = value
+        self._order.value = value
 
     def to_dict(self):
         return serialize(self)

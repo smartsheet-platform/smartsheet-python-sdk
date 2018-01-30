@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -34,8 +32,8 @@ class RowMapping(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._from_ = None
-        self._to = None
+        self._from_ = Number()
+        self._to = Number()
 
         if props:
             deserialize(self, props)
@@ -56,21 +54,19 @@ class RowMapping(object):
 
     @property
     def from_(self):
-        return self._from_
+        return self._from_.value
 
     @from_.setter
     def from_(self, value):
-        if isinstance(value, six.integer_types):
-            self._from_ = value
+        self._from_.value = value
 
     @property
     def to(self):
-        return self._to
+        return self._to.value
 
     @to.setter
     def to(self, value):
-        if isinstance(value, six.integer_types):
-            self._to = value
+        self._to.value = value
 
     def to_dict(self):
         return serialize(self)

@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -34,19 +32,18 @@ class CopyOrMoveRowDestination(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._sheet_id = None
+        self._sheet_id = Number()
 
         if props:
             deserialize(self, props)
 
     @property
     def sheet_id(self):
-        return self._sheet_id
+        return self._sheet_id.value
 
     @sheet_id.setter
     def sheet_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._sheet_id = value
+        self._sheet_id.value = value
 
     def to_dict(self):
         return serialize(self)

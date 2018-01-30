@@ -19,9 +19,8 @@ from __future__ import absolute_import
 
 import contextlib
 import os.path
-import six
-import json
 
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -36,11 +35,11 @@ class DownloadedFile(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._download_directory = None
-        self._filename = None
-        self._message = None
+        self._download_directory = String()
+        self._filename = String()
+        self._message = String()
         self._resp = None
-        self._result_code = None
+        self._result_code = Number()
 
         if props:
             deserialize(self, props)
@@ -50,30 +49,27 @@ class DownloadedFile(object):
 
     @property
     def download_directory(self):
-        return self._download_directory
+        return self._download_directory.value
 
     @download_directory.setter
     def download_directory(self, value):
-        if isinstance(value, six.string_types):
-            self._download_directory = value
+        self._download_directory.value = value
 
     @property
     def filename(self):
-        return self._filename
+        return self._filename.value
 
     @filename.setter
     def filename(self, value):
-        if isinstance(value, six.string_types):
-            self._filename = value
+        self._filename.value = value
 
     @property
     def message(self):
-        return self._message
+        return self._message.value
 
     @message.setter
     def message(self, value):
-        if isinstance(value, six.string_types):
-            self._message = value
+        self._message.value = value
 
     @property
     def resp(self):
@@ -88,12 +84,11 @@ class DownloadedFile(object):
 
     @property
     def result_code(self):
-        return self._result_code
+        return self._result_code.value
 
     @result_code.setter
     def result_code(self, value):
-        if isinstance(value, six.integer_types):
-            self._result_code = value
+        self._result_code.value = value
 
     def save_to_file(self, chunksize=2**16):
         download_path = os.path.join(self.download_directory, self.filename)

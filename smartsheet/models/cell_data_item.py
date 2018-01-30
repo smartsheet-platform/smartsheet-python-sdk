@@ -17,14 +17,12 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .cell import Cell
 from .object_value import ObjectValue
 from .string_object_value import StringObjectValue
 from .boolean_object_value import BooleanObjectValue
 from .number_object_value import NumberObjectValue
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -38,13 +36,13 @@ class CellDataItem(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._cell = None
-        self._column_id = None
-        self._label = None
-        self._label_format = None
+        self._cell = TypedObject(Cell)
+        self._column_id = Number()
+        self._label = String()
+        self._label_format = String()
         self._object_value = None
-        self._order = None
-        self._value_format = None
+        self._order = Number()
+        self._value_format = String()
 
         if props:
             deserialize(self, props)
@@ -53,41 +51,35 @@ class CellDataItem(object):
 
     @property
     def cell(self):
-        return self._cell
+        return self._cell.value
 
     @cell.setter
     def cell(self, value):
-        if isinstance(value, Cell):
-            self._cell = value
-        elif isinstance(value, dict):
-            self._cell = Cell(value, self._base)
+        self._cell.value = value
 
     @property
     def column_id(self):
-        return self._column_id
+        return self._column_id.value
 
     @column_id.setter
     def column_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._column_id = value
+        self._column_id.value = value
 
     @property
     def label(self):
-        return self._label
+        return self._label.value
 
     @label.setter
     def label(self, value):
-        if isinstance(value, six.string_types):
-            self._label = value
+        self._label.value = value
 
     @property
     def label_format(self):
-        return self._label_format
+        return self._label_format.value
 
     @label_format.setter
     def label_format(self, value):
-        if isinstance(value, six.string_types):
-            self._label_format = value
+        self._label_format.value = value
 
     @property
     def object_value(self):
@@ -106,21 +98,19 @@ class CellDataItem(object):
 
     @property
     def order(self):
-        return self._order
+        return self._order.value
 
     @order.setter
     def order(self, value):
-        if isinstance(value, six.integer_types):
-            self._order = value
+        self._order.value = value
 
     @property
     def value_format(self):
-        return self._value_format
+        return self._value_format.value
 
     @value_format.setter
     def value_format(self, value):
-        if isinstance(value, six.string_types):
-            self._value_format = value
+        self._value_format.value = value
 
     def to_dict(self):
         return serialize(self)

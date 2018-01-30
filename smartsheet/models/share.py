@@ -17,13 +17,9 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
-from datetime import datetime
-from dateutil.parser import parse
 
 
 class Share(object):
@@ -45,21 +41,31 @@ class Share(object):
                 'OWNER'],
             '_type': [
                 'USER',
-                'GROUP']}
+                'GROUP'],
+            'scope': [
+                'ITEM',
+                'WORKSPACE'
+            ]}
 
-        self._access_level = None
-        self._cc_me = None
-        self._created_at = None
-        self._email = None
-        self._group_id = None
-        self._id_ = None
-        self._message = None
-        self._modified_at = None
-        self._name = None
-        self._scope = None
-        self._subject = None
-        self._type_ = None
-        self._user_id = None
+        self._access_level = String(
+            accept=self.allowed_values['access_level']
+        )
+        self._cc_me = Boolean()
+        self._created_at = Timestamp()
+        self._email = String()
+        self._group_id = Number()
+        self._id_ = String()
+        self._message = String()
+        self._modified_at = Timestamp()
+        self._name = String()
+        self._scope = String(
+            accept=self.allowed_values['scope']
+        )
+        self._subject = String()
+        self._type_ = String(
+            accept=self.allowed_values['_type']
+        )
+        self._user_id = Number()
 
         if props:
             deserialize(self, props)
@@ -86,138 +92,107 @@ class Share(object):
 
     @property
     def access_level(self):
-        return self._access_level
+        return self._access_level.value
 
     @access_level.setter
     def access_level(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['access_level']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Share`access_level`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['access_level']))
-            self._access_level = value
+        self._access_level.value = value
 
     @property
     def cc_me(self):
-        return self._cc_me
+        return self._cc_me.value
 
     @cc_me.setter
     def cc_me(self, value):
-        if isinstance(value, bool):
-            self._cc_me = value
+        self._cc_me.value = value
 
     @property
     def created_at(self):
-        return self._created_at
+        return self._created_at.value
 
     @created_at.setter
     def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._created_at = value
+        self._created_at.value = value
 
     @property
     def email(self):
-        return self._email
+        return self._email.value
 
     @email.setter
     def email(self, value):
-        if isinstance(value, six.string_types):
-            self._email = value
+        self._email.value = value
 
     @property
     def group_id(self):
-        return self._group_id
+        return self._group_id.value
 
     @group_id.setter
     def group_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._group_id = value
+        self._group_id.value = value
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.string_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def message(self):
-        return self._message
+        return self._message.value
 
     @message.setter
     def message(self, value):
-        if isinstance(value, six.string_types):
-            self._message = value
+        self._message.value = value
 
     @property
     def modified_at(self):
-        return self._modified_at
+        return self._modified_at.value
 
     @modified_at.setter
     def modified_at(self, value):
-        if isinstance(value, datetime):
-            self._modified_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._modified_at = value
+        self._modified_at.value = value
 
     @property
     def name(self):
-        return self._name
+        return self._name.value
 
     @name.setter
     def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+        self._name.value = value
 
     @property
     def scope(self):
-        return self._scope
+        return self._scope.value
 
     @scope.setter
     def scope(self, value):
-        if isinstance(value, six.string_types):
-            self._scope = value
+        self._scope.value = value
 
     @property
     def subject(self):
-        return self._subject
+        return self._subject.value
 
     @subject.setter
     def subject(self, value):
-        if isinstance(value, six.string_types):
-            self._subject = value
+        self._subject.value = value
 
     @property
     def type_(self):
-        return self._type_
+        return self._type_.value
 
     @type_.setter
     def type_(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Share`_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['_type']))
-            self._type_ = value
+        self._type_.value = value
 
     @property
     def user_id(self):
-        return self._user_id
+        return self._user_id.value
 
     @user_id.setter
     def user_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._user_id = value
+        self._user_id.value = value
 
     def to_dict(self):
         return serialize(self)

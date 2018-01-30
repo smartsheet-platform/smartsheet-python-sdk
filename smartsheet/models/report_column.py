@@ -17,10 +17,8 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .column import Column
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -36,8 +34,8 @@ class ReportColumn(Column):
         if base_obj is not None:
             self._base = base_obj
 
-        self._sheet_name_column = None
-        self._virtual_id = None
+        self._sheet_name_column = Boolean()
+        self._virtual_id = Number()
 
         if props:
             deserialize(self, props)
@@ -46,21 +44,19 @@ class ReportColumn(Column):
 
     @property
     def sheet_name_column(self):
-        return self._sheet_name_column
+        return self._sheet_name_column.value
 
     @sheet_name_column.setter
     def sheet_name_column(self, value):
-        if isinstance(value, bool):
-            self._sheet_name_column = value
+        self._sheet_name_column.value = value
 
     @property
     def virtual_id(self):
-        return self._virtual_id
+        return self._virtual_id.value
 
     @virtual_id.setter
     def virtual_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._virtual_id = value
+        self._virtual_id.value = value
 
     def to_dict(self):
         return serialize(self)

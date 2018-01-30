@@ -1193,13 +1193,12 @@ class TestModelAttributes:
         # value2, value2
         model = smart.models.Criteria({
             'operator': 'EQUAL',
-            'value1': 'foo',
-            'value2': 'foo'
+            'values': ['foo', 'foo']
         })
 
         assert model.operator == 'EQUAL'
-        assert model.value1 == 'foo'
-        assert model.value2 == 'foo'
+        assert model.values[0] == 'foo'
+        assert model.values[1] == 'foo'
         as_dict = model.to_dict()
         assert isinstance(as_dict, dict)
 
@@ -1773,7 +1772,6 @@ class TestModelAttributes:
         assert model.attachment_sub_type == 'DOCUMENT'
         assert model.attachment_type == 'BOX_COM'
         assert isinstance(model.created_by, smart.models.User)
-        assert model.description == 'foo'
         assert model.id == 19082
         assert model.mime_type == 'foo'
         assert model.name == 'foo'
@@ -1790,7 +1788,6 @@ class TestModelAttributes:
     def test_attachment_snake(self, smart_setup):
         smart = smart_setup['smart']
         model = smart.models.Attachment({
-            'description': 'foo',
             'mimeType': 'foo',
             'name': 'foo',
             'parentId': 19082,
@@ -1807,7 +1804,6 @@ class TestModelAttributes:
         assert model.attachment_sub_type == 'DOCUMENT'
         assert model.attachment_type == 'BOX_COM'
         assert isinstance(model.created_by, smart.models.User)
-        assert model.description == 'foo'
         assert model.id == 19082
         assert model.mime_type == 'foo'
         assert model.name == 'foo'

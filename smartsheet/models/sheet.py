@@ -17,9 +17,6 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .attachment import Attachment
 from .column import Column
 from .sheet_filter import SheetFilter
@@ -29,11 +26,9 @@ from .project_settings import ProjectSettings
 from .row import Row
 from .sheet_user_settings import SheetUserSettings
 from .source import Source
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
-from datetime import datetime
-from dateutil.parser import parse
 
 
 class Sheet(object):
@@ -54,32 +49,34 @@ class Sheet(object):
                 'ADMIN',
                 'OWNER']}
 
-        self._access_level = None
+        self._access_level = String(
+            accept=self.allowed_values['access_level']
+        )
         self._attachments = TypedList(Attachment)
         self._columns = TypedList(Column)
-        self._created_at = None
-        self._dependencies_enabled = None
+        self._created_at = Timestamp()
+        self._dependencies_enabled = Boolean()
         self._discussions = TypedList(Discussion)
         self._effective_attachment_options = TypedList(str)
-        self._favorite = None
+        self._favorite = Boolean()
         self._filters = TypedList(SheetFilter)
-        self._from_id = None
-        self._gantt_enabled = None
-        self._id_ = None
-        self._modified_at = None
-        self._name = None
-        self._owner = None
-        self._owner_id = None
-        self._permalink = None
-        self._project_settings = None
-        self._read_only = None
-        self._resource_management_enabled = None
+        self._from_id = Number()
+        self._gantt_enabled = Boolean()
+        self._id_ = Number()
+        self._modified_at = Timestamp()
+        self._name = String()
+        self._owner = String()
+        self._owner_id = Number()
+        self._permalink = String()
+        self._project_settings = TypedObject(ProjectSettings)
+        self._read_only = Boolean()
+        self._resource_management_enabled = Boolean()
         self._rows = TypedList(Row)
-        self._show_parent_rows_for_filters = None
-        self._source = None
-        self._total_row_count = None
-        self._user_settings = None
-        self._version = None
+        self._show_parent_rows_for_filters = Boolean()
+        self._source = TypedObject(Source)
+        self._total_row_count = Number()
+        self._user_settings = TypedObject(SheetUserSettings)
+        self._version = Number()
 
         if props:
             deserialize(self, props)
@@ -102,17 +99,11 @@ class Sheet(object):
 
     @property
     def access_level(self):
-        return self._access_level
+        return self._access_level.value
 
     @access_level.setter
     def access_level(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['access_level']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Sheet`access_level`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['access_level']))
-            self._access_level = value
+        self._access_level.value = value
 
     @property
     def attachments(self):
@@ -132,25 +123,19 @@ class Sheet(object):
 
     @property
     def created_at(self):
-        return self._created_at
+        return self._created_at.value
 
     @created_at.setter
     def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._created_at = value
+        self._created_at.value = value
 
     @property
     def dependencies_enabled(self):
-        return self._dependencies_enabled
+        return self._dependencies_enabled.value
 
     @dependencies_enabled.setter
     def dependencies_enabled(self, value):
-        if isinstance(value, bool):
-            self._dependencies_enabled = value
+        self._dependencies_enabled.value = value
 
     @property
     def discussions(self):
@@ -170,12 +155,11 @@ class Sheet(object):
 
     @property
     def favorite(self):
-        return self._favorite
+        return self._favorite.value
 
     @favorite.setter
     def favorite(self, value):
-        if isinstance(value, bool):
-            self._favorite = value
+        self._favorite.value = value
 
     @property
     def filters(self):
@@ -187,108 +171,91 @@ class Sheet(object):
 
     @property
     def from_id(self):
-        return self._from_id
+        return self._from_id.value
 
     @from_id.setter
     def from_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._from_id = value
+        self._from_id.value = value
 
     @property
     def gantt_enabled(self):
-        return self._gantt_enabled
+        return self._gantt_enabled.value
 
     @gantt_enabled.setter
     def gantt_enabled(self, value):
-        if isinstance(value, bool):
-            self._gantt_enabled = value
+        self._gantt_enabled.value = value
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def modified_at(self):
-        return self._modified_at
+        return self._modified_at.value
 
     @modified_at.setter
     def modified_at(self, value):
-        if isinstance(value, datetime):
-            self._modified_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._modified_at = value
+        self._modified_at.value = value
 
     @property
     def name(self):
-        return self._name
+        return self._name.value
 
     @name.setter
     def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+        self._name.value = value
 
     @property
     def owner(self):
-        return self._owner
+        return self._owner.value
 
     @owner.setter
     def owner(self, value):
-        if isinstance(value, six.string_types):
-            self._owner = value
+        self._owner.value = value
 
     @property
     def owner_id(self):
-        return self._owner_id
+        return self._owner_id.value
 
     @owner_id.setter
     def owner_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._owner_id = value
+        self._owner_id.value = value
 
     @property
     def permalink(self):
-        return self._permalink
+        return self._permalink.value
 
     @permalink.setter
     def permalink(self, value):
-        if isinstance(value, six.string_types):
-            self._permalink = value
+        self._permalink.value = value
 
     @property
     def project_settings(self):
-        return self._project_settings
+        return self._project_settings.value
 
     @project_settings.setter
     def project_settings(self, value):
-        if isinstance(value, ProjectSettings):
-            self._project_settings = value
-        elif isinstance(value, dict):
-            self._project_settings = ProjectSettings(value, self._base)
+        self._project_settings.value = value
 
     @property
     def read_only(self):
-        return self._read_only
+        return self._read_only.value
 
     @read_only.setter
     def read_only(self, value):
-        if isinstance(value, bool):
-            self._read_only = value
+        self._read_only.value = value
 
     @property
     def resource_management_enabled(self):
-        return self._resource_management_enabled
+        return self._resource_management_enabled.value
 
     @resource_management_enabled.setter
     def resource_management_enabled(self, value):
-        if isinstance(value, bool):
-            self._resource_management_enabled = value
+        self._resource_management_enabled.value = value
 
     @property
     def rows(self):
@@ -300,52 +267,43 @@ class Sheet(object):
 
     @property
     def show_parent_rows_for_filters(self):
-        return self._show_parent_rows_for_filters
+        return self._show_parent_rows_for_filters.value
 
     @show_parent_rows_for_filters.setter
     def show_parent_rows_for_filters(self, value):
-        if isinstance(value, bool):
-            self._show_parent_rows_for_filters = value
+        self._show_parent_rows_for_filters.value = value
 
     @property
     def source(self):
-        return self._source
+        return self._source.value
 
     @source.setter
     def source(self, value):
-        if isinstance(value, Source):
-            self._source = value
-        else:
-            self._source = Source(value, self._base)
+        self._source.value = value
 
     @property
     def total_row_count(self):
-        return self._total_row_count
+        return self._total_row_count.value
 
     @total_row_count.setter
     def total_row_count(self, value):
-        if isinstance(value, six.integer_types):
-            self._total_row_count = value
+        self._total_row_count.value = value
 
     @property
     def user_settings(self):
-        return self._user_settings
+        return self._user_settings.value
 
     @user_settings.setter
     def user_settings(self, value):
-        if isinstance(value, SheetUserSettings):
-            self._user_settings = value
-        else:
-            self._user_settings = SheetUserSettings(value, self._base)
+        self._user_settings.value = value
 
     @property
     def version(self):
-        return self._version
+        return self._version.value
 
     @version.setter
     def version(self, value):
-        if isinstance(value, six.integer_types):
-            self._version = value
+        self._version.value = value
 
     def add_columns(self, list_of_columns):
         return self._base.Sheets.add_columns(self.id, list_of_columns)

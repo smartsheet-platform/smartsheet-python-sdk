@@ -21,6 +21,9 @@ import json
 import logging
 import six
 
+from datetime import datetime
+from dateutil.parser import parse
+
 
 class TypedList(collections.MutableSequence):
 
@@ -86,6 +89,9 @@ class TypedList(collections.MutableSequence):
         elif isinstance(value, self.item_type):
             self.purge()
             self.append(value)
+        elif hasattr(value, 'is_explicit_null'):
+            self.purge()
+            self.append(value)
         else:
             raise ValueError("Can't load to TypedList(%s) from '%s'", self.item_type, value)
 
@@ -97,7 +103,151 @@ class TypedList(collections.MutableSequence):
         return json.dumps(self.__store)
 
 
-class ExplicitNull(object):
+class TypedObject(object):
 
-    def __init__(self):
-        pass
+    def __init__(self, object_type):
+        self.object_type = object_type
+        self._value = None
+        self._log = logging.getLogger(__name__)
+        if isinstance(self.object_type, six.string_types):
+            self.object_type = getattr(
+                importlib.import_module(
+                    __package__ + '.models.' + self.object_type.lower()
+                ), self.object_type)
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        if isinstance(value, self.object_type):
+            self._value = value
+        elif isinstance(value, dict):
+            self._value = self.object_type(value)
+        elif hasattr(value, 'is_explicit_null'):
+            self._value = value
+        else:
+            raise ValueError("`[0]` invalid type for [1] value".format(value, self.object_type))
+
+    def __str(self):
+        return json.dumps(self._value)
+
+
+class Number(object):
+
+    def __init__(self, initial_value=None):
+        self._value = None
+        if initial_value:
+            self.value = initial_value
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        if value is None:
+            self._value = None
+        elif isinstance(value, (six.integer_types, float)):
+            self._value = value
+        else:
+            raise ValueError("`[0]` invalid type for Number value".format(value))
+
+    def __str__(self):
+        return str(self.value)
+
+
+class String(object):
+
+    def __init__(self, initial_value=None, accept=None):
+        self._value = None
+        if initial_value:
+            self.value = initial_value
+        self._accept = None
+        if accept:
+            self.accept = accept
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        if value is None:
+            self._value = None
+        elif isinstance(value, six.string_types):
+            if self.accept and value not in self._accept:
+                raise ValueError(
+                    "`{0}` is not in accept list, must be one of {1}".format(
+                        value, self.accept))
+            self._value = value
+        else:
+            raise ValueError("`[0]` invalid type for String value".format(value))
+
+    @property
+    def accept(self):
+        return self._accept
+
+    @accept.setter
+    def accept(self, value):
+        if isinstance(value, list):
+            self._accept = value
+        elif isinstance(value, six.string_types):
+            self._accept = [value]
+        else:
+            raise ValueError("`[0]` invalid type for accept".format(value))
+
+    def __str__(self):
+        return self._value
+
+
+class Boolean(object):
+
+    def __init__(self, initial_value=None):
+        self._value = None
+        if initial_value:
+            self.value = initial_value
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        if value is None:
+            self._value = None
+        elif isinstance(value, bool):
+            self._value = value
+        else:
+            raise ValueError("`[0]` invalid type for Boolean value".format(value))
+
+    def __str__(self):
+        return str(self._value)
+
+
+class Timestamp(object):
+
+    def __init__(self, initial_value=None):
+        self._value = None
+        if initial_value:
+            self.value = initial_value
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        if value is None:
+            self._value = None
+        elif isinstance(value, datetime):
+            self._value = value
+        elif isinstance(value, six.string_types):
+            value = parse(value)
+            self._value = value
+        else:
+            raise ValueError("`[0]` invalid type for Timestamp value".format(value))
+
+    def __str__(self):
+        return str(self._value)

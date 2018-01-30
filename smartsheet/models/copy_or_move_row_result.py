@@ -17,11 +17,8 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .row_mapping import RowMapping
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -36,7 +33,7 @@ class CopyOrMoveRowResult(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._destination_sheet_id = None
+        self._destination_sheet_id = Number()
         self._row_mappings = TypedList(RowMapping)
 
         if props:
@@ -47,12 +44,11 @@ class CopyOrMoveRowResult(object):
 
     @property
     def destination_sheet_id(self):
-        return self._destination_sheet_id
+        return self._destination_sheet_id.value
 
     @destination_sheet_id.setter
     def destination_sheet_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._destination_sheet_id = value
+        self._destination_sheet_id.value = value
 
     @property
     def row_mappings(self):

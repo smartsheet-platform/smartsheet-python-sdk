@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -34,8 +32,8 @@ class Account(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._id_ = None
-        self._name = None
+        self._id_ = Number()
+        self._name = String()
 
         if props:
             deserialize(self, props)
@@ -56,21 +54,19 @@ class Account(object):
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def name(self):
-        return self._name
+        return self._name.value
 
     @name.setter
     def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+        self._name.value = value
 
     def to_dict(self):
         return serialize(self)

@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -34,7 +32,7 @@ class Version(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._version = None
+        self._version = Number()
 
         if props:
             deserialize(self, props)
@@ -44,12 +42,11 @@ class Version(object):
 
     @property
     def version(self):
-        return self._version
+        return self._version.value
 
     @version.setter
     def version(self, value):
-        if isinstance(value, six.integer_types):
-            self._version = value
+        self._version.value = value
 
     def to_dict(self):
         return serialize(self)

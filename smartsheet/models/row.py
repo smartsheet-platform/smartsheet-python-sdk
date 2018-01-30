@@ -17,19 +17,15 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .attachment import Attachment
 from .cell import Cell
 from .column import Column
 from .discussion import Discussion
-from ..types import TypedList
+from ..types import *
 from .user import User
 from ..util import serialize
 from ..util import deserialize
 from datetime import datetime
-from dateutil.parser import parse
 
 
 class Row(object):
@@ -50,34 +46,36 @@ class Row(object):
                 'ADMIN',
                 'OWNER']}
 
-        self._above = None
-        self._access_level = None
+        self._above = Boolean()
+        self._access_level = String(
+            accept=self.allowed_values['access_level']
+        )
         self._attachments = TypedList(Attachment)
         self._cells = TypedList(Cell)
         self._columns = TypedList(Column)
-        self._conditional_format = None
-        self._created_at = None
-        self._created_by = None
+        self._conditional_format = String()
+        self._created_at = Timestamp()
+        self._created_by = TypedObject(User)
         self._discussions = TypedList(Discussion)
-        self._expanded = None
-        self._filtered_out = None
-        self._format_ = None
-        self._id_ = None
-        self._in_critical_path = None
-        self._indent = None
-        self._locked = None
-        self._locked_for_user = None
-        self._modified_at = None
-        self._modified_by = None
-        self._outdent = None
-        self._parent_id = None
-        self._permalink = None
-        self._row_number = None
-        self._sheet_id = None
-        self._sibling_id = None
-        self._to_bottom = None
-        self._to_top = None
-        self._version = None
+        self._expanded = Boolean()
+        self._filtered_out = Boolean()
+        self._format_ = String()
+        self._id_ = Number()
+        self._in_critical_path = Boolean()
+        self._indent = Number()
+        self._locked = Boolean()
+        self._locked_for_user = Boolean()
+        self._modified_at = Timestamp()
+        self._modified_by = TypedObject(User)
+        self._outdent = Number()
+        self._parent_id = Number()
+        self._permalink = String()
+        self._row_number = Number()
+        self._sheet_id = Number()
+        self._sibling_id = Number()
+        self._to_bottom = Boolean()
+        self._to_top = Boolean()
+        self._version = Number()
 
         if props:
             deserialize(self, props)
@@ -104,26 +102,19 @@ class Row(object):
 
     @property
     def above(self):
-        return self._above
+        return self._above.value
 
     @above.setter
     def above(self, value):
-        if isinstance(value, bool):
-            self._above = value
+        self._above.value = value
 
     @property
     def access_level(self):
-        return self._access_level
+        return self._access_level.value
 
     @access_level.setter
     def access_level(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['access_level']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Row`access_level`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['access_level']))
-            self._access_level = value
+        self._access_level.value = value
 
     @property
     def attachments(self):
@@ -151,36 +142,27 @@ class Row(object):
 
     @property
     def conditional_format(self):
-        return self._conditional_format
+        return self._conditional_format.value
 
     @conditional_format.setter
     def conditional_format(self, value):
-        if isinstance(value, six.string_types):
-            self._conditional_format = value
+        self._conditional_format.value = value
 
     @property
     def created_at(self):
-        return self._created_at
+        return self._created_at.value
 
     @created_at.setter
     def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._created_at = value
+        self._created_at.value = value
 
     @property
     def created_by(self):
-        return self._created_by
+        return self._created_by.value
 
     @created_by.setter
     def created_by(self, value):
-        if isinstance(value, User):
-            self._created_by = value
-        else:
-            self._created_by = User(value, self._base)
+        self._created_by.value = value
 
     @property
     def discussions(self):
@@ -192,180 +174,156 @@ class Row(object):
 
     @property
     def expanded(self):
-        return self._expanded
+        return self._expanded.value
 
     @expanded.setter
     def expanded(self, value):
-        if isinstance(value, bool):
-            self._expanded = value
+        self._expanded.value = value
 
     @property
     def filtered_out(self):
-        return self._filtered_out
+        return self._filtered_out.value
 
     @filtered_out.setter
     def filtered_out(self, value):
-        if isinstance(value, bool):
-            self._filtered_out = value
+        self._filtered_out.value = value
 
     @property
     def format_(self):
-        return self._format_
+        return self._format_.value
 
     @format_.setter
     def format_(self, value):
-        if isinstance(value, six.string_types):
-            self._format_ = value
+        self._format_.value = value
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def in_critical_path(self):
-        return self._in_critical_path
+        return self._in_critical_path.value
 
     @in_critical_path.setter
     def in_critical_path(self, value):
-        if isinstance(value, bool):
-            self._in_critical_path = value
+        self._in_critical_path.value = value
 
     @property
     def indent(self):
-        return self._indent
+        return self._indent.value
 
     @indent.setter
     def indent(self, value):
-        if isinstance(value, six.integer_types):
-            self._indent = value
+        self._indent.value = value
 
     @property
     def locked(self):
-        return self._locked
+        return self._locked.value
 
     @locked.setter
     def locked(self, value):
-        if isinstance(value, bool):
-            self._locked = value
+        self._locked.value = value
 
     @property
     def locked_for_user(self):
-        return self._locked_for_user
+        return self._locked_for_user.value
 
     @locked_for_user.setter
     def locked_for_user(self, value):
-        if isinstance(value, bool):
-            self._locked_for_user = value
+        self._locked_for_user.value = value
 
     @property
     def modified_at(self):
-        return self._modified_at
+        return self._modified_at.value
 
     @modified_at.setter
     def modified_at(self, value):
         if isinstance(value, datetime):
-            self._modified_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._modified_at = value
+            self._modified_at.value = value
 
     @property
     def modified_by(self):
-        return self._modified_by
+        return self._modified_by.value
 
     @modified_by.setter
     def modified_by(self, value):
-        if isinstance(value, User):
-            self._modified_by = value
-        else:
-            self._modified_by = User(value, self._base)
+        self._modified_by.value = value
 
     @property
     def outdent(self):
-        return self._outdent
+        return self._outdent.value
 
     @outdent.setter
     def outdent(self, value):
-        if isinstance(value, six.integer_types):
-            self._outdent = value
+        self._outdent.value = value
 
     @property
     def parent_id(self):
-        return self._parent_id
+        return self._parent_id.value
 
     @parent_id.setter
     def parent_id(self, value):
-        if isinstance(value, (six.integer_types, type(None))):
-            self._parent_id = value
+        self._parent_id.value = value
 
     @property
     def permalink(self):
-        return self._permalink
+        return self._permalink.value
 
     @permalink.setter
     def permalink(self, value):
-        if isinstance(value, six.string_types):
-            self._permalink = value
+        self._permalink.value = value
 
     @property
     def row_number(self):
-        return self._row_number
+        return self._row_number.value
 
     @row_number.setter
     def row_number(self, value):
-        if isinstance(value, six.integer_types):
-            self._row_number = value
+        self._row_number.value = value
 
     @property
     def sheet_id(self):
-        return self._sheet_id
+        return self._sheet_id.value
 
     @sheet_id.setter
     def sheet_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._sheet_id = value
+        self._sheet_id.value = value
 
     @property
     def sibling_id(self):
-        return self._sibling_id
+        return self._sibling_id.value
 
     @sibling_id.setter
     def sibling_id(self, value):
-        if isinstance(value, (six.integer_types, type(None))):
-            self._sibling_id = value
+        self._sibling_id.value = value
 
     @property
     def to_bottom(self):
-        return self._to_bottom
+        return self._to_bottom.value
 
     @to_bottom.setter
     def to_bottom(self, value):
-        if isinstance(value, bool):
-            self._to_bottom = value
+        self._to_bottom.value = value
 
     @property
     def to_top(self):
-        return self._to_top
+        return self._to_top.value
 
     @to_top.setter
     def to_top(self, value):
-        if isinstance(value, bool):
-            self._to_top = value
+        self._to_top.value = value
 
     @property
     def version(self):
-        return self._version
+        return self._version.value
 
     @version.setter
     def version(self, value):
-        if isinstance(value, six.integer_types):
-            self._version = value
+        self._version.value = value
 
     def get_column(self, column_id):
         for cell in self.cells:

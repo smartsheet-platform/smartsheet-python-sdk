@@ -17,13 +17,8 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .cell import Cell
-from .cell_link import CellLink
-from .hyperlink import Hyperlink
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -39,7 +34,7 @@ class ReportCell(Cell):
         if base_obj is not None:
             self._base = base_obj
 
-        self._virtual_column_id = None
+        self._virtual_column_id = Number()
 
         if props:
             deserialize(self, props)
@@ -49,12 +44,11 @@ class ReportCell(Cell):
 
     @property
     def virtual_column_id(self):
-        return self._virtual_column_id
+        return self._virtual_column_id.value
 
     @virtual_column_id.setter
     def virtual_column_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._virtual_column_id = value
+        self._virtual_column_id.value = value
 
     def to_dict(self):
         return serialize(self)

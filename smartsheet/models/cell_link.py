@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -45,64 +43,56 @@ class CellLink(object):
                 'INVALID',
                 'DISABLED']}
 
-        self._column_id = None
-        self._row_id = None
-        self._sheet_id = None
-        self._sheet_name = None
-        self._status = None
+        self._column_id = Number()
+        self._row_id = Number()
+        self._sheet_id = Number()
+        self._sheet_name = String()
+        self._status = String(
+            accept=self.allowed_values['status']
+        )
 
         if props:
             deserialize(self, props)
 
     @property
     def column_id(self):
-        return self._column_id
+        return self._column_id.value
 
     @column_id.setter
     def column_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._column_id = value
+        self._column_id.value = value
 
     @property
     def row_id(self):
-        return self._row_id
+        return self._row_id.value
 
     @row_id.setter
     def row_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._row_id = value
+        self._row_id.value = value
 
     @property
     def sheet_id(self):
-        return self._sheet_id
+        return self._sheet_id.value
 
     @sheet_id.setter
     def sheet_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._sheet_id = value
+        self._sheet_id.value = value
 
     @property
     def sheet_name(self):
-        return self._sheet_name
+        return self._sheet_name.value
 
     @sheet_name.setter
     def sheet_name(self, value):
-        if isinstance(value, six.string_types):
-            self._sheet_name = value
+        self._sheet_name.value = value
 
     @property
     def status(self):
-        return self._status
+        return self._status.value
 
     @status.setter
     def status(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['status']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for CellLink`status`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['status']))
-            self._status = value
+        self._status.value = value
 
     def to_dict(self):
         return serialize(self)

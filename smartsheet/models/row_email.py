@@ -17,11 +17,8 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .email import Email
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -38,9 +35,9 @@ class RowEmail(Email):
             self._base = base_obj
 
         self._column_ids = TypedList(int)
-        self._include_attachments = False
-        self._include_discussions = False
-        self._layout = None
+        self._include_attachments = Boolean()
+        self._include_discussions = Boolean()
+        self._layout = String()
 
         if props:
             deserialize(self, props)
@@ -55,30 +52,27 @@ class RowEmail(Email):
 
     @property
     def include_attachments(self):
-        return self._include_attachments
+        return self._include_attachments.value
 
     @include_attachments.setter
     def include_attachments(self, value):
-        if isinstance(value, bool):
-            self._include_attachments = value
+        self._include_attachments.value = value
 
     @property
     def include_discussions(self):
-        return self._include_discussions
+        return self._include_discussions.value
 
     @include_discussions.setter
     def include_discussions(self, value):
-        if isinstance(value, bool):
-            self._include_discussions = value
+        self._include_discussions.value = value
 
     @property
     def layout(self):
-        return self._layout
+        return self._layout.value
 
     @layout.setter
     def layout(self, value):
-        if isinstance(value, six.string_types):
-            self._layout = value
+        self._layout.value = value
 
     def to_dict(self):
         return serialize(self)

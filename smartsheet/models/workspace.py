@@ -17,15 +17,12 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .folder import Folder
 from .report import Report
 from .sheet import Sheet
 from .sight import Sight
 from .template import Template
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -48,12 +45,14 @@ class Workspace(object):
                 'ADMIN',
                 'OWNER']}
 
-        self._access_level = None
-        self._favorite = None
+        self._access_level = String(
+            accept=self.allowed_values['access_level']
+        )
+        self._favorite = Boolean()
         self._folders = TypedList(Folder)
-        self._id_ = None
-        self._name = None
-        self._permalink = None
+        self._id_ = Number()
+        self._name = String()
+        self._permalink = String()
         self._reports = TypedList(Report)
         self._sheets = TypedList(Sheet)
         self._sights = TypedList(Sight)
@@ -80,26 +79,19 @@ class Workspace(object):
 
     @property
     def access_level(self):
-        return self._access_level
+        return self._access_level.value
 
     @access_level.setter
     def access_level(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['access_level']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Workspace`access_level`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['access_level']))
-            self._access_level = value
+        self._access_level.value = value
 
     @property
     def favorite(self):
-        return self._favorite
+        return self._favorite.value
 
     @favorite.setter
     def favorite(self, value):
-        if isinstance(value, bool):
-            self._favorite = value
+        self._favorite.value = value
 
     @property
     def folders(self):
@@ -111,30 +103,27 @@ class Workspace(object):
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def name(self):
-        return self._name
+        return self._name.value
 
     @name.setter
     def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+        self._name.value = value
 
     @property
     def permalink(self):
-        return self._permalink
+        return self._permalink.value
 
     @permalink.setter
     def permalink(self, value):
-        if isinstance(value, six.string_types):
-            self._permalink = value
+        self._permalink.value = value
 
     @property
     def reports(self):

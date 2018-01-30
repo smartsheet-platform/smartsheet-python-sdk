@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -34,49 +32,45 @@ class Hyperlink(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._report_id = None
-        self._sheet_id = None
-        self._sight_id = None
-        self._url = None
+        self._report_id = Number()
+        self._sheet_id = Number()
+        self._sight_id = Number()
+        self._url = String()
 
         if props:
             deserialize(self, props)
 
     @property
     def report_id(self):
-        return self._report_id
+        return self._report_id.value
 
     @report_id.setter
     def report_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._report_id = value
+        self._report_id.value = value
 
     @property
     def sheet_id(self):
-        return self._sheet_id
+        return self._sheet_id.value
 
     @sheet_id.setter
     def sheet_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._sheet_id = value
+        self._sheet_id.value = value
 
     @property
     def sight_id(self):
-        return self._sight_id
+        return self._sight_id.value
 
     @sight_id.setter
     def sight_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._sight_id = value
+        self._sight_id.value = value
 
     @property
     def url(self):
-        return self._url
+        return self._url.value
 
     @url.setter
     def url(self, value):
-        if isinstance(value, six.string_types):
-            self._url = value
+        self._url.value = value
 
     def to_dict(self):
         return serialize(self)

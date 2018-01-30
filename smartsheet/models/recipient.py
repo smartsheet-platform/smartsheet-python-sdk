@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -34,29 +32,27 @@ class Recipient(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._email = None
-        self._group_id = None
+        self._email = String()
+        self._group_id = Number()
 
         if props:
             deserialize(self, props)
 
     @property
     def email(self):
-        return self._email
+        return self._email.value
 
     @email.setter
     def email(self, value):
-        if isinstance(value, six.string_types):
-            self._email = value
+        self._email.value = value
 
     @property
     def group_id(self):
-        return self._group_id
+        return self._group_id.value
 
     @group_id.setter
     def group_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._group_id = value
+        self._group_id.value = value
 
     def to_dict(self):
         return serialize(self)

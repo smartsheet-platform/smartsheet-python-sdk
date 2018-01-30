@@ -17,11 +17,8 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .search_result_item import SearchResultItem
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -37,7 +34,7 @@ class SearchResult(object):
             self._base = base_obj
 
         self._results = TypedList(SearchResultItem)
-        self._total_count = None
+        self._total_count = Number()
 
         if props:
             deserialize(self, props)
@@ -55,12 +52,11 @@ class SearchResult(object):
 
     @property
     def total_count(self):
-        return self._total_count
+        return self._total_count.value
 
     @total_count.setter
     def total_count(self, value):
-        if isinstance(value, six.integer_types):
-            self._total_count = value
+        self._total_count.value = value
 
     def to_dict(self):
         return serialize(self)

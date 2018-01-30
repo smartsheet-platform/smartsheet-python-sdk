@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -34,7 +32,7 @@ class WebhookSecret(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._shared_secret = None
+        self._shared_secret = String()
 
         if props:
             deserialize(self, props)
@@ -45,12 +43,11 @@ class WebhookSecret(object):
 
     @property
     def shared_secret(self):
-        return self._shared_secret
+        return self._shared_secret.value
 
     @shared_secret.setter
     def shared_secret(self, value):
-        if isinstance(value, six.string_types):
-            self._shared_secret = value
+        self._shared_secret.value = value
 
     def to_dict(self):
         return serialize(self)

@@ -17,10 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -69,10 +66,10 @@ class Criteria(object):
                 'IS_CURRENT_USER',
                 'IS_NOT_CURRENT_USER']}
 
-        self._column_id = None
-        self._operator = None
-        self._value1 = None
-        self._value2 = None
+        self._column_id = Number()
+        self._operator = String(
+            accept=self.allowed_values['operator']
+        )
         self._values = TypedList(str)
 
         if props:
@@ -80,44 +77,19 @@ class Criteria(object):
 
     @property
     def column_id(self):
-        return self._column_id
+        return self._column_id.value
 
     @column_id.setter
     def column_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._column_id = value
+        self._column_id.value = value
 
     @property
     def operator(self):
-        return self._operator
+        return self._operator.value
 
     @operator.setter
     def operator(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['operator']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Criteria`operator`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['operator']))
-            self._operator = value
-
-    @property
-    def value1(self):
-        return self._value1
-
-    @value1.setter
-    def value1(self, value):
-        if isinstance(value, six.string_types):
-            self._value1 = value
-
-    @property
-    def value2(self):
-        return self._value2
-
-    @value2.setter
-    def value2(self, value):
-        if isinstance(value, six.string_types):
-            self._value2 = value
+        self._operator.value = value
 
     @property
     def values(self):

@@ -1,5 +1,5 @@
 import pytest
-import smartsheet
+
 
 @pytest.mark.usefixtures("smart_setup")
 class TestRows:
@@ -110,6 +110,8 @@ class TestRows:
         email = smart.models.MultiRowEmail()
         email.send_to = smart.models.Recipient({'email': 'john.doe@smartsheet.com'})
         email.row_ids = ids
+        email.include_attachments = False
+        email.include_discussions = False
         email.column_ids = list(set(column_ids))
         action = smart.Sheets.send_rows(
             smart_setup['sheet_b'].id,
@@ -131,7 +133,7 @@ class TestRows:
         new_row.id = row.id
         new_row.cells = [smart.models.Cell]
         new_row.cells[0].column_id = row.cells[0].column_id
-        new_row.cells[0].set_value_null()
+        new_row.cells[0].value = smart.models.ExplicitNull()
         new_row.to_bottom = True
         new_row.to_top = False
         action = smart.Sheets.update_rows(

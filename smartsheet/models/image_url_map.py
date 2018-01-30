@@ -17,13 +17,10 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .image_url import ImageUrl
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
-from ..types import TypedList
 
 
 class ImageUrlMap(object):
@@ -37,7 +34,7 @@ class ImageUrlMap(object):
             self._base = base_obj
 
         self._image_urls = TypedList(ImageUrl)
-        self._url_expires_in_millis = 0
+        self._url_expires_in_millis = Number()
 
         if props:
             deserialize(self, props)
@@ -56,12 +53,11 @@ class ImageUrlMap(object):
 
     @property
     def url_expires_in_millis(self):
-        return self._url_expires_in_millis
+        return self._url_expires_in_millis.value
 
     @url_expires_in_millis.setter
     def url_expires_in_millis(self, value):
-        if isinstance(value, six.integer_types):
-            self._url_expires_in_millis = value
+        self._url_expires_in_millis.value = value
 
     def to_dict(self):
         return serialize(self)

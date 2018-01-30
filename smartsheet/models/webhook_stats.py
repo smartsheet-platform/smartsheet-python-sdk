@@ -17,13 +17,9 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
-from datetime import datetime
-from dateutil.parser import parse
 
 
 class WebhookStats(object):
@@ -36,9 +32,9 @@ class WebhookStats(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._last_callback_attempt = None
-        self._last_callback_attempt_retry_count = None
-        self._last_successful_callback = None
+        self._last_callback_attempt = Timestamp()
+        self._last_callback_attempt_retry_count = Number()
+        self._last_successful_callback = Timestamp()
 
         if props:
             deserialize(self, props)
@@ -49,38 +45,27 @@ class WebhookStats(object):
 
     @property
     def last_callback_attempt(self):
-        return self._last_callback_attempt
+        return self._last_callback_attempt.value
 
     @last_callback_attempt.setter
     def last_callback_attempt(self, value):
-        if isinstance(value, datetime):
-            self._last_callback_attempt = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._last_callback_attempt = value
+        self._last_callback_attempt.value = value
 
     @property
     def last_callback_attempt_retry_count(self):
-        return self._last_callback_attempt_retry_count
+        return self._last_callback_attempt_retry_count.value
 
     @last_callback_attempt_retry_count.setter
     def last_callback_attempt_retry_count(self, value):
-        if isinstance(value, six.integer_types):
-            self._last_callback_attempt_retry_count = value
+        self._last_callback_attempt_retry_count.value = value
 
     @property
     def last_successful_callback(self):
-        return self._last_successful_callback
+        return self._last_successful_callback.value
 
     @last_successful_callback.setter
     def last_successful_callback(self, value):
-        if isinstance(value, datetime):
-            self._last_successful_callback = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._last_successful_callback = value
+        self._last_successful_callback.value = value
 
     def to_dict(self):
         return serialize(self)

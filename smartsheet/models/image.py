@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -34,10 +32,10 @@ class Image(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._alt_text = None
-        self._height = 0
-        self._id_ = None
-        self._width = 0
+        self._alt_text = String()
+        self._height = Number()
+        self._id_ = String()
+        self._width = Number()
 
         if props:
             deserialize(self, props)
@@ -56,39 +54,35 @@ class Image(object):
 
     @property
     def alt_text(self):
-        return self._alt_text
+        return self._alt_text.value
 
     @alt_text.setter
     def alt_text(self, value):
-        if isinstance(value, six.string_types):
-            self._alt_text = value
+        self._alt_text.value = value
 
     @property
     def height(self):
-        return self._height
+        return self._height.value
 
     @height.setter
     def height(self, value):
-        if isinstance(value, six.integer_types):
-            self._height = value
+        self._height.value = value
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.string_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def width(self):
-        return self._width
+        return self._width.value
 
     @width.setter
     def width(self, value):
-        if isinstance(value, six.integer_types):
-            self._width = value
+        self._width.value = value
 
     def to_dict(self):
         return serialize(self)

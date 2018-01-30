@@ -17,10 +17,8 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .user_model import UserModel
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -36,7 +34,7 @@ class User(UserModel):
         if base_obj is not None:
             self._base = base_obj
 
-        self._name = None
+        self._name = String()
 
         if props:
             deserialize(self, props)
@@ -45,12 +43,11 @@ class User(UserModel):
 
     @property
     def name(self):
-        return self._name
+        return self._name.value
 
     @name.setter
     def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+        self._name.value = value
 
     def to_dict(self):
         return serialize(self)

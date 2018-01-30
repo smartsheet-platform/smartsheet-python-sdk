@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -46,24 +44,20 @@ class FormatDetails(object):
                 'A1',
                 'A0']}
 
-        self._paper_size = None
+        self._paper_size = String(
+            accept=self.allowed_values['paper_size']
+        )
 
         if props:
             deserialize(self, props)
 
     @property
     def paper_size(self):
-        return self._paper_size
+        return self._paper_size.value
 
     @paper_size.setter
     def paper_size(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['paper_size']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for FormatDetails`paper_size`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['paper_size']))
-            self._paper_size = value
+        self._paper_size.value = value
 
     def to_dict(self):
         return serialize(self)

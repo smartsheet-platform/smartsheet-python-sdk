@@ -17,15 +17,10 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .webhook_stats import WebhookStats
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
-from datetime import datetime
-from dateutil.parser import parse
 
 
 class Webhook(object):
@@ -38,22 +33,28 @@ class Webhook(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._api_client_id = None
-        self._api_client_name = None
-        self._callback_url = None
-        self._created_at = None
-        self._disabled_details = None
-        self._enabled = None
+        self.allowed_values = {
+            'scope': [
+                'sheet']}
+
+        self._api_client_id = String()
+        self._api_client_name = String()
+        self._callback_url = String()
+        self._created_at = Timestamp()
+        self._disabled_details = String()
+        self._enabled = Boolean()
         self._events = TypedList(six.string_types)
-        self._id_ = None
-        self._modified_at = None
-        self._name = None
-        self._scope = None
-        self._scope_object_id = None
-        self._shared_secret = None
-        self._stats = None
-        self._status = None
-        self._version = None
+        self._id_ = Number()
+        self._modified_at = Timestamp()
+        self._name = String()
+        self._scope = String(
+            accept=self.allowed_values['scope']
+        )
+        self._scope_object_id = Number()
+        self._shared_secret = String()
+        self._stats = TypedObject(WebhookStats)
+        self._status = String()
+        self._version = Number()
 
         if props:
             deserialize(self, props)
@@ -76,61 +77,51 @@ class Webhook(object):
 
     @property
     def api_client_id(self):
-        return self._api_client_id
+        return self._api_client_id.value
 
     @api_client_id.setter
     def api_client_id(self, value):
-        if isinstance(value, six.string_types):
-            self._api_client_id = value
+        self._api_client_id.value = value
 
     @property
     def api_client_name(self):
-        return self._api_client_name
+        return self._api_client_name.value
 
     @api_client_name.setter
     def api_client_name(self, value):
-        if isinstance(value, six.string_types):
-            self._api_client_name = value
+        self._api_client_name.value = value
 
     @property
     def callback_url(self):
-        return self._callback_url
+        return self._callback_url.value
 
     @callback_url.setter
     def callback_url(self, value):
-        if isinstance(value, six.string_types):
-            self._callback_url = value
+        self._callback_url.value = value
 
     @property
     def created_at(self):
-        return self._created_at
+        return self._created_at.value
 
     @created_at.setter
     def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._created_at = value
+        self._created_at.value = value
 
     @property
     def disabled_details(self):
-        return self._disabled_details
+        return self._disabled_details.value
 
     @disabled_details.setter
     def disabled_details(self, value):
-        if isinstance(value, six.string_types):
-            self._disabled_details = value
+        self._disabled_details.value = value
 
     @property
     def enabled(self):
-        return self._enabled
+        return self._enabled.value
 
     @enabled.setter
     def enabled(self, value):
-        if isinstance(value, bool):
-            self._enabled = value
+        self._enabled.value = value
 
     @property
     def events(self):
@@ -142,90 +133,75 @@ class Webhook(object):
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def modified_at(self):
-        return self._modified_at
+        return self._modified_at.value
 
     @modified_at.setter
     def modified_at(self, value):
-        if isinstance(value, datetime):
-            self._modified_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._modified_at = value
+        self._modified_at.value = value
 
     @property
     def name(self):
-        return self._name
+        return self._name.value
 
     @name.setter
     def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+        self._name.value = value
 
     @property
     def scope(self):
-        return self._scope
+        return self._scope.value
 
     @scope.setter
     def scope(self, value):
-        if isinstance(value, six.string_types):
-            self._scope = value
+        self._scope.value = value
 
     @property
     def scope_object_id(self):
-        return self._scope_object_id
+        return self._scope_object_id.value
 
     @scope_object_id.setter
     def scope_object_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._scope_object_id = value
+        self._scope_object_id.value = value
 
     @property
     def shared_secret(self):
-        return self._shared_secret
+        return self._shared_secret.value
 
     @shared_secret.setter
     def shared_secret(self, value):
-        if isinstance(value, six.string_types):
-            self._shared_secret = value
+        self._shared_secret.value = value
 
     @property
     def stats(self):
-        return self._stats
+        return self._stats.value
 
     @stats.setter
     def stats(self, value):
-        if isinstance(value, dict):
-            self._stats = WebhookStats(value, self._base)
-        if isinstance(value, WebhookStats):
-            self._stats = value
+        self._stats.value = value
 
     @property
     def status(self):
-        return self._status
+        return self._status.value
 
     @status.setter
     def status(self, value):
-        if isinstance(value, six.string_types):
-            self._status = value
+        self._status.value = value
 
     @property
     def version(self):
-        return self._version
+        return self._version.value
 
     @version.setter
     def version(self, value):
-        if isinstance(value, six.integer_types):
-            self._version = value
+        self._version.value = value
 
     def to_dict(self):
         return serialize(self)

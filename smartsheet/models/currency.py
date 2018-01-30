@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -61,34 +59,29 @@ class Currency(object):
                 'SEK',
                 'SGD']}
 
-        self._code = None
-        self._symbol = None
+        self._code = String(
+            accept=self.allowed_values['code']
+        )
+        self._symbol = String()
 
         if props:
             deserialize(self, props)
 
     @property
     def code(self):
-        return self._code
+        return self._code.value
 
     @code.setter
     def code(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['code']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Currency`code`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['code']))
-            self._code = value
+        self._code.value = value
 
     @property
     def symbol(self):
-        return self._symbol
+        return self._symbol.value
 
     @symbol.setter
     def symbol(self, value):
-        if isinstance(value, six.string_types):
-            self._symbol = value
+        self._symbol.value = value
 
     def to_dict(self):
         return serialize(self)

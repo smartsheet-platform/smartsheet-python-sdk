@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 from .sheet_filter_details import SheetFilterDetails
@@ -41,10 +39,12 @@ class SheetFilter(object):
                 'PERSONAL',
                 'SHARED']}
 
-        self._filter_type = None
-        self._id_ = None
-        self._name = None
-        self._query = None
+        self._filter_type = String(
+            accept=self.allowed_values['_filter_type']
+        )
+        self._id_ = Number()
+        self._name = String()
+        self._query = TypedObject(SheetFilterDetails)
 
         if props:
             deserialize(self, props)
@@ -65,46 +65,35 @@ class SheetFilter(object):
 
     @property
     def filter_type(self):
-        return self._filter_type
+        return self._filter_type.value
 
     @filter_type.setter
     def filter_type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['_filter_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Filter`_filter_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['_filter_type']))
-            self._filter_type = value
+        self._filter_type.value = value
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def name(self):
-        return self._name
+        return self._name.value
 
     @name.setter
     def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+        self._name.value = value
 
     @property
     def query(self):
-        return self._query
+        return self._query.value
 
     @query.setter
     def query(self, value):
-        if isinstance(value, SheetFilterDetails):
-            self._query = value
-        elif isinstance(value, dict):
-            self._query = SheetFilterDetails(value, self._base)
+        self._query.value = value
 
     def to_dict(self):
         return serialize(self)

@@ -2,7 +2,6 @@ import pytest
 import six
 import os.path
 from datetime import date
-from smartsheet.types import ExplicitNull
 
 _dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -110,7 +109,7 @@ class TestRegression:
             if col.type == 'PREDECESSOR':
                 row.cells.append({
                     'column_id': col.id,
-                    'value': ExplicitNull()
+                    'value': smart.models.ExplicitNull()
                 })
                 break
 
@@ -152,7 +151,7 @@ class TestRegression:
         cell = smart.models.Cell()
         cell.column_id = col_id
         cell.link_in_from_cell = cell_link
-        cell.set_value_null()
+        cell.value = smart.models.ExplicitNull()
 
         row = smart.models.Row()
         row.id = added_row.id

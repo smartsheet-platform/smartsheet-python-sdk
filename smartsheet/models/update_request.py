@@ -17,16 +17,12 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .multi_row_email import MultiRowEmail
 from .user import User
 from .schedule import Schedule
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
-from datetime import datetime
-from dateutil.parser import parse
 
 
 class UpdateRequest(MultiRowEmail):
@@ -40,11 +36,11 @@ class UpdateRequest(MultiRowEmail):
         if base_obj is not None:
             self._base = base_obj
 
-        self._created_at = None
-        self._id_ = None
-        self._modified_at = None
-        self._schedule = None
-        self._sent_by = None
+        self._created_at = Timestamp()
+        self._id_ = Number()
+        self._modified_at = Timestamp()
+        self._schedule = TypedObject(Schedule)
+        self._sent_by = TypedObject(User)
 
         if props:
             deserialize(self, props)
@@ -67,62 +63,43 @@ class UpdateRequest(MultiRowEmail):
 
     @property
     def created_at(self):
-        return self._created_at
+        return self._created_at.value
 
     @created_at.setter
     def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._created_at = value
+        self._created_at.value = value
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def modified_at(self):
-        return self._modified_at
+        return self._modified_at.value
 
     @modified_at.setter
     def modified_at(self, value):
-        if isinstance(value, datetime):
-            self._modified_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._modified_at = value
+        self._modified_at.value = value
 
     @property
     def schedule(self):
-        return self._schedule
+        return self._schedule.value
 
     @schedule.setter
     def schedule(self, value):
-        if isinstance(value, Schedule):
-            self._schedule = value
-        else:
-            if isinstance(value, dict):
-                self._schedule = Schedule(value, self._base)
+        self._schedule.value = value
 
     @property
     def sent_by(self):
-        return self._sent_by
+        return self._sent_by.value
 
     @sent_by.setter
     def sent_by(self, value):
-        if isinstance(value, User):
-            self._sent_by = value
-        else:
-            if isinstance(value, dict):
-                self._sent_by = User(value, self._base)
+        self._sent_by.value = value
 
     def to_dict(self):
         return serialize(self)

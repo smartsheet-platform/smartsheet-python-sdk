@@ -17,11 +17,9 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .account import Account
 from .user_model import UserModel
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -37,9 +35,9 @@ class UserProfile(UserModel):
         if base_obj is not None:
             self._base = base_obj
 
-        self._account = None
-        self._locale = None
-        self._time_zone = None
+        self._account = TypedObject(Account)
+        self._locale = String()
+        self._time_zone = String()
 
         if props:
             deserialize(self, props)
@@ -50,32 +48,27 @@ class UserProfile(UserModel):
 
     @property
     def account(self):
-        return self._account
+        return self._account.value
 
     @account.setter
     def account(self, value):
-        if isinstance(value, Account):
-            self._account = value
-        else:
-            self._account = Account(value, self._base)
+        self._account.value = value
 
     @property
     def locale(self):
-        return self._locale
+        return self._locale.value
 
     @locale.setter
     def locale(self, value):
-        if isinstance(value, six.string_types):
-            self._locale = value
+        self._locale.value = value
 
     @property
     def time_zone(self):
-        return self._time_zone
+        return self._time_zone.value
 
     @time_zone.setter
     def time_zone(self, value):
-        if isinstance(value, six.string_types):
-            self._time_zone = value
+        self._time_zone.value = value
 
     def to_dict(self):
         return serialize(self)

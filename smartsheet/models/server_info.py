@@ -17,10 +17,8 @@
 
 from __future__ import absolute_import
 
-import json
-
 from .format_tables import FormatTables
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -35,7 +33,7 @@ class ServerInfo(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._formats = None
+        self._formats = TypedObject(FormatTables)
         self._supported_locales = TypedList(str)
 
         if props:
@@ -46,14 +44,11 @@ class ServerInfo(object):
 
     @property
     def formats(self):
-        return self._formats
+        return self._formats.value
 
     @formats.setter
     def formats(self, value):
-        if isinstance(value, FormatTables):
-            self._formats = value
-        else:
-            self._formats = FormatTables(value, self._base)
+        self._formats.value = value
 
     @property
     def supported_locales(self):

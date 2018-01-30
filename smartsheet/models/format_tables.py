@@ -17,12 +17,9 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .currency import Currency
 from .font_family import FontFamily
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -41,7 +38,7 @@ class FormatTables(object):
         self._color = TypedList(str)
         self._currency = TypedList(Currency)
         self._decimal_count = TypedList(str)
-        self._defaults = None
+        self._defaults = String()
         self._font_family = TypedList(FontFamily)
         self._font_size = TypedList(str)
         self._horizontal_align = TypedList(str)
@@ -90,12 +87,11 @@ class FormatTables(object):
 
     @property
     def defaults(self):
-        return self._defaults
+        return self._defaults.value
 
     @defaults.setter
     def defaults(self, value):
-        if isinstance(value, six.string_types):
-            self._defaults = value
+        self._defaults.value = value
 
     @property
     def font_family(self):

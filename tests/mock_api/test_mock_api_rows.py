@@ -1,7 +1,7 @@
 # pylint: disable=C0103,W0232
 
 import pytest
-from smartsheet.models import Row, PredecessorList, Duration
+from smartsheet.models import Row, PredecessorList, Duration, ExplicitNull
 from smartsheet.exceptions import ApiError
 
 from mock_api_test_helper import MockApiTestHelper, clean_api_error
@@ -564,9 +564,10 @@ class TestMockApiRows(MockApiTestHelper):
         first_row.id = 10
         first_row.cells.append({
             "columnId": 101,
-            "value": ""
+            "value": "",
+            "hyperlink": ExplicitNull()
         })
-        first_row.cells[0].set_hyperlink_null()
+        first_row.cells[0].hyperlink = ExplicitNull()
 
         response = self.client.Sheets.update_rows(1, [first_row])
 
@@ -584,7 +585,7 @@ class TestMockApiRows(MockApiTestHelper):
             "columnId": 101,
             "value": ""
         })
-        first_row.cells[0].set_link_in_from_cell_null()
+        first_row.cells[0].link_in_from_cell = ExplicitNull()
 
         response = self.client.Sheets.update_rows(1, [first_row])
 

@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -38,10 +36,13 @@ class AccessToken(object):
             'token_type': [
                 'bearer']}
 
-        self._access_token = None
-        self._expires_in = None
-        self._refresh_token = None
-        self._token_type = None
+        self._access_token = String()
+        self._expires_at = Timestamp()
+        self._expires_in = Number()
+        self._refresh_token = String()
+        self._token_type = String(
+            accept=self.allowed_values['token_type']
+        )
 
         if props:
             deserialize(self, props)
@@ -51,44 +52,43 @@ class AccessToken(object):
 
     @property
     def access_token(self):
-        return self._access_token
+        return self._access_token.value
 
     @access_token.setter
     def access_token(self, value):
-        if isinstance(value, six.string_types):
-            self._access_token = value
+        self._access_token.value = value
+
+    @property
+    def expires_at(self):
+        return self._expires_at.value
+
+    @expires_at.setter
+    def expires_at(self, value):
+        self._expires_at.value = value
 
     @property
     def expires_in(self):
-        return self._expires_in
+        return self._expires_in.value
 
     @expires_in.setter
     def expires_in(self, value):
-        if isinstance(value, six.integer_types):
-            self._expires_in = value
+        self._expires_in.value = value
 
     @property
     def refresh_token(self):
-        return self._refresh_token
+        return self._refresh_token.value
 
     @refresh_token.setter
     def refresh_token(self, value):
-        if isinstance(value, six.string_types):
-            self._refresh_token = value
+        self._refresh_token.value = value
 
     @property
     def token_type(self):
-        return self._token_type
+        return self._token_type.value
 
     @token_type.setter
     def token_type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['token_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for AccessToken`token_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['token_type']))
-            self._token_type = value
+        self._token_type.value = value
 
     def to_dict(self):
         return serialize(self)

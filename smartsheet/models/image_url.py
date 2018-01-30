@@ -17,10 +17,8 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .error_result import ErrorResult
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -35,59 +33,54 @@ class ImageUrl(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._error = None
-        self._height = 0
-        self._image_id = None
-        self._url = None
-        self._width = 0
+        self._error = TypedObject(ErrorResult)
+        self._height = Number()
+        self._image_id = String()
+        self._url = String()
+        self._width = Number()
 
         if props:
             deserialize(self, props)
 
     @property
     def error(self):
-        return self._error
+        return self._error.value
 
     @error.setter
     def error(self, value):
-        if isinstance(value, dict):
-            self._error = ErrorResult(value, self._base)
+        self._error.value = value
 
     @property
     def height(self):
-        return self._height
+        return self._height.value
 
     @height.setter
     def height(self, value):
-        if isinstance(value, six.integer_types):
-            self._height = value
+        self._height.value = value
 
     @property
     def image_id(self):
-        return self._image_id
+        return self._image_id.value
 
     @image_id.setter
     def image_id(self, value):
-        if isinstance(value, six.string_types):
-            self._image_id = value
+        self._image_id.value = value
 
     @property
     def url(self):
-        return self._url
+        return self._url.value
 
     @url.setter
     def url(self, value):
-        if isinstance(value, six.string_types):
-            self._url = value
+        self._url.value = value
 
     @property
     def width(self):
-        return self._width
+        return self._width.value
 
     @width.setter
     def width(self, value):
-        if isinstance(value, six.integer_types):
-            self._width = value
+        self._width.value = value
 
     def to_dict(self):
         return serialize(self)

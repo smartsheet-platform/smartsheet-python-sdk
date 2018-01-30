@@ -17,10 +17,8 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .error_result import ErrorResult
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -35,9 +33,9 @@ class BulkItemFailure(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._error = None
-        self._index = None
-        self._row_id = None
+        self._error = TypedObject(ErrorResult)
+        self._index = Number()
+        self._row_id = Number()
 
         if props:
             deserialize(self, props)
@@ -48,30 +46,27 @@ class BulkItemFailure(object):
 
     @property
     def error(self):
-        return self._error
+        return self._error.value
 
     @error.setter
     def error(self, value):
-        if isinstance(value, dict):
-            self._error = ErrorResult(value, self._base)
+        self._error.value = value
 
     @property
     def index(self):
-        return self._index
+        return self._index.value
 
     @index.setter
     def index(self, value):
-        if isinstance(value, six.integer_types):
-            self._index = value
+        self._index.value = value
 
     @property
     def row_id(self):
-        return self._row_id
+        return self._row_id.value
 
     @row_id.setter
     def row_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._row_id = value
+        self._row_id.value = value
 
     def to_dict(self):
         return serialize(self)

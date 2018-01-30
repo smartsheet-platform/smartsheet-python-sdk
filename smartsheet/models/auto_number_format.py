@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -34,49 +32,45 @@ class AutoNumberFormat(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._fill = None
-        self._prefix = None
-        self._starting_number = None
-        self._suffix = None
+        self._fill = String()
+        self._prefix = String()
+        self._starting_number = Number()
+        self._suffix = String()
 
         if props:
             deserialize(self, props)
 
     @property
     def fill(self):
-        return self._fill
+        return self._fill.value
 
     @fill.setter
     def fill(self, value):
-        if isinstance(value, six.string_types):
-            self._fill = value
+        self._fill.value = value
 
     @property
     def prefix(self):
-        return self._prefix
+        return self._prefix.value
 
     @prefix.setter
     def prefix(self, value):
-        if isinstance(value, six.string_types):
-            self._prefix = value
+        self._prefix.value = value
 
     @property
     def starting_number(self):
-        return self._starting_number
+        return self._starting_number.value
 
     @starting_number.setter
     def starting_number(self, value):
-        if isinstance(value, six.integer_types):
-            self._starting_number = value
+        self._starting_number.value = value
 
     @property
     def suffix(self):
-        return self._suffix
+        return self._suffix.value
 
     @suffix.setter
     def suffix(self, value):
-        if isinstance(value, six.string_types):
-            self._suffix = value
+        self._suffix.value = value
 
     def to_dict(self):
         return serialize(self)

@@ -17,12 +17,9 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .auto_number_format import AutoNumberFormat
 from .contact_option import ContactOption
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -81,23 +78,27 @@ class Column(object):
                 'PREDECESSOR',
                 'ABSTRACT_DATETIME']}
 
-        self._auto_number_format = None
+        self._auto_number_format = TypedObject(AutoNumberFormat)
         self._contact_options = TypedList(ContactOption)
-        self._format_ = None
-        self._hidden = None
-        self._id_ = None
-        self._index = None
-        self._locked = None
-        self._locked_for_user = None
+        self._format_ = String()
+        self._hidden = Boolean()
+        self._id_ = Number()
+        self._index = Number()
+        self._locked = Boolean()
+        self._locked_for_user = Boolean()
         self._options = TypedList(str)
-        self._primary = None
-        self._symbol = None
-        self._system_column_type = None
+        self._primary = Boolean()
+        self._symbol = String()
+        self._system_column_type = String(
+            accept=self.allowed_values['system_column_type']
+        )
         self._tags = TypedList(str)
-        self._title = None
-        self._type_ = None
-        self._width = None
-        self._validation = None
+        self._title = String()
+        self._type_ = String(
+            accept=self.allowed_values['_type']
+        )
+        self._width = Number()
+        self._validation = Boolean()
 
         if props:
             deserialize(self, props)
@@ -128,14 +129,11 @@ class Column(object):
     
     @property
     def auto_number_format(self):
-        return self._auto_number_format
+        return self._auto_number_format.value
 
     @auto_number_format.setter
     def auto_number_format(self, value):
-        if isinstance(value, AutoNumberFormat):
-            self._auto_number_format = value
-        else:
-            self._auto_number_format = AutoNumberFormat(value, self._base)
+        self._auto_number_format.value = value
 
     @property
     def contact_options(self):
@@ -147,57 +145,51 @@ class Column(object):
 
     @property
     def format_(self):
-        return self._format_
+        return self._format_.value
 
     @format_.setter
     def format_(self, value):
-        if isinstance(value, six.string_types):
-            self._format_ = value
+        self._format_.value = value
 
     @property
     def hidden(self):
-        return self._hidden
+        return self._hidden.value
 
     @hidden.setter
     def hidden(self, value):
-        if isinstance(value, bool):
-            self._hidden = value
+        self._hidden.value = value
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def index(self):
-        return self._index
+        return self._index.value
 
     @index.setter
     def index(self, value):
-        if isinstance(value, six.integer_types):
-            self._index = value
+        self._index.value = value
 
     @property
     def locked(self):
-        return self._locked
+        return self._locked.value
 
     @locked.setter
     def locked(self, value):
-        if isinstance(value, bool):
-            self._locked = value
+        self._locked.value = value
 
     @property
     def locked_for_user(self):
-        return self._locked_for_user
+        return self._locked_for_user.value
 
     @locked_for_user.setter
     def locked_for_user(self, value):
-        if isinstance(value, bool):
-            self._locked_for_user = value
+        self._locked_for_user.value = value
 
     @property
     def options(self):
@@ -209,40 +201,27 @@ class Column(object):
 
     @property
     def primary(self):
-        return self._primary
+        return self._primary.value
 
     @primary.setter
     def primary(self, value):
-        if isinstance(value, bool):
-            self._primary = value
+        self._primary.value = value
 
     @property
     def symbol(self):
-        return self._symbol
+        return self._symbol.value
 
     @symbol.setter
     def symbol(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['symbol']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Column`symbol`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['symbol']))
-            self._symbol = value
+        self._symbol.value = value
 
     @property
     def system_column_type(self):
-        return self._system_column_type
+        return self._system_column_type.value
 
     @system_column_type.setter
     def system_column_type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['system_column_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Column`system_column_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['system_column_type']))
-            self._system_column_type = value
+        self._system_column_type.value = value
 
     @property
     def tags(self):
@@ -254,44 +233,35 @@ class Column(object):
 
     @property
     def title(self):
-        return self._title
+        return self._title.value
 
     @title.setter
     def title(self, value):
-        if isinstance(value, six.string_types):
-            self._title = value
+        self._title.value = value
 
     @property
     def type_(self):
-        return self._type_
+        return self._type_.value
 
     @type_.setter
     def type_(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Column`_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['_type']))
-            self._type_ = value
+        self._type_.value = value
 
     @property
     def width(self):
-        return self._width
+        return self._width.value
 
     @width.setter
     def width(self, value):
-        if isinstance(value, six.integer_types):
-            self._width = value
+        self._width.value = value
 
     @property
     def validation(self):
-        return self._validation
+        return self._validation.value
 
     @validation.setter
     def validation(self, value):
-        if isinstance(value, bool):
-            self._validation = value
+        self._validation.value = value
 
     def to_dict(self):
         return serialize(self)

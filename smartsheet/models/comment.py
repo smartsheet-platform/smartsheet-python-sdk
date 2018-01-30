@@ -17,16 +17,11 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .attachment import Attachment
 from .user import User
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
-from datetime import datetime
-from dateutil.parser import parse
 
 
 class Comment(object):
@@ -40,12 +35,12 @@ class Comment(object):
             self._base = base_obj
 
         self._attachments = TypedList(Attachment)
-        self._created_at = None
-        self._created_by = None
-        self._discussion_id = None
-        self._id_ = None
-        self._modified_at = None
-        self._text = None
+        self._created_at = Timestamp()
+        self._created_by = TypedObject(User)
+        self._discussion_id = Number()
+        self._id_ = Number()
+        self._modified_at = Timestamp()
+        self._text = String()
 
         if props:
             deserialize(self, props)
@@ -76,67 +71,51 @@ class Comment(object):
 
     @property
     def created_at(self):
-        return self._created_at
+        return self._created_at.value
 
     @created_at.setter
     def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._created_at = value
+        self._created_at.value = value
 
     @property
     def created_by(self):
-        return self._created_by
+        return self._created_by.value
 
     @created_by.setter
     def created_by(self, value):
-        if isinstance(value, User):
-            self._created_by = value
-        else:
-            self._created_by = User(value, self._base)
+        self._created_by.value = value
 
     @property
     def discussion_id(self):
-        return self._discussion_id
+        return self._discussion_id.value
 
     @discussion_id.setter
     def discussion_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._discussion_id = value
+        self._discussion_id.value = value
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def modified_at(self):
-        return self._modified_at
+        return self._modified_at.value
 
     @modified_at.setter
     def modified_at(self, value):
-        if isinstance(value, datetime):
-            self._modified_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._modified_at = value
+        self._modified_at.value = value
 
     @property
     def text(self):
-        return self._text
+        return self._text.value
 
     @text.setter
     def text(self, value):
-        if isinstance(value, six.string_types):
-            self._text = value
+        self._text.value = value
 
     def to_dict(self):
         return serialize(self)

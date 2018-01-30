@@ -17,17 +17,12 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .attachment import Attachment
 from .comment import Comment
 from .user import User
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
-from datetime import datetime
-from dateutil.parser import parse
 
 
 class Discussion(object):
@@ -48,19 +43,21 @@ class Discussion(object):
                 'ADMIN',
                 'OWNER']}
 
-        self._access_level = None
-        self._comment = None
+        self._access_level = String(
+            accept=self.allowed_values['access_level']
+        )
+        self._comment = TypedObject(Comment)
         self._comment_attachments = TypedList(Attachment)
-        self._comment_count = None
+        self._comment_count = Number()
         self._comments = TypedList(Comment)
-        self._created_by = None
-        self._id_ = None
-        self._last_commented_at = None
-        self._last_commented_user = None
-        self._parent_id = None
-        self._parent_type = None
-        self._read_only = None
-        self._title = None
+        self._created_by = TypedObject(User)
+        self._id_ = Number()
+        self._last_commented_at = Timestamp()
+        self._last_commented_user = TypedObject(User)
+        self._parent_id = Number()
+        self._parent_type = String()
+        self._read_only = Boolean()
+        self._title = String()
 
         if props:
             deserialize(self, props)
@@ -83,28 +80,19 @@ class Discussion(object):
 
     @property
     def access_level(self):
-        return self._access_level
+        return self._access_level.value
 
     @access_level.setter
     def access_level(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['access_level']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Discussion`access_level`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['access_level']))
-            self._access_level = value
+        self._access_level.value = value
 
     @property
     def comment(self):
-        return self._comment
+        return self._comment.value
 
     @comment.setter
     def comment(self, value):
-        if isinstance(value, Comment):
-            self._comment = value
-        else:
-            self._comment = Comment(value, self._base)
+        self._comment.value = value
 
     @property
     def comment_attachments(self):
@@ -116,12 +104,11 @@ class Discussion(object):
 
     @property
     def comment_count(self):
-        return self._comment_count
+        return self._comment_count.value
 
     @comment_count.setter
     def comment_count(self, value):
-        if isinstance(value, six.integer_types):
-            self._comment_count = value
+        self._comment_count.value = value
 
     @property
     def comments(self):
@@ -133,83 +120,67 @@ class Discussion(object):
 
     @property
     def created_by(self):
-        return self._created_by
+        return self._created_by.value
 
     @created_by.setter
     def created_by(self, value):
-        if isinstance(value, User):
-            self._created_by = value
-        else:
-            self._created_by = User(value, self._base)
+        self._created_by.value = value
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def last_commented_at(self):
-        return self._last_commented_at
+        return self._last_commented_at.value
 
     @last_commented_at.setter
     def last_commented_at(self, value):
-        if isinstance(value, datetime):
-            self._last_commented_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._last_commented_at = value
+        self._last_commented_at.value = value
 
     @property
     def last_commented_user(self):
-        return self._last_commented_user
+        return self._last_commented_user.value
 
     @last_commented_user.setter
     def last_commented_user(self, value):
-        if isinstance(value, User):
-            self._last_commented_user = value
-        else:
-            self._last_commented_user = User(value, self._base)
+        self._last_commented_user.value = value
 
     @property
     def parent_id(self):
-        return self._parent_id
+        return self._parent_id.value
 
     @parent_id.setter
     def parent_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._parent_id = value
+        self._parent_id.value = value
 
     @property
     def parent_type(self):
-        return self._parent_type
+        return self._parent_type.value
 
     @parent_type.setter
     def parent_type(self, value):
-        if isinstance(value, six.string_types):
-            self._parent_type = value
+        self._parent_type.value = value
 
     @property
     def read_only(self):
-        return self._read_only
+        return self._read_only.value
 
     @read_only.setter
     def read_only(self, value):
-        if isinstance(value, bool):
-            self._read_only = value
+        self._read_only.value = value
 
     @property
     def title(self):
-        return self._title
+        return self._title.value
 
     @title.setter
     def title(self, value):
-        if isinstance(value, six.string_types):
-            self._title = value
+        self._title.value = value
 
     def to_dict(self):
         return serialize(self)

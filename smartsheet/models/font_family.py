@@ -17,10 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -35,7 +32,7 @@ class FontFamily(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._name = None
+        self._name = String()
         self._traits = TypedList(str)
 
         if props:
@@ -43,12 +40,11 @@ class FontFamily(object):
 
     @property
     def name(self):
-        return self._name
+        return self._name.value
 
     @name.setter
     def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+        self._name.value = value
 
     @property
     def traits(self):

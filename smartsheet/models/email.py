@@ -17,11 +17,8 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .recipient import Recipient
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -36,31 +33,29 @@ class Email(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._cc_me = False
-        self._message = None
+        self._cc_me = Boolean()
+        self._message = String()
         self._send_to = TypedList(Recipient)
-        self._subject = None
+        self._subject = String()
 
         if props:
             deserialize(self, props)
 
     @property
     def cc_me(self):
-        return self._cc_me
+        return self._cc_me.value
 
     @cc_me.setter
     def cc_me(self, value):
-        if isinstance(value, bool):
-            self._cc_me = value
+        self._cc_me.value = value
 
     @property
     def message(self):
-        return self._message
+        return self._message.value
 
     @message.setter
     def message(self, value):
-        if isinstance(value, six.string_types):
-            self._message = value
+        self._message.value = value
 
     @property
     def send_to(self):
@@ -72,12 +67,11 @@ class Email(object):
 
     @property
     def subject(self):
-        return self._subject
+        return self._subject.value
 
     @subject.setter
     def subject(self, value):
-        if isinstance(value, six.string_types):
-            self._subject = value
+        self._subject.value = value
 
     def to_dict(self):
         return serialize(self)

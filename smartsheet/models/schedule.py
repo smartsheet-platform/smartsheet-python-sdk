@@ -17,14 +17,9 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
-from ..types import TypedList
-from datetime import datetime
-from dateutil.parser import parse
 
 
 class Schedule(object):
@@ -62,14 +57,18 @@ class Schedule(object):
                 'LAST']}
 
         self._day_descriptors = TypedList(str)
-        self._day_of_month = None
-        self._day_ordinal = None
-        self._end_at = None
-        self._last_sent_at = None
-        self._next_send_at = None
-        self._repeat_every = None
-        self._start_at = None
-        self._type_ = None
+        self._day_of_month = Number()
+        self._day_ordinal = String(
+            accept=self.allowed_values['day_ordinal']
+        )
+        self._end_at = Timestamp()
+        self._last_sent_at = Timestamp()
+        self._next_send_at = Timestamp()
+        self._repeat_every = Number()
+        self._start_at = Timestamp()
+        self._type_ = String(
+            accept=self.allowed_values['type']
+        )
 
         if props:
             deserialize(self, props)
@@ -104,101 +103,67 @@ class Schedule(object):
 
     @property
     def day_of_month(self):
-        return self._day_of_month
+        return self._day_of_month.value
 
     @day_of_month.setter
     def day_of_month(self, value):
-        if isinstance(value, six.integer_types):
-            self._day_of_month = value
+        self._day_of_month.value = value
 
     @property
     def day_ordinal(self):
-        return self._day_ordinal
+        return self._day_ordinal.value
 
     @day_ordinal.setter
     def day_ordinal(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['day_ordinal']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Schedule`day_ordinal`,"
-                     " must be one of {1}").format(
-                        value, self.allowed_values['day_ordinal']))
-            self._day_ordinal = value
+        self._day_ordinal.value = value
 
     @property
     def end_at(self):
-        return self._end_at
+        return self._end_at.value
 
     @end_at.setter
     def end_at(self, value):
-        if isinstance(value, datetime):
-            self._end_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._end_at = value
+        self._end_at.value = value
 
     @property
     def last_sent_at(self):
-        return self._last_sent_at
+        return self._last_sent_at.value
 
     @last_sent_at.setter
     def last_sent_at(self, value):
-        if isinstance(value, datetime):
-            self._last_sent_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._last_sent_at = value
+        self._last_sent_at.value = value
 
     @property
     def next_send_at(self):
-        return self._next_send_at
+        return self._next_send_at.value
 
     @next_send_at.setter
     def next_send_at(self, value):
-        if isinstance(value, datetime):
-            self._next_send_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._next_send_at = value
+        self._next_send_at.value = value
 
     @property
     def repeat_every(self):
-        return self._repeat_every
+        return self._repeat_every.value
 
     @repeat_every.setter
     def repeat_every(self, value):
-        if isinstance(value, six.integer_types):
-            self._repeat_every = value
+        self._repeat_every.value = value
 
     @property
     def start_at(self):
-        return self._start_at
+        return self._start_at.value
 
     @start_at.setter
     def start_at(self, value):
-        if isinstance(value, datetime):
-            self._start_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._start_at = value
+        self._start_at.value = value
 
     @property
     def type_(self):
-        return self._type_
+        return self._type_.value
 
     @type_.setter
     def type_(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Schedule`type`,"
-                     " must be one of {1}").format(
-                        value, self.allowed_values['type']))
-            self._type_ = value
+        self._type_.value = value
 
     def to_dict(self):
         return serialize(self)

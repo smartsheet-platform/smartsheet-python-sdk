@@ -28,8 +28,7 @@ from .date_object_value import DateObjectValue
 from .string_object_value import StringObjectValue
 from .number_object_value import NumberObjectValue
 from .boolean_object_value import BooleanObjectValue
-from ..types import TypedList
-from ..types import ExplicitNull
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -44,19 +43,19 @@ class Cell(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._column_id = None
-        self._column_type = None
-        self._conditional_format = None
-        self._display_value = None
-        self._format_ = None
-        self._formula = None
-        self._hyperlink = None
-        self._image = None
-        self._link_in_from_cell = None
+        self._column_id = Number()
+        self._column_type = String()
+        self._conditional_format = String()
+        self._display_value = String()
+        self._format_ = String()
+        self._formula = String()
+        self._hyperlink = TypedObject(Hyperlink)
+        self._image = TypedObject(Image)
+        self._link_in_from_cell = TypedObject(CellLink)
         self._links_out_to_cells = TypedList(CellLink)
         self._object_value = None
-        self._override_validation = None
-        self._strict = None
+        self._override_validation = Boolean()
+        self._strict = Boolean()
         self._value = None
 
         if props:
@@ -78,96 +77,75 @@ class Cell(object):
 
     @property
     def column_id(self):
-        return self._column_id
+        return self._column_id.value
 
     @column_id.setter
     def column_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._column_id = value
+        self._column_id.value = value
 
     @property
     def column_type(self):
-        return self._column_type
+        return self._column_type.value
 
     @column_type.setter
     def column_type(self, value):
-        if isinstance(value, six.string_types):
-            self._column_type = value
+        self._column_type.value = value
 
     @property
     def conditional_format(self):
-        return self._conditional_format
+        return self._conditional_format.value
 
     @conditional_format.setter
     def conditional_format(self, value):
-        if isinstance(value, six.string_types):
-            self._conditional_format = value
+        self._conditional_format.value = value
 
     @property
     def display_value(self):
-        return self._display_value
+        return self._display_value.value
 
     @display_value.setter
     def display_value(self, value):
-        if isinstance(value, six.string_types):
-            self._display_value = value
+        self._display_value.value = value
 
     @property
     def format_(self):
-        return self._format_
+        return self._format_.value
 
     @format_.setter
     def format_(self, value):
-        if isinstance(value, six.string_types):
-            self._format_ = value
+        self._format_.value = value
 
     @property
     def formula(self):
-        return self._formula
+        return self._formula.value
 
     @formula.setter
     def formula(self, value):
-        if isinstance(value, six.string_types):
-            self._formula = value
+        self._formula.value = value
 
     @property
     def hyperlink(self):
-        return self._hyperlink
+        return self._hyperlink.value
 
     @hyperlink.setter
     def hyperlink(self, value):
-        if isinstance(value, (Hyperlink, ExplicitNull)):
-            self._hyperlink = value
-        else:
-            self._hyperlink = Hyperlink(value, self._base)
-
-    def set_hyperlink_null(self):
-        self.hyperlink = ExplicitNull()
+        self._hyperlink.value = value
 
     @property
     def image(self):
-        return self._image
+        return self._image.value
 
     @image.setter
     def image(self, value):
-        if isinstance(value, Image):
-            self._image = value
-        else:
-            self._image = Image(value, self._base)
+        self._image.value = value
 
     @property
     def link_in_from_cell(self):
-        return self._link_in_from_cell
+        return self._link_in_from_cell.value
 
     @link_in_from_cell.setter
     def link_in_from_cell(self, value):
-        if isinstance(value, (CellLink, ExplicitNull)):
-            self._link_in_from_cell = value
-        else:
-            self._link_in_from_cell = CellLink(value, self._base)
-
-    def set_link_in_from_cell_null(self):
-        self.link_in_from_cell = ExplicitNull()
+        self._link_in_from_cell.value = value
 
     @property
     def links_out_to_cells(self):
@@ -214,21 +192,19 @@ class Cell(object):
 
     @property
     def override_validation(self):
-        return self._override_validation
+        return self._override_validation.value
 
     @override_validation.setter
     def override_validation(self, value):
-        if isinstance(value, bool):
-            self._override_validation = value
+        self._override_validation.value = value
 
     @property
     def strict(self):
-        return self._strict
+        return self._strict.value
 
     @strict.setter
     def strict(self, value):
-        if isinstance(value, bool):
-            self._strict = value
+        self._strict.value = value
 
     @property
     def value(self):
@@ -238,9 +214,6 @@ class Cell(object):
     def value(self, value):
         if isinstance(value, (six.string_types, six.integer_types, float, bool, ExplicitNull)):
             self._value = value
-
-    def set_value_null(self):
-        self.value = ExplicitNull()
 
     def to_dict(self):
         return serialize(self)

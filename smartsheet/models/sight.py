@@ -17,15 +17,10 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .widget import Widget
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
-from datetime import datetime
-from dateutil.parser import parse
 
 
 class Sight(object):
@@ -33,6 +28,7 @@ class Sight(object):
     """Smartsheet Sight data model."""
 
     def __init__(self, props=None, base_obj=None):
+        from .workspace import Workspace
         """Initialize the Sight model."""
         self._base = None
         if base_obj is not None:
@@ -44,16 +40,18 @@ class Sight(object):
                 'ADMIN',
                 'OWNER']}
 
-        self._access_level = None
-        self._column_count = None
-        self._created_at = None
-        self._favorite = None
-        self._id_ = None
-        self._modified_at = None
-        self._name = None
-        self._permalink = None
+        self._access_level = String(
+            accept=self.allowed_values['access_level']
+        )
+        self._column_count = Number()
+        self._created_at = Timestamp()
+        self._favorite = Boolean()
+        self._id_ = Number()
+        self._modified_at = Timestamp()
+        self._name = String()
+        self._permalink = String()
         self._widgets = TypedList(Widget)
-        self._workspace = None
+        self._workspace = TypedObject(Workspace)
 
         if props:
             deserialize(self, props)
@@ -76,88 +74,67 @@ class Sight(object):
 
     @property
     def access_level(self):
-        return self._access_level
+        return self._access_level.value
 
     @access_level.setter
     def access_level(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['access_level']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Sight`access_level`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['access_level']))
-            self._access_level = value
+        self._access_level.value = value
 
     @property
     def column_count(self):
-        return self._column_count
+        return self._column_count.value
 
     @column_count.setter
     def column_count(self, value):
-        if isinstance(value, six.integer_types):
-            self._column_count = value
+        self._column_count.value = value
 
     @property
     def created_at(self):
-        return self._created_at
+        return self._created_at.value
 
     @created_at.setter
     def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._created_at = value
+        self._created_at.value = value
 
     @property
     def favorite(self):
-        return self._favorite
+        return self._favorite.value
 
     @favorite.setter
     def favorite(self, value):
-        if isinstance(value, bool):
-            self._favorite = value
+        self._favorite.value = value
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def modified_at(self):
-        return self._modified_at
+        return self._modified_at.value
 
     @modified_at.setter
     def modified_at(self, value):
-        if isinstance(value, datetime):
-            self._modified_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._modified_at = value
+        self._modified_at.value = value
 
     @property
     def name(self):
-        return self._name
+        return self._name.value
 
     @name.setter
     def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+        self._name.value = value
 
     @property
     def permalink(self):
-        return self._permalink
+        return self._permalink.value
 
     @permalink.setter
     def permalink(self, value):
-        if isinstance(value, six.string_types):
-            self._permalink = value
+        self._permalink.value = value
 
     @property
     def widgets(self):
@@ -169,15 +146,11 @@ class Sight(object):
 
     @property
     def workspace(self):
-        return self._workspace
+        return self._workspace.value
 
     @workspace.setter
     def workspace(self, value):
-        from .workspace import Workspace
-        if isinstance(value, Workspace):
-            self._workspace = value
-        elif isinstance(value, dict):
-            self._workspace = Workspace(value, self._base)
+        self._workspace.value = value
 
     def to_dict(self):
         return serialize(self)

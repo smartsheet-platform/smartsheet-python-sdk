@@ -17,16 +17,11 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .user import User
 from .recipient import Recipient
 from ..util import serialize
 from ..util import deserialize
-from ..types import TypedList
-from datetime import datetime
-from dateutil.parser import parse
+from ..types import *
 
 
 class SentUpdateRequest(object):
@@ -45,17 +40,19 @@ class SentUpdateRequest(object):
                 'CANCELED']}
 
         self._column_ids = TypedList(six.integer_types)
-        self._id_ = None
-        self._include_attachments = None
-        self._include_discussions = None
-        self._message = None
+        self._id_ = Number()
+        self._include_attachments = Boolean()
+        self._include_discussions = Boolean()
+        self._message = String()
         self._row_ids = TypedList(six.integer_types)
-        self._sent_at = None
-        self._sent_by = None
-        self._sent_to = None
-        self._status = None
-        self._subject = None
-        self._update_request_id = None
+        self._sent_at = Timestamp()
+        self._sent_by = TypedObject(User)
+        self._sent_to = TypedObject(Recipient)
+        self._status = String(
+            accept=self.allowed_values['update_request_status']
+        )
+        self._subject = String()
+        self._update_request_id = Number()
 
         if props:
             deserialize(self, props)
@@ -86,39 +83,35 @@ class SentUpdateRequest(object):
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def include_attachments(self):
-        return self._include_attachments
+        return self._include_attachments.value
 
     @include_attachments.setter
     def include_attachments(self, value):
-        if isinstance(value, bool):
-            self._include_attachments = value
+        self._include_attachments.value = value
 
     @property
     def include_discussions(self):
-        return self._include_discussions
+        return self._include_discussions.value
 
     @include_discussions.setter
     def include_discussions(self, value):
-        if isinstance(value, bool):
-            self._include_discussions = value
+        self._include_discussions.value = value
 
     @property
     def message(self):
-        return self._message
+        return self._message.value
 
     @message.setter
     def message(self, value):
-        if isinstance(value, six.string_types):
-            self._message = value
+        self._message.value = value
 
     @property
     def row_ids(self):
@@ -130,71 +123,51 @@ class SentUpdateRequest(object):
 
     @property
     def sent_at(self):
-        return self._sent_at
+        return self._sent_at.value
 
     @sent_at.setter
     def sent_at(self, value):
-        if isinstance(value, datetime):
-            self._sent_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._sent_at = value
+        self._sent_at.value = value
 
     @property
     def sent_by(self):
-        return self._sent_by
+        return self._sent_by.value
 
     @sent_by.setter
     def sent_by(self, value):
-        if isinstance(value, User):
-            self._sent_by = value
-        else:
-            if isinstance(value, dict):
-                self._sent_by = User(value, self._base)
+        self._sent_by.value = value
 
     @property
     def sent_to(self):
-        return self._sent_to
+        return self._sent_to.value
 
     @sent_to.setter
     def sent_to(self, value):
-        if isinstance(value, Recipient):
-            self._sent_to = value
-        elif isinstance(value, dict):
-            self._sent_to = Recipient(value, self._base)
+        self._sent_to.value = value
 
     @property
     def status(self):
-        return self._status
+        return self._status.value
 
     @status.setter
     def status(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['update_request_status']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for SentUpdateRequest`update_request_status`,"
-                     " must be one of {1}").format(
-                        value, self.allowed_values['update_request_status']))
-            self._status = value
+        self._status.value = value
 
     @property
     def subject(self):
-        return self._subject
+        return self._subject.value
 
     @subject.setter
     def subject(self, value):
-        if isinstance(value, six.string_types):
-            self._subject = value
+        self._subject.value = value
 
     @property
     def update_request_id(self):
-        return self._update_request_id
+        return self._update_request_id.value
 
     @update_request_id.setter
     def update_request_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._update_request_id = value
+        self._update_request_id.value = value
 
     def to_dict(self):
         return serialize(self)

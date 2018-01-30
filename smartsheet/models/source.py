@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -39,8 +37,10 @@ class Source(object):
                 'sheet',
                 'template']}
 
-        self._id_ = None
-        self._type_ = None
+        self._id_ = Number()
+        self._type_ = String(
+            accept=self.allowed_values['_type']
+        )
 
         if props:
             deserialize(self, props)
@@ -65,26 +65,19 @@ class Source(object):
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def type_(self):
-        return self._type_
+        return self._type_.value
 
     @type_.setter
     def type_(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Source`_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['_type']))
-            self._type_ = value
+        self._type_.value = value
 
     def to_dict(self):
         return serialize(self)

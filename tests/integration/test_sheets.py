@@ -239,6 +239,8 @@ class TestSheets:
         email = smart.models.MultiRowEmail()
         email.send_to = smart.models.Recipient({'email': 'john.doe@smartsheet.com'})
         email.row_ids = ids
+        email.include_attachments = False
+        email.include_discussions = False
         email.column_ids = list(set(column_ids))
         action = smart.Sheets.send_update_request(
             smart_setup['sheet'].id,

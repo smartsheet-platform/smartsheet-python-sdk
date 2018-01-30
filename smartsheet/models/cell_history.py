@@ -17,15 +17,11 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .cell import Cell
 from .user import User
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
-from datetime import datetime
-from dateutil.parser import parse
 
 
 class CellHistory(Cell):
@@ -39,8 +35,8 @@ class CellHistory(Cell):
         if base_obj is not None:
             self._base = base_obj
 
-        self._modified_at = None
-        self._modified_by = None
+        self._modified_at = Timestamp()
+        self._modified_by = TypedObject(User)
 
         if props:
             deserialize(self, props)
@@ -48,27 +44,19 @@ class CellHistory(Cell):
 
     @property
     def modified_at(self):
-        return self._modified_at
+        return self._modified_at.value
 
     @modified_at.setter
     def modified_at(self, value):
-        if isinstance(value, datetime):
-            self._modified_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._modified_at = value
+        self._modified_at.value = value
 
     @property
     def modified_by(self):
-        return self._modified_by
+        return self._modified_by.value
 
     @modified_by.setter
     def modified_by(self, value):
-        if isinstance(value, User):
-            self._modified_by = value
-        else:
-            self._modified_by = User(value, self._base)
+        self._modified_by.value = value
 
     def to_dict(self):
         return serialize(self)

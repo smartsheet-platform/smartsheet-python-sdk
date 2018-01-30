@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -34,39 +32,36 @@ class SheetUserSettings(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._applied_sheet_filter_id = None
-        self._critical_path_enabled = None
-        self._display_summary_tasks = None
+        self._applied_sheet_filter_id = Number()
+        self._critical_path_enabled = Boolean()
+        self._display_summary_tasks = Boolean()
 
         if props:
             deserialize(self, props)
 
     @property
     def applied_sheet_filter_id(self):
-        return self._applied_sheet_filter_id
+        return self._applied_sheet_filter_id.value
 
     @applied_sheet_filter_id.setter
     def applied_sheet_filter_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._applied_sheet_filter_id = value
+        self._applied_sheet_filter_id.value = value
 
     @property
     def critical_path_enabled(self):
-        return self._critical_path_enabled
+        return self._critical_path_enabled.value
 
     @critical_path_enabled.setter
     def critical_path_enabled(self, value):
-        if isinstance(value, bool):
-            self._critical_path_enabled = value
+        self._critical_path_enabled.value = value
 
     @property
     def display_summary_tasks(self):
-        return self._display_summary_tasks
+        return self._display_summary_tasks.value
 
     @display_summary_tasks.setter
     def display_summary_tasks(self, value):
-        if isinstance(value, bool):
-            self._display_summary_tasks = value
+        self._display_summary_tasks.value = value
 
     def to_dict(self):
         return serialize(self)

@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 
 from .object_value import *
+from ..types import *
 from ..util import deserialize
 
 
@@ -32,14 +33,14 @@ class Duration(ObjectValue):
         if base_obj is not None:
             self._base = base_obj
 
-        self._days = None
-        self._elapsed = None
-        self._hours = None
-        self._milliseconds = None
-        self._minutes = None
-        self._negative = None
-        self._seconds = None
-        self._weeks = None
+        self._days = Number()
+        self._elapsed = Boolean()
+        self._hours = Number()
+        self._milliseconds = Number()
+        self._minutes = Number()
+        self._negative = Boolean()
+        self._seconds = Number()
+        self._weeks = Number()
 
         if props:
             deserialize(self, props)
@@ -48,72 +49,64 @@ class Duration(ObjectValue):
 
     @property
     def days(self):
-        return self._days
+        return self._days.value
 
     @days.setter
     def days(self, value):
-        if isinstance(value, (six.integer_types, float)):
-            self._days = value
+        self._days.value = value
 
     @property
     def elapsed(self):
-        return self._elapsed
+        return self._elapsed.value
 
     @elapsed.setter
     def elapsed(self, value):
-        if isinstance(value, bool):
-            self._elapsed = value
+        self._elapsed.value = value
 
     @property
     def hours(self):
-        return self._hours
+        return self._hours.value
 
     @hours.setter
     def hours(self, value):
-        if isinstance(value, (six.integer_types, float)):
-            self._hours = value
+        self._hours.value = value
 
     @property
     def milliseconds(self):
-        return self._milliseconds
+        return self._milliseconds.value
 
     @milliseconds.setter
     def milliseconds(self, value):
-        if isinstance(value, (six.integer_types, float)):
-            self._milliseconds = value
+        self._milliseconds.value = value
 
     @property
     def minutes(self):
-        return self._minutes
+        return self._minutes.value
 
     @minutes.setter
     def minutes(self, value):
-        if isinstance(value, (six.integer_types, float)):
-            self._minutes = value
+        self._minutes.value = value
 
     @property
     def negative(self):
-        return self._negative
+        return self._negative.value
 
     @negative.setter
     def negative(self, value):
-        if isinstance(value, bool):
-            self._negative = value
+        self._negative.value = value
 
     @property
     def seconds(self):
-        return self._seconds
+        return self._seconds.value
 
     @seconds.setter
     def seconds(self, value):
-        if isinstance(value, (six.integer_types, float)):
-            self._seconds = value
+        self._seconds.value = value
 
     @property
     def weeks(self):
-        return self._weeks
+        return self._weeks.value
 
     @weeks.setter
     def weeks(self, value):
-        if isinstance(value, (six.integer_types, float)):
-            self._weeks = value
+        self._weeks.value = value

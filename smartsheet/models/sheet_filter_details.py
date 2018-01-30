@@ -17,11 +17,8 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .criteria import Criteria
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -42,8 +39,10 @@ class SheetFilterDetails(object):
                 'OR']}
 
         self._criteria = TypedList(Criteria)
-        self._include_parent = None
-        self._operator = None
+        self._include_parent = Boolean()
+        self._operator = String(
+            accept=self.allowed_values['operator']
+        )
 
         if props:
             deserialize(self, props)
@@ -60,26 +59,19 @@ class SheetFilterDetails(object):
 
     @property
     def include_parent(self):
-        return self._include_parent
+        return self._include_parent.value
 
     @include_parent.setter
     def include_parent(self, value):
-        if isinstance(value, bool):
-            self._include_parent = value
+        self._include_parent.value = value
 
     @property
     def operator(self):
-        return self._operator
+        return self._operator.value
 
     @operator.setter
     def operator(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['operator']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Filter`operator`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['operator']))
-            self._operator = value
+        self._operator.value = value
 
     def to_dict(self):
         return serialize(self)

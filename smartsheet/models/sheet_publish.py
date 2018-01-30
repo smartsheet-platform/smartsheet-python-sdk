@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -34,21 +32,30 @@ class SheetPublish(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._ical_enabled = False
-        self._ical_url = None
-        self._read_only_full_accessible_by = None
-        self._read_only_full_default_view = None
-        self._read_only_full_enabled = False
-        self._read_only_full_show_toolbar = True
-        self._read_only_full_url = None
-        self._read_only_lite_enabled = False
-        self._read_only_lite_ssl_url = None
-        self._read_only_lite_url = None
-        self._read_write_accessible_by = None
-        self._read_write_default_view = None
-        self._read_write_enabled = False
-        self._read_write_show_toolbar = True
-        self._read_write_url = None
+        self.allowed_values = {
+            'accessible_by': [
+                'ALL',
+                'ORG']}
+
+        self._ical_enabled = Boolean()
+        self._ical_url = String()
+        self._read_only_full_accessible_by = String(
+            accept=self.allowed_values['accessible_by']
+        )
+        self._read_only_full_default_view = String()
+        self._read_only_full_enabled = Boolean()
+        self._read_only_full_show_toolbar = Boolean()
+        self._read_only_full_url = String()
+        self._read_only_lite_enabled = Boolean()
+        self._read_only_lite_ssl_url = String()
+        self._read_only_lite_url = String()
+        self._read_write_accessible_by = String(
+            accept=self.allowed_values['accessible_by']
+        )
+        self._read_write_default_view = String()
+        self._read_write_enabled = Boolean()
+        self._read_write_show_toolbar = Boolean()
+        self._read_write_url = String()
 
         if props:
             deserialize(self, props)
@@ -58,138 +65,123 @@ class SheetPublish(object):
 
     @property
     def ical_enabled(self):
-        return self._ical_enabled
+        return self._ical_enabled.value
 
     @ical_enabled.setter
     def ical_enabled(self, value):
-        if isinstance(value, bool):
-            self._ical_enabled = value
+        self._ical_enabled.value = value
 
     @property
     def ical_url(self):
-        return self._ical_url
+        return self._ical_url.value
 
     @ical_url.setter
     def ical_url(self, value):
-        if isinstance(value, six.string_types):
-            self._ical_url = value
+        self._ical_url.value = value
 
     @property
     def read_only_full_accessible_by(self):
-        return self._read_only_full_accessible_by
+        return self._read_only_full_accessible_by.value
 
     @read_only_full_accessible_by.setter
     def read_only_full_accessible_by(self, value):
-        if isinstance(value, six.string_types):
-            self._read_only_full_accessible_by = value
+        self._read_only_full_accessible_by.value = value
 
     @property
     def read_only_full_default_view(self):
-        return self._read_only_full_default_view
+        return self._read_only_full_default_view.value
 
     @read_only_full_default_view.setter
     def read_only_full_default_view(self, value):
-        if isinstance(value, six.string_types):
-            self._read_only_full_default_view = value
+        self._read_only_full_default_view.value = value
 
     @property
     def read_only_full_enabled(self):
-        return self._read_only_full_enabled
+        return self._read_only_full_enabled.value
 
     @read_only_full_enabled.setter
     def read_only_full_enabled(self, value):
-        if isinstance(value, bool):
-            self._read_only_full_enabled = value
+        self._read_only_full_enabled.value = value
 
     @property
     def read_only_full_show_toolbar(self):
-        return self._read_only_full_show_toolbar
+        return self._read_only_full_show_toolbar.value
 
     @read_only_full_show_toolbar.setter
     def read_only_full_show_toolbar(self, value):
-        if isinstance(value, bool):
-            self._read_only_full_show_toolbar = value
+        self._read_only_full_show_toolbar.value = value
 
     @property
     def read_only_full_url(self):
-        return self._read_only_full_url
+        return self._read_only_full_url.value
 
     @read_only_full_url.setter
     def read_only_full_url(self, value):
-        if isinstance(value, six.string_types):
-            self._read_only_full_url = value
+        self._read_only_full_url.value = value
 
     @property
     def read_only_lite_enabled(self):
-        return self._read_only_lite_enabled
+        return self._read_only_lite_enabled.value
 
     @read_only_lite_enabled.setter
     def read_only_lite_enabled(self, value):
-        if isinstance(value, bool):
-            self._read_only_lite_enabled = value
+        self._read_only_lite_enabled.value = value
 
     @property
     def read_only_lite_ssl_url(self):
-        return self._read_only_lite_ssl_url
+        return self._read_only_lite_ssl_url.value
 
     @read_only_lite_ssl_url.setter
     def read_only_lite_ssl_url(self, value):
-        if isinstance(value, six.string_types):
-            self._read_only_lite_ssl_url = value
+        self._read_only_lite_ssl_url.value = value
 
     @property
     def read_only_lite_url(self):
-        return self._read_only_lite_url
+        return self._read_only_lite_url.value
 
     @read_only_lite_url.setter
     def read_only_lite_url(self, value):
-        if isinstance(value, six.string_types):
-            self._read_only_lite_url = value
+        self._read_only_lite_url.value = value
 
     @property
     def read_write_accessible_by(self):
-        return self._read_write_accessible_by
+        return self._read_write_accessible_by.value
 
     @read_write_accessible_by.setter
     def read_write_accessible_by(self, value):
-        if isinstance(value, six.string_types):
-            self._read_write_accessible_by = value
+        self._read_write_accessible_by.value = value
 
     @property
     def read_write_default_view(self):
-        return self._read_write_default_view
+        return self._read_write_default_view.value
 
     @read_write_default_view.setter
     def read_write_default_view(self, value):
-        if isinstance(value, six.string_types):
-            self._read_write_default_view = value
+        self._read_write_default_view.value = value
 
     @property
     def read_write_enabled(self):
-        return self._read_write_enabled
+        return self._read_write_enabled.value
 
     @read_write_enabled.setter
     def read_write_enabled(self, value):
-        if isinstance(value, bool):
-            self._read_write_enabled = value
+        self._read_write_enabled.value = value
 
     @property
     def read_write_show_toolbar(self):
-        return self._read_write_show_toolbar
+        return self._read_write_show_toolbar.value
 
     @read_write_show_toolbar.setter
     def read_write_show_toolbar(self, value):
-        if isinstance(value, bool):
-            self._read_write_show_toolbar = value
+        self._read_write_show_toolbar.value = value
 
     @property
     def read_write_url(self):
-        return self._read_write_url
+        return self._read_write_url.value
 
     @read_write_url.setter
     def read_write_url(self, value):
-        if isinstance(value, six.string_types):
-            self._read_write_url = value
+        self._read_write_url.value = value
 
     def to_dict(self):
         return serialize(self)

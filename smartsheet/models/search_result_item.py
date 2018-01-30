@@ -17,10 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -54,14 +51,18 @@ class SearchResultItem(object):
                 'template']}
 
         self._context_data = TypedList(str)
-        self._favorite = None
-        self._object_id = None
-        self._object_type = None
-        self._parent_object_favorite = None
-        self._parent_object_id = None
-        self._parent_object_name = None
-        self._parent_object_type = None
-        self._text = None
+        self._favorite = Boolean()
+        self._object_id = Number()
+        self._object_type = String(
+            accept=self.allowed_values['object_type']
+        )
+        self._parent_object_favorite = Boolean()
+        self._parent_object_id = Number()
+        self._parent_object_name = String()
+        self._parent_object_type = String(
+            accept=self.allowed_values['parent_object_type']
+        )
+        self._text = String()
 
         if props:
             deserialize(self, props)
@@ -76,85 +77,67 @@ class SearchResultItem(object):
 
     @property
     def favorite(self):
-        return self._favorite
+        return self._favorite.value
 
     @favorite.setter
     def favorite(self, value):
-        if isinstance(value, bool):
-            self._favorite = value
+        self._favorite.value = value
 
     @property
     def object_id(self):
-        return self._object_id
+        return self._object_id.value
 
     @object_id.setter
     def object_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._object_id = value
+        self._object_id.value = value
 
     @property
     def object_type(self):
-        return self._object_type
+        return self._object_type.value
 
     @object_type.setter
     def object_type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['object_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for SearchResultItem`object_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['object_type']))
-            self._object_type = value
+        self._object_type.value = value
 
     @property
     def parent_object_favorite(self):
-        return self._parent_object_favorite
+        return self._parent_object_favorite.value
 
     @parent_object_favorite.setter
     def parent_object_favorite(self, value):
-        if isinstance(value, bool):
-            self._parent_object_favorite = value
+        self._parent_object_favorite.value = value
 
     @property
     def parent_object_id(self):
-        return self._parent_object_id
+        return self._parent_object_id.value
 
     @parent_object_id.setter
     def parent_object_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._parent_object_id = value
+        self._parent_object_id.value = value
 
     @property
     def parent_object_name(self):
-        return self._parent_object_name
+        return self._parent_object_name.value
 
     @parent_object_name.setter
     def parent_object_name(self, value):
-        if isinstance(value, six.string_types):
-            self._parent_object_name = value
+        self._parent_object_name.value = value
 
     @property
     def parent_object_type(self):
-        return self._parent_object_type
+        return self._parent_object_type.value
 
     @parent_object_type.setter
     def parent_object_type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['parent_object_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for SearchResultItem`parent_object_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['parent_object_type']))
-            self._parent_object_type = value
+        self._parent_object_type.value = value
 
     @property
     def text(self):
-        return self._text
+        return self._text.value
 
     @text.setter
     def text(self, value):
-        if isinstance(value, six.string_types):
-            self._text = value
+        self._text.value = value
 
     def to_dict(self):
         return serialize(self)

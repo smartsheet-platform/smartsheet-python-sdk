@@ -17,13 +17,9 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .email import Email
 from .format_details import FormatDetails
-from .recipient import Recipient
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -45,8 +41,10 @@ class SheetEmail(Email):
                 'PDF_GANTT',
                 'EXCEL']}
 
-        self._format_ = None
-        self._format_details = None
+        self._format_ = String(
+            accept=self.allowed_values['_format']
+        )
+        self._format_details = TypedObject(FormatDetails)
 
         if props:
             deserialize(self, props)
@@ -67,28 +65,19 @@ class SheetEmail(Email):
 
     @property
     def format_(self):
-        return self._format_
+        return self._format_.value
 
     @format_.setter
     def format_(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['_format']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for SheetEmail`_format`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['_format']))
-            self._format_ = value
+        self._format_.value = value
 
     @property
     def format_details(self):
-        return self._format_details
+        return self._format_details.value
 
     @format_details.setter
     def format_details(self, value):
-        if isinstance(value, FormatDetails):
-            self._format_details = value
-        else:
-            self._format_details = FormatDetails(value, self._base)
+        self._format_details.value = value
 
     def to_dict(self):
         return serialize(self)

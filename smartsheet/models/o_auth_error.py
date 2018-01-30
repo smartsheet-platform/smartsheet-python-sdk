@@ -17,9 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -43,9 +41,11 @@ class OAuthError(object):
                 'unsupported_grant_type',
                 'invalid_scope']}
 
-        self._error = None
-        self._error_code = None
-        self._error_description = None
+        self._error = String(
+            accept=self.allowed_values['error']
+        )
+        self._error_code = Number()
+        self._error_description = String()
 
         if props:
             deserialize(self, props)
@@ -55,35 +55,27 @@ class OAuthError(object):
 
     @property
     def error(self):
-        return self._error
+        return self._error.value
 
     @error.setter
     def error(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['error']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for OAuthError`error`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['error']))
-            self._error = value
+        self._error.value = value
 
     @property
     def error_code(self):
-        return self._error_code
+        return self._error_code.value
 
     @error_code.setter
     def error_code(self, value):
-        if isinstance(value, six.integer_types):
-            self._error_code = value
+        self._error_code.value = value
 
     @property
     def error_description(self):
-        return self._error_description
+        return self._error_description.value
 
     @error_description.setter
     def error_description(self, value):
-        if isinstance(value, six.string_types):
-            self._error_description = value
+        self._error_description.value = value
 
     def to_dict(self):
         return serialize(self)

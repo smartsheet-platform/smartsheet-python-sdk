@@ -17,12 +17,9 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
-
 
 class GroupMember(object):
 
@@ -34,11 +31,11 @@ class GroupMember(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._email = None
-        self._first_name = None
-        self._id_ = None
-        self._last_name = None
-        self._name = None
+        self._email = String()
+        self._first_name = String()
+        self._id_ = Number()
+        self._last_name = String()
+        self._name = String()
 
         if props:
             deserialize(self, props)
@@ -59,48 +56,43 @@ class GroupMember(object):
 
     @property
     def email(self):
-        return self._email
+        return self._email.value
 
     @email.setter
     def email(self, value):
-        if isinstance(value, six.string_types):
-            self._email = value
+        self._email.value = value
 
     @property
     def first_name(self):
-        return self._first_name
+        return self._first_name.value
 
     @first_name.setter
     def first_name(self, value):
-        if isinstance(value, six.string_types):
-            self._first_name = value
+        self._first_name.value = value
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def last_name(self):
-        return self._last_name
+        return self._last_name.value
 
     @last_name.setter
     def last_name(self, value):
-        if isinstance(value, six.string_types):
-            self._last_name = value
+        self._last_name.value = value
 
     @property
     def name(self):
-        return self._name
+        return self._name.value
 
     @name.setter
     def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+        self._name.value = value
 
     def to_dict(self):
         return serialize(self)

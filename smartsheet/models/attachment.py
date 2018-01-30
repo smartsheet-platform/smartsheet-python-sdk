@@ -17,13 +17,10 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .user import User
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
-from datetime import datetime
 
 
 class Attachment(object):
@@ -57,19 +54,24 @@ class Attachment(object):
                 'ROW',
                 'COMMENT']}
 
-        self._attachment_sub_type = None
-        self._attachment_type = None
-        self._created_at = None
-        self._created_by = None
-        self._description = None
-        self._id_ = None
-        self._mime_type = None
-        self._name = None
-        self._parent_id = None
-        self._parent_type = None
-        self._size_in_kb = None
-        self._url = None
-        self._url_expires_in_millis = None
+        self._attachment_sub_type = String(
+            accept=self.allowed_values['attachment_sub_type']
+        )
+        self._attachment_type = String(
+            accept=self.allowed_values['attachment_type']
+        )
+        self._created_at = Timestamp()
+        self._created_by = TypedObject(User)
+        self._id_ = Number()
+        self._mime_type = String()
+        self._name = String()
+        self._parent_id = Number()
+        self._parent_type = String(
+            accept=self.allowed_values['parent_type']
+        )
+        self._size_in_kb = Number()
+        self._url = String()
+        self._url_expires_in_millis = Number()
 
         if props:
             deserialize(self, props)
@@ -92,137 +94,99 @@ class Attachment(object):
 
     @property
     def attachment_sub_type(self):
-        return self._attachment_sub_type
+        return self._attachment_sub_type.value
 
     @attachment_sub_type.setter
     def attachment_sub_type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['attachment_sub_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Attachment`attachment_sub_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['attachment_sub_type']))
-            self._attachment_sub_type = value
+        self._attachment_sub_type.value = value
 
     @property
     def attachment_type(self):
-        return self._attachment_type
+        return self._attachment_type.value
 
     @attachment_type.setter
     def attachment_type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['attachment_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Attachment`attachment_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['attachment_type']))
-            self._attachment_type = value
+        self._attachment_type.value = value
 
     @property
     def created_at(self):
-        return self._created_at
+        return self._created_at.value
 
     @created_at.setter
     def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
+        self._created_at.value = value
 
     @property
     def created_by(self):
-        return self._created_by
+        return self._created_by.value
 
     @created_by.setter
     def created_by(self, value):
-        if isinstance(value, User):
-            self._created_by = value
-        else:
-            self._created_by = User(value, self._base)
-
-    @property
-    def description(self):
-        return self._description
-
-    @description.setter
-    def description(self, value):
-        if isinstance(value, six.string_types):
-            self._description = value
+        self._created_by.value = value
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def mime_type(self):
-        return self._mime_type
+        return self._mime_type.value
 
     @mime_type.setter
     def mime_type(self, value):
-        if isinstance(value, six.string_types):
-            self._mime_type = value
+        self._mime_type.value = value
 
     @property
     def name(self):
-        return self._name
+        return self._name.value
 
     @name.setter
     def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+        self._name.value = value
 
     @property
     def parent_id(self):
-        return self._parent_id
+        return self._parent_id.value
 
     @parent_id.setter
     def parent_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._parent_id = value
+        self._parent_id.value = value
 
     @property
     def parent_type(self):
-        return self._parent_type
+        return self._parent_type.value
 
     @parent_type.setter
     def parent_type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['parent_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Attachment`parent_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['parent_type']))
-            self._parent_type = value
+        self._parent_type.value = value
 
     @property
     def size_in_kb(self):
-        return self._size_in_kb
+        return self._size_in_kb.value
 
     @size_in_kb.setter
     def size_in_kb(self, value):
-        if isinstance(value, six.integer_types):
-            self._size_in_kb = value
+        self._size_in_kb.value = value
 
     @property
     def url(self):
-        return self._url
+        return self._url.value
 
     @url.setter
     def url(self, value):
-        if isinstance(value, six.string_types):
-            self._url = value
+        self._url.value = value
 
     @property
     def url_expires_in_millis(self):
-        return self._url_expires_in_millis
+        return self._url_expires_in_millis.value
 
     @url_expires_in_millis.setter
     def url_expires_in_millis(self, value):
-        if isinstance(value, six.integer_types):
-            self._url_expires_in_millis = value
+        self._url_expires_in_millis.value = value
 
     def to_dict(self):
         return serialize(self)

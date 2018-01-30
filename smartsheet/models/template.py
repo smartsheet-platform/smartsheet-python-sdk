@@ -17,10 +17,7 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -50,18 +47,24 @@ class Template(object):
                 'TASK_LIST',
                 'PROJECT_SHEET']}
 
-        self._access_level = None
-        self._blank = None
+        self._access_level = String(
+            accept=self.allowed_values['access_level']
+        )
+        self._blank = Boolean()
         self._categories = TypedList(six.string_types)
-        self._description = None
-        self._global_template = None
-        self._id_ = None
-        self._image = None
-        self._large_image = None
-        self._locale = None
-        self._name = None
+        self._description = String()
+        self._global_template = String(
+            accept=self.allowed_values['global_template']
+        )
+        self._id_ = Number()
+        self._image = String()
+        self._large_image = String()
+        self._locale = String()
+        self._name = String()
         self._tags = TypedList(six.string_types)
-        self._type = None
+        self._type = String(
+            accept=self.allowed_values['type']
+        )
 
         if props:
             deserialize(self, props)
@@ -82,26 +85,19 @@ class Template(object):
 
     @property
     def access_level(self):
-        return self._access_level
+        return self._access_level.value
 
     @access_level.setter
     def access_level(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['access_level']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Template`access_level`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['access_level']))
-            self._access_level = value
+        self._access_level.value = value
 
     @property
     def blank(self):
-        return self._blank
+        return self._blank.value
 
     @blank.setter
     def blank(self, value):
-        if isinstance(value, bool):
-            self._blank = value
+        self._blank.value = value
 
     @property
     def categories(self):
@@ -113,71 +109,59 @@ class Template(object):
 
     @property
     def description(self):
-        return self._description
+        return self._description.value
 
     @description.setter
     def description(self, value):
-        if isinstance(value, six.string_types):
-            self._description = value
+        self._description.value = value
 
     @property
     def global_template(self):
-        return self._global_template
+        return self._global_template.value
 
     @global_template.setter
     def global_template(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['global_template']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Template`type`,"
-                     " must be one of {1}").format(
-                        value, self.allowed_values['global_template']))
-            self._global_template = value
+        self._global_template.value = value
 
     @property
     def id_(self):
-        return self._id_
+        return self._id_.value
 
     @id_.setter
     def id_(self, value):
-        if isinstance(value, six.integer_types):
-            self._id_ = value
+        self._id_.value = value
 
     @property
     def image(self):
-        return self._image
+        return self._image.value
 
     @image.setter
     def image(self, value):
-        if isinstance(value, six.string_types):
-            self._image = value
+        self._image.value = value
 
     @property
     def large_image(self):
-        return self._large_image
+        return self._large_image.value
 
     @large_image.setter
     def large_image(self, value):
-        if isinstance(value, six.string_types):
-            self._large_image = value
+        self._large_image.value = value
 
     @property
     def locale(self):
-        return self._locale
+        return self._locale.value
 
     @locale.setter
     def locale(self, value):
-        if isinstance(value, six.string_types):
-            self._locale = value
+        self._locale.value = value
 
     @property
     def name(self):
-        return self._name
+        return self._name.value
 
     @name.setter
     def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+        self._name.value = value
 
     @property
     def tags(self):
@@ -189,17 +173,11 @@ class Template(object):
 
     @property
     def type(self):
-        return self._type
+        return self._type.value
 
     @type.setter
     def type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Template`type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['type']))
-            self._type = value
+        self._type.value = value
 
     def to_dict(self):
         return serialize(self)

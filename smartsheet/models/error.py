@@ -22,6 +22,7 @@ import json
 from .error_result import ErrorResult
 from ..util import serialize
 from ..util import deserialize
+from ..types import TypedObject
 
 
 class Error(object):
@@ -35,7 +36,7 @@ class Error(object):
             self._base = base_obj
 
         self._request_response = None
-        self._result = None
+        self._result = TypedObject(ErrorResult)
 
         if props:
             deserialize(self, props)
@@ -58,14 +59,11 @@ class Error(object):
 
     @property
     def result(self):
-        return self._result
+        return self._result.value
 
     @result.setter
     def result(self, value):
-        if isinstance(value, ErrorResult):
-            self._result = value
-        else:
-            self._result = ErrorResult(value, self._base)
+        self._result.value = value
 
     def to_dict(self):
         return serialize(self)

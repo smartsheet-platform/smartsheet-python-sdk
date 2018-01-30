@@ -17,14 +17,11 @@
 
 from __future__ import absolute_import
 
-import six
-import json
-
 from .column import Column
 from .cell_data_item import CellDataItem
 from .shortcut_data_item import ShortcutDataItem
 from .hyperlink import Hyperlink
-from ..types import TypedList
+from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
@@ -41,26 +38,26 @@ class WidgetContent(object):
         """Represents the CellLinkWidgetContent object."""
         self._cell_data = TypedList(CellDataItem)
         self._columns = TypedList(Column)
-        self._hyperlink = None
+        self._hyperlink = TypedObject(Hyperlink)
 
         """Represents the RichtextWidgetContent object."""
-        self._html = None
+        self._html = String()
 
         """Represents the ShortcutWidgetContent object."""
         self._shortcut_data = TypedList(ShortcutDataItem)
 
         """Represents the ReportWidgetContent object."""
-        self._html_content = None
+        self._html_content = String()
 
         """Represents the ImageWidgetContent object."""
-        self._file_name = None
-        self._format_ = None
-        self._height = None
-        self._private_id = None
-        self._width = None
+        self._file_name = String()
+        self._format_ = String()
+        self._height = Number()
+        self._private_id = String()
+        self._width = Number()
 
         """Represents the TitleWidgetContent object."""
-        self._background_color = None
+        self._background_color = String()
 
         if props:
             deserialize(self, props)
@@ -98,24 +95,20 @@ class WidgetContent(object):
 
     @property
     def hyperlink(self):
-        return self._hyperlink
+        return self._hyperlink.value
 
     @hyperlink.setter
     def hyperlink(self, value):
-        if isinstance(value, Hyperlink):
-            self._hyperlink = value
-        elif isinstance(value, dict):
-            self._hyperlink = Hyperlink(value, self._base)
+        self._hyperlink.value = value
 
     """Represents the RichtextWidgetContent object."""
     @property
     def html(self):
-        return self._html
+        return self._html.value
 
     @html.setter
     def html(self, value):
-        if isinstance(value, six.string_types):
-            self._html = value
+        self._html.value = value
 
     """Represents the ShortcutWidgetContent object."""
     @property
@@ -129,68 +122,61 @@ class WidgetContent(object):
     """Represents the ReportWidgetContent object."""
     @property
     def html_content(self):
-        return self._html_content
+        return self._html_content.value
 
     @html_content.setter
     def html_content(self, value):
-        if isinstance(value, six.string_types):
-            self._html_content = value
+        self._html_content.value = value
 
     """Represents the ImageWidgetContent object."""
     @property
     def file_name(self):
-        return self._file_name
+        return self._file_name.value
 
     @file_name.setter
     def file_name(self, value):
-        if isinstance(value, six.string_types):
-            self._file_name = value
+        self._file_name.value = value
 
     @property
     def format_(self):
-        return self._format_
+        return self._format_.value
 
     @format_.setter
     def format_(self, value):
-        if isinstance(value, six.string_types):
-            self._format_ = value
+        self._format_.value = value
 
     @property
     def height(self):
-        return self._height
+        return self._height.value
 
     @height.setter
     def height(self, value):
-        if isinstance(value, six.integer_types):
-            self._height = value
+        self._height.value = value
 
     @property
     def private_id(self):
-        return self._private_id
+        return self._private_id.value
 
     @private_id.setter
     def private_id(self, value):
-        if isinstance(value, six.string_types):
-            self._private_id = value
+        self._private_id.value = value
 
     @property
     def width(self):
-        return self._width
+        return self._width.value
 
     @width.setter
     def width(self, value):
-        if isinstance(value, six.integer_types):
-            self._width = value
+        self._width.value = value
 
     """Represents the TitleWidgetContent object."""
     @property
     def background_color(self):
-        return self._background_color
+        return self._background_color.value
 
     @background_color.setter
     def background_color(self, value):
-        if isinstance(value, six.string_types):
-            self._background_color = value
+        self._background_color.value = value
 
     def to_dict(self):
         return serialize(self)
