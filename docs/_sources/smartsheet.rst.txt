@@ -91,6 +91,14 @@ smartsheet.images module
     :undoc-members:
     :show-inheritance:
 
+smartsheet.passthrough module
+-----------------------------
+
+.. automodule:: smartsheet.passthrough
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 smartsheet.reports module
 -------------------------
 

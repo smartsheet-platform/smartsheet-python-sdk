@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet.models package &mdash; Smartsheet Python SDK 1.2.1 documentation</title>
+  <title>smartsheet.models package &mdash; Smartsheet Python SDK 1.2.3 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Smartsheet Python SDK 1.2.1 documentation" href="index.html"/>
+    <link rel="top" title="Smartsheet Python SDK 1.2.3 documentation" href="index.html"/>
         <link rel="up" title="smartsheet package" href="smartsheet.html"/>
         <link rel="prev" title="smartsheet package" href="smartsheet.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.2.1
+                1.2.3
               </div>
             
           
@@ -100,6 +100,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.alternate_email">smartsheet.models.alternate_email module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.attachment">smartsheet.models.attachment module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.auto_number_format">smartsheet.models.auto_number_format module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.boolean_object_value">smartsheet.models.boolean_object_value module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.bulk_item_failure">smartsheet.models.bulk_item_failure module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.bulk_item_result">smartsheet.models.bulk_item_result module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.cell">smartsheet.models.cell module</a></li>
@@ -109,6 +110,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.column">smartsheet.models.column module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.comment">smartsheet.models.comment module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.contact">smartsheet.models.contact module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.contact_object_value">smartsheet.models.contact_object_value module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.contact_option">smartsheet.models.contact_option module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.container_destination">smartsheet.models.container_destination module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.copy_or_move_row_destination">smartsheet.models.copy_or_move_row_destination module</a></li>
@@ -116,6 +118,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.copy_or_move_row_result">smartsheet.models.copy_or_move_row_result module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.criteria">smartsheet.models.criteria module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.currency">smartsheet.models.currency module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.date_object_value">smartsheet.models.date_object_value module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.discussion">smartsheet.models.discussion module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.downloaded_file">smartsheet.models.downloaded_file module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.duration">smartsheet.models.duration module</a></li>
@@ -136,10 +139,14 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.image_url">smartsheet.models.image_url module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.image_url_map">smartsheet.models.image_url_map module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.index_result">smartsheet.models.index_result module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.json_object">smartsheet.models.json_object module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.multi_row_email">smartsheet.models.multi_row_email module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.number_object_value">smartsheet.models.number_object_value module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.o_auth_error">smartsheet.models.o_auth_error module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.object_value">smartsheet.models.object_value module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.predecessor">smartsheet.models.predecessor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.predecessor_list">smartsheet.models.predecessor_list module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.primitive_object_value">smartsheet.models.primitive_object_value module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.project_settings">smartsheet.models.project_settings module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.recipient">smartsheet.models.recipient module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.report">smartsheet.models.report module</a></li>
@@ -159,12 +166,15 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.share">smartsheet.models.share module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sheet">smartsheet.models.sheet module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sheet_email">smartsheet.models.sheet_email module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sheet_filter">smartsheet.models.sheet_filter module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sheet_filter_details">smartsheet.models.sheet_filter_details module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sheet_publish">smartsheet.models.sheet_publish module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sheet_user_settings">smartsheet.models.sheet_user_settings module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.shortcut_data_item">smartsheet.models.shortcut_data_item module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sight">smartsheet.models.sight module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sight_publish">smartsheet.models.sight_publish module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.source">smartsheet.models.source module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.string_object_value">smartsheet.models.string_object_value module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.template">smartsheet.models.template module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.update_request">smartsheet.models.update_request module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.user">smartsheet.models.user module</a></li>
@@ -192,6 +202,7 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.groups">smartsheet.groups module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.home">smartsheet.home module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.images">smartsheet.images module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.passthrough">smartsheet.passthrough module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.reports">smartsheet.reports module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.search">smartsheet.search module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.server">smartsheet.server module</a></li>
@@ -503,6 +514,21 @@
 </dd></dl>
 
 </div>
+<div class="section" id="module-smartsheet.models.boolean_object_value">
+<span id="smartsheet-models-boolean-object-value-module"></span><h2>smartsheet.models.boolean_object_value module<a class="headerlink" href="#module-smartsheet.models.boolean_object_value" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.boolean_object_value.BooleanObjectValue">
+<em class="property">class </em><code class="descclassname">smartsheet.models.boolean_object_value.</code><code class="descname">BooleanObjectValue</code><span class="sig-paren">(</span><em>value=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.boolean_object_value.BooleanObjectValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#smartsheet.models.primitive_object_value.PrimitiveObjectValue" title="smartsheet.models.primitive_object_value.PrimitiveObjectValue"><code class="xref py py-class docutils literal"><span class="pre">smartsheet.models.primitive_object_value.PrimitiveObjectValue</span></code></a></p>
+<p>Smartsheet BooleanObjectValue data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.boolean_object_value.BooleanObjectValue.object_type">
+<code class="descname">object_type</code><a class="headerlink" href="#smartsheet.models.boolean_object_value.BooleanObjectValue.object_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-smartsheet.models.bulk_item_failure">
 <span id="smartsheet-models-bulk-item-failure-module"></span><h2>smartsheet.models.bulk_item_failure module<a class="headerlink" href="#module-smartsheet.models.bulk_item_failure" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -647,6 +673,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.cell.Cell.override_validation">
+<code class="descname">override_validation</code><a class="headerlink" href="#smartsheet.models.cell.Cell.override_validation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.cell.Cell.pre_request_filter">
 <code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.cell.Cell.pre_request_filter" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -704,6 +735,11 @@
 <dl class="attribute">
 <dt id="smartsheet.models.cell_data_item.CellDataItem.object_value">
 <code class="descname">object_value</code><a class="headerlink" href="#smartsheet.models.cell_data_item.CellDataItem.object_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.cell_data_item.CellDataItem.order">
+<code class="descname">order</code><a class="headerlink" href="#smartsheet.models.cell_data_item.CellDataItem.order" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -932,6 +968,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.column.Column.validation">
+<code class="descname">validation</code><a class="headerlink" href="#smartsheet.models.column.Column.validation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.column.Column.width">
 <code class="descname">width</code><a class="headerlink" href="#smartsheet.models.column.Column.width" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1019,6 +1060,26 @@
 <dl class="method">
 <dt id="smartsheet.models.contact.Contact.to_json">
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact.Contact.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-smartsheet.models.contact_object_value">
+<span id="smartsheet-models-contact-object-value-module"></span><h2>smartsheet.models.contact_object_value module<a class="headerlink" href="#module-smartsheet.models.contact_object_value" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.contact_object_value.ContactObjectValue">
+<em class="property">class </em><code class="descclassname">smartsheet.models.contact_object_value.</code><code class="descname">ContactObjectValue</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_object_value.ContactObjectValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#smartsheet.models.contact.Contact" title="smartsheet.models.contact.Contact"><code class="xref py py-class docutils literal"><span class="pre">smartsheet.models.contact.Contact</span></code></a>, <a class="reference internal" href="#smartsheet.models.object_value.ObjectValue" title="smartsheet.models.object_value.ObjectValue"><code class="xref py py-class docutils literal"><span class="pre">smartsheet.models.object_value.ObjectValue</span></code></a></p>
+<p>Smartsheet ContactObjectValue data model.</p>
+<dl class="method">
+<dt id="smartsheet.models.contact_object_value.ContactObjectValue.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_object_value.ContactObjectValue.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.contact_object_value.ContactObjectValue.to_json">
+<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_object_value.ContactObjectValue.to_json" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1187,6 +1248,11 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Smartsheet Criteria data model.</p>
 <dl class="attribute">
+<dt id="smartsheet.models.criteria.Criteria.column_id">
+<code class="descname">column_id</code><a class="headerlink" href="#smartsheet.models.criteria.Criteria.column_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.criteria.Criteria.operator">
 <code class="descname">operator</code><a class="headerlink" href="#smartsheet.models.criteria.Criteria.operator" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1209,6 +1275,11 @@
 <dl class="attribute">
 <dt id="smartsheet.models.criteria.Criteria.value2">
 <code class="descname">value2</code><a class="headerlink" href="#smartsheet.models.criteria.Criteria.value2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.criteria.Criteria.values">
+<code class="descname">values</code><a class="headerlink" href="#smartsheet.models.criteria.Criteria.values" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1239,6 +1310,31 @@
 <dl class="method">
 <dt id="smartsheet.models.currency.Currency.to_json">
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.currency.Currency.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-smartsheet.models.date_object_value">
+<span id="smartsheet-models-date-object-value-module"></span><h2>smartsheet.models.date_object_value module<a class="headerlink" href="#module-smartsheet.models.date_object_value" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.date_object_value.DateObjectValue">
+<em class="property">class </em><code class="descclassname">smartsheet.models.date_object_value.</code><code class="descname">DateObjectValue</code><span class="sig-paren">(</span><em>props=None</em>, <em>object_type=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.date_object_value.DateObjectValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#smartsheet.models.object_value.ObjectValue" title="smartsheet.models.object_value.ObjectValue"><code class="xref py py-class docutils literal"><span class="pre">smartsheet.models.object_value.ObjectValue</span></code></a></p>
+<p>Smartsheet DateObjectValue data model.</p>
+<dl class="method">
+<dt id="smartsheet.models.date_object_value.DateObjectValue.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.date_object_value.DateObjectValue.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.date_object_value.DateObjectValue.to_json">
+<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.date_object_value.DateObjectValue.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.date_object_value.DateObjectValue.value">
+<code class="descname">value</code><a class="headerlink" href="#smartsheet.models.date_object_value.DateObjectValue.value" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2205,6 +2301,31 @@
 </dd></dl>
 
 </div>
+<div class="section" id="module-smartsheet.models.json_object">
+<span id="smartsheet-models-json-object-module"></span><h2>smartsheet.models.json_object module<a class="headerlink" href="#module-smartsheet.models.json_object" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.json_object.JSONObject">
+<em class="property">class </em><code class="descclassname">smartsheet.models.json_object.</code><code class="descname">JSONObject</code><span class="sig-paren">(</span><em>payload=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.json_object.JSONObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Smartsheet JSONObject data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.json_object.JSONObject.data">
+<code class="descname">data</code><a class="headerlink" href="#smartsheet.models.json_object.JSONObject.data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.json_object.JSONObject.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.json_object.JSONObject.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.json_object.JSONObject.to_json">
+<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.json_object.JSONObject.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-smartsheet.models.multi_row_email">
 <span id="smartsheet-models-multi-row-email-module"></span><h2>smartsheet.models.multi_row_email module<a class="headerlink" href="#module-smartsheet.models.multi_row_email" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -2230,6 +2351,21 @@
 <dl class="method">
 <dt id="smartsheet.models.multi_row_email.MultiRowEmail.to_json">
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.multi_row_email.MultiRowEmail.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-smartsheet.models.number_object_value">
+<span id="smartsheet-models-number-object-value-module"></span><h2>smartsheet.models.number_object_value module<a class="headerlink" href="#module-smartsheet.models.number_object_value" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.number_object_value.NumberObjectValue">
+<em class="property">class </em><code class="descclassname">smartsheet.models.number_object_value.</code><code class="descname">NumberObjectValue</code><span class="sig-paren">(</span><em>value=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.number_object_value.NumberObjectValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#smartsheet.models.primitive_object_value.PrimitiveObjectValue" title="smartsheet.models.primitive_object_value.PrimitiveObjectValue"><code class="xref py py-class docutils literal"><span class="pre">smartsheet.models.primitive_object_value.PrimitiveObjectValue</span></code></a></p>
+<p>Smartsheet NumberObjectValue data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.number_object_value.NumberObjectValue.object_type">
+<code class="descname">object_type</code><a class="headerlink" href="#smartsheet.models.number_object_value.NumberObjectValue.object_type" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2350,6 +2486,61 @@
 <dl class="attribute">
 <dt id="smartsheet.models.predecessor.Predecessor.type">
 <code class="descname">type</code><a class="headerlink" href="#smartsheet.models.predecessor.Predecessor.type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-smartsheet.models.predecessor_list">
+<span id="smartsheet-models-predecessor-list-module"></span><h2>smartsheet.models.predecessor_list module<a class="headerlink" href="#module-smartsheet.models.predecessor_list" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.predecessor_list.PredecessorList">
+<em class="property">class </em><code class="descclassname">smartsheet.models.predecessor_list.</code><code class="descname">PredecessorList</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.predecessor_list.PredecessorList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#smartsheet.models.object_value.ObjectValue" title="smartsheet.models.object_value.ObjectValue"><code class="xref py py-class docutils literal"><span class="pre">smartsheet.models.object_value.ObjectValue</span></code></a></p>
+<p>Smartsheet PredecessorList data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.predecessor_list.PredecessorList.pre_request_filter">
+<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.predecessor_list.PredecessorList.pre_request_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.predecessor_list.PredecessorList.predecessors">
+<code class="descname">predecessors</code><a class="headerlink" href="#smartsheet.models.predecessor_list.PredecessorList.predecessors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.predecessor_list.PredecessorList.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.predecessor_list.PredecessorList.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.predecessor_list.PredecessorList.to_json">
+<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.predecessor_list.PredecessorList.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-smartsheet.models.primitive_object_value">
+<span id="smartsheet-models-primitive-object-value-module"></span><h2>smartsheet.models.primitive_object_value module<a class="headerlink" href="#module-smartsheet.models.primitive_object_value" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.primitive_object_value.PrimitiveObjectValue">
+<em class="property">class </em><code class="descclassname">smartsheet.models.primitive_object_value.</code><code class="descname">PrimitiveObjectValue</code><span class="sig-paren">(</span><em>value=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.primitive_object_value.PrimitiveObjectValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Smartsheet PrimitiveObjectValue data model.</p>
+<dl class="method">
+<dt id="smartsheet.models.primitive_object_value.PrimitiveObjectValue.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.primitive_object_value.PrimitiveObjectValue.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.primitive_object_value.PrimitiveObjectValue.to_json">
+<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.primitive_object_value.PrimitiveObjectValue.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.primitive_object_value.PrimitiveObjectValue.value">
+<code class="descname">value</code><a class="headerlink" href="#smartsheet.models.primitive_object_value.PrimitiveObjectValue.value" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2743,8 +2934,18 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.report_publish.ReportPublish.read_only_full_default_view">
+<code class="descname">read_only_full_default_view</code><a class="headerlink" href="#smartsheet.models.report_publish.ReportPublish.read_only_full_default_view" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.report_publish.ReportPublish.read_only_full_enabled">
 <code class="descname">read_only_full_enabled</code><a class="headerlink" href="#smartsheet.models.report_publish.ReportPublish.read_only_full_enabled" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.report_publish.ReportPublish.read_only_full_show_toolbar">
+<code class="descname">read_only_full_show_toolbar</code><a class="headerlink" href="#smartsheet.models.report_publish.ReportPublish.read_only_full_show_toolbar" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3284,6 +3485,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.search_result_item.SearchResultItem.favorite">
+<code class="descname">favorite</code><a class="headerlink" href="#smartsheet.models.search_result_item.SearchResultItem.favorite" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.search_result_item.SearchResultItem.object_id">
 <code class="descname">object_id</code><a class="headerlink" href="#smartsheet.models.search_result_item.SearchResultItem.object_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -3291,6 +3497,11 @@
 <dl class="attribute">
 <dt id="smartsheet.models.search_result_item.SearchResultItem.object_type">
 <code class="descname">object_type</code><a class="headerlink" href="#smartsheet.models.search_result_item.SearchResultItem.object_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.search_result_item.SearchResultItem.parent_object_favorite">
+<code class="descname">parent_object_favorite</code><a class="headerlink" href="#smartsheet.models.search_result_item.SearchResultItem.parent_object_favorite" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3594,6 +3805,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.sheet.Sheet.filters">
+<code class="descname">filters</code><a class="headerlink" href="#smartsheet.models.sheet.Sheet.filters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.sheet.Sheet.from_id">
 <code class="descname">from_id</code><a class="headerlink" href="#smartsheet.models.sheet.Sheet.from_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -3806,6 +4022,76 @@
 </dd></dl>
 
 </div>
+<div class="section" id="module-smartsheet.models.sheet_filter">
+<span id="smartsheet-models-sheet-filter-module"></span><h2>smartsheet.models.sheet_filter module<a class="headerlink" href="#module-smartsheet.models.sheet_filter" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.sheet_filter.SheetFilter">
+<em class="property">class </em><code class="descclassname">smartsheet.models.sheet_filter.</code><code class="descname">SheetFilter</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_filter.SheetFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Smartsheet SheetFilter data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.sheet_filter.SheetFilter.filter_type">
+<code class="descname">filter_type</code><a class="headerlink" href="#smartsheet.models.sheet_filter.SheetFilter.filter_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.sheet_filter.SheetFilter.name">
+<code class="descname">name</code><a class="headerlink" href="#smartsheet.models.sheet_filter.SheetFilter.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.sheet_filter.SheetFilter.query">
+<code class="descname">query</code><a class="headerlink" href="#smartsheet.models.sheet_filter.SheetFilter.query" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.sheet_filter.SheetFilter.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_filter.SheetFilter.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.sheet_filter.SheetFilter.to_json">
+<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_filter.SheetFilter.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-smartsheet.models.sheet_filter_details">
+<span id="smartsheet-models-sheet-filter-details-module"></span><h2>smartsheet.models.sheet_filter_details module<a class="headerlink" href="#module-smartsheet.models.sheet_filter_details" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.sheet_filter_details.SheetFilterDetails">
+<em class="property">class </em><code class="descclassname">smartsheet.models.sheet_filter_details.</code><code class="descname">SheetFilterDetails</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_filter_details.SheetFilterDetails" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Smartsheet SheetFilterDetails data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.sheet_filter_details.SheetFilterDetails.criteria">
+<code class="descname">criteria</code><a class="headerlink" href="#smartsheet.models.sheet_filter_details.SheetFilterDetails.criteria" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.sheet_filter_details.SheetFilterDetails.include_parent">
+<code class="descname">include_parent</code><a class="headerlink" href="#smartsheet.models.sheet_filter_details.SheetFilterDetails.include_parent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.sheet_filter_details.SheetFilterDetails.operator">
+<code class="descname">operator</code><a class="headerlink" href="#smartsheet.models.sheet_filter_details.SheetFilterDetails.operator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.sheet_filter_details.SheetFilterDetails.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_filter_details.SheetFilterDetails.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.sheet_filter_details.SheetFilterDetails.to_json">
+<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_filter_details.SheetFilterDetails.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-smartsheet.models.sheet_publish">
 <span id="smartsheet-models-sheet-publish-module"></span><h2>smartsheet.models.sheet_publish module<a class="headerlink" href="#module-smartsheet.models.sheet_publish" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -3834,8 +4120,18 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.sheet_publish.SheetPublish.read_only_full_default_view">
+<code class="descname">read_only_full_default_view</code><a class="headerlink" href="#smartsheet.models.sheet_publish.SheetPublish.read_only_full_default_view" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.sheet_publish.SheetPublish.read_only_full_enabled">
 <code class="descname">read_only_full_enabled</code><a class="headerlink" href="#smartsheet.models.sheet_publish.SheetPublish.read_only_full_enabled" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.sheet_publish.SheetPublish.read_only_full_show_toolbar">
+<code class="descname">read_only_full_show_toolbar</code><a class="headerlink" href="#smartsheet.models.sheet_publish.SheetPublish.read_only_full_show_toolbar" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3849,6 +4145,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.sheet_publish.SheetPublish.read_only_lite_ssl_url">
+<code class="descname">read_only_lite_ssl_url</code><a class="headerlink" href="#smartsheet.models.sheet_publish.SheetPublish.read_only_lite_ssl_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.sheet_publish.SheetPublish.read_only_lite_url">
 <code class="descname">read_only_lite_url</code><a class="headerlink" href="#smartsheet.models.sheet_publish.SheetPublish.read_only_lite_url" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -3859,8 +4160,18 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.sheet_publish.SheetPublish.read_write_default_view">
+<code class="descname">read_write_default_view</code><a class="headerlink" href="#smartsheet.models.sheet_publish.SheetPublish.read_write_default_view" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.sheet_publish.SheetPublish.read_write_enabled">
 <code class="descname">read_write_enabled</code><a class="headerlink" href="#smartsheet.models.sheet_publish.SheetPublish.read_write_enabled" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.sheet_publish.SheetPublish.read_write_show_toolbar">
+<code class="descname">read_write_show_toolbar</code><a class="headerlink" href="#smartsheet.models.sheet_publish.SheetPublish.read_write_show_toolbar" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3888,6 +4199,11 @@
 <em class="property">class </em><code class="descclassname">smartsheet.models.sheet_user_settings.</code><code class="descname">SheetUserSettings</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_user_settings.SheetUserSettings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Smartsheet SheetUserSettings data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.sheet_user_settings.SheetUserSettings.applied_sheet_filter_id">
+<code class="descname">applied_sheet_filter_id</code><a class="headerlink" href="#smartsheet.models.sheet_user_settings.SheetUserSettings.applied_sheet_filter_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="smartsheet.models.sheet_user_settings.SheetUserSettings.critical_path_enabled">
 <code class="descname">critical_path_enabled</code><a class="headerlink" href="#smartsheet.models.sheet_user_settings.SheetUserSettings.critical_path_enabled" title="Permalink to this definition">¶</a></dt>
@@ -3918,6 +4234,11 @@
 <em class="property">class </em><code class="descclassname">smartsheet.models.shortcut_data_item.</code><code class="descname">ShortcutDataItem</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.shortcut_data_item.ShortcutDataItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Smartsheet ShortcutDataItem data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.shortcut_data_item.ShortcutDataItem.attachment_type">
+<code class="descname">attachment_type</code><a class="headerlink" href="#smartsheet.models.shortcut_data_item.ShortcutDataItem.attachment_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="smartsheet.models.shortcut_data_item.ShortcutDataItem.hyperlink">
 <code class="descname">hyperlink</code><a class="headerlink" href="#smartsheet.models.shortcut_data_item.ShortcutDataItem.hyperlink" title="Permalink to this definition">¶</a></dt>
@@ -4081,6 +4402,21 @@
 <dl class="method">
 <dt id="smartsheet.models.source.Source.to_json">
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.source.Source.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-smartsheet.models.string_object_value">
+<span id="smartsheet-models-string-object-value-module"></span><h2>smartsheet.models.string_object_value module<a class="headerlink" href="#module-smartsheet.models.string_object_value" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.string_object_value.StringObjectValue">
+<em class="property">class </em><code class="descclassname">smartsheet.models.string_object_value.</code><code class="descname">StringObjectValue</code><span class="sig-paren">(</span><em>value=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.string_object_value.StringObjectValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#smartsheet.models.primitive_object_value.PrimitiveObjectValue" title="smartsheet.models.primitive_object_value.PrimitiveObjectValue"><code class="xref py py-class docutils literal"><span class="pre">smartsheet.models.primitive_object_value.PrimitiveObjectValue</span></code></a></p>
+<p>Smartsheet StringObjectValue data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.string_object_value.StringObjectValue.object_type">
+<code class="descname">object_type</code><a class="headerlink" href="#smartsheet.models.string_object_value.StringObjectValue.object_type" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -4644,6 +4980,16 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.widget_content.WidgetContent.cell_data">
+<code class="descname">cell_data</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.cell_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.widget_content.WidgetContent.columns">
+<code class="descname">columns</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.columns" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.widget_content.WidgetContent.file_name">
 <code class="descname">file_name</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.file_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -4659,8 +5005,18 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.widget_content.WidgetContent.html">
+<code class="descname">html</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.html" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.widget_content.WidgetContent.html_content">
 <code class="descname">html_content</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.html_content" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.widget_content.WidgetContent.hyperlink">
+<code class="descname">hyperlink</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.hyperlink" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -4807,7 +5163,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.2.1',
+            VERSION:'1.2.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

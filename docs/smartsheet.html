@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet package &mdash; Smartsheet Python SDK 1.2.1 documentation</title>
+  <title>smartsheet package &mdash; Smartsheet Python SDK 1.2.3 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Smartsheet Python SDK 1.2.1 documentation" href="index.html"/>
+    <link rel="top" title="Smartsheet Python SDK 1.2.3 documentation" href="index.html"/>
         <link rel="next" title="smartsheet.models package" href="smartsheet.models.html"/>
         <link rel="prev" title="Smartsheet Python SDK Documentation" href="index.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.2.1
+                1.2.3
               </div>
             
           
@@ -107,6 +107,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.groups">smartsheet.groups module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.home">smartsheet.home module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.images">smartsheet.images module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.passthrough">smartsheet.passthrough module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.reports">smartsheet.reports module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.search">smartsheet.search module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.server">smartsheet.server module</a></li>
@@ -199,6 +200,7 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.alternate_email">smartsheet.models.alternate_email module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.attachment">smartsheet.models.attachment module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.auto_number_format">smartsheet.models.auto_number_format module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.boolean_object_value">smartsheet.models.boolean_object_value module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.bulk_item_failure">smartsheet.models.bulk_item_failure module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.bulk_item_result">smartsheet.models.bulk_item_result module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.cell">smartsheet.models.cell module</a></li>
@@ -208,6 +210,7 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.column">smartsheet.models.column module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.comment">smartsheet.models.comment module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.contact">smartsheet.models.contact module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.contact_object_value">smartsheet.models.contact_object_value module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.contact_option">smartsheet.models.contact_option module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.container_destination">smartsheet.models.container_destination module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.copy_or_move_row_destination">smartsheet.models.copy_or_move_row_destination module</a></li>
@@ -215,6 +218,7 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.copy_or_move_row_result">smartsheet.models.copy_or_move_row_result module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.criteria">smartsheet.models.criteria module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.currency">smartsheet.models.currency module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.date_object_value">smartsheet.models.date_object_value module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.discussion">smartsheet.models.discussion module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.downloaded_file">smartsheet.models.downloaded_file module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.duration">smartsheet.models.duration module</a></li>
@@ -235,10 +239,14 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.image_url">smartsheet.models.image_url module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.image_url_map">smartsheet.models.image_url_map module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.index_result">smartsheet.models.index_result module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.json_object">smartsheet.models.json_object module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.multi_row_email">smartsheet.models.multi_row_email module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.number_object_value">smartsheet.models.number_object_value module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.o_auth_error">smartsheet.models.o_auth_error module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.object_value">smartsheet.models.object_value module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.predecessor">smartsheet.models.predecessor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.predecessor_list">smartsheet.models.predecessor_list module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.primitive_object_value">smartsheet.models.primitive_object_value module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.project_settings">smartsheet.models.project_settings module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.recipient">smartsheet.models.recipient module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.report">smartsheet.models.report module</a></li>
@@ -258,12 +266,15 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.share">smartsheet.models.share module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sheet">smartsheet.models.sheet module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sheet_email">smartsheet.models.sheet_email module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sheet_filter">smartsheet.models.sheet_filter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sheet_filter_details">smartsheet.models.sheet_filter_details module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sheet_publish">smartsheet.models.sheet_publish module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sheet_user_settings">smartsheet.models.sheet_user_settings module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.shortcut_data_item">smartsheet.models.shortcut_data_item module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sight">smartsheet.models.sight module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sight_publish">smartsheet.models.sight_publish module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.source">smartsheet.models.source module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.string_object_value">smartsheet.models.string_object_value module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.template">smartsheet.models.template module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.update_request">smartsheet.models.update_request module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.user">smartsheet.models.user module</a></li>
@@ -698,7 +709,7 @@ if not specified.</li>
 <p>Class for handling Cells operations.</p>
 <dl class="method">
 <dt id="smartsheet.cells.Cells.add_image_to_cell">
-<code class="descname">add_image_to_cell</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>row_id</em>, <em>column_id</em>, <em>file</em>, <em>file_type</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.cells.Cells.add_image_to_cell" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_image_to_cell</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>row_id</em>, <em>column_id</em>, <em>file</em>, <em>file_type</em>, <em>override_validation=False</em>, <em>alt_text=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.cells.Cells.add_image_to_cell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uploads an image to the specified cell.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1277,7 +1288,7 @@ of object IDs representing the items to work on.</li>
 <p>Class for handling Folders operations.</p>
 <dl class="method">
 <dt id="smartsheet.folders.Folders.copy_folder">
-<code class="descname">copy_folder</code><span class="sig-paren">(</span><em>folder_id</em>, <em>container_destination_obj</em>, <em>include=None</em>, <em>skip_remap=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.folders.Folders.copy_folder" title="Permalink to this definition">¶</a></dt>
+<code class="descname">copy_folder</code><span class="sig-paren">(</span><em>folder_id</em>, <em>container_destination_obj</em>, <em>include=None</em>, <em>skip_remap=None</em>, <em>omit=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.folders.Folders.copy_folder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a copy of the specified Folder.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1287,11 +1298,14 @@ of object IDs representing the items to work on.</li>
 <li><strong>folder_id</strong> (<em>int</em>) &#8211; Folder ID</li>
 <li><strong>container_destination_obj</strong> &#8211; (ContainerDestination): Container Destination object.</li>
 <li><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; A comma separated list of
-elements to copy. Valid list values: data, attachments,
-discussions, cellLinks, forms, all.</li>
+elements to copy. Valid list values: attachments,
+cellLinks, data, discussions, filters, forms, ruleRecipients,
+rules, shares, all (deprecated).</li>
 <li><strong>skip_remap</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; A comma separated list
 of references to NOT re-map for the newly created resource.
-Valid list items: cellLinks, reports, sheetHyperlinks</li>
+Valid list items: cellLinks, reports, sheetHyperlinks, sights</li>
+<li><strong>omit</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; A comma separated list of elements to omit.
+The only current valid item is sheetHyperlinks</li>
 </ul>
 </td>
 </tr>
@@ -1404,7 +1418,7 @@ data, attachments, discussions, cellLinks, forms.</li>
 <li><strong>folder_id</strong> (<em>int</em>) &#8211; Folder ID</li>
 <li><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; A comma-separated list of
 optional elements to include in the response. Valid list
-values: ownerInfo, source.</li>
+values: ownerInfo, sheetVersion, source.</li>
 </ul>
 </td>
 </tr>
@@ -1717,7 +1731,7 @@ Workspaces, Folders, Reports and Templates.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; A comma-separated list of
 optional elements to include in the response. Valid list
-values: ownerInfo, source.</td>
+values: ownerInfo, sheetVersion, source.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Home</td>
 </tr>
@@ -1773,6 +1787,97 @@ if not specified.</li>
 or more ImageURL objects.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">ImageURLMap</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-smartsheet.passthrough">
+<span id="smartsheet-passthrough-module"></span><h2>smartsheet.passthrough module<a class="headerlink" href="#module-smartsheet.passthrough" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.passthrough.Passthrough">
+<em class="property">class </em><code class="descclassname">smartsheet.passthrough.</code><code class="descname">Passthrough</code><span class="sig-paren">(</span><em>smartsheet_obj</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.passthrough.Passthrough" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Class for handling Sheets operations.</p>
+<dl class="method">
+<dt id="smartsheet.passthrough.Passthrough.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>endpoint</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.passthrough.Passthrough.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Issue a DELETE request on the specified URL.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>endpoint</strong> (<em>str</em>) &#8211; Endpoint URL (relative to base), e.g. &#8216;/sheets/{id}&#8217;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">JSONObject</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.passthrough.Passthrough.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>endpoint</em>, <em>query_params=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.passthrough.Passthrough.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Issue a GET request on the specified URL.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>endpoint</strong> (<em>str</em>) &#8211; Endpoint URL (relative to base), e.g. &#8216;/sheets&#8217;</li>
+<li><strong>query_params</strong> (<em>dict</em>) &#8211; Optional dictionary of additional query parameters</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">JSONObject</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.passthrough.Passthrough.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>endpoint</em>, <em>payload</em>, <em>query_params=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.passthrough.Passthrough.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Issue a POST request on the specified URL.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>endpoint</strong> (<em>str</em>) &#8211; Endpoint URL (relative to base), e.g. &#8216;/sheets&#8217;</li>
+<li><strong>payload</strong> (<em>str</em><em>, </em><em>dict</em><em>, or </em><a class="reference internal" href="smartsheet.models.html#smartsheet.models.json_object.JSONObject" title="smartsheet.models.json_object.JSONObject"><em>JSONObject</em></a>) &#8211; JSON payload</li>
+<li><strong>query_params</strong> (<em>dict</em>) &#8211; Optional dictionary of additional query parameters</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">JSONObject</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.passthrough.Passthrough.put">
+<code class="descname">put</code><span class="sig-paren">(</span><em>endpoint</em>, <em>payload</em>, <em>query_params=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.passthrough.Passthrough.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Issue a PUT request on the specified URL.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>endpoint</strong> (<em>str</em>) &#8211; Endpoint URL (relative to base), e.g. &#8216;/sheets/{id}&#8217;</li>
+<li><strong>payload</strong> (<em>str</em><em>, </em><em>dict</em><em> or </em><a class="reference internal" href="smartsheet.models.html#smartsheet.models.json_object.JSONObject" title="smartsheet.models.json_object.JSONObject"><em>JSONObject</em></a>) &#8211; JSON payload</li>
+<li><strong>query_params</strong> (<em>dict</em>) &#8211; Optional dictionary of additional query parameters</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">JSONObject</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1844,9 +1949,12 @@ Source Sheets.</p>
 return per page. Defaults to 100.</li>
 <li><strong>page</strong> (<em>int</em>) &#8211; Which page to return. Defaults to 1
 if not specified.</li>
-<li><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; A comma-separated list of
+<li><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; <p>A comma-separated list of
 optional elements to include in the response. Valid list
-values: discussions, attachments, format, sourceSheets.</li>
+values: discussions, attachments, format, sheetVersion(requires sourceSheets),</p>
+<blockquote>
+<div>sourceSheets.</div></blockquote>
+</li>
 </ul>
 </td>
 </tr>
@@ -2083,16 +2191,36 @@ is false.</li>
 <p>Class for handling Search operations.</p>
 <dl class="method">
 <dt id="smartsheet.search.Search.search">
-<code class="descname">search</code><span class="sig-paren">(</span><em>query</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.search.Search.search" title="Permalink to this definition">¶</a></dt>
+<code class="descname">search</code><span class="sig-paren">(</span><em>query</em>, <em>include=None</em>, <em>location=None</em>, <em>modified_since=None</em>, <em>scopes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.search.Search.search" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search all Sheets the User can access for the specified text.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>query</strong> (<em>str</em>) &#8211; Text with which to perform the
-search.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>query</strong> (<em>str</em>) &#8211; Text with which to perform the search.</li>
+<li><strong>include</strong> (<em>str</em>) &#8211; when specified with a value of &#8216;favoriteFlag&#8217;,
+response indicates which returned items are favorites</li>
+<li><strong>location</strong> (<em>str</em>) &#8211; when specified with a value of &#8216;personalWorkspace&#8217;,
+limits the response to only those items in the user&#8217;s Workspaces</li>
+<li><strong>modified_since</strong> (<em>str</em>) &#8211; includes items that are modified on or after the
+date and time specified</li>
+<li><strong>scopes</strong> (<em>str</em>) &#8211; comma-seperated list of search filters:
+attachments
+cellData
+comments
+folderNames
+profileFields
+reportNames
+sheetNames
+sightNames
+templateNames
+workspaceNames</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">SearchResult</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">SearchResult</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -2301,7 +2429,7 @@ will be altered).</li>
 
 <dl class="method">
 <dt id="smartsheet.sheets.Sheets.copy_sheet">
-<code class="descname">copy_sheet</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>container_destination_obj</em>, <em>include=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.copy_sheet" title="Permalink to this definition">¶</a></dt>
+<code class="descname">copy_sheet</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>container_destination_obj</em>, <em>include=None</em>, <em>omit=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.copy_sheet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a copy of the specified Sheet</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2310,10 +2438,14 @@ will be altered).</li>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>sheet_id</strong> (<em>int</em>) &#8211; Sheet ID</li>
 <li><strong>container_destination_obj</strong> &#8211; (ContainerDestination): Container Destination object.</li>
-<li><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; A comma-separated list of
+<li><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; <p>A comma-separated list of
 optional elements to include in the response. Valid list
-values: data, attachments, discussions, cellLinks, forms,
-all.</li>
+values: attachments, cellLinks, data, discussions, forms,</p>
+<blockquote>
+<div>ruleRecipients, rules, shares, all (deprecated).</div></blockquote>
+</li>
+<li><strong>omit</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; A comma-seperated list of optional elements
+to omit. Only current valid value is sheetHyperlinks</li>
 </ul>
 </td>
 </tr>
@@ -2356,6 +2488,27 @@ all.</li>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>sheet_id</strong> (<em>int</em>) &#8211; Sheet ID</li>
 <li><strong>column_id</strong> (<em>int</em>) &#8211; Column ID</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Result</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.sheets.Sheets.delete_filter">
+<code class="descname">delete_filter</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>filter_id</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.delete_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a Filter for the specified Sheet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sheet_id</strong> (<em>int</em>) &#8211; Sheet ID</li>
+<li><strong>filter_id</strong> (<em>int</em>) &#8211; Filter ID</li>
 </ul>
 </td>
 </tr>
@@ -2484,9 +2637,7 @@ will be altered).</li>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>sheet_id</strong> (<em>int</em>) &#8211; Sheet ID</li>
 <li><strong>column_id</strong> (<em>int</em>) &#8211; Column ID</li>
-<li><strong>include</strong> (<em>str</em>) &#8211; When specified with a value of
-&#8216;filters&#8217;, response will include the Filter the user has
-applied (if any).</li>
+<li><strong>include</strong> (<em>str</em>) &#8211; (future)</li>
 </ul>
 </td>
 </tr>
@@ -2506,9 +2657,7 @@ applied (if any).</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>include</strong> (<em>str</em>) &#8211; When specified with a value of
-&#8216;filters&#8217;, response will include the Filter the user has
-applied (if any).</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>include</strong> (<em>str</em>) &#8211; (future).</td>
 </tr>
 </tbody>
 </table>
@@ -2524,9 +2673,7 @@ applied (if any).</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>sheet_id</strong> (<em>int</em>) &#8211; Sheet ID</li>
-<li><strong>include</strong> (<em>str</em>) &#8211; When specified with a value of
-&#8216;filters&#8217;, response will include the Filter the user has
-applied (if any).</li>
+<li><strong>include</strong> (<em>str</em>) &#8211; (future)</li>
 <li><strong>page_size</strong> (<em>int</em>) &#8211; The maximum number of items to
 return per page. Defaults to 100.</li>
 <li><strong>page</strong> (<em>int</em>) &#8211; Which page to return. Defaults to 1
@@ -2537,6 +2684,27 @@ if not specified.</li>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">IndexResult</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.sheets.Sheets.get_filter">
+<code class="descname">get_filter</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>filter_id</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.get_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Filter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sheet_id</strong> (<em>int</em>) &#8211; Sheet ID</li>
+<li><strong>filter_id</strong> (<em>int</em>) &#8211; Filter ID</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Filter</p>
 </td>
 </tr>
 </tbody>
@@ -2647,7 +2815,7 @@ objects.</p>
 <li><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; A comma-separated list of
 optional elements to include in the response. Valid list
 values: attachments, discussions, format, filters,
-ownerInfo, source, rowWriterInfo.</li>
+filterDefinitions, ownerInfo, source, rowWriterInfo.</li>
 <li><strong>exclude</strong> (<em>str</em>) &#8211; Response will not include cells
 that have never contained any data.</li>
 <li><strong>row_ids</strong> (<em>list</em><em>[</em><em>int</em><em>]</em><em></em>) &#8211; comma-separated list of Row
@@ -2800,6 +2968,32 @@ instead of name suggested by Content-Disposition.</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="smartsheet.sheets.Sheets.list_filters">
+<code class="descname">list_filters</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>page_size=100</em>, <em>page=1</em>, <em>include_all=False</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.list_filters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all saved sheet filters</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sheet_id</strong> (<em>int</em>) &#8211; Sheet ID</li>
+<li><strong>page_size</strong> (<em>int</em>) &#8211; The maximum number of items to
+return per page. Defaults to 100.</li>
+<li><strong>page</strong> (<em>int</em>) &#8211; Which page to return. Defaults to 1
+if not specified.</li>
+<li><strong>include_all</strong> (<em>bool</em>) &#8211; If true, include all results
+(i.e. do not paginate).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">IndexResult</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="smartsheet.sheets.Sheets.list_org_sheets">
 <code class="descname">list_org_sheets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.list_org_sheets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of all Sheets owned by an organization.</p>
@@ -2873,7 +3067,7 @@ order, by name.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; A comma-separated list of
 optional elements to include in the response. Valid list
-values: ownerInfo, source.</li>
+values: ownerInfo, sheetVersion, source.</li>
 <li><strong>page_size</strong> (<em>int</em>) &#8211; The maximum number of items to
 return per page. Defaults to 100.</li>
 <li><strong>page</strong> (<em>int</em>) &#8211; Which page to return. Defaults to 1
@@ -3557,6 +3751,20 @@ is false.</li>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Use this to make requests to the Smartsheet API.</p>
 <dl class="method">
+<dt id="smartsheet.smartsheet.Smartsheet.as_test_scenario">
+<code class="descname">as_test_scenario</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.smartsheet.Smartsheet.as_test_scenario" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identify requests made with this client as a test scenario.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; The name of the test scenario.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="smartsheet.smartsheet.Smartsheet.assume_user">
 <code class="descname">assume_user</code><span class="sig-paren">(</span><em>email=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.smartsheet.Smartsheet.assume_user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assume identity of specified user.</p>
@@ -3594,7 +3802,7 @@ as exceptions.</td>
 
 <dl class="attribute">
 <dt id="smartsheet.smartsheet.Smartsheet.models">
-<code class="descname">models</code><em class="property"> = &lt;module 'smartsheet.models' from '/Users/sweil/Documents/src/smartsheet-python-sdk/smartsheet/models/__init__.py'&gt;</em><a class="headerlink" href="#smartsheet.smartsheet.Smartsheet.models" title="Permalink to this definition">¶</a></dt>
+<code class="descname">models</code><em class="property"> = &lt;module 'smartsheet.models' from '/Users/sweil/Documents/src/python/smartsheet-python-sdk/smartsheet/models/__init__.py'&gt;</em><a class="headerlink" href="#smartsheet.smartsheet.Smartsheet.models" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4137,6 +4345,11 @@ when the function is used.</p>
 <dd></dd></dl>
 
 <dl class="function">
+<dt id="smartsheet.util.null_filter">
+<code class="descclassname">smartsheet.util.</code><code class="descname">null_filter</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.util.null_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="smartsheet.util.prep">
 <code class="descclassname">smartsheet.util.</code><code class="descname">prep</code><span class="sig-paren">(</span><em>prop</em>, <em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.util.prep" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serialize a value for JSON transformation.</p>
@@ -4276,40 +4489,36 @@ if not specified.</li>
 <p>Class for handling Workspaces operations.</p>
 <dl class="method">
 <dt id="smartsheet.workspaces.Workspaces.copy_workspace">
-<code class="descname">copy_workspace</code><span class="sig-paren">(</span><em>workspace_id</em>, <em>container_destination_obj</em>, <em>include=None</em>, <em>skip_remap=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.workspaces.Workspaces.copy_workspace" title="Permalink to this definition">¶</a></dt>
+<code class="descname">copy_workspace</code><span class="sig-paren">(</span><em>workspace_id</em>, <em>container_destination_obj</em>, <em>include=None</em>, <em>skip_remap=None</em>, <em>omit=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.workspaces.Workspaces.copy_workspace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a copy of the specified Workspace.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>workspace_id</strong> (<em>int</em>) &#8211; Workspace ID</li>
 <li><strong>container_destination_obj</strong> (<a class="reference internal" href="smartsheet.models.html#smartsheet.models.container_destination.ContainerDestination" title="smartsheet.models.container_destination.ContainerDestination"><em>ContainerDestination</em></a>) &#8211; Container Destination object.</li>
-<li><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; <p>A comma-separated list of optional elements to copy. Valid list values:</p>
-<p>data</p>
-<p>attachments</p>
-<p>discussions</p>
-<p>cellLinks</p>
-<p>forms</p>
-<p>brand</p>
-<p>shares</p>
-<p><strong>all</strong> - specify a value of &#8220;all&#8221; to include everything.</p>
+<li><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; <p>A comma-separated list of optional elements to copy.
+Valid list values: attachments, brand, cellLinks, data, discussions, filters,</p>
+<blockquote>
+<div>forms, ruleRecipients, rules, shares, all (deprecated).</div></blockquote>
+<dl class="docutils">
+<dt>Cell history will not be copied, regardless of which <strong>include</strong> parameter values</dt>
+<dd>are specified.</dd>
+</dl>
 </li>
+<li><strong>skip_remap</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; <p>A comma separated list of references to NOT re-map for
+the newly created resource.</p>
+<blockquote>
+<div>Valid list items: cellLinks, reports, sheetHyperlinks, sights</div></blockquote>
+</li>
+<li><strong>omit</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; a comma seperated list of items to exclude. The only
+currently valid option is sheetHyperlinks</li>
 </ul>
 </td>
 </tr>
-</tbody>
-</table>
-<dl class="docutils">
-<dt>Cell history will not be copied, regardless of which <strong>include</strong> parameter values are specified.</dt>
-<dd>skip_remap (list[str]): A comma separated list of references to NOT re-map for the newly created resource.
-Valid list items: cellLinks, reports, sheetHyperlinks, sights</dd>
-</dl>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Result</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Result</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -4482,7 +4691,7 @@ include the <strong>loadAll</strong> parameter with a value of <cite>true</cite>
 nested items.</li>
 <li><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em></em>) &#8211; A comma-separated list of
 optional elements to include in the response. Valid list
-values: ownerInfo, source.</li>
+values: ownerInfo, sheetVersion, source.</li>
 </ul>
 </td>
 </tr>
@@ -4522,16 +4731,26 @@ if not specified.</li>
 
 <dl class="method">
 <dt id="smartsheet.workspaces.Workspaces.list_shares">
-<code class="descname">list_shares</code><span class="sig-paren">(</span><em>workspace_id</em>, <em>include_workspace_shares=False</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.workspaces.Workspaces.list_shares" title="Permalink to this definition">¶</a></dt>
+<code class="descname">list_shares</code><span class="sig-paren">(</span><em>workspace_id</em>, <em>page_size=100</em>, <em>page=1</em>, <em>include_all=False</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.workspaces.Workspaces.list_shares" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of all Users and Groups to whom the specified Workspace
 is shared, and their access level.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>workspace_id</strong> (<em>int</em>) &#8211; Workspace ID</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>workspace_id</strong> (<em>int</em>) &#8211; Workspace ID</li>
+<li><strong>page_size</strong> (<em>int</em>) &#8211; The maximum number of items to
+return per page. Defaults to 100.</li>
+<li><strong>page</strong> (<em>int</em>) &#8211; Which page to return. Defaults to 1
+if not specified.</li>
+<li><strong>include_all</strong> (<em>bool</em>) &#8211; If true, include all results
+(i.e. do not paginate).</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">IndexResult</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">IndexResult</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -4681,7 +4900,7 @@ Workspace.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.2.1',
+            VERSION:'1.2.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

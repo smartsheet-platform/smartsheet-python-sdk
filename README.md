@@ -4,7 +4,9 @@
 This library is intended to simplify connecting to the [Smartsheet API](http://smartsheet-platform.github.io/api-docs/) from Python applications.
 
 ## System Requirements
-The SDK currently supports Python 2.7, 3.3, 3.4, 3.5, 3.6, pypy, and pypy3.
+The SDK currently supports Python 2.7, 3.3, 3.4, 3.5, 3.6, pypy, and pypy3.  
+**Note** that Python version 3.3 or higher is required for Unicode support. (E.g. if your Smartsheet data includes non-ASCII characters.)  
+
 The following packages are required.
 
 * [requests](https://pypi.python.org/pypi/requests)
@@ -60,6 +62,40 @@ Getting started with the Python SDK is easy:
 
 See a sample application here: https://github.com/smartsheet-samples/python-read-write-sheet
 
+## Passthrough Option
+
+If there is an API Feature that is not yet supported by the Python SDK, there is a passthrough option that allows you to pass and receive raw JSON objects.
+
+To invoke the passthrough, your code can call one of the following four methods:
+
+`response = ss_client.Passthrough.get(endpoint, query_params)`
+
+`response = ss_client.Passthrough.post(endpoint, payload, query_params)`
+
+`response = ss_client.Passthrough.put(endpoint, payload, query_parameters)`
+
+`response = ss_client.Passthrough.delete(endpoint)`
+
+* `endpoint`: The specific API endpoint you wish to invoke. The client object base URL gets prepended to the caller’s endpoint URL argument, so in the above `get` example, if endpoint is `'/sheets'` an HTTP GET is requested from the URL `https://api.smartsheet.com/2.0/sheets`
+* `payload`: The data to be passed through, can be either a dictionary or string.
+* `query_params`: An optional dictionary of query parameters.
+
+All calls to passthrough methods return a JSON result. The `data` attribute contains the JSON result as a dictionary. For example, after a PUT operation the API's result message will be contained in `response.data['message']`. If you prefer raw JSON instead of a dictionary, you can use the `to_json()` method, for example `response.to_json()`. 
+
+### Passthrough Example
+
+The following example shows how to POST data to `https://api.smartsheet.com/2.0/sheets` using the passthrough method and a dictionary:
+
+```python
+  payload = {"name": "my new sheet",
+              "columns": [
+                {"title": "Favorite", "type": "CHECKBOX", "symbol": "STAR"},
+                {"title": "Primary Column", "primary": True, "type": "TEXT_NUMBER"}
+              ]
+            }
+
+  response = ss_client.Passthrough.post('/sheets', payload)
+```
 ## Support
 If you have any questions or issues with this SDK please post on StackOverflow using the tag ["smartsheet-api"](http://stackoverflow.com/questions/tagged/smartsheet-api) or contact us directly at api@smartsheet.com.
 
