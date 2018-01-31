@@ -1192,11 +1192,12 @@ class Sheets(object):
 
         return response
 
-    def update_update_request(self, sheet_id, update_request_obj):
+    def update_update_request(self, sheet_id, update_request_id, update_request_obj):
         """Updates an UpdateRequest for the specified Rows(s) within the Sheet.
 
         Args:
             sheet_id (int): Sheet ID
+            update_request_id: Update request ID
             update_request_obj (UpdateRequest): UpdateRequest object
 
         Returns:
@@ -1204,7 +1205,7 @@ class Sheets(object):
         """
         _op = fresh_operation('create_update_request')
         _op['method'] = 'PUT'
-        _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests/' + str(update_request_obj.id)
+        _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests/' + str(update_request_id)
         _op['json'] = update_request_obj
 
         expected = ['Result', 'UpdateRequest']

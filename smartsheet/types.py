@@ -58,6 +58,9 @@ class TypedList(collections.MutableSequence):
         try:
             if isinstance(item, self.item_type):
                 return item
+            # allow explicit null to be passed through to the list
+            elif hasattr(item, 'is_explicit_null'):
+                return item
         except TypeError:
             raise
 

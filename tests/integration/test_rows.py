@@ -155,3 +155,42 @@ class TestRows:
             [new_row]
         )
         assert action.message == 'SUCCESS'
+
+    def test_add_rows_partial_success(self, smart_setup):
+        smart = smart_setup['smart']
+
+        new_row_a = smart.models.Row()
+        new_row_a.cells = [smart.models.Cell]
+        new_row_b = smart.models.Row()
+        new_row_b.cells = [smart.models.Cell]
+        for col in smart_setup['sheet'].columns:
+            if col.primary:
+                new_row_a.cells[0].column_id = col.id
+                new_row_a.cells[0].value = 'this is a good row'
+        new_row_b.cells[0].column_id = 123
+        new_row_b.cells[0].value = 'this is a bad row'
+
+        action = smart.Sheets.add_rows_with_partial_success(smart_setup['sheet'].id, [new_row_a,new_row_b])
+        assert action.message == 'PARTIAL_SUCCESS'
+        assert isinstance(action, smart.models.BulkItemResult)
+
+    def test_update_rows_partial_success(self, smart_setup):
+        smart = smart_setup['smart']
+
+        row = smart_setup['sheet'].get_row(TestRows.added_row_with_dict.id)
+        new_row_a = smart.models.Row()
+        new_row_b = smart.models.Row()
+        new_row_a.id = row.id
+        new_row_b.id = 123
+        new_row_a.cells = [smart.models.Cell]
+        new_row_b.cells = [smart.models.Cell]
+        for col in smart_setup['sheet'].columns:
+            if col.primary:
+                new_row_a.cells[0].column_id = col.id
+                new_row_a.cells[0].value = 'this is a good row'
+                new_row_b.cells[0].column_id = col.id
+                new_row_b.cells[0].value = 'this is a bad row'
+
+        action = smart.Sheets.update_rows_with_partial_success(smart_setup['sheet'].id, [new_row_a,new_row_b])
+        assert action.message == 'PARTIAL_SUCCESS'
+        assert isinstance(action, smart.models.BulkItemResult)

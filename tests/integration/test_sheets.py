@@ -397,6 +397,3 @@ class TestSheets:
     
         action = sheet.add_rows(rows)
         assert action.message == 'SUCCESS'
-    
-        
-    

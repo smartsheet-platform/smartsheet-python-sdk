@@ -85,7 +85,7 @@ def serialize(obj):
         retval = obj.serialize()
 
     elif isinstance(obj, (datetime, date)):
-        retval = obj.isoformat()
+        retval = obj.isoformat() + 'Z'
 
     elif isinstance(obj, _primitive_types):
         retval = obj
@@ -95,8 +95,11 @@ def serialize(obj):
 
     elif isinstance(obj, _list_types):
         if len(obj):
-            retval = [serialize(x) for x in obj]
-
+            retval = []
+            for x in obj:
+                serialized = serialize(x)
+                if not hasattr(serialized, 'is_explicit_null'):
+                    retval.append(serialized)
     else:
         retval = {}
         prop_list = get_child_properties(obj)
