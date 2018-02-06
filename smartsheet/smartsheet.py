@@ -172,8 +172,8 @@ class Smartsheet(object):
         self._api_base = os.environ.get(
             'API_BASE', __api_base__)
         self._assume_user = None
-
         self._test_scenario_name = None
+        self._change_agent = None
 
     def assume_user(self, email=None):
         """Assume identity of specified user.
@@ -214,6 +214,15 @@ class Smartsheet(object):
             name (str): The name of the test scenario.
         """
         self._test_scenario_name = name
+
+    def with_change_agent(self, change_agent):
+        """
+        Request headers will contain the 'Smartsheet-Change-Agent' header value
+
+        Agrs:
+            change_agent: (str) the name of this change agent
+        """
+        self._change_agent = change_agent
 
     def request(self, prepped_request, expected, operation):
         """
@@ -396,6 +405,15 @@ class Smartsheet(object):
         else:
             try:
                 del prepped_request.headers['Api-Scenario']
+            except KeyError:
+                pass
+
+        if self._change_agent is not None:
+            prepped_request.headers.update(
+                {'Smartsheet-Change-Agent': self._change_agent})
+        else:
+            try:
+                del prepped_request.headers['Smartsheet-Change-Agent']
             except KeyError:
                 pass
 

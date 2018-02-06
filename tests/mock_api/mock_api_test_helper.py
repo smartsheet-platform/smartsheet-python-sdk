@@ -2,6 +2,7 @@ import os
 import smartsheet
 from smartsheet.exceptions import ApiError
 
+
 def clean_api_error(test_func):
     def wrapper(*args, **kwargs):
         try:
