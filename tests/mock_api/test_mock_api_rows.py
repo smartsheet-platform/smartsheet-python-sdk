@@ -568,7 +568,6 @@ class TestMockApiRows(MockApiTestHelper):
             "value": "",
             "hyperlink": ExplicitNull()
         })
-        first_row.cells[0].hyperlink = ExplicitNull()
 
         response = self.client.Sheets.update_rows(1, [first_row])
 
