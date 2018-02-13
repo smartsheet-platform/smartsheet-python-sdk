@@ -41,6 +41,7 @@ class ShortcutDataItem(object):
                 'DROPBOX',
                 'EVERNOTE',
                 'EGNYTE',
+                'ONEDRIVE',
                 'SMARTSHEET']}
 
         self._attachment_type = String(
