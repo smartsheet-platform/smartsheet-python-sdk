@@ -221,28 +221,6 @@ class TestSheets:
         )
         assert action.message == 'SUCCESS'
 
-    def test_update_request(self, smart_setup):
-        smart = smart_setup['smart']
-        sheet = smart.Sheets.get_sheet(smart_setup['sheet'].id)
-        ids = []
-        column_ids = []
-        for row in sheet.rows:
-            ids.append(row.id)
-            for cell in row.cells:
-                column_ids.append(cell.column_id)
-
-        email = smart.models.MultiRowEmail()
-        email.send_to = smart.models.Recipient({'email': 'john.doe@smartsheet.com'})
-        email.row_ids = ids
-        email.include_attachments = False
-        email.include_discussions = False
-        email.column_ids = list(set(column_ids))
-        action = smart.Sheets.send_update_request(
-            smart_setup['sheet'].id,
-            email
-        )
-        assert action.message == 'SUCCESS'
-
     def test_search_sheet(self, smart_setup):
         smart = smart_setup['smart']
         result = smart.Sheets.search_sheet(
