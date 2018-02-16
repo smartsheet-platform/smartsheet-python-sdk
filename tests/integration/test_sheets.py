@@ -195,11 +195,6 @@ class TestSheets:
         )
         assert col.id == smart_setup['sheet_primary_col'].id
 
-    def test_list_org_sheets(self, smart_setup):
-        smart = smart_setup['smart']
-        action = smart.Sheets.list_org_sheets()
-        assert action.total_count > 0
-
     def test_get_sheet_by_unknown_name(self, smart_setup):
         smart = smart_setup['smart']
         sheet = smart.Sheets.get_sheet_by_name(
