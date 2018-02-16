@@ -26,3 +26,4 @@ smartsheet/version.py
 .idea/*
 .eggs/*
 .cache/*
+.pytest_cache/*
