@@ -151,6 +151,10 @@ def smart_setup(request):
         action = fixture['smart'].Folders.delete_folder(fixture['folder'].id)
         if action.message == 'SUCCESS':
             print("deleted fixture folder")
+        if 'folder_b' in fixture:
+            action = fixture['smart'].Folders.delete_folder(fixture['folder_b'].id)
+            if action.message == 'SUCCESS':
+                print("deleted fixture folder_b")
 
     request.addfinalizer(smart_teardown)
     return fixture

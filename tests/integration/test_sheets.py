@@ -245,6 +245,7 @@ class TestSheets:
             })
         )
         assert action.message == 'SUCCESS'
+        smart_setup['folder_b'] = test_folder_b
     
     def test_complex_sheet(self, smart_setup):
         smart = smart_setup['smart']
