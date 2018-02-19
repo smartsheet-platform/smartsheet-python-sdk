@@ -22,8 +22,8 @@ Several changes have been made to the SDK to improve both the maintainability of
 * Properties `id`, `format`, and `type` are accessible without the preceding underscore, e.g. `cell._format` has changed to `cell.format`. 
 
 ## System Requirements
-The SDK currently supports Python 2.7, 3.3, 3.4, 3.5, 3.6, pypy, and pypy3.  
-**Note** that Python version 3.3 or higher is required for Unicode support. (E.g. if your Smartsheet data includes non-ASCII characters.)  
+The SDK currently supports Python 2.7, 3.4, 3.5, 3.6, pypy, and pypy3.  
+**Note** that Python version 3.4 or higher is required for Unicode support. (E.g. if your Smartsheet data includes non-ASCII characters.)  
 
 The following packages are required.
 
