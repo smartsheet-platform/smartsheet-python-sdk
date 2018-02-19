@@ -34,7 +34,7 @@ class RowEmail(Email):
         if base_obj is not None:
             self._base = base_obj
 
-        self._column_ids = TypedList(int)
+        self._column_ids = TypedList(six.integer_types)
         self._include_attachments = Boolean()
         self._include_discussions = Boolean()
         self._layout = String()

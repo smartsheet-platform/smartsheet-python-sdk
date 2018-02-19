@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 
 import json
+import six
 
 from .row_email import RowEmail
 from ..types import TypedList
@@ -36,7 +37,7 @@ class MultiRowEmail(RowEmail):
         if base_obj is not None:
             self._base = base_obj
 
-        self._row_ids = TypedList(int)
+        self._row_ids = TypedList(six.integer_types)
 
         if props:
             deserialize(self, props)
