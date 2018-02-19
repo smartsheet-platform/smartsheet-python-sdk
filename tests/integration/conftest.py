@@ -9,7 +9,7 @@ import six
 @pytest.fixture(scope="module")
 def smart_setup(request):
     # set up a test session folder with basic starting points
-    smart = smartsheet.Smartsheet()
+    smart = smartsheet.Smartsheet(max_retry_time=30)
     now = datetime.now(tzlocal()).strftime("%Y-%m-%d %H:%M:%S")
 
     # test run base folders
