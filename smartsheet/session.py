@@ -39,13 +39,15 @@ class _SSLAdapter(HTTPAdapter):
 
 def pinned_session(pool_maxsize=8):
     http_adapter = _SSLAdapter(pool_connections=4,
-                               pool_maxsize=pool_maxsize)
+                               pool_maxsize=pool_maxsize,
+                               max_retries=1)
 
     _session = requests.session()
     _session.hooks = {'response': redact_token}
     _session.mount('https://', http_adapter)
 
     return _session
+
 
 def redact_token(res, *args, **kwargs):
     if 'Authorization' in res.request.headers:
