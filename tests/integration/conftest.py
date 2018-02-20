@@ -12,9 +12,45 @@ def smart_setup(request):
     smart = smartsheet.Smartsheet()
     now = datetime.now(tzlocal()).strftime("%Y-%m-%d %H:%M:%S")
 
+    users = os.environ.get('SMARTSHEET_FIXTURE_USERS', None)
+    if users is None:
+        pytest.exit('Environment not setup correctly...aborting')
+
+    users = json.loads(users)
+    fixusers = {}
+    for nick,info in six.iteritems(users):
+        profile = smart.Users.get_user(info['id'])
+        assert isinstance(profile, smart.models.UserProfile)
+        fixusers[nick] = profile
+    action = smart.Groups.list_groups(include_all=True)
+    assert isinstance(action, smart.models.IndexResult)
+    grps = action.result
+    groups = {}
+    need_exec = True
+    for gp in grps:
+        groups[gp.name] = gp
+        if gp.name == 'exec':
+            need_exec = False
+
+    if need_exec:
+        group = smart.models.Group({
+            'name': 'exec',
+            'members': [
+                smart.models.GroupMember({
+                    'email': fixusers['moe'].email
+                }),
+                smart.models.GroupMember({
+                    'email': fixusers['admin'].email
+                })
+            ]
+        })
+        action = smart.Groups.create_group(group)
+        assert action.message == 'SUCCESS'
+
     # test run base folders
     folder_name = 'pytest ' + now
     action = smart.Home.create_folder(folder_name)
+    assert action.message == 'SUCCESS'
     test_folder = action.result
 
     # add a sheet to mess around with
@@ -34,6 +70,7 @@ def smart_setup(request):
         }]
     })
     action = smart.Folders.create_sheet_in_folder(test_folder.id, sheet);
+    assert action.message == 'SUCCESS'
     sheet = action.result
 
     # get primary column id
@@ -50,7 +87,10 @@ def smart_setup(request):
             'value': 'The first column of the first row.'
         }]
     })])
+    assert action.message == 'SUCCESS'
+
     sheet = smart.Sheets.get_sheet(sheet.id)
+    assert isinstance(sheet, smart.models.Sheet)
 
     sheet_b = smart.models.Sheet({
         'name': 'pytest_fixture_sheetB ' + now,
@@ -61,6 +101,7 @@ def smart_setup(request):
         }]
     })
     action = smart.Folders.create_sheet_in_folder(test_folder.id, sheet_b);
+    assert action.message == 'SUCCESS'
     sheet_b = action.result
     for idx, col in enumerate(sheet_b.columns):
         if col.primary:
@@ -96,38 +137,10 @@ def smart_setup(request):
                 'value': 'Keen'
             }]
         })])
-    rows = action.result
+    assert action.message == 'SUCCESS'
+
     sheet_b = smart.Sheets.get_sheet(sheet_b.id)
-
-    users = os.environ.get('SMARTSHEET_FIXTURE_USERS', None)
-    users = json.loads(users)
-    fixusers = {}
-    for nick,info in six.iteritems(users):
-        profile = smart.Users.get_user(info['id'])
-        fixusers[nick] = profile
-    action = smart.Groups.list_groups(include_all=True)
-    grps = action.result
-    groups = {}
-    need_exec = True
-    for gp in grps:
-        groups[gp.name] = gp
-        if gp.name == 'exec':
-            need_exec = False
-
-    if need_exec:
-        group = smart.models.Group({
-            'name': 'exec',
-            'members': [
-                smart.models.GroupMember({
-                    'email': fixusers['moe'].email
-                }),
-                smart.models.GroupMember({
-                    'email': fixusers['admin'].email
-                })
-            ]
-        })
-        action = smart.Groups.create_group(group)
-        assert action.message == 'SUCCESS'
+    assert isinstance(sheet_b, smart.models.Sheet)
 
     fixture = {
         'smart': smart,
@@ -143,14 +156,18 @@ def smart_setup(request):
 
     def smart_teardown():
         action = fixture['smart'].Sheets.delete_sheet(fixture['sheet'].id)
-        if action.message == 'SUCCESS':
-            print("deleted fixture sheet")
+        assert action.message == 'SUCCESS'
+        print("deleted fixture sheet")
         action = fixture['smart'].Sheets.delete_sheet(fixture['sheet_b'].id)
-        if action.message == 'SUCCESS':
-            print("deleted fixture sheet_b")
+        assert action.message == 'SUCCESS'
+        print("deleted fixture sheet_b")
         action = fixture['smart'].Folders.delete_folder(fixture['folder'].id)
-        if action.message == 'SUCCESS':
-            print("deleted fixture folder")
+        assert action.message == 'SUCCESS'
+        print("deleted fixture folder")
+        if 'folder_b' in fixture:
+            action = fixture['smart'].Folders.delete_folder(fixture['folder_b'].id)
+            assert action.message == 'SUCCESS'
+            print("deleted fixture folder_b")
 
     request.addfinalizer(smart_teardown)
     return fixture
