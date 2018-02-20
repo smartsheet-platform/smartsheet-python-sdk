@@ -40,7 +40,7 @@ class _SSLAdapter(HTTPAdapter):
 def pinned_session(pool_maxsize=8):
     http_adapter = _SSLAdapter(pool_connections=4,
                                pool_maxsize=pool_maxsize,
-                               max_retries=0)
+                               max_retries=1)
 
     _session = requests.session()
     _session.hooks = {'response': redact_token}
