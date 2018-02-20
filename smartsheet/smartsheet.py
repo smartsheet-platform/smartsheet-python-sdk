@@ -105,7 +105,7 @@ class DefaultCalcBackoff(AbstractUserCalcBackoff):
         if (total_elapsed_time + backoff) > self._max_retry_time:
             return -1
 
-        return backoff
+        return 4.9 # backoff
 
 
 class Smartsheet(object):
