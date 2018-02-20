@@ -1,6 +1,7 @@
 import pytest
 import smartsheet
 import os.path
+import threading
 
 _dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -12,6 +13,40 @@ class TestAttachments:
     # SEE TestDiscussions for this test
     # def test_attach_url_to_comment(self, smart_setup):
     #     smart = smart_setup['smart']
+
+    def test_get_to_rate_limit(self, smart_setup):
+        smart = smart_setup['smart']
+
+        class loop_thread(threading.Thread):
+            def __init__(self, counter):
+                threading.Thread.__init__(self)
+                self.counter = counter
+
+            def run(self):
+                print("Starting " + self.name)
+                loop_call(self.counter)
+                print("Exiting " + self.name)
+
+        def loop_call(count):
+            for x in range(0,count):
+                action = smart.Sheets.get_sheet_version(smart_setup['sheet'].id)
+                if action.request_response is None or action.request_response.status_code != 200:
+                    return
+
+        threadLock = threading.Lock()
+        threads = []
+
+        for x in range(0, 5):
+            thread1 = loop_thread(100)
+            threads.append(thread1)
+
+        for t in threads:
+            t.start()
+
+        x = 0
+        for t in threads:
+            x = x + 100
+            t.join()
 
     def test_attach_url_to_sheet(self, smart_setup):
         smart = smart_setup['smart']
