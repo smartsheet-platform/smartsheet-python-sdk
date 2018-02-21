@@ -91,4 +91,7 @@ Release Notes
 Each specific release is available for download via
 `Github <https://github.com/smartsheet-platform/smartsheet-python-sdk/tags>`__.
 
-See [CHANGELOG.md](https://github.com/smartsheet-platform/smartsheet-python-sdk/blob/master/CHANGELOG.md)
+Changelog
+---------
+
+See `Changelog <https://github.com/smartsheet-platform/smartsheet-python-sdk/blob/master/CHANGELOG.md>`__.
