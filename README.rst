@@ -1,5 +1,3 @@
-|Build Status| |Coverage Status|
-
 Smartsheet Python SDK
 =====================
 
