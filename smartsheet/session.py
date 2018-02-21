@@ -23,6 +23,7 @@ import certifi
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.poolmanager import PoolManager
+from requests.packages.urllib3.util import Retry
 
 
 _TRUSTED_CERT_FILE = certifi.where()
@@ -33,6 +34,7 @@ class _SSLAdapter(HTTPAdapter):
         ctx = ssl.create_default_context()
         ctx.options |= ssl.OP_NO_SSLv2
         ctx.options |= ssl.OP_NO_SSLv3
+        ctx.options |= ssl.OP_NO_TLSv1
         return ctx
 
     def init_poolmanager(self, connections, maxsize, block=False):
@@ -47,7 +49,8 @@ class _SSLAdapter(HTTPAdapter):
 def pinned_session(pool_maxsize=8):
     http_adapter = _SSLAdapter(pool_connections=4,
                                pool_maxsize=pool_maxsize,
-                               max_retries=1)
+                               max_retries=Retry(total=1,
+                                                 method_whitelist=Retry.DEFAULT_METHOD_WHITELIST.union(['POST'])))
 
     _session = requests.session()
     _session.hooks = {'response': redact_token}
