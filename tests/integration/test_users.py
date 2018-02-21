@@ -1,5 +1,6 @@
 import pytest
-import smartsheet
+import six
+
 
 @pytest.mark.usefixtures("smart_setup")
 @pytest.mark.usefixtures("tmpdir")
@@ -10,7 +11,7 @@ class TestUsers:
     def test_get_current_user(self, smart_setup):
         smart = smart_setup['smart']
         me = smart.Users.get_current_user()
-        assert isinstance(me.id, int)
+        assert isinstance(me.id, six.integer_types)
 
     def test_get_user(self, smart_setup):
         smart = smart_setup['smart']
