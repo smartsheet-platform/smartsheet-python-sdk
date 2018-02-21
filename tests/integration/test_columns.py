@@ -1,5 +1,6 @@
 import pytest
-import smartsheet
+import six
+
 
 @pytest.mark.usefixtures("smart_setup")
 class TestColumns:
@@ -43,7 +44,7 @@ class TestColumns:
         smart = smart_setup['smart']
         some_column = smart_setup['sheet'].columns.pop()
         column = smart_setup['sheet'].get_column(some_column.id)
-        assert isinstance(column.id, int)
+        assert isinstance(column.id, six.integer_types)
 
     def test_update_column(self, smart_setup):
         smart = smart_setup['smart']
