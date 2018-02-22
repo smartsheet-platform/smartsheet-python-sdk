@@ -6,6 +6,7 @@ import json
 import os
 import six
 
+
 @pytest.fixture(scope="module")
 def smart_setup(request):
     # set up a test session folder with basic starting points
@@ -138,6 +139,7 @@ def smart_setup(request):
             }]
         })])
     assert action.message == 'SUCCESS'
+
     sheet_b = smart.Sheets.get_sheet(sheet_b.id)
     assert isinstance(sheet_b, smart.models.Sheet)
 

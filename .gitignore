@@ -27,3 +27,6 @@ smartsheet/version.py
 .eggs/*
 .cache/*
 .pytest_cache/*
+
+# ignore ugly batch files
+*.bat

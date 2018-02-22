@@ -1,6 +1,7 @@
 import pytest
 import six
 
+
 @pytest.mark.usefixtures("smart_setup")
 class TestColumns:
     test_columns = None

@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.4] - 2018-2-21
+
+### Fixed
+
+- There is a race condition which exists in the window between when the API servers disconnect an idle connection and when the client receives notification 
+of the disconnection. If a request is made during that window, the client reads a blank status line and issues an error indicating that the session was 
+terminated without a response (UnexpectedRequestError). This release is made to address that issue by implementing appropriate retries in the SDK.
+ 
 ## [1.2.3] - 2017-12-11
 
 ### Fixed

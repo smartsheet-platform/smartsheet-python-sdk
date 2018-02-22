@@ -1,6 +1,7 @@
 import pytest
 import six
 
+
 @pytest.mark.usefixtures("smart_setup")
 @pytest.mark.usefixtures("tmpdir")
 class TestUsers:
