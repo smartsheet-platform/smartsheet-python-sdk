@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,10 +17,10 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-from ..util import null_filter
-import json
-import six
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
+
 
 class Hyperlink(object):
 
@@ -31,76 +31,52 @@ class Hyperlink(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
-        self._report_id = None
-        self._sheet_id = None
-        self._sight_id = None
-        self._url = None
+        self._report_id = Number()
+        self._sheet_id = Number()
+        self._sight_id = Number()
+        self._url = String()
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'reportId' in props:
-                self.report_id = props['reportId']
-            if 'report_id' in props:
-                self.report_id = props['report_id']
-            if 'sheetId' in props:
-                self.sheet_id = props['sheetId']
-            if 'sheet_id' in props:
-                self.sheet_id = props['sheet_id']
-            if 'sightId' in props:
-                self.sight_id = props['sightId']
-            if 'sight_id' in props:
-                self.sight_id = props['sight_id']
-            if 'url' in props:
-                self.url = props['url']
+            deserialize(self, props)
 
     @property
     def report_id(self):
-        return self._report_id
+        return self._report_id.value
 
     @report_id.setter
     def report_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._report_id = value
+        self._report_id.value = value
 
     @property
     def sheet_id(self):
-        return self._sheet_id
+        return self._sheet_id.value
 
     @sheet_id.setter
     def sheet_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._sheet_id = value
+        self._sheet_id.value = value
 
     @property
     def sight_id(self):
-        return self._sight_id
+        return self._sight_id.value
 
     @sight_id.setter
     def sight_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._sight_id = value
+        self._sight_id.value = value
 
     @property
     def url(self):
-        return self._url
+        return self._url.value
 
     @url.setter
     def url(self, value):
-        if isinstance(value, six.string_types):
-            self._url = value
+        self._url.value = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'reportId': prep(self._report_id),
-            'sheetId': prep(self._sheet_id),
-            'sightId': prep(self._sight_id),
-            'url': prep(self._url)}
-        return null_filter(obj)
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

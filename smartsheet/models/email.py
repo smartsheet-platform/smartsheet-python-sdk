@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,12 +18,10 @@
 from __future__ import absolute_import
 
 from .recipient import Recipient
-from ..types import TypedList
-from ..util import prep
-from datetime import datetime
-import json
-import logging
-import six
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
+
 
 class Email(object):
 
@@ -34,45 +32,30 @@ class Email(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
-        self._cc_me = False
-        self._message = None
+        self._cc_me = Boolean()
+        self._message = String()
         self._send_to = TypedList(Recipient)
-        self._subject = None
+        self._subject = String()
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'ccMe' in props:
-                self.cc_me = props['ccMe']
-            if 'cc_me' in props:
-                self.cc_me = props['cc_me']
-            if 'message' in props:
-                self.message = props['message']
-            if 'sendTo' in props:
-                self.send_to = props['sendTo']
-            if 'send_to' in props:
-                self.send_to = props['send_to']
-            if 'subject' in props:
-                self.subject = props['subject']
+            deserialize(self, props)
 
     @property
     def cc_me(self):
-        return self._cc_me
+        return self._cc_me.value
 
     @cc_me.setter
     def cc_me(self, value):
-        if isinstance(value, bool):
-            self._cc_me = value
+        self._cc_me.value = value
 
     @property
     def message(self):
-        return self._message
+        return self._message.value
 
     @message.setter
     def message(self, value):
-        if isinstance(value, six.string_types):
-            self._message = value
+        self._message.value = value
 
     @property
     def send_to(self):
@@ -80,40 +63,21 @@ class Email(object):
 
     @send_to.setter
     def send_to(self, value):
-        if isinstance(value, list):
-            self._send_to.purge()
-            self._send_to.extend([
-                (Recipient(x, self._base)
-                 if not isinstance(x, Recipient) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._send_to.purge()
-            self._send_to = value.to_list()
-        elif isinstance(value, Recipient):
-            self._send_to.purge()
-            self._send_to.append(value)
+        self._send_to.load(value)
 
     @property
     def subject(self):
-        return self._subject
+        return self._subject.value
 
     @subject.setter
     def subject(self, value):
-        if isinstance(value, six.string_types):
-            self._subject = value
+        self._subject.value = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'ccMe': prep(self._cc_me),
-            'message': prep(self._message),
-            'sendTo': prep(self._send_to),
-            'subject': prep(self._subject)}
-        if not self._send_to:
-            del obj['sendTo']
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

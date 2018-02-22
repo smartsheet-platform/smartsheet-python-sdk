@@ -1,5 +1,5 @@
 import pytest
-import smartsheet
+from smartsheet.util import serialize
 
 @pytest.mark.usefixtures("smart_setup")
 class TestContacts:
@@ -19,7 +19,9 @@ class TestContacts:
         )
         email = contact.email
         name = contact.name
-        the_id = contact.id
+        id_ = contact.id
         contact_dict = contact.to_dict()
         assert contact.request_response.status_code == 200
         assert contact_dict['email'] == email
+        assert contact_dict['name'] == name
+        assert contact_dict['id'] == id_

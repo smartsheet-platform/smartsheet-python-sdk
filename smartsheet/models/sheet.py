@@ -26,13 +26,10 @@ from .project_settings import ProjectSettings
 from .row import Row
 from .sheet_user_settings import SheetUserSettings
 from .source import Source
-from ..types import TypedList
-from ..util import prep
-from datetime import datetime
-from dateutil.parser import parse
-import json
-import logging
-import six
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
+
 
 class Sheet(object):
 
@@ -43,8 +40,6 @@ class Sheet(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
         self.allowed_values = {
             'access_level': [
@@ -54,148 +49,61 @@ class Sheet(object):
                 'ADMIN',
                 'OWNER']}
 
-        self._access_level = None
+        self._access_level = String(
+            accept=self.allowed_values['access_level']
+        )
         self._attachments = TypedList(Attachment)
         self._columns = TypedList(Column)
-        self._created_at = None
-        self._dependencies_enabled = None
+        self._created_at = Timestamp()
+        self._dependencies_enabled = Boolean()
         self._discussions = TypedList(Discussion)
         self._effective_attachment_options = TypedList(str)
-        self._favorite = None
+        self._favorite = Boolean()
         self._filters = TypedList(SheetFilter)
-        self._from_id = None
-        self._gantt_enabled = None
-        self.__id = None
-        self._modified_at = None
-        self._name = None
-        self._owner = None
-        self._owner_id = None
-        self._permalink = None
-        self._project_settings = None
-        self._read_only = None
-        self._resource_management_enabled = None
+        self._from_id = Number()
+        self._gantt_enabled = Boolean()
+        self._id_ = Number()
+        self._modified_at = Timestamp()
+        self._name = String()
+        self._owner = String()
+        self._owner_id = Number()
+        self._permalink = String()
+        self._project_settings = TypedObject(ProjectSettings)
+        self._read_only = Boolean()
+        self._resource_management_enabled = Boolean()
         self._rows = TypedList(Row)
-        self._show_parent_rows_for_filters = None
-        self._source = None
-        self._total_row_count = None
-        self._user_settings = None
-        self._version = None
+        self._show_parent_rows_for_filters = Boolean()
+        self._source = TypedObject(Source)
+        self._total_row_count = Number()
+        self._user_settings = TypedObject(SheetUserSettings)
+        self._version = Number()
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'accessLevel' in props:
-                self.access_level = props['accessLevel']
-            if 'access_level' in props:
-                self.access_level = props['access_level']
-            if 'attachments' in props:
-                self.attachments = props['attachments']
-            if 'columns' in props:
-                self.columns = props['columns']
-            if 'createdAt' in props:
-                self.created_at = props['createdAt']
-            if 'created_at' in props:
-                self.created_at = props['created_at']
-            if 'dependenciesEnabled' in props:
-                self.dependencies_enabled = props[
-                    'dependenciesEnabled']
-            if 'dependencies_enabled' in props:
-                self.dependencies_enabled = props[
-                    'dependencies_enabled']
-            if 'discussions' in props:
-                self.discussions = props['discussions']
-            if 'effectiveAttachmentOptions' in props:
-                self.effective_attachment_options = props[
-                    'effectiveAttachmentOptions']
-            if 'effective_attachment_options' in props:
-                self.effective_attachment_options = props[
-                    'effective_attachment_options']
-            if 'favorite' in props:
-                self.favorite = props['favorite']
-            if 'filters' in props:
-                self.filters = props['filters']
-            if 'fromId' in props:
-                self.from_id = props['fromId']
-            if 'from_id' in props:
-                self.from_id = props['from_id']
-            if 'ganttEnabled' in props:
-                self.gantt_enabled = props['ganttEnabled']
-            if 'gantt_enabled' in props:
-                self.gantt_enabled = props['gantt_enabled']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'modifiedAt' in props:
-                self.modified_at = props['modifiedAt']
-            if 'modified_at' in props:
-                self.modified_at = props['modified_at']
-            if 'name' in props:
-                self.name = props['name']
-            if 'owner' in props:
-                self.owner = props['owner']
-            if 'ownerId' in props:
-                self.owner_id = props['ownerId']
-            if 'owner_id' in props:
-                self.owner_id = props['owner_id']
-            if 'permalink' in props:
-                self.permalink = props['permalink']
-            if 'projectSettings' in props:
-                self.project_settings = props['projectSettings']
-            if 'project_settings' in props:
-                self.project_settings = props['project_settings']
-            if 'readOnly' in props:
-                self.read_only = props['readOnly']
-            if 'read_only' in props:
-                self.read_only = props['read_only']
-            if 'resourceManagementEnabled' in props:
-                self.resource_management_enabled = props[
-                    'resourceManagementEnabled']
-            if 'resource_management_enabled' in props:
-                self.resource_management_enabled = props[
-                    'resource_management_enabled']
-            if 'rows' in props:
-                self.rows = props['rows']
-            if 'showParentRowsForFilters' in props:
-                self.show_parent_rows_for_filters = props[
-                    'showParentRowsForFilters']
-            if 'show_parent_rows_for_filters' in props:
-                self.show_parent_rows_for_filters = props[
-                    'show_parent_rows_for_filters']
-            if 'source' in props:
-                self.source = props['source']
-            if 'totalRowCount' in props:
-                self.total_row_count = props['totalRowCount']
-            if 'total_row_count' in props:
-                self.total_row_count = props['total_row_count']
-            if 'userSettings' in props:
-                self.user_settings = props['userSettings']
-            if 'user_settings' in props:
-                self.user_settings = props['user_settings']
-            if 'version' in props:
-                self.version = props['version']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
 
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(Sheet, self).__setattr__(key, value)
+
     @property
     def access_level(self):
-        return self._access_level
+        return self._access_level.value
 
     @access_level.setter
     def access_level(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['access_level']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Sheet`access_level`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['access_level']))
-            self._access_level = value
+        self._access_level.value = value
 
     @property
     def attachments(self):
@@ -203,18 +111,7 @@ class Sheet(object):
 
     @attachments.setter
     def attachments(self, value):
-        if isinstance(value, list):
-            self._attachments.purge()
-            self._attachments.extend([
-                (Attachment(x, self._base)
-                 if not isinstance(x, Attachment) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._attachments.purge()
-            self._attachments = value.to_list()
-        elif isinstance(value, Attachment):
-            self._attachments.purge()
-            self._attachments.append(value)
+        self._attachments.load(value)
 
     @property
     def columns(self):
@@ -222,40 +119,23 @@ class Sheet(object):
 
     @columns.setter
     def columns(self, value):
-        if isinstance(value, list):
-            self._columns.purge()
-            self._columns.extend([
-                (Column(x, self._base)
-                 if not isinstance(x, Column) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._columns.purge()
-            self._columns = value.to_list()
-        elif isinstance(value, Column):
-            self._columns.purge()
-            self._columns.append(value)
+        self._columns.load(value)
 
     @property
     def created_at(self):
-        return self._created_at
+        return self._created_at.value
 
     @created_at.setter
     def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._created_at = value
+        self._created_at.value = value
 
     @property
     def dependencies_enabled(self):
-        return self._dependencies_enabled
+        return self._dependencies_enabled.value
 
     @dependencies_enabled.setter
     def dependencies_enabled(self, value):
-        if isinstance(value, bool):
-            self._dependencies_enabled = value
+        self._dependencies_enabled.value = value
 
     @property
     def discussions(self):
@@ -263,18 +143,7 @@ class Sheet(object):
 
     @discussions.setter
     def discussions(self, value):
-        if isinstance(value, list):
-            self._discussions.purge()
-            self._discussions.extend([
-                (Discussion(x, self._base)
-                 if not isinstance(x, Discussion) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._discussions.purge()
-            self._discussions = value.to_list()
-        elif isinstance(value, Discussion):
-            self._discussions.purge()
-            self._discussions.append(value)
+        self._discussions.load(value)
 
     @property
     def effective_attachment_options(self):
@@ -282,27 +151,15 @@ class Sheet(object):
 
     @effective_attachment_options.setter
     def effective_attachment_options(self, value):
-        if isinstance(value, list):
-            self._effective_attachment_options.purge()
-            self._effective_attachment_options.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._effective_attachment_options.purge()
-            self._effective_attachment_options = value.to_list()
-        elif isinstance(value, str):
-            self._effective_attachment_options.purge()
-            self._effective_attachment_options.append(value)
+        self._effective_attachment_options.load(value)
 
     @property
     def favorite(self):
-        return self._favorite
+        return self._favorite.value
 
     @favorite.setter
     def favorite(self, value):
-        if isinstance(value, bool):
-            self._favorite = value
+        self._favorite.value = value
 
     @property
     def filters(self):
@@ -310,123 +167,95 @@ class Sheet(object):
 
     @filters.setter
     def filters(self, value):
-        if isinstance(value, list):
-            self._filters.purge()
-            self._filters.extend([
-                (SheetFilter(x, self._base)
-                 if not isinstance(x, SheetFilter) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._filters.purge()
-            self._filters = value.to_list()
-        elif isinstance(value, SheetFilter):
-            self._filters.purge()
-            self._filters.append(value)
+        self._filters.load(value)
 
     @property
     def from_id(self):
-        return self._from_id
+        return self._from_id.value
 
     @from_id.setter
     def from_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._from_id = value
+        self._from_id.value = value
 
     @property
     def gantt_enabled(self):
-        return self._gantt_enabled
+        return self._gantt_enabled.value
 
     @gantt_enabled.setter
     def gantt_enabled(self, value):
-        if isinstance(value, bool):
-            self._gantt_enabled = value
+        self._gantt_enabled.value = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_.value
 
-    @_id.setter
-    def _id(self, value):
-        if isinstance(value, six.integer_types):
-            self.__id = value
+    @id_.setter
+    def id_(self, value):
+        self._id_.value = value
 
     @property
     def modified_at(self):
-        return self._modified_at
+        return self._modified_at.value
 
     @modified_at.setter
     def modified_at(self, value):
-        if isinstance(value, datetime):
-            self._modified_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._modified_at = value
+        self._modified_at.value = value
 
     @property
     def name(self):
-        return self._name
+        return self._name.value
 
     @name.setter
     def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+        self._name.value = value
 
     @property
     def owner(self):
-        return self._owner
+        return self._owner.value
 
     @owner.setter
     def owner(self, value):
-        if isinstance(value, six.string_types):
-            self._owner = value
+        self._owner.value = value
 
     @property
     def owner_id(self):
-        return self._owner_id
+        return self._owner_id.value
 
     @owner_id.setter
     def owner_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._owner_id = value
+        self._owner_id.value = value
 
     @property
     def permalink(self):
-        return self._permalink
+        return self._permalink.value
 
     @permalink.setter
     def permalink(self, value):
-        if isinstance(value, six.string_types):
-            self._permalink = value
+        self._permalink.value = value
 
     @property
     def project_settings(self):
-        return self._project_settings
+        return self._project_settings.value
 
     @project_settings.setter
     def project_settings(self, value):
-        if isinstance(value, ProjectSettings):
-            self._project_settings = value
-        elif isinstance(value, dict):
-            self._project_settings = ProjectSettings(value, self._base)
+        self._project_settings.value = value
 
     @property
     def read_only(self):
-        return self._read_only
+        return self._read_only.value
 
     @read_only.setter
     def read_only(self, value):
-        if isinstance(value, bool):
-            self._read_only = value
+        self._read_only.value = value
 
     @property
     def resource_management_enabled(self):
-        return self._resource_management_enabled
+        return self._resource_management_enabled.value
 
     @resource_management_enabled.setter
     def resource_management_enabled(self, value):
-        if isinstance(value, bool):
-            self._resource_management_enabled = value
+        self._resource_management_enabled.value = value
 
     @property
     def rows(self):
@@ -434,95 +263,47 @@ class Sheet(object):
 
     @rows.setter
     def rows(self, value):
-        if isinstance(value, list):
-            self._rows.purge()
-            self._rows.extend([
-                (Row(x, self._base)
-                 if not isinstance(x, Row) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._rows.purge()
-            self._rows = value.to_list()
-        elif isinstance(value, Row):
-            self._rows.purge()
-            self._rows.append(value)
+        self._rows.load(value)
 
     @property
     def show_parent_rows_for_filters(self):
-        return self._show_parent_rows_for_filters
+        return self._show_parent_rows_for_filters.value
 
     @show_parent_rows_for_filters.setter
     def show_parent_rows_for_filters(self, value):
-        if isinstance(value, bool):
-            self._show_parent_rows_for_filters = value
+        self._show_parent_rows_for_filters.value = value
 
     @property
     def source(self):
-        return self._source
+        return self._source.value
 
     @source.setter
     def source(self, value):
-        if isinstance(value, Source):
-            self._source = value
-        else:
-            self._source = Source(value, self._base)
+        self._source.value = value
 
     @property
     def total_row_count(self):
-        return self._total_row_count
+        return self._total_row_count.value
 
     @total_row_count.setter
     def total_row_count(self, value):
-        if isinstance(value, six.integer_types):
-            self._total_row_count = value
+        self._total_row_count.value = value
 
     @property
     def user_settings(self):
-        return self._user_settings
+        return self._user_settings.value
 
     @user_settings.setter
     def user_settings(self, value):
-        if isinstance(value, SheetUserSettings):
-            self._user_settings = value
-        else:
-            self._user_settings = SheetUserSettings(value, self._base)
+        self._user_settings.value = value
 
     @property
     def version(self):
-        return self._version
+        return self._version.value
 
     @version.setter
     def version(self, value):
-        if isinstance(value, six.integer_types):
-            self._version = value
-
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        if self.attachments is not None:
-            # Attachment
-            for item in self.attachments:
-                item.pre_request_filter = value
-        if self.columns is not None:
-            # Column
-            for item in self.columns:
-                item.pre_request_filter = value
-        if self.discussions is not None:
-            # Discussion
-            for item in self.discussions:
-                item.pre_request_filter = value
-        if self.rows is not None:
-            # Row
-            for item in self.rows:
-                item.pre_request_filter = value
-        if self.source is not None:
-            self.source.pre_request_filter = value
-        if self.user_settings is not None:
-            self.user_settings.pre_request_filter = value
-        self._pre_request_filter = value
+        self._version.value = value
 
     def add_columns(self, list_of_columns):
         return self._base.Sheets.add_columns(self.id, list_of_columns)
@@ -544,9 +325,6 @@ class Sheet(object):
 
     def get_row(self, row_id, include=None, exclude=None):
         return self._base.Sheets.get_row(self.id, row_id, include, exclude)
-
-    def get_publish_status(self):
-        return self._base.Sheets.get_publish_status(self.id)
 
     def get_version(self):
         return self._base.Sheets.get_sheet_version(self.id)
@@ -599,133 +377,11 @@ class Sheet(object):
             if col.title == title:
                 return col
 
-    def to_dict(self, op_id=None, method=None):
-        req_filter = self.pre_request_filter
-        if req_filter:
-            if self.attachments is not None:
-                for item in self.attachments:
-                    item.pre_request_filter = req_filter
-            if self.columns is not None:
-                for item in self.columns:
-                    item.pre_request_filter = req_filter
-            if self.discussions is not None:
-                for item in self.discussions:
-                    item.pre_request_filter = req_filter
-            if self.rows is not None:
-                for item in self.rows:
-                    item.pre_request_filter = req_filter
-            if self.source is not None:
-                self.source.pre_request_filter = req_filter
-            if self.user_settings is not None:
-                self.user_settings.pre_request_filter = req_filter
-
-        obj = {
-            'accessLevel': prep(self._access_level),
-            'attachments': prep(self._attachments),
-            'columns': prep(self._columns),
-            'createdAt': prep(self._created_at),
-            'dependenciesEnabled': prep(self._dependencies_enabled),
-            'discussions': prep(self._discussions),
-            'effectiveAttachmentOptions': prep(
-                self._effective_attachment_options),
-            'favorite': prep(self._favorite),
-            'filters': prep(self._filters),
-            'fromId': prep(self._from_id),
-            'ganttEnabled': prep(self._gantt_enabled),
-            'id': prep(self.__id),
-            'modifiedAt': prep(self._modified_at),
-            'name': prep(self._name),
-            'owner': prep(self._owner),
-            'ownerId': prep(self._owner_id),
-            'permalink': prep(self._permalink),
-            'projectSettings': prep(self._project_settings),
-            'readOnly': prep(self._read_only),
-            'resourceManagementEnabled': prep(
-                self._resource_management_enabled),
-            'rows': prep(self._rows),
-            'showParentRowsForFilters': prep(
-                self._show_parent_rows_for_filters),
-            'source': prep(self._source),
-            'totalRowCount': prep(self._total_row_count),
-            'userSettings': prep(self._user_settings),
-            'version': prep(self._version)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'create_sheet':
-            permitted = ['name', 'columns']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_sheet_from_template':
-            permitted = ['name', 'fromId']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_sheet_in_folder':
-            permitted = ['name', 'columns']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_sheet_in_folder_from_template':
-            permitted = ['name', 'fromId']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_sheet_in_workspace':
-            permitted = ['name', 'columns']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_sheet_in_workspace_from_template':
-            permitted = ['name', 'fromId']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'update_sheet':
-            permitted = ['name', 'userSettings', 'projectSettings']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

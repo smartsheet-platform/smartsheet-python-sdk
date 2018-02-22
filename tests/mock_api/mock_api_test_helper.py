@@ -2,6 +2,7 @@ import os
 import smartsheet
 from smartsheet.exceptions import ApiError
 
+
 def clean_api_error(test_func):
     def wrapper(*args, **kwargs):
         try:
@@ -13,7 +14,7 @@ def clean_api_error(test_func):
 
 
 class MockApiTestHelper(object):
-    def setup_method(self):
+    def setup_method(self, method):
         os.environ['API_BASE'] = 'http://localhost:8082'
         self.client = smartsheet.Smartsheet(access_token='abc123')
         self.client.errors_as_exceptions()

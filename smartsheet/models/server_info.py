@@ -18,12 +18,10 @@
 from __future__ import absolute_import
 
 from .format_tables import FormatTables
-from ..types import TypedList
-from ..util import prep
-from datetime import datetime
-import json
-import logging
-import six
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
+
 
 class ServerInfo(object):
 
@@ -34,34 +32,23 @@ class ServerInfo(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
-        self._formats = None
+        self._formats = TypedObject(FormatTables)
         self._supported_locales = TypedList(str)
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'formats' in props:
-                self.formats = props['formats']
-            if 'supportedLocales' in props:
-                self.supported_locales = props[
-                    'supportedLocales']
-            if 'supported_locales' in props:
-                self.supported_locales = props[
-                    'supported_locales']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
 
     @property
     def formats(self):
-        return self._formats
+        return self._formats.value
 
     @formats.setter
     def formats(self, value):
-        if isinstance(value, FormatTables):
-            self._formats = value
-        else:
-            self._formats = FormatTables(value, self._base)
+        self._formats.value = value
 
     @property
     def supported_locales(self):
@@ -69,27 +56,13 @@ class ServerInfo(object):
 
     @supported_locales.setter
     def supported_locales(self, value):
-        if isinstance(value, list):
-            self._supported_locales.purge()
-            self._supported_locales.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._supported_locales.purge()
-            self._supported_locales = value.to_list()
-        elif isinstance(value, str):
-            self._supported_locales.purge()
-            self._supported_locales.append(value)
+        self._supported_locales.load(value)
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'formats': prep(self._formats),
-            'supportedLocales': prep(self._supported_locales)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

@@ -19,8 +19,6 @@ from __future__ import absolute_import
 
 from .models.folder import Folder
 import logging
-import os.path
-import six
 from . import fresh_operation
 
 
@@ -88,8 +86,6 @@ class Folders(object):
         _op['method'] = 'POST'
         _op['path'] = '/folders/' + str(folder_id) + '/folders'
         _op['json'] = folder_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_folder_in_folder'
 
         expected = ['Result', 'Folder']
 
@@ -112,8 +108,6 @@ class Folders(object):
         _op['method'] = 'POST'
         _op['path'] = '/folders/' + str(folder_id) + '/sheets'
         _op['json'] = sheet_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_sheet_in_folder'
 
         expected = ['Result', 'Sheet']
 
@@ -153,8 +147,6 @@ class Folders(object):
         _op['path'] = '/folders/' + str(folder_id) + '/sheets'
         _op['query_params']['include'] = include
         _op['json'] = sheet_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_sheet_in_folder_from_template'
 
         expected = ['Result', 'Sheet']
 
@@ -178,7 +170,7 @@ class Folders(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/folders/' + str(folder_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -207,16 +199,15 @@ class Folders(object):
 
         return response
 
-    def list_folders(self, folder_id, page_size=100, page=1,
-                     include_all=False):
+    def list_folders(self, folder_id, page_size=None, page=None,
+                     include_all=None):
         """Get a list of top-level child Folders within the specified Folder.
 
         Args:
             folder_id (int): Folder ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -252,8 +243,6 @@ class Folders(object):
         _op['method'] = 'POST'
         _op['path'] = '/folders/' + str(folder_id) + '/move'
         _op['json'] = container_destination_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'move_folder'
 
         expected = ['Result', 'Folder']
 
@@ -281,8 +270,6 @@ class Folders(object):
         _op['method'] = 'PUT'
         _op['path'] = '/folders/' + str(folder_id)
         _op['json'] = folder_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_folder'
 
         expected = ['Result', 'Folder']
 

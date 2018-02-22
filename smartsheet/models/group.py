@@ -17,14 +17,11 @@
 
 from __future__ import absolute_import
 
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
 from .group_member import GroupMember
-from ..types import TypedList
-from ..util import prep
-from datetime import datetime
-from dateutil.parser import parse
-import json
-import logging
-import six
+
 
 class Group(object):
 
@@ -35,83 +32,58 @@ class Group(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
-        self._created_at = None
-        self._description = None
-        self.__id = None
+        self._created_at = Timestamp()
+        self._description = String()
+        self._id_ = Number()
         self._members = TypedList(GroupMember)
-        self._modified_at = None
-        self._name = None
-        self._owner = None
-        self._owner_id = None
+        self._modified_at = Timestamp()
+        self._name = String()
+        self._owner = String()
+        self._owner_id = Number()
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'createdAt' in props:
-                self.created_at = props['createdAt']
-            if 'created_at' in props:
-                self.created_at = props['created_at']
-            if 'description' in props:
-                self.description = props['description']
-            # read only
-            if 'id' in props:
-                self._id = props['id']
-            if 'members' in props:
-                self.members = props['members']
-            if 'modifiedAt' in props:
-                self.modified_at = props['modifiedAt']
-            if 'modified_at' in props:
-                self.modified_at = props['modified_at']
-            if 'name' in props:
-                self.name = props['name']
-            if 'owner' in props:
-                self.owner = props['owner']
-            if 'ownerId' in props:
-                self.owner_id = props['ownerId']
-            if 'owner_id' in props:
-                self.owner_id = props['owner_id']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
 
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(Group, self).__setattr__(key, value)
+
     @property
     def created_at(self):
-        return self._created_at
+        return self._created_at.value
 
     @created_at.setter
     def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._created_at = value
+        self._created_at.value = value
 
     @property
     def description(self):
-        return self._description
+        return self._description.value
 
     @description.setter
     def description(self, value):
-        if isinstance(value, six.string_types):
-            self._description = value
+        self._description.value = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_.value
 
-    @_id.setter
-    def _id(self, value):
-        if isinstance(value, six.integer_types):
-            self.__id = value
+    @id_.setter
+    def id_(self, value):
+        self._id_.value = value
 
     @property
     def members(self):
@@ -119,114 +91,45 @@ class Group(object):
 
     @members.setter
     def members(self, value):
-        if isinstance(value, list):
-            self._members.purge()
-            self._members.extend([
-                (GroupMember(x, self._base)
-                 if not isinstance(x, GroupMember) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._members.purge()
-            self._members = value.to_list()
-        elif isinstance(value, GroupMember):
-            self._members.purge()
-            self._members.append(value)
+        self._members.load(value)
 
     @property
     def modified_at(self):
-        return self._modified_at
+        return self._modified_at.value
 
     @modified_at.setter
     def modified_at(self, value):
-        if isinstance(value, datetime):
-            self._modified_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._modified_at = value
+        self._modified_at.value = value
 
     @property
     def name(self):
-        return self._name
+        return self._name.value
 
     @name.setter
     def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+        self._name.value = value
 
     @property
     def owner(self):
-        return self._owner
+        return self._owner.value
 
     @owner.setter
     def owner(self, value):
-        if isinstance(value, six.string_types):
-            self._owner = value
+        self._owner.value = value
 
     @property
     def owner_id(self):
-        return self._owner_id
+        return self._owner_id.value
 
     @owner_id.setter
     def owner_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._owner_id = value
+        self._owner_id.value = value
 
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        if self.members is not None:
-            # GroupMember
-            for item in self.members:
-                item.pre_request_filter = value
-        self._pre_request_filter = value
-
-    def to_dict(self, op_id=None, method=None):
-        req_filter = self.pre_request_filter
-        if req_filter:
-            if self.members is not None:
-                for item in self.members:
-                    item.pre_request_filter = req_filter
-
-        obj = {
-            'createdAt': prep(self._created_at),
-            'description': prep(self._description),
-            'id': prep(self.__id),
-            'members': prep(self._members),
-            'modifiedAt': prep(self._modified_at),
-            'name': prep(self._name),
-            'owner': prep(self._owner),
-            'ownerId': prep(self._owner_id)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'create_group':
-            permitted = ['name', 'description', 'members']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'update_group':
-            permitted = ['name', 'description', 'ownerId']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

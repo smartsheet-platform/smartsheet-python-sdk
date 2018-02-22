@@ -16,12 +16,11 @@
 # under the License.
 
 from __future__ import absolute_import
-from ..types import TypedList
-from ..util import prep
+
 from .widget_content import WidgetContent
-import logging
-import six
-import json
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
 
 
 class Widget(object):
@@ -45,198 +44,139 @@ class Widget(object):
                 'TITLE'
             ]}
 
-        self.__id = None
-        self._type = None
-        self._title = None
-        self._show_title = None
-        self._show_title_icon = None
-        self._title_format = None
-        self._x_position = None
-        self._y_position = None
-        self._height = None
-        self._width = None
-        self._version = None
-        self._contents = None
+        self._contents = TypedObject(WidgetContent)
+        self._height = Number()
+        self._id_ = Number()
+        self._show_title = Boolean()
+        self._show_title_icon = Boolean()
+        self._title = String()
+        self._title_format = String()
+        self._type = String(
+            accept=self.allowed_values['widget_type']
+        )
+        self._version = Number()
+        self._width = Number()
+        self._x_position = Number()
+        self._y_position = Number()
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'type' in props:
-                self.type = props['type']
-            if 'title' in props:
-                self.title = props['title']
-            if 'showTitle' in props:
-                self.show_title = props['showTitle']
-            if 'show_title' in props:
-                self.show_title = props['show_title']
-            if 'showTitleIcon' in props:
-                self.show_title_icon = props['showTitleIcon']
-            if 'show_title_icon' in props:
-                self.show_title_icon = props['show_title_icon']
-            if 'titleFormat' in props:
-                self.title_format = props['titleFormat']
-            if 'title_format' in props:
-                self.title_format = props['title_format']
-            if 'xPosition' in props:
-                self.x_position = props['xPosition']
-            if 'x_position' in props:
-                self.x_position = props['x_position']
-            if 'yPosition' in props:
-                self.y_position = props['yPosition']
-            if 'y_position' in props:
-                self.y_position = props['y_position']
-            if 'height' in props:
-                self.height = props['height']
-            if 'width' in props:
-                self.width = props['width']
-            if 'version' in props:
-                self.version = props['version']
-            if 'contents' in props:
-                self.contents = props['contents']
+            deserialize(self, props)
+
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
 
-    @property
-    def _id(self):
-        return self.__id
-
-    @_id.setter
-    def _id(self, value):
-        if isinstance(value, six.integer_types):
-            self.__id = value
-
-    @property
-    def type(self):
-        return self._type
-
-    @type.setter
-    def type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['widget_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Widget `widget_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['widget_type']))
-            self._type = value
-
-    @property
-    def title(self):
-        return self._title
-
-    @title.setter
-    def title(self, value):
-        if isinstance(value, six.string_types):
-            self._title = value
-
-    @property
-    def show_title(self):
-        return self._show_title
-
-    @show_title.setter
-    def show_title(self, value):
-        if isinstance(value, bool):
-            self._show_title = value
-
-    @property
-    def show_title_icon(self):
-        return self._show_title_icon
-
-    @show_title_icon.setter
-    def show_title_icon(self, value):
-        if isinstance(value, bool):
-            self._show_title_icon = value
-
-    @property
-    def title_format(self):
-        return self._title_format
-
-    @title_format.setter
-    def title_format(self, value):
-        if isinstance(value, six.string_types):
-            self._title_format = value
-
-    @property
-    def x_position(self):
-        return self._x_position
-
-    @x_position.setter
-    def x_position(self, value):
-        if isinstance(value, six.integer_types):
-            self._x_position = value
-
-    @property
-    def y_position(self):
-        return self._y_position
-
-    @y_position.setter
-    def y_position(self, value):
-        if isinstance(value, six.integer_types):
-            self._y_position = value
-
-    @property
-    def height(self):
-        return self._height
-
-    @height.setter
-    def height(self, value):
-        if isinstance(value, six.integer_types):
-            self._height = value
-
-    @property
-    def width(self):
-        return self._width
-
-    @width.setter
-    def width(self,value):
-        if isinstance(value, six.integer_types):
-            self._width = value
-
-    @property
-    def version(self):
-        return self._version
-
-    @version.setter
-    def version(self, value):
-        if isinstance(value, six.integer_types):
-            self._version = value
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(Widget, self).__setattr__(key, value)
 
     @property
     def contents(self):
-        return self._contents
+        return self._contents.value
 
     @contents.setter
     def contents(self, value):
-        if isinstance(value, WidgetContent):
-            self._contents = value
-        elif isinstance(value, dict):
-            self._contents = WidgetContent(value, self._base)
+        self._contents.value = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'id': prep(self.__id),
-            'type': prep(self._type),
-            'title': prep(self._title),
-            'showTitle': prep(self._show_title),
-            'showTitleIcon': prep(self._show_title_icon),
-            'titleFormat': prep(self._title_format),
-            'xPosition': prep(self._x_position),
-            'yPosition': prep(self._y_position),
-            'height': prep(self._height),
-            'width': prep(self._width),
-            'version' : prep(self._version),
-            'contents' : prep(self._contents)}
-        return obj
+    @property
+    def height(self):
+        return self._height.value
+
+    @height.setter
+    def height(self, value):
+        self._height.value = value
+
+    @property
+    def id_(self):
+        return self._id_.value
+
+    @id_.setter
+    def id_(self, value):
+        self._id_.value = value
+
+    @property
+    def show_title(self):
+        return self._show_title.value
+
+    @show_title.setter
+    def show_title(self, value):
+        self._show_title.value = value
+
+    @property
+    def show_title_icon(self):
+        return self._show_title_icon.value
+
+    @show_title_icon.setter
+    def show_title_icon(self, value):
+        self._show_title_icon.value = value
+
+    @property
+    def title(self):
+        return self._title.value
+
+    @title.setter
+    def title(self, value):
+        self._title.value = value
+
+    @property
+    def title_format(self):
+        return self._title_format.value
+
+    @title_format.setter
+    def title_format(self, value):
+        self._title_format.value = value
+
+    @property
+    def type(self):
+        return self._type.value
+
+    @type.setter
+    def type(self, value):
+        self._type.value = value
+
+    @property
+    def version(self):
+        return self._version.value
+
+    @version.setter
+    def version(self, value):
+        self._version.value = value
+
+    @property
+    def width(self):
+        return self._width.value
+
+    @width.setter
+    def width(self, value):
+        self._width.value = value
+
+    @property
+    def x_position(self):
+        return self._x_position.value
+
+    @x_position.setter
+    def x_position(self, value):
+        self._x_position.value = value
+
+    @property
+    def y_position(self):
+        return self._y_position.value
+
+    @y_position.setter
+    def y_position(self, value):
+        self._y_position.value = value
+
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

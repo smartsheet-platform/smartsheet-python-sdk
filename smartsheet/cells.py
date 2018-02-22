@@ -19,8 +19,6 @@ from __future__ import absolute_import
 
 import logging
 from . import fresh_operation
-from io import BytesIO
-import os
 
 
 class Cells(object):
@@ -33,7 +31,7 @@ class Cells(object):
         self._log = logging.getLogger(__name__)
 
     def get_cell_history(self, sheet_id, row_id, column_id, include=None,
-                         page_size=100, page=1, include_all=False):
+                         page_size=None, page=None, include_all=None):
         """Get the Cell modification history.
 
         Args:
@@ -44,9 +42,8 @@ class Cells(object):
                 \"columnType\", response will include the columnType
                 attribute for each Cell.
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -84,6 +81,8 @@ class Cells(object):
             column_id (int): Column ID
             file (string): path to image file.
             file_type (string): content type of image file
+            override_validation: override a column's validation property
+            alt_text: alternate text for the image
 
         Returns:
             Result
@@ -104,13 +103,13 @@ class Cells(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows/' + str(row_id) + \
                       '/columns/' + str(column_id) + '/cellimages'
-        _op['headers'] = {'content-type':file_type,
-                          'content-disposition':'attachment; filename="' + file + '"'}
+        _op['headers'] = {'content-type': file_type,
+                          'content-disposition': 'attachment; filename="' + file + '"'}
         _op['query_params']['altText'] = alt_text
         _op['query_params']['overrideValidation'] = override_validation
         _op['form_data'] = _data
 
-        expected = 'Result'
+        expected = ['Result', 'Row']
 
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)

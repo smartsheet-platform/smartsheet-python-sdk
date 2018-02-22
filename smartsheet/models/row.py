@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -21,14 +21,12 @@ from .attachment import Attachment
 from .cell import Cell
 from .column import Column
 from .discussion import Discussion
-from ..types import TypedList
+from ..types import *
 from .user import User
-from ..util import prep
+from ..util import serialize
+from ..util import deserialize
 from datetime import datetime
-from dateutil.parser import parse
-import json
-import logging
-import six
+
 
 class Row(object):
 
@@ -39,8 +37,6 @@ class Row(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
         self.allowed_values = {
             'access_level': [
@@ -50,120 +46,39 @@ class Row(object):
                 'ADMIN',
                 'OWNER']}
 
-        self._above = None
-        self._access_level = None
+        self._above = Boolean()
+        self._access_level = String(
+            accept=self.allowed_values['access_level']
+        )
         self._attachments = TypedList(Attachment)
         self._cells = TypedList(Cell)
         self._columns = TypedList(Column)
-        self._conditional_format = None
-        self._created_at = None
-        self._created_by = None
+        self._conditional_format = String()
+        self._created_at = Timestamp()
+        self._created_by = TypedObject(User)
         self._discussions = TypedList(Discussion)
-        self._expanded = None
-        self._filtered_out = None
-        self.__format = None
-        self.__id = None
-        self._in_critical_path = None
-        self._indent = None
-        self._locked = None
-        self._locked_for_user = None
-        self._modified_at = None
-        self._modified_by = None
-        self._outdent = None
-        self._parent_id = None
-        self._permalink = None
-        self._row_number = None
-        self._sheet_id = None
-        self._sibling_id = None
-        self._to_bottom = None
-        self._to_top = None
-        self._version = None
+        self._expanded = Boolean()
+        self._filtered_out = Boolean()
+        self._format_ = String()
+        self._id_ = Number()
+        self._in_critical_path = Boolean()
+        self._indent = Number()
+        self._locked = Boolean()
+        self._locked_for_user = Boolean()
+        self._modified_at = Timestamp()
+        self._modified_by = TypedObject(User)
+        self._outdent = Number()
+        self._parent_id = Number()
+        self._permalink = String()
+        self._row_number = Number()
+        self._sheet_id = Number()
+        self._sibling_id = Number()
+        self._to_bottom = Boolean()
+        self._to_top = Boolean()
+        self._version = Number()
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'above' in props:
-                self.above = props['above']
-            if 'accessLevel' in props:
-                self.access_level = props['accessLevel']
-            if 'access_level' in props:
-                self.access_level = props['access_level']
-            if 'attachments' in props:
-                self.attachments = props['attachments']
-            if 'cells' in props:
-                self.cells = props['cells']
-            if 'columns' in props:
-                self.columns = props['columns']
-            if 'conditionalFormat' in props:
-                self.conditional_format = props[
-                    'conditionalFormat']
-            if 'conditional_format' in props:
-                self.conditional_format = props[
-                    'conditional_format']
-            # read only
-            if 'createdAt' in props:
-                self.created_at = props['createdAt']
-            if 'createdBy' in props:
-                self.created_by = props['createdBy']
-            if 'discussions' in props:
-                self.discussions = props['discussions']
-            if 'expanded' in props:
-                self.expanded = props['expanded']
-            # read only
-            if 'filteredOut' in props:
-                self.filtered_out = props['filteredOut']
-            if 'format' in props:
-                self._format = props['format']
-            if '_format' in props:
-                self._format = props['_format']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'inCriticalPath' in props:
-                self.in_critical_path = props['inCriticalPath']
-            if 'in_critical_path' in props:
-                self.in_critical_path = props[
-                    'in_critical_path']
-            if 'indent' in props:
-                self.indent = props['indent']
-            if 'locked' in props:
-                self.locked = props['locked']
-            # read only
-            if 'lockedForUser' in props:
-                self.locked_for_user = props['lockedForUser']
-            # read only
-            if 'modifiedAt' in props:
-                self.modified_at = props['modifiedAt']
-            if 'modifiedBy' in props:
-                self.modified_by = props['modifiedBy']
-            if 'outdent' in props:
-                self.outdent = props['outdent']
-            if 'parentId' in props:
-                self.parent_id = props['parentId']
-            if 'parent_id' in props:
-                self.parent_id = props['parent_id']
-            if 'permalink' in props:
-                self.permalink = props['permalink']
-            # read only
-            if 'rowNumber' in props:
-                self.row_number = props['rowNumber']
-            # read only
-            if 'sheetId' in props:
-                self.sheet_id = props['sheetId']
-            if 'siblingId' in props:
-                self.sibling_id = props['siblingId']
-            if 'sibling_id' in props:
-                self.sibling_id = props['sibling_id']
-            if 'toBottom' in props:
-                self.to_bottom = props['toBottom']
-            if 'to_bottom' in props:
-                self.to_bottom = props['to_bottom']
-            if 'toTop' in props:
-                self.to_top = props['toTop']
-            if 'to_top' in props:
-                self.to_top = props['to_top']
-            if 'version' in props:
-                self.version = props['version']
+            deserialize(self, props)
 
         # requests package Response object
         self.request_response = None
@@ -171,40 +86,35 @@ class Row(object):
 
     def __getattr__(self, key):
         if key == 'format':
-            return self._format
+            return self.format_
         elif key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
 
     def __setattr__(self, key, value):
-        if key == 'id':
-            self._id = value
+        if key == 'format':
+            self.format_ = value
+        elif key == 'id':
+            self.id_ = value
         else:
-            object.__setattr__(self, key, value)
+            super(Row, self).__setattr__(key, value)
 
     @property
     def above(self):
-        return self._above
+        return self._above.value
 
     @above.setter
     def above(self, value):
-        if isinstance(value, bool):
-            self._above = value
+        self._above.value = value
 
     @property
     def access_level(self):
-        return self._access_level
+        return self._access_level.value
 
     @access_level.setter
     def access_level(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['access_level']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Row`access_level`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['access_level']))
-            self._access_level = value
+        self._access_level.value = value
 
     @property
     def attachments(self):
@@ -212,18 +122,7 @@ class Row(object):
 
     @attachments.setter
     def attachments(self, value):
-        if isinstance(value, list):
-            self._attachments.purge()
-            self._attachments.extend([
-                (Attachment(x, self._base)
-                 if not isinstance(x, Attachment) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._attachments.purge()
-            self._attachments = value.to_list()
-        elif isinstance(value, Attachment):
-            self._attachments.purge()
-            self._attachments.append(value)
+        self._attachments.load(value)
 
     @property
     def cells(self):
@@ -231,18 +130,7 @@ class Row(object):
 
     @cells.setter
     def cells(self, value):
-        if isinstance(value, list):
-            self._cells.purge()
-            self._cells.extend([
-                (Cell(x, self._base)
-                 if not isinstance(x, Cell) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._cells.purge()
-            self._cells = value.to_list()
-        elif isinstance(value, Cell):
-            self._cells.purge()
-            self._cells.append(value)
+        self._cells.load(value)
 
     @property
     def columns(self):
@@ -250,51 +138,31 @@ class Row(object):
 
     @columns.setter
     def columns(self, value):
-        if isinstance(value, list):
-            self._columns.purge()
-            self._columns.extend([
-                (Column(x, self._base)
-                 if not isinstance(x, Column) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._columns.purge()
-            self._columns = value.to_list()
-        elif isinstance(value, Column):
-            self._columns.purge()
-            self._columns.append(value)
+        self._columns.load(value)
 
     @property
     def conditional_format(self):
-        return self._conditional_format
+        return self._conditional_format.value
 
     @conditional_format.setter
     def conditional_format(self, value):
-        if isinstance(value, six.string_types):
-            self._conditional_format = value
+        self._conditional_format.value = value
 
     @property
     def created_at(self):
-        return self._created_at
+        return self._created_at.value
 
     @created_at.setter
     def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._created_at = value
+        self._created_at.value = value
 
     @property
     def created_by(self):
-        return self._created_by
+        return self._created_by.value
 
     @created_by.setter
     def created_by(self, value):
-        if isinstance(value, User):
-            self._created_by = value
-        else:
-            self._created_by = User(value, self._base)
+        self._created_by.value = value
 
     @property
     def discussions(self):
@@ -302,219 +170,160 @@ class Row(object):
 
     @discussions.setter
     def discussions(self, value):
-        if isinstance(value, list):
-            self._discussions.purge()
-            self._discussions.extend([
-                (Discussion(x, self._base)
-                 if not isinstance(x, Discussion) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._discussions.purge()
-            self._discussions = value.to_list()
-        elif isinstance(value, Discussion):
-            self._discussions.purge()
-            self._discussions.append(value)
+        self._discussions.load(value)
 
     @property
     def expanded(self):
-        return self._expanded
+        return self._expanded.value
 
     @expanded.setter
     def expanded(self, value):
-        if isinstance(value, bool):
-            self._expanded = value
+        self._expanded.value = value
 
     @property
     def filtered_out(self):
-        return self._filtered_out
+        return self._filtered_out.value
 
     @filtered_out.setter
     def filtered_out(self, value):
-        if isinstance(value, bool):
-            self._filtered_out = value
+        self._filtered_out.value = value
 
     @property
-    def _format(self):
-        return self.__format
+    def format_(self):
+        return self._format_.value
 
-    @_format.setter
-    def _format(self, value):
-        if isinstance(value, six.string_types):
-            self.__format = value
+    @format_.setter
+    def format_(self, value):
+        self._format_.value = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_.value
 
-    @_id.setter
-    def _id(self, value):
-        if isinstance(value, six.integer_types):
-            self.__id = value
+    @id_.setter
+    def id_(self, value):
+        self._id_.value = value
 
     @property
     def in_critical_path(self):
-        return self._in_critical_path
+        return self._in_critical_path.value
 
     @in_critical_path.setter
     def in_critical_path(self, value):
-        if isinstance(value, bool):
-            self._in_critical_path = value
+        self._in_critical_path.value = value
 
     @property
     def indent(self):
-        return self._indent
+        return self._indent.value
 
     @indent.setter
     def indent(self, value):
-        if isinstance(value, six.integer_types):
-            self._indent = value
+        self._indent.value = value
 
     @property
     def locked(self):
-        return self._locked
+        return self._locked.value
 
     @locked.setter
     def locked(self, value):
-        if isinstance(value, bool):
-            self._locked = value
+        self._locked.value = value
 
     @property
     def locked_for_user(self):
-        return self._locked_for_user
+        return self._locked_for_user.value
 
     @locked_for_user.setter
     def locked_for_user(self, value):
-        if isinstance(value, bool):
-            self._locked_for_user = value
+        self._locked_for_user.value = value
 
     @property
     def modified_at(self):
-        return self._modified_at
+        return self._modified_at.value
 
     @modified_at.setter
     def modified_at(self, value):
         if isinstance(value, datetime):
-            self._modified_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._modified_at = value
+            self._modified_at.value = value
 
     @property
     def modified_by(self):
-        return self._modified_by
+        return self._modified_by.value
 
     @modified_by.setter
     def modified_by(self, value):
-        if isinstance(value, User):
-            self._modified_by = value
-        else:
-            self._modified_by = User(value, self._base)
+        self._modified_by.value = value
 
     @property
     def outdent(self):
-        return self._outdent
+        return self._outdent.value
 
     @outdent.setter
     def outdent(self, value):
-        if isinstance(value, six.integer_types):
-            self._outdent = value
+        self._outdent.value = value
 
     @property
     def parent_id(self):
-        return self._parent_id
+        return self._parent_id.value
 
     @parent_id.setter
     def parent_id(self, value):
-        if isinstance(value, (six.integer_types, type(None))):
-            self._parent_id = value
+        self._parent_id.value = value
 
     @property
     def permalink(self):
-        return self._permalink
+        return self._permalink.value
 
     @permalink.setter
     def permalink(self, value):
-        if isinstance(value, six.string_types):
-            self._permalink = value
+        self._permalink.value = value
 
     @property
     def row_number(self):
-        return self._row_number
+        return self._row_number.value
 
     @row_number.setter
     def row_number(self, value):
-        if isinstance(value, six.integer_types):
-            self._row_number = value
+        self._row_number.value = value
 
     @property
     def sheet_id(self):
-        return self._sheet_id
+        return self._sheet_id.value
 
     @sheet_id.setter
     def sheet_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._sheet_id = value
+        self._sheet_id.value = value
 
     @property
     def sibling_id(self):
-        return self._sibling_id
+        return self._sibling_id.value
 
     @sibling_id.setter
     def sibling_id(self, value):
-        if isinstance(value, (six.integer_types, type(None))):
-            self._sibling_id = value
+        self._sibling_id.value = value
 
     @property
     def to_bottom(self):
-        return self._to_bottom
+        return self._to_bottom.value
 
     @to_bottom.setter
     def to_bottom(self, value):
-        if isinstance(value, bool):
-            self._to_bottom = value
+        self._to_bottom.value = value
 
     @property
     def to_top(self):
-        return self._to_top
+        return self._to_top.value
 
     @to_top.setter
     def to_top(self, value):
-        if isinstance(value, bool):
-            self._to_top = value
+        self._to_top.value = value
 
     @property
     def version(self):
-        return self._version
+        return self._version.value
 
     @version.setter
     def version(self, value):
-        if isinstance(value, six.integer_types):
-            self._version = value
-
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        if self.attachments is not None:
-            # Attachment
-            for item in self.attachments:
-                item.pre_request_filter = value
-        if self.cells is not None:
-            # Cell
-            for item in self.cells:
-                item.pre_request_filter = value
-        if self.columns is not None:
-            # Column
-            for item in self.columns:
-                item.pre_request_filter = value
-        if self.discussions is not None:
-            # Discussion
-            for item in self.discussions:
-                item.pre_request_filter = value
-        self._pre_request_filter = value
+        self._version.value = value
 
     def get_column(self, column_id):
         for cell in self.cells:
@@ -526,82 +335,11 @@ class Row(object):
             if cell.column_id == column_id:
                 self.cells[idx] = replacement_cell
 
-    def to_dict(self, op_id=None, method=None):
-        req_filter = self.pre_request_filter
-        if req_filter:
-            if self.attachments is not None:
-                for item in self.attachments:
-                    item.pre_request_filter = req_filter
-            if self.cells is not None:
-                for item in self.cells:
-                    item.pre_request_filter = req_filter
-            if self.columns is not None:
-                for item in self.columns:
-                    item.pre_request_filter = req_filter
-            if self.discussions is not None:
-                for item in self.discussions:
-                    item.pre_request_filter = req_filter
-
-        obj = {
-            'above': prep(self._above),
-            'accessLevel': prep(self._access_level),
-            'attachments': prep(self._attachments),
-            'cells': prep(self._cells),
-            'columns': prep(self._columns),
-            'conditionalFormat': prep(self._conditional_format),
-            'createdAt': prep(self._created_at),
-            'createdBy': prep(self._created_by),
-            'discussions': prep(self._discussions),
-            'expanded': prep(self._expanded),
-            'filteredOut': prep(self._filtered_out),
-            'format': prep(self.__format),
-            'id': prep(self.__id),
-            'inCriticalPath': prep(self._in_critical_path),
-            'indent': prep(self._indent),
-            'locked': prep(self._locked),
-            'lockedForUser': prep(self._locked_for_user),
-            'modifiedAt': prep(self._modified_at),
-            'modifiedBy': prep(self._modified_by),
-            'outdent': prep(self._outdent),
-            'parentId': prep(self._parent_id),
-            'permalink': prep(self._permalink),
-            'rowNumber': prep(self._row_number),
-            'sheetId': prep(self._sheet_id),
-            'siblingId': prep(self._sibling_id),
-            'toBottom': prep(self._to_bottom),
-            'toTop': prep(self._to_top),
-            'version': prep(self._version)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'add_rows':
-            permitted = ['format', 'expanded', 'locked',
-                         'cells', 'toTop', 'toBottom', 'above', 'siblingId',
-                         'parentId']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'update_rows':
-            permitted = ['id', 'format', 'expanded',
-                         'locked', 'cells', 'toTop', 'toBottom', 'above',
-                         'siblingId', 'parentId', 'indent', 'outdent']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

@@ -18,8 +18,6 @@
 from __future__ import absolute_import
 
 import logging
-import os.path
-import six
 from . import fresh_operation
 
 
@@ -62,14 +60,13 @@ class Favorites(object):
 
         return response
 
-    def list_favorites(self, page_size=100, page=1, include_all=False):
+    def list_favorites(self, page_size=None, page=None, include_all=None):
         """Get a list of all the user's Favorite items.
 
         Args:
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -111,7 +108,7 @@ class Favorites(object):
         _op['path'] = '/favorites/' + str(favorite_type)
         _op['query_params']['objectIds'] = object_ids
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 

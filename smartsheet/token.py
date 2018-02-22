@@ -18,8 +18,6 @@
 from __future__ import absolute_import
 
 import logging
-import os.path
-import six
 from . import fresh_operation
 
 
@@ -124,7 +122,7 @@ class Token(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/token'
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 

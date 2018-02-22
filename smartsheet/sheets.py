@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0913
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -56,9 +56,6 @@ class Sheets(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/columns'
         _op['json'] = list_of_columns
-        # filter before we go
-        for item in _op['json']:
-            item.pre_request_filter = 'add_columns'
 
         expected = ['Result', 'Column']
 
@@ -118,9 +115,6 @@ class Sheets(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows'
         _op['json'] = list_of_rows
-        # filter before we go
-        for item in _op['json']:
-            item.pre_request_filter = 'add_rows'
 
         expected = ['Result', 'Row']
 
@@ -181,10 +175,6 @@ class Sheets(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows'
         _op['json'] = list_of_rows
         _op['query_params']['allowPartialSuccess'] = 'true'
-
-        # filter before we go
-        for item in _op['json']:
-            item.pre_request_filter = 'add_rows'
 
         expected = ['BulkItemResult', 'Row']
 
@@ -304,7 +294,7 @@ class Sheets(object):
         _op['query_params']['ids'] = ids
         _op['query_params']['ignoreRowsNotFound'] = ignore_rows_not_found
 
-        expected = 'Result'
+        expected = ['Result', 'NumberObjectValue']
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -324,7 +314,7 @@ class Sheets(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/sheets/' + str(sheet_id) + '/shares/' + str(share_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -343,7 +333,7 @@ class Sheets(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/sheets/' + str(sheet_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -372,17 +362,16 @@ class Sheets(object):
 
         return response
 
-    def get_columns(self, sheet_id, include=None, page_size=100, page=1,
-                    include_all=False):
+    def get_columns(self, sheet_id, include=None, page_size=None, page=None,
+                    include_all=None):
         """Get all columns belonging to the specified Sheet.
 
         Args:
             sheet_id (int): Sheet ID
             include (str): (future)
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -476,7 +465,7 @@ class Sheets(object):
         return response
 
     def get_sheet(self, sheet_id, include=None, exclude=None, row_ids=None,
-                  row_numbers=None, column_ids=None, page_size=100, page=1):
+                  row_numbers=None, column_ids=None, page_size=None, page=None):
         """Get the specified Sheet.
 
         Get the specified Sheet. Returns the Sheet, including Rows,
@@ -501,9 +490,8 @@ class Sheets(object):
                 columns in the 'columns' array, and individual rows' 'cells'
                 array will only contain cells in the specified columns.
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
 
         Returns:
             Sheet
@@ -663,19 +651,19 @@ class Sheets(object):
 
         return response
 
-    def list_shares(self, sheet_id, page_size=100, page=1,
-                    include_all=False, include_workspace_shares=False):
+    def list_shares(self, sheet_id, page_size=None, page=None,
+                    include_all=None, include_workspace_shares=False):
         """Get the list of all Users and Groups to whom the specified Sheet is
         shared, and their access level.
 
         Args:
             sheet_id (int): Sheet ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
+            include_workspace_shares(bool): Include Workspace shares
 
         Returns:
             IndexResult
@@ -696,8 +684,8 @@ class Sheets(object):
 
         return response
 
-    def list_sheets(self, include=None, page_size=100, page=1,
-                    include_all=False, modified_since=None):
+    def list_sheets(self, include=None, page_size=None, page=None,
+                    include_all=None, modified_since=None):
         """Get the list of all Sheets the User has access to, in alphabetical
         order, by name.
 
@@ -706,11 +694,11 @@ class Sheets(object):
                 optional elements to include in the response. Valid list
                 values: ownerInfo, sheetVersion, source.
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
+            modified_since(datetime): Return sheets modified since provided datetime
 
         Returns:
             IndexResult
@@ -790,8 +778,6 @@ class Sheets(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/move'
         _op['json'] = container_destination_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'move_sheet'
 
         expected = ['Result', 'Sheet']
 
@@ -838,7 +824,7 @@ class Sheets(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows/emails'
         _op['json'] = multi_row_email_obj
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -860,7 +846,7 @@ class Sheets(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/emails'
         _op['json'] = sheet_email_obj
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -925,8 +911,6 @@ class Sheets(object):
         _op['method'] = 'PUT'
         _op['path'] = '/sheets/' + str(sheet_id) + '/publish'
         _op['json'] = sheet_publish_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'set_publish_status'
 
         expected = ['Result', 'SheetPublish']
 
@@ -956,8 +940,6 @@ class Sheets(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/shares'
         _op['query_params']['sendEmail'] = send_email
         _op['json'] = share_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'share_sheet'
 
         expected = ['Result', 'Share']
 
@@ -991,8 +973,6 @@ class Sheets(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/columns/' + str(
             column_id)
         _op['json'] = column_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_column'
 
         expected = ['Result', 'Column']
 
@@ -1027,9 +1007,6 @@ class Sheets(object):
         _op['method'] = 'PUT'
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows'
         _op['json'] = list_of_rows
-        # filter before we go
-        for item in _op['json']:
-            item.pre_request_filter = 'update_rows'
 
         expected = ['Result', 'Row']
 
@@ -1066,10 +1043,6 @@ class Sheets(object):
         _op['json'] = list_of_rows
         _op['query_params']['allowPartialSuccess'] = 'true'
 
-        # filter before we go
-        for item in _op['json']:
-            item.pre_request_filter = 'update_rows'
-
         expected = ['BulkItemResult', 'Row']
 
         prepped_request = self._base.prepare_request(_op)
@@ -1098,8 +1071,6 @@ class Sheets(object):
         _op['method'] = 'PUT'
         _op['path'] = '/sheets/' + str(sheet_id) + '/shares/' + str(share_id)
         _op['json'] = share_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_share'
 
         expected = ['Result', 'Share']
 
@@ -1122,8 +1093,6 @@ class Sheets(object):
         _op['method'] = 'PUT'
         _op['path'] = '/sheets/' + str(sheet_id)
         _op['json'] = sheet_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_sheet'
 
         expected = ['Result', 'Sheet']
 
@@ -1132,17 +1101,16 @@ class Sheets(object):
 
         return response
 
-    def list_update_requests(self, sheet_id, page_size=100, page=1,
-                        include_all=False):
+    def list_update_requests(self, sheet_id, page_size=None, page=None,
+                             include_all=None):
         """Get the list of all Sheet UpdateRequests.
 
         Args:
             sheet_id (int): Sheet ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
-            include_all (bool): If true, include all results
+                return per page.
+            page (int): Which page to return.
+            include_all(bool): If true, include all results
                 (i.e. do not paginate).
 
         Returns:
@@ -1196,8 +1164,6 @@ class Sheets(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests'
         _op['json'] = update_request_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_update_request'
 
         expected = ['Result', 'UpdateRequest']
 
@@ -1220,17 +1186,18 @@ class Sheets(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests/' + str(update_request_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
         return response
 
-    def update_update_request(self, sheet_id, update_request_obj):
+    def update_update_request(self, sheet_id, update_request_id, update_request_obj):
         """Updates an UpdateRequest for the specified Rows(s) within the Sheet.
 
         Args:
             sheet_id (int): Sheet ID
+            update_request_id: Update request ID
             update_request_obj (UpdateRequest): UpdateRequest object
 
         Returns:
@@ -1238,10 +1205,8 @@ class Sheets(object):
         """
         _op = fresh_operation('create_update_request')
         _op['method'] = 'PUT'
-        _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests/' + str(update_request_obj.id)
+        _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests/' + str(update_request_id)
         _op['json'] = update_request_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_update_request'
 
         expected = ['Result', 'UpdateRequest']
 
@@ -1250,16 +1215,15 @@ class Sheets(object):
 
         return response
 
-    def list_sent_update_requests(self, sheet_id, page_size=100, page=1,
-                        include_all=False):
+    def list_sent_update_requests(self, sheet_id, page_size=None, page=None,
+                                  include_all=None):
         """Get the list of all Sent UpdateRequests.
 
         Args:
             sheet_id (int): Sheet ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -1314,22 +1278,21 @@ class Sheets(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/sheets/' + str(sheet_id) + '/sentupdaterequests/' + str(sent_update_request_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
         return response
 
-    def list_filters(self, sheet_id, page_size=100, page=1,
-                        include_all=False):
+    def list_filters(self, sheet_id, page_size=None, page=None,
+                     include_all=None):
         """Returns a list of all saved sheet filters
 
         Args:
             sheet_id (int): Sheet ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -1384,7 +1347,7 @@ class Sheets(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/sheets/' + str(sheet_id) + '/filters/' + str(filter_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -1396,6 +1359,8 @@ class Sheets(object):
         Note: returns the first matching title found.
 
         Args:
+            sheet_id(int): Sheet ID
+            title(str): Title search string
             include (str): (future).
         """
         all_columns = self.get_columns(sheet_id, include_all=True)
@@ -1406,7 +1371,7 @@ class Sheets(object):
 
     def get_sheet_by_name(self, name, include=None, exclude=None,
                           row_ids=None, row_numbers=None, column_ids=None,
-                          page_size=100, page=1):
+                          page_size=None, page=None):
         """For those times when you don't know the Sheet Id.
 
         Note: returns the first matching name found.

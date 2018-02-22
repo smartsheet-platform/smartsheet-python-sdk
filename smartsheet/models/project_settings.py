@@ -17,12 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-from ..types import TypedList
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
 from datetime import date
 from dateutil.parser import parse
-import six
-import json
 
 
 class ProjectSettings(object):
@@ -34,44 +33,22 @@ class ProjectSettings(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._working_days = TypedList(six.string_types)
+        self._length_of_day = Number()
         self._non_working_days = TypedList(date)
-        self._length_of_day = None
+        self._working_days = TypedList(str)
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'workingDays' in props:
-                self.working_days = props['workingDays']
-            if 'working_days' in props:
-                self.working_days = props['working_days']
-            if 'nonWorkingDays' in props:
-                self.non_working_days = props['nonWorkingDays']
-            if 'non_working_days' in props:
-                self.non_working_days = props['non_working_days']
-            if 'lengthOfDay' in props:
-                self.length_of_day = props['lengthOfDay']
-            if 'length_of_day' in props:
-                self.length_of_day = props['length_of_day']
+            deserialize(self, props)
+
         self.__initialized = True
 
     @property
-    def working_days(self):
-        return self._working_days
+    def length_of_day(self):
+        return self._length_of_day.value
 
-    @working_days.setter
-    def working_days(self, value):
-        if isinstance(value, list):
-            self._working_days.purge()
-            self._working_days.extend([
-                 (six.string_types(x, self._base)
-                  if not isinstance(x, six.string_types) else x) for x in value
-             ])
-        elif isinstance(value, TypedList):
-            self._working_days.purge()
-            self._working_days = value.to_list()
-        elif isinstance(value, six.string_types):
-            self._working_days.purge()
-            self._working_days.append(value)
+    @length_of_day.setter
+    def length_of_day(self, value):
+        self._length_of_day.value = value
 
     @property
     def non_working_days(self):
@@ -86,35 +63,26 @@ class ProjectSettings(object):
                     x = parse(x).date()
                 if isinstance(x, date):
                     self._non_working_days.extend([x])
-        elif isinstance(value, TypedList):
-            self._non_working_days.purge()
-            self._non_working_days = value.to_list()
-        elif isinstance(value, date):
-            self._non_working_days.purge()
-            self._non_working_days.append(value)
         elif isinstance(value, six.string_types):
             value = parse(value).date()
             self._non_working_days.purge()
             self._non_working_days.append(value)
+        else:
+            self._non_working_days.load(value)
 
     @property
-    def length_of_day(self):
-        return self._length_of_day
+    def working_days(self):
+        return self._working_days
 
-    @length_of_day.setter
-    def length_of_day(self, value):
-        if isinstance(value, (six.integer_types, float)):
-            self._length_of_day = value
+    @working_days.setter
+    def working_days(self, value):
+        self._working_days.load(value)
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'workingDays': prep(self._working_days),
-            'nonWorkingDays': prep(self._non_working_days),
-            'lengthOfDay': prep(self._length_of_day)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

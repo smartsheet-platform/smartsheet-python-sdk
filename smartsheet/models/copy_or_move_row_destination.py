@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,12 +17,10 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
-from ..util import prep
-from datetime import datetime
-import json
-import logging
-import six
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
+
 
 class CopyOrMoveRowDestination(object):
 
@@ -33,33 +31,25 @@ class CopyOrMoveRowDestination(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
-        self._sheet_id = None
+        self._sheet_id = Number()
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'sheetId' in props:
-                self.sheet_id = props['sheetId']
-            if 'sheet_id' in props:
-                self.sheet_id = props['sheet_id']
+            deserialize(self, props)
 
     @property
     def sheet_id(self):
-        return self._sheet_id
+        return self._sheet_id.value
 
     @sheet_id.setter
     def sheet_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._sheet_id = value
+        self._sheet_id.value = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'sheetId': prep(self._sheet_id)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

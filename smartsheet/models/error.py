@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,13 +17,13 @@
 
 from __future__ import absolute_import
 
-from .error_result import ErrorResult
-from ..types import TypedList
-from ..util import prep
-from datetime import datetime
 import json
-import logging
-import six
+
+from .error_result import ErrorResult
+from ..util import serialize
+from ..util import deserialize
+from ..types import TypedObject
+
 
 class Error(object):
 
@@ -34,20 +34,13 @@ class Error(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
         self._request_response = None
-        self._result = None
+        self._result = TypedObject(ErrorResult)
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'requestResponse' in props:
-                self.request_response = props['requestResponse']
-            if 'request_response' in props:
-                self.request_response = props[
-                    'request_response']
-            if 'result' in props:
-                self.result = props['result']
+            deserialize(self, props)
+
         self.message = 'ERROR'
 
         # requests package Response object
@@ -66,23 +59,17 @@ class Error(object):
 
     @property
     def result(self):
-        return self._result
+        return self._result.value
 
     @result.setter
     def result(self, value):
-        if isinstance(value, ErrorResult):
-            self._result = value
-        else:
-            self._result = ErrorResult(value, self._base)
+        self._result.value = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'requestResponse': prep(self._request_response),
-            'result': prep(self._result)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

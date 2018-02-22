@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,12 +17,10 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
-from ..util import prep
-from datetime import datetime
-import json
-import logging
-import six
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
+
 
 class ContainerDestination(object):
 
@@ -33,8 +31,6 @@ class ContainerDestination(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
         self.allowed_values = {
             'destination_type': [
@@ -42,110 +38,44 @@ class ContainerDestination(object):
                 'workspace',
                 'folder']}
 
-        self._destination_id = None
-        self._destination_type = None
-        self._new_name = None
+        self._destination_id = Number()
+        self._destination_type = String(
+            accept=self.allowed_values['destination_type']
+        )
+        self._new_name = String()
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'destinationId' in props:
-                self.destination_id = props['destinationId']
-            if 'destination_id' in props:
-                self.destination_id = props['destination_id']
-            if 'destinationType' in props:
-                self.destination_type = props['destinationType']
-            if 'destination_type' in props:
-                self.destination_type = props[
-                    'destination_type']
-            if 'newName' in props:
-                self.new_name = props['newName']
-            if 'new_name' in props:
-                self.new_name = props['new_name']
+            deserialize(self, props)
 
     @property
     def destination_id(self):
-        return self._destination_id
+        return self._destination_id.value
 
     @destination_id.setter
     def destination_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._destination_id = value
+        self._destination_id.value = value
 
     @property
     def destination_type(self):
-        return self._destination_type
+        return self._destination_type.value
 
     @destination_type.setter
     def destination_type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['destination_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for ContainerDestination`destination_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['destination_type']))
-            self._destination_type = value
+        self._destination_type.value = value
 
     @property
     def new_name(self):
-        return self._new_name
+        return self._new_name.value
 
     @new_name.setter
     def new_name(self, value):
-        if isinstance(value, six.string_types):
-            self._new_name = value
+        self._new_name.value = value
 
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        self._pre_request_filter = value
-
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'destinationId': prep(self._destination_id),
-            'destinationType': prep(self._destination_type),
-            'newName': prep(self._new_name)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'copy_workspace':
-            permitted = ['newName']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'move_folder':
-            permitted = ['destinationId',
-                         'destinationType']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'move_sheet':
-            permitted = ['destinationType',
-                         'destinationId']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

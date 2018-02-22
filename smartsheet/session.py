@@ -30,13 +30,20 @@ _TRUSTED_CERT_FILE = certifi.where()
 
 
 class _SSLAdapter(HTTPAdapter):
+    def create_ssl_context(self):
+        ctx = ssl.create_default_context()
+        ctx.options |= ssl.OP_NO_SSLv2
+        ctx.options |= ssl.OP_NO_SSLv3
+        ctx.options |= ssl.OP_NO_TLSv1
+        return ctx
+
     def init_poolmanager(self, connections, maxsize, block=False):
         self.poolmanager = PoolManager(num_pools=connections,
                                        maxsize=maxsize,
                                        block=block,
                                        cert_reqs=ssl.CERT_REQUIRED,
                                        ca_certs=_TRUSTED_CERT_FILE,
-                                       ssl_version=ssl.PROTOCOL_TLSv1)
+                                       ssl_context=self.create_ssl_context())
 
 
 def pinned_session(pool_maxsize=8):

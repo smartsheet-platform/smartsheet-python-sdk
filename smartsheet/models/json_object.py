@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2017 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -16,8 +16,10 @@
 # under the License.
 
 from __future__ import absolute_import
+
 import six
 import json
+
 
 class JSONObject(object):
 
@@ -43,12 +45,14 @@ class JSONObject(object):
         elif isinstance(value, six.string_types):
             self._data = json.loads(value)
 
-    def to_dict(self, op_id=None, method=None):
+    def serialize(self):
+        return self._data
+
+    def to_dict(self):
         return self._data
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
-
-    def __str__(self):
         return json.dumps(self.to_dict())
 
+    def __str__(self):
+        return self.to_json()

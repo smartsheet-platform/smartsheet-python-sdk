@@ -16,11 +16,12 @@
 # under the License.
 
 from __future__ import absolute_import
-from ..util import prep
+
 from .hyperlink import Hyperlink
-import logging
-import six
-import json
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
+
 
 class ShortcutDataItem(object):
     """Smartsheet ShortcutDataItem data model."""
@@ -31,103 +32,85 @@ class ShortcutDataItem(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._label = None
-        self._label_format = None
-        self._attachment_type = None
-        self._mime_type = None
-        self._hyperlink = None
-        self._order = None
+        self.allowed_values = {
+            '_type': [
+                'FILE',
+                'GOOGLE_DRIVE',
+                'LINK',
+                'BOX_COM',
+                'DROPBOX',
+                'EVERNOTE',
+                'EGNYTE',
+                'ONEDRIVE',
+                'SMARTSHEET']}
+
+        self._attachment_type = String(
+            accept=self.allowed_values['_type']
+        )
+        self._hyperlink = TypedObject(Hyperlink)
+        self._label = String()
+        self._label_format = String()
+        self._mime_type = String()
+        self._order = Number()
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'label' in props:
-                self.label = props['label']
-            if 'labelFormat' in props:
-                self.label_format = props['labelFormat']
-            if 'label_format' in props:
-                self.label_format = props['label_format']
-            if 'attachmentType' in props:
-                self.attachment_type = props['attachmentType']
-            if 'attachment_type' in props:
-                self.attachment_type = props['attachment_type']
-            if 'mimeType' in props:
-                self.mime_type = props['mimeType']
-            if 'mime_type' in props:
-                self.mime_type = props['mime_type']
-            if 'hyperlink' in props:
-                self.hyperlink = props['hyperlink']
-            if 'order' in props:
-                self.order = props['order']
+            deserialize(self, props)
+
         self.__initialized = True
 
     @property
-    def label(self):
-        return self._label
-
-    @label.setter
-    def label(self, value):
-        if isinstance(value, six.string_types):
-            self._label = value
-
-    @property
-    def label_format(self):
-        return self._label_format
-
-    @label_format.setter
-    def label_format(self, value):
-        if isinstance(value, six.string_types):
-            self._label_format = value
-
-    @property
     def attachment_type(self):
-        return self._attachment_type
+        return self._attachment_type.value
 
     @attachment_type.setter
     def attachment_type(self, value):
-        if isinstance(value, six.string_types):
-            self._attachment_type = value
-
-    @property
-    def mime_type(self):
-        return self._mime_type
-
-    @mime_type.setter
-    def mime_type(self, value):
-        if isinstance(value, six.string_types):
-            self._mime_type = value
+        self._attachment_type.value = value
 
     @property
     def hyperlink(self):
-        return self._hyperlink
+        return self._hyperlink.value
 
     @hyperlink.setter
     def hyperlink(self, value):
-        if isinstance(value, Hyperlink):
-            self._hyperlink = value
-        elif isinstance(value, dict):
-            self._hyperlink = Hyperlink(value, self._base)
+        self._hyperlink.value = value
+
+    @property
+    def label(self):
+        return self._label.value
+
+    @label.setter
+    def label(self, value):
+        self._label.value = value
+
+    @property
+    def label_format(self):
+        return self._label_format.value
+
+    @label_format.setter
+    def label_format(self, value):
+        self._label_format.value = value
+
+    @property
+    def mime_type(self):
+        return self._mime_type.value
+
+    @mime_type.setter
+    def mime_type(self, value):
+        self._mime_type.value = value
 
     @property
     def order(self):
-        return self._order
+        return self._order.value
 
     @order.setter
     def order(self, value):
-        if isinstance(value, six.integer_types):
-            self._order = value
+        self._order.value = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'label': prep(self._label),
-            'labelFormat': prep(self._label_format),
-            'attachmentType': prep(self._attachment_type),
-            'mimeType': prep(self._mime_type),
-            'hyperlink': prep(self._hyperlink),
-            'order': prep(self._order)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

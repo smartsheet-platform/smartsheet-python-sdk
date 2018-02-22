@@ -17,10 +17,11 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
 from .sheet_filter_details import SheetFilterDetails
-import json
-import six
+
 
 class SheetFilter(object):
 
@@ -31,7 +32,6 @@ class SheetFilter(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
         self.allowed_values = {
             '_filter_type': [
@@ -39,86 +39,67 @@ class SheetFilter(object):
                 'PERSONAL',
                 'SHARED']}
 
-        self.__id = None
-        self._name = None
-        self._filter_type = None
-        self._query = None
+        self._filter_type = String(
+            accept=self.allowed_values['_filter_type']
+        )
+        self._id_ = Number()
+        self._name = String()
+        self._query = TypedObject(SheetFilterDetails)
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'name' in props:
-                self.name = props['name']
-            if 'filterType' in props:
-                self.filter_type = props['filterType']
-            if 'filter_type' in props:
-                self.filter_type = props['filter_type']
-            if 'query' in props:
-                self.query = props['query']
+            deserialize(self, props)
+
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
             raise AttributeError(key)
 
-    @property
-    def _id(self):
-        return self.__id
-
-    @_id.setter
-    def _id(self, value):
-        if isinstance(value, six.integer_types):
-            self.__id = value
-
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(SheetFilter, self).__setattr__(key, value)
 
     @property
     def filter_type(self):
-        return self._filter_type
+        return self._filter_type.value
 
     @filter_type.setter
     def filter_type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['_filter_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Filter`_filter_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['_filter_type']))
-            self._filter_type = value
+        self._filter_type.value = value
+
+    @property
+    def id_(self):
+        return self._id_.value
+
+    @id_.setter
+    def id_(self, value):
+        self._id_.value = value
+
+    @property
+    def name(self):
+        return self._name.value
+
+    @name.setter
+    def name(self, value):
+        self._name.value = value
 
     @property
     def query(self):
-        return self._query
+        return self._query.value
 
     @query.setter
     def query(self, value):
-        if isinstance(value, SheetFilterDetails):
-            self._query = value
-        elif isinstance(value, dict):
-            self._query = SheetFilterDetails(value, self._base)
+        self._query.value = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'id': prep(self.__id),
-            'name': prep(self._name),
-            'filterType': prep(self._filter_type),
-            'query': prep(self._query)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

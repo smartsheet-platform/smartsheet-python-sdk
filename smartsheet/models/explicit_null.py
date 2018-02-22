@@ -13,23 +13,13 @@
 # distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
-# under the License.
-
-from __future__ import absolute_import
-
-from .contact import Contact
-from .object_value import *
+# under the License
 
 
-class ContactObjectValue(ObjectValue, Contact):
-    """Smartsheet ContactObjectValue data model."""
+class ExplicitNull(object):
 
-    def __init__(self, props=None, base_obj=None):
-        """Initialize the ContactObjectValue model."""
-        ObjectValue.__init__(self, CONTACT, base_obj)
-        Contact.__init__(self, props, base_obj)
-        self._base = None
-        if base_obj is not None:
-            self._base = base_obj
+    def __init__(self):
+        pass
 
-        self.__initialized = True
+    def is_explicit_null(self):
+        pass

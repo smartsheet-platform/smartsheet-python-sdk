@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0913
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -20,8 +20,6 @@ from __future__ import absolute_import
 from .models.folder import Folder
 from .models.sheet import Sheet
 import logging
-import os.path
-import six
 from . import fresh_operation
 
 
@@ -52,8 +50,6 @@ class Home(object):
         _op['method'] = 'POST'
         _op['path'] = '/home/folders'
         _op['json'] = folder_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_folder'
 
         expected = ['Result', 'Folder']
 
@@ -79,8 +75,6 @@ class Home(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets'
         _op['json'] = sheet_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_sheet'
 
         expected = ['Result', 'Sheet']
 
@@ -117,8 +111,6 @@ class Home(object):
         _op['path'] = '/sheets'
         _op['query_params']['include'] = include
         _op['json'] = sheet_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_sheet_from_template'
 
         expected = ['Result', 'Sheet']
 
@@ -150,15 +142,14 @@ class Home(object):
 
         return response
 
-    def list_folders(self, page_size=100, page=1, include_all=False):
+    def list_folders(self, page_size=None, page=None, include_all=None):
         """Gets a list of top-level child Folders within the user's Sheets
         folder.
 
         Args:
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 

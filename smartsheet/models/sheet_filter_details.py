@@ -18,10 +18,10 @@
 from __future__ import absolute_import
 
 from .criteria import Criteria
-from ..types import TypedList
-from ..util import prep
-import json
-import six
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
+
 
 class SheetFilterDetails(object):
 
@@ -38,35 +38,16 @@ class SheetFilterDetails(object):
                 'AND',
                 'OR']}
 
-        self._operator = None
         self._criteria = TypedList(Criteria)
-        self._include_parent = None
+        self._include_parent = Boolean()
+        self._operator = String(
+            accept=self.allowed_values['operator']
+        )
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'operator' in props:
-                self.operator = props['operator']
-            if 'criteria' in props:
-                self.criteria = props['criteria']
-            if 'includeParent' in props:
-                self.include_parent = props['includeParent']
-            if 'include_parent' in props:
-                self.include_parent = props['include_parent']
+            deserialize(self, props)
+
         self.__initialized = True
-
-    @property
-    def operator(self):
-        return self._operator
-
-    @operator.setter
-    def operator(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['operator']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Filter`operator`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['operator']))
-            self._operator = value
 
     @property
     def criteria(self):
@@ -74,37 +55,29 @@ class SheetFilterDetails(object):
 
     @criteria.setter
     def criteria(self, value):
-        if isinstance(value, list):
-            self._criteria.purge()
-            self._criteria.extend([
-                (Criteria(x)
-                 if not isinstance(x, Criteria) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._criteria.purge()
-            self._criteria = value.to_list()
-        elif isinstance(value, Criteria):
-            self._criteria.purge()
-            self._criteria.append(value)
+        self._criteria.load(value)
 
     @property
     def include_parent(self):
-        return self._include_parent
+        return self._include_parent.value
 
     @include_parent.setter
     def include_parent(self, value):
-        if isinstance(value, bool):
-            self._include_parent = value
+        self._include_parent.value = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'operator': prep(self._operator),
-            'criteria': prep(self._criteria),
-            'includeParent': prep(self._include_parent)}
-        return obj
+    @property
+    def operator(self):
+        return self._operator.value
+
+    @operator.setter
+    def operator(self, value):
+        self._operator.value = value
+
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

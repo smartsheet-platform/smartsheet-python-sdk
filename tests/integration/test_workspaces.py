@@ -136,10 +136,11 @@ class TestWorkspaces:
 
     def test_update_workspace(self, smart_setup):
         smart = smart_setup['smart']
-        TestWorkspaces.c.name = 'Nincompoops'
+        new_workspace = smart.models.Workspace()
+        new_workspace.name = 'Nincompoops'
         action = smart.Workspaces.update_workspace(
             TestWorkspaces.c.id,
-            TestWorkspaces.c
+            new_workspace
         )
         assert action.message == 'SUCCESS'
 

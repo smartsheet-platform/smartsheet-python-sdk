@@ -1,10 +1,11 @@
 # pylint: disable=C0103,W0232
 
 import pytest
-from smartsheet.models import Row, PredecessorList, Duration
+from smartsheet.models import Row, PredecessorList, Duration, ExplicitNull
 from smartsheet.exceptions import ApiError
 
 from mock_api_test_helper import MockApiTestHelper, clean_api_error
+
 
 class TestMockApiRows(MockApiTestHelper):
     @clean_api_error
@@ -244,7 +245,7 @@ class TestMockApiRows(MockApiTestHelper):
 
         response = self.client.Sheets.add_rows(1, [first_row])
 
-        assert response.result[0].cells[0].hyperlink.to_top is True
+        assert response.result[0].row_number == 1
 
     @clean_api_error
     def test_add_rows_location_bottom(self):
@@ -263,7 +264,7 @@ class TestMockApiRows(MockApiTestHelper):
 
         response = self.client.Sheets.add_rows(1, [first_row])
 
-        assert response.result[0].cells[0].hyperlink.to_bottom is True
+        assert response.result[0].row_number == 100
 
     @clean_api_error
     def test_update_rows_assign_values_string(self):
@@ -564,9 +565,8 @@ class TestMockApiRows(MockApiTestHelper):
         first_row.id = 10
         first_row.cells.append({
             "columnId": 101,
-            "value": ""
-            # We are implicitly setting "hyperlink": null here.
-            # This test will likely need to be updated when unset fields are removed from JSON output
+            "value": "",
+            "hyperlink": ExplicitNull()
         })
 
         response = self.client.Sheets.update_rows(1, [first_row])
@@ -583,15 +583,15 @@ class TestMockApiRows(MockApiTestHelper):
         first_row.id = 10
         first_row.cells.append({
             "columnId": 101,
-            "value": "",
-            "linkInFromCell": None
+            "value": ""
         })
+        first_row.cells[0].link_in_from_cell = ExplicitNull()
 
         response = self.client.Sheets.update_rows(1, [first_row])
 
         assert response.result[0].cells[0].column_id == 101
         assert response.result[0].cells[0].value is None
-        assert response.result[0].cells[0].linkInFromCell is None
+        assert response.result[0].cells[0].link_in_from_cell is None
 
     @clean_api_error
     def test_update_rows_invalid_assign_hyperlink_and_cell_link(self):
@@ -626,7 +626,7 @@ class TestMockApiRows(MockApiTestHelper):
 
         response = self.client.Sheets.update_rows(1, [first_row])
 
-        assert response.result[0].rowNumber == 1
+        assert response.result[0].row_number == 1
 
     @clean_api_error
     def test_update_rows_location_bottom(self):
@@ -637,4 +637,4 @@ class TestMockApiRows(MockApiTestHelper):
 
         response = self.client.Sheets.update_rows(1, [first_row])
 
-        assert response.result[0].rowNumber == 100
+        assert response.result[0].row_number == 100

@@ -17,14 +17,13 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
-from ..util import prep
 from .column import Column
 from .cell_data_item import CellDataItem
 from .shortcut_data_item import ShortcutDataItem
 from .hyperlink import Hyperlink
-import six
-import json
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
 
 
 class WidgetContent(object):
@@ -37,98 +36,54 @@ class WidgetContent(object):
             self._base = base_obj
 
         """Represents the CellLinkWidgetContent object."""
-        self._hyperlink = None
         self._cell_data = TypedList(CellDataItem)
         self._columns = TypedList(Column)
+        self._hyperlink = TypedObject(Hyperlink)
 
         """Represents the RichtextWidgetContent object."""
-        self._html = None
+        self._html = String()
 
         """Represents the ShortcutWidgetContent object."""
         self._shortcut_data = TypedList(ShortcutDataItem)
 
         """Represents the ReportWidgetContent object."""
-        self._html_content = None
+        self._html_content = String()
 
         """Represents the ImageWidgetContent object."""
-        self._private_id = None
-        self._height = None
-        self._width = None
-        self._file_name = None
-        self._format = None
+        self._file_name = String()
+        self._format_ = String()
+        self._height = Number()
+        self._private_id = String()
+        self._width = Number()
 
         """Represents the TitleWidgetContent object."""
-        self._background_color = None
+        self._background_color = String()
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'hyperlink' in props:
-                self.hyperlink = props['hyperlink']
-            if 'cellData' in props:
-                self.cell_data = props['cellData']
-            if 'cell_data' in props:
-                self.cell_data = props['cell_data']
-            if 'columns' in props:
-                self.columns = props['columns']
-            if 'html' in props:
-                self.html = props['html']
-            if 'shortcutData' in props:
-                self.shortcut_data = props['shortcutData']
-            if 'shortcut_data' in props:
-                self.shortcut_data = props['shortcut_data']
-            if 'htmlContent' in props:
-                self.html_content = props['htmlContent']
-            if 'html_content' in props:
-                self.html_content = props['html_content']
-            if 'privateId' in props:
-                self.private_id = props['privateId']
-            if 'private_id' in props:
-                self.private_id = props['private_id']
-            if 'height' in props:
-                self.height = props['height']
-            if 'width' in props:
-                self.width = props['width']
-            if 'fileName' in props:
-                self.file_name = props['fileName']
-            if 'file_name' in props:
-                self.file_name = props['file_name']
-            if 'format' in props:
-                self.format = props['format']
-            if 'backgroundColor' in props:
-                self.background_color = props['backgroundColor']
-            if 'background_color' in props:
-                self.background_color = props['background_color']
+            deserialize(self, props)
+
         self.__initialized = True
 
-    @property
-    def hyperlink(self):
-        return self._hyperlink
+    def __getattr__(self, key):
+        if key == 'format':
+            return self.format_
+        else:
+            raise AttributeError(key)
 
-    @hyperlink.setter
-    def hyperlink(self, value):
-        if isinstance(value, Hyperlink):
-            self._hyperlink = value
-        elif isinstance(value, dict):
-            self._hyperlink = Hyperlink(value, self._base)
+    def __setattr__(self, key, value):
+        if key == 'format':
+            self.format_ = value
+        else:
+            super(WidgetContent, self).__setattr__(key, value)
 
+    """Represents the CellLinkWidgetContent object."""
     @property
     def cell_data(self):
         return self._cell_data
 
     @cell_data.setter
     def cell_data(self, value):
-        if isinstance(value, list):
-            self._cell_data.purge()
-            self._cell_data.extend([
-                (CellDataItem(x, self._base)
-                 if not isinstance(x, CellDataItem) else x) for x in value
-             ])
-        elif isinstance(value, TypedList):
-            self._cell_data.purge()
-            self._cell_data = value.to_list()
-        elif isinstance(value, CellDataItem):
-            self._cell_data.purge()
-            self._cell_data.append(value)
+        self._cell_data.load(value)
 
     @property
     def columns(self):
@@ -136,128 +91,98 @@ class WidgetContent(object):
 
     @columns.setter
     def columns(self, value):
-        if isinstance(value, list):
-            self._columns.purge()
-            self._columns.extend([
-                (Column(x, self._base)
-                 if not isinstance(x, Column) else x) for x in value
-             ])
-        elif isinstance(value, TypedList):
-            self._columns.purge()
-            self._columns = value.to_list()
-        elif isinstance(value, Column):
-            self._columns.purge()
-            self._columns.append(value)
+        self._columns.load(value)
 
     @property
+    def hyperlink(self):
+        return self._hyperlink.value
+
+    @hyperlink.setter
+    def hyperlink(self, value):
+        self._hyperlink.value = value
+
+    """Represents the RichtextWidgetContent object."""
+    @property
     def html(self):
-        return self._html
+        return self._html.value
 
     @html.setter
     def html(self, value):
-        if isinstance(value, six.string_types):
-            self._html = value
+        self._html.value = value
 
+    """Represents the ShortcutWidgetContent object."""
     @property
     def shortcut_data(self):
         return self._shortcut_data
 
     @shortcut_data.setter
     def shortcut_data(self, value):
-        if isinstance(value, list):
-            self._shortcut_data.purge()
-            self._shortcut_data.extend([
-                (ShortcutDataItem(x, self._base)
-                 if not isinstance(x, ShortcutDataItem) else x) for x in value
-             ])
-        elif isinstance(value, TypedList):
-            self._shortcut_data.purge()
-            self._shortcut_data = value.to_list()
-        elif isinstance(value, ShortcutDataItem):
-            self._shortcut_data.purge()
-            self._shortcut_data.append(value)
+        self._shortcut_data.load(value)
 
+    """Represents the ReportWidgetContent object."""
     @property
     def html_content(self):
-        return self._html_content
+        return self._html_content.value
 
     @html_content.setter
     def html_content(self, value):
-        if isinstance(value, six.string_types):
-            self._html_content = value
+        self._html_content.value = value
 
-    @property
-    def private_id(self):
-        return self._private_id
-
-    @private_id.setter
-    def private_id(self, value):
-        if isinstance(value, six.string_types):
-            self._private_id = value
-
-    @property
-    def height(self):
-        return self._height
-
-    @height.setter
-    def height(self, value):
-        if isinstance(value, six.integer_types):
-            self._height = value
-
-    @property
-    def width(self):
-        return self._width
-
-    @width.setter
-    def width(self, value):
-        if isinstance(value, six.integer_types):
-            self._width = value
-
+    """Represents the ImageWidgetContent object."""
     @property
     def file_name(self):
-        return self._file_name
+        return self._file_name.value
 
     @file_name.setter
     def file_name(self, value):
-        if isinstance(value, six.string_types):
-            self._file_name = value
+        self._file_name.value = value
 
     @property
-    def format(self):
-        return self._format
+    def format_(self):
+        return self._format_.value
 
-    @format.setter
-    def format(self, value):
-        if isinstance(value, six.string_types):
-            self._format = value
+    @format_.setter
+    def format_(self, value):
+        self._format_.value = value
 
+    @property
+    def height(self):
+        return self._height.value
+
+    @height.setter
+    def height(self, value):
+        self._height.value = value
+
+    @property
+    def private_id(self):
+        return self._private_id.value
+
+    @private_id.setter
+    def private_id(self, value):
+        self._private_id.value = value
+
+    @property
+    def width(self):
+        return self._width.value
+
+    @width.setter
+    def width(self, value):
+        self._width.value = value
+
+    """Represents the TitleWidgetContent object."""
     @property
     def background_color(self):
-        return self._background_color
+        return self._background_color.value
 
     @background_color.setter
     def background_color(self, value):
-        if isinstance(value, six.string_types):
-            self._background_color = value
+        self._background_color.value = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'hyperlink': prep(self._hyperlink),
-            'cellData': prep(self._cell_data),
-            'columns': prep(self._columns),
-            'html': prep(self._html),
-            'shortcutData': prep(self._shortcut_data),
-            'htmlContent': prep(self._html_content),
-            'privateId': prep(self._private_id),
-            'height': prep(self._height),
-            'width': prep(self._width),
-            'fileName': prep(self._file_name),
-            'format': prep(self._format),
-            'backgroundColor': prep(self._background_color)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

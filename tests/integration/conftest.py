@@ -70,7 +70,7 @@ def smart_setup(request):
             'type': 'TEXT_NUMBER'
         }]
     })
-    action = smart.Folders.create_sheet_in_folder(test_folder.id, sheet);
+    action = smart.Folders.create_sheet_in_folder(test_folder.id, sheet)
     assert action.message == 'SUCCESS'
     sheet = action.result
 
@@ -101,7 +101,7 @@ def smart_setup(request):
             'type': 'TEXT_NUMBER'
         }]
     })
-    action = smart.Folders.create_sheet_in_folder(test_folder.id, sheet_b);
+    action = smart.Folders.create_sheet_in_folder(test_folder.id, sheet_b)
     assert action.message == 'SUCCESS'
     sheet_b = action.result
     for idx, col in enumerate(sheet_b.columns):

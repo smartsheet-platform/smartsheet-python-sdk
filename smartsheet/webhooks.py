@@ -18,6 +18,7 @@
 import logging
 from . import fresh_operation
 
+
 class Webhooks(object):
 
     """Class for handling Webhooks operations."""
@@ -27,16 +28,15 @@ class Webhooks(object):
         self._base = smartsheet_obj
         self._log = logging.getLogger(__name__)
 
-    def list_webhooks(self, page_size=100, page=1,
-                    include_all=False):
+    def list_webhooks(self, page_size=None, page=None,
+                      include_all=None):
         """Get the list of all Webhooks the User has access to, in alphabetical
         order, by name.
 
         Args:
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -90,8 +90,6 @@ class Webhooks(object):
         _op['method'] = 'POST'
         _op['path'] = '/webhooks'
         _op['json'] = webhook_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_webhook'
 
         expected = ['Result', 'Webhook']
 
@@ -114,8 +112,6 @@ class Webhooks(object):
         _op['method'] = 'PUT'
         _op['path'] = '/webhooks/' + str(webhook_id)
         _op['json'] = webhook_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_webhook'
 
         expected = ['Result', 'Webhook']
 
@@ -137,7 +133,7 @@ class Webhooks(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/webhooks/' + str(webhook_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
 
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)

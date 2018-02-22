@@ -33,8 +33,8 @@ import json
 from .exceptions import *
 from .models import Error, ErrorResult
 from .session import pinned_session
-from .types import TypedList
 from .util import is_multipart
+from .util import serialize
 from . import (
     __version__,
     __api_base__,
@@ -78,7 +78,7 @@ def setup_logging():
 class AbstractUserCalcBackoff(object):
 
     def calc_backoff(self, previous_attempts, total_elapsed_time, error_result):
-        raise NotImplementedError("Class %s doesn't implement calc_backoff()" % (self.__class__.__name__))
+        raise NotImplementedError("Class %s doesn't implement calc_backoff()" % self.__class__.__name__)
 
 
 class DefaultCalcBackoff(AbstractUserCalcBackoff):
@@ -172,8 +172,8 @@ class Smartsheet(object):
         self._api_base = os.environ.get(
             'API_BASE', __api_base__)
         self._assume_user = None
-
         self._test_scenario_name = None
+        self._change_agent = None
 
     def assume_user(self, email=None):
         """Assume identity of specified user.
@@ -215,6 +215,15 @@ class Smartsheet(object):
         """
         self._test_scenario_name = name
 
+    def with_change_agent(self, change_agent):
+        """
+        Request headers will contain the 'Smartsheet-Change-Agent' header value
+
+        Agrs:
+            change_agent: (str) the name of this change agent
+        """
+        self._change_agent = change_agent
+
     def request(self, prepped_request, expected, operation):
         """
         Make a request from the Smartsheet API.
@@ -226,6 +235,7 @@ class Smartsheet(object):
         Args:
             prepped_request (Request): Prepared request for the operation.
             expected (list|str): The expected response data type.
+            operation(dict): Dictionary containing operation details
 
         Returns:
             The API operation result object.
@@ -241,8 +251,6 @@ class Smartsheet(object):
             raise the_ex(native, str(native.result.code) + ': ' + native.result.message)
         else:
             return native
-
-        return res.native(expected)
 
     def _log_request(self, operation, response):
         """
@@ -270,13 +278,13 @@ class Smartsheet(object):
         if 200 <= response.status_code <= 299:
             if operation['dl_path'] is None:
                 self._log.debug('Response: {\nstatus: %d %s\ncontent: {\n%s\n}',
-                               response.status_code, response.reason, content_dumps)
+                                response.status_code, response.reason, content_dumps)
             else:
                 self._log.debug('Response: {\nstatus: %d %s',
-                               response.status_code, response.reason)
+                                response.status_code, response.reason)
         else:
             self._log.error('Response: {\nstatus: %d %s\ncontent: {\n%s\n}',
-                           response.status_code, response.reason, content_dumps)
+                            response.status_code, response.reason, content_dumps)
 
     def _request(self, prepped_request, operation):
         """
@@ -313,6 +321,7 @@ class Smartsheet(object):
         Args:
             prepped_request (Request): A prepared request object for
                 the operation.
+            operation(dict): Dictionary containing operation details
 
         Returns:
             Operation Result object.
@@ -328,10 +337,11 @@ class Smartsheet(object):
                 if native.result.should_retry:
                     attempt += 1
                     elapsed_time = time.time()-start_time
-                    backoff = self._user_calc_backoff.calc_backoff(attempt,elapsed_time,native.result)
+                    backoff = self._user_calc_backoff.calc_backoff(attempt, elapsed_time, native.result)
                     if backoff < 0:
                         break
-                    self._log.info('HttpError status_code=%s: Retrying in %.1f seconds', native.result.status_code, backoff)
+                    self._log.info('HttpError status_code=%s: Retrying in %.1f seconds',
+                                   native.result.status_code, backoff)
                     time.sleep(backoff)
                     # restore un-redacted request prior to retry
                     prepped_request = pre_redact_request.copy()
@@ -351,12 +361,7 @@ class Smartsheet(object):
                 _op['path'] = _op['path'].replace('{' + key + '}', str(val))
 
         if _op['json']:
-            if isinstance(_op['json'], (list, TypedList)):
-                _op['json'] = [
-                    x.to_dict(_op['id'], _op['method']) for x in _op['json']
-                ]
-            else:
-                _op['json'] = _op['json'].to_dict(_op['id'], _op['method'])
+            _op['json'] = serialize(_op['json'])
 
         if _op['query_params']:
             for key, val in six.iteritems(_op['query_params']):
@@ -400,6 +405,15 @@ class Smartsheet(object):
         else:
             try:
                 del prepped_request.headers['Api-Scenario']
+            except KeyError:
+                pass
+
+        if self._change_agent is not None:
+            prepped_request.headers.update(
+                {'Smartsheet-Change-Agent': self._change_agent})
+        else:
+            try:
+                del prepped_request.headers['Smartsheet-Change-Agent']
             except KeyError:
                 pass
 
@@ -514,7 +528,7 @@ class OperationErrorResult(object):
     error_lookup = {
         0: {
             'name': 'ApiError',
-            'recommendation': ('Do not retry without fixing the problem. '),
+            'recommendation': 'Do not retry without fixing the problem. ',
             'should_retry': False},
         4001: {
             'name': 'SystemMaintenanceError',

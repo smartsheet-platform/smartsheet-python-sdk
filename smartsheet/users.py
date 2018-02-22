@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0913
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -46,9 +46,6 @@ class Users(object):
         _op['method'] = 'POST'
         _op['path'] = '/users/' + str(user_id) + '/alternateemails'
         _op['json'] = list_of_alternate_emails
-        # filter before we go
-        for item in _op['json']:
-            item.pre_request_filter = 'add_alternate_email'
 
         expected = ['Result', 'AlternateEmail']
 
@@ -96,8 +93,8 @@ class Users(object):
 
                 resourceViewer (optional)
 
-                send_email (bool): Either true or false to indicate whether or not to notify the user by email. Default
-                is false.
+            send_email (bool): Either true or false to indicate whether or not to notify the user by email. Default
+            is false.
 
         Returns:
             Result
@@ -107,8 +104,6 @@ class Users(object):
         _op['path'] = '/users'
         _op['query_params']['sendEmail'] = send_email
         _op['json'] = user_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'add_user'
 
         expected = ['Result', 'User']
 
@@ -132,7 +127,7 @@ class Users(object):
         _op['path'] = '/users/' + str(user_id) + '/alternateemails/' + str(
             alternate_email_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -213,8 +208,8 @@ class Users(object):
 
         return response
 
-    def list_org_sheets(self, page_size=100, page=1,
-                    include_all=False, modified_since=None):
+    def list_org_sheets(self, page_size=None, page=None,
+                        include_all=None, modified_since=None):
         """Get a list of all Sheets owned by an organization.
 
         Get the list of all Sheets owned by the members of the
@@ -222,11 +217,12 @@ class Users(object):
 
         Args:
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
+            modified_since(datetime): list organization sheets modified since datetime
+
         Returns:
             IndexResult
         """
@@ -246,17 +242,16 @@ class Users(object):
 
         return response
 
-    def list_users(self, email=None, page_size=100, page=1,
-                   include_all=False, include=None):
+    def list_users(self, email=None, page_size=None, page=None,
+                   include_all=None, include=None):
         """Get the list of Users in the organization.
 
         Args:
             email (list[str]): Comma separated list of email
                 addresses on which to filter the results.
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
             include(list[str]): optional include parameter, only current
@@ -317,7 +312,7 @@ class Users(object):
         _op['query_params']['transferSheets'] = transfer_sheets
         _op['query_params']['removeFromSharing'] = remove_from_sharing
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -330,15 +325,6 @@ class Users(object):
             user_id (int): User ID
             user_obj (User): User object with the following
                 attributes:
-          * email (required)
-          * admin
-                (required)
-          * licensedSheetCreator (required)
-
-                    * firstName (optional)
-          * lastName (optional)
-
-                        * resourceViewer (optional)
 
         Returns:
             Result
@@ -347,8 +333,6 @@ class Users(object):
         _op['method'] = 'PUT'
         _op['path'] = '/users/' + str(user_id)
         _op['json'] = user_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_user'
 
         expected = ['Result', 'User']
 

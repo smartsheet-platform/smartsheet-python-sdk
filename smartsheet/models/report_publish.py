@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2017 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,10 +17,10 @@
 
 from __future__ import absolute_import
 
-from ..util import prep
-import json
-import logging
-import six
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
+
 
 class ReportPublish(object):
 
@@ -31,129 +31,72 @@ class ReportPublish(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
-        self._read_only_full_enabled = False
-        self._read_only_full_url = None
-        self._read_only_full_accessible_by = None
-        self._read_only_full_default_view = None
-        self._read_only_full_show_toolbar = True
+        self.allowed_values = {
+            'accessible_by': [
+                'ALL',
+                'ORG']}
+
+        self._read_only_full_accessible_by = String(
+            accept=self.allowed_values['accessible_by']
+        )
+        self._read_only_full_default_view = String()
+        self._read_only_full_enabled = Boolean()
+        self._read_only_full_show_toolbar = Boolean()
+        self._read_only_full_url = String()
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'readOnlyFullEnabled' in props:
-                self.read_only_full_enabled = props[
-                    'readOnlyFullEnabled']
-            if 'read_only_full_enabled' in props:
-                self.read_only_full_enabled = props[
-                    'read_only_full_enabled']
-            # read only
-            if 'readOnlyFullUrl' in props:
-                self.read_only_full_url = props[
-                    'readOnlyFullUrl']
-            if 'readOnlyFullAccessibleBy' in props:
-                self.read_only_full_accessible_by = props[
-                    'readOnlyFullAccessibleBy']
-            if 'read_only_full_accessible_by' in props:
-                self.read_only_full_accessible_by = props[
-                    'read_only_full_accessible_by']
-            if 'readOnlyFullDefaultView' in props:
-                self.read_only_full_default_view = props[
-                    'readOnlyFullDefaultView']
-            if 'read_only_full_default_view' in props:
-                self.read_only_full_default_view = props[
-                    'read_only_full_default_view']
-            if 'readOnlyFullShowToolbar' in props:
-                self.read_only_full_show_toolbar = props[
-                    'readOnlyFullShowToolbar']
-            if 'read_only_full_show_toolbar' in props:
-                self.read_only_full_show_toolbar = props[
-                    'read_only_full_show_toolbar']
+            deserialize(self, props)
+
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     @property
-    def read_only_full_enabled(self):
-        return self._read_only_full_enabled
-
-    @read_only_full_enabled.setter
-    def read_only_full_enabled(self, value):
-        if isinstance(value, bool):
-            self._read_only_full_enabled = value
-
-    @property
-    def read_only_full_url(self):
-        return self._read_only_full_url
-
-    @read_only_full_url.setter
-    def read_only_full_url(self, value):
-        if isinstance(value, six.string_types):
-            self._read_only_full_url = value
-
-    @property
     def read_only_full_accessible_by(self):
-        return self._read_only_full_accessible_by
+        return self._read_only_full_accessible_by.value
 
     @read_only_full_accessible_by.setter
     def read_only_full_accessible_by(self, value):
-        if isinstance(value, six.string_types):
-            self._read_only_full_accessible_by = value
+        self._read_only_full_accessible_by.value = value
 
     @property
     def read_only_full_default_view(self):
-        return self._read_only_full_default_view
+        return self._read_only_full_default_view.value
 
     @read_only_full_default_view.setter
     def read_only_full_default_view(self, value):
-        if isinstance(value, six.string_types):
-            self._read_only_full_default_view = value;
+        self._read_only_full_default_view.value = value
+
+    @property
+    def read_only_full_enabled(self):
+        return self._read_only_full_enabled.value
+
+    @read_only_full_enabled.setter
+    def read_only_full_enabled(self, value):
+        self._read_only_full_enabled.value = value
 
     @property
     def read_only_full_show_toolbar(self):
-        return self._read_only_full_show_toolbar
+        return self._read_only_full_show_toolbar.value
 
     @read_only_full_show_toolbar.setter
     def read_only_full_show_toolbar(self, value):
-        if isinstance(value, bool):
-            self._read_only_full_show_toolbar = value
+        self._read_only_full_show_toolbar.value = value
 
     @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
+    def read_only_full_url(self):
+        return self._read_only_full_url.value
 
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        self._pre_request_filter = value
+    @read_only_full_url.setter
+    def read_only_full_url(self, value):
+        self._read_only_full_url.value = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'readOnlyFullEnabled': prep(self._read_only_full_enabled),
-            'readOnlyFullAccessibleBy': prep(self._read_only_full_accessible_by),
-            'readOnlyFullUrl': prep(self._read_only_full_url),
-            'readOnlyFullDefaultView': prep(self._read_only_full_default_view),
-            'readOnlyFullShowToolbar': prep(self._read_only_full_show_toolbar)}
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'set_publish_status':
-            permitted = ['readOnlyFullEnabled',
-                         'readOnlyFullAccessibleBy',
-                         'readOnlyFullDefaultView',
-                         'readOnlyFullShowToolbar']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

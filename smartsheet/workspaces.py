@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0913
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -19,8 +19,6 @@ from __future__ import absolute_import
 
 from .models.folder import Folder
 import logging
-import os.path
-import six
 from . import fresh_operation
 
 
@@ -60,8 +58,6 @@ class Workspaces(object):
         _op['query_params']['skipRemap'] = skip_remap
         _op['query_params']['omit'] = omit
         _op['json'] = container_destination_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'copy_workspace'
 
         expected = ['Result', 'Workspace']
 
@@ -89,8 +85,6 @@ class Workspaces(object):
         _op['method'] = 'POST'
         _op['path'] = '/workspaces/' + str(workspace_id) + '/folders'
         _op['json'] = folder_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_folder_in_workspace'
 
         expected = ['Result', 'Folder']
 
@@ -114,8 +108,6 @@ class Workspaces(object):
         _op['method'] = 'POST'
         _op['path'] = '/workspaces/' + str(workspace_id) + '/sheets'
         _op['json'] = sheet_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_sheet_in_workspace'
 
         expected = ['Result', 'Sheet']
 
@@ -155,8 +147,6 @@ class Workspaces(object):
         _op['path'] = '/workspaces/' + str(workspace_id) + '/sheets'
         _op['query_params']['include'] = include
         _op['json'] = sheet_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_sheet_in_workspace_from_template'
 
         expected = ['Result', 'Sheet']
 
@@ -180,8 +170,6 @@ class Workspaces(object):
         _op['method'] = 'POST'
         _op['path'] = '/workspaces'
         _op['json'] = workspace_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'create_workspace'
 
         expected = ['Result', 'Workspace']
 
@@ -205,7 +193,7 @@ class Workspaces(object):
         _op['path'] = '/workspaces/' + str(workspace_id) + '/shares/' + str(
             share_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -224,7 +212,7 @@ class Workspaces(object):
         _op['method'] = 'DELETE'
         _op['path'] = '/workspaces/' + str(workspace_id)
 
-        expected = 'Result'
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
@@ -282,17 +270,16 @@ class Workspaces(object):
 
         return response
 
-    def list_folders(self, workspace_id, page_size=100, page=1,
-                     include_all=False):
+    def list_folders(self, workspace_id, page_size=None, page=None,
+                     include_all=None):
         """Get a list of top-level child Folders within the specified
         Workspace.
 
         Args:
             workspace_id (int): Workspace ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -313,17 +300,16 @@ class Workspaces(object):
 
         return response
 
-    def list_shares(self, workspace_id, page_size=100, page=1,
-                    include_all=False):
+    def list_shares(self, workspace_id, page_size=None, page=None,
+                    include_all=None):
         """Get a list of all Users and Groups to whom the specified Workspace
         is shared, and their access level.
 
         Args:
             workspace_id (int): Workspace ID
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -343,14 +329,13 @@ class Workspaces(object):
 
         return response
 
-    def list_workspaces(self, page_size=100, page=1, include_all=False):
+    def list_workspaces(self, page_size=None, page=None, include_all=None):
         """Get the list of Workspaces the authenticated User may access.
 
         Args:
             page_size (int): The maximum number of items to
-                return per page. Defaults to 100.
-            page (int): Which page to return. Defaults to 1
-                if not specified.
+                return per page.
+            page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
 
@@ -389,8 +374,6 @@ class Workspaces(object):
         _op['path'] = '/workspaces/' + str(workspace_id) + '/shares'
         _op['query_params']['sendEmail'] = send_email
         _op['json'] = share_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'share_workspace'
 
         expected = ['Result', 'Share']
 
@@ -422,8 +405,6 @@ class Workspaces(object):
         _op['path'] = '/workspaces/' + str(workspace_id) + '/shares/' + str(
             share_id)
         _op['json'] = share_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_share'
 
         expected = ['Result', 'Share']
 
@@ -446,8 +427,6 @@ class Workspaces(object):
         _op['method'] = 'PUT'
         _op['path'] = '/workspaces/' + str(workspace_id)
         _op['json'] = workspace_obj
-        # filter before we go
-        _op['json'].pre_request_filter = 'update_workspace'
 
         expected = ['Result', 'Workspace']
 

@@ -17,12 +17,10 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
-from ..util import prep
-from datetime import datetime
-import json
-import logging
-import six
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
+
 
 class RowMapping(object):
 
@@ -33,53 +31,48 @@ class RowMapping(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
 
-        self.__from = None
-        self._to = None
+        self._from_ = Number()
+        self._to = Number()
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'from' in props:
-                self._from = props['from']
-            if '_from' in props:
-                self._from = props['_from']
-            if 'to' in props:
-                self.to = props['to']
+            deserialize(self, props)
+
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'from':
-            return self._from
+            return self.from_
         else:
             raise AttributeError(key)
 
-    @property
-    def _from(self):
-        return self.__from
+    def __setattr__(self, key, value):
+        if key == 'from':
+            self.from_ = value
+        else:
+            super(RowMapping, self).__setattr__(key, value)
 
-    @_from.setter
-    def _from(self, value):
-        if isinstance(value, six.integer_types):
-            self.__from = value
+    @property
+    def from_(self):
+        return self._from_.value
+
+    @from_.setter
+    def from_(self, value):
+        self._from_.value = value
 
     @property
     def to(self):
-        return self._to
+        return self._to.value
 
     @to.setter
     def to(self, value):
-        if isinstance(value, six.integer_types):
-            self._to = value
+        self._to.value = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'from': prep(self.__from),
-            'to': prep(self._to)}
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

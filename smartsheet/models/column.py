@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2016 Smartsheet.com, Inc.
+# Copyright 2018 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -19,11 +19,10 @@ from __future__ import absolute_import
 
 from .auto_number_format import AutoNumberFormat
 from .contact_option import ContactOption
-from ..types import TypedList
-from ..util import prep
-import json
-import logging
-import six
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
+
 
 class Column(object):
 
@@ -34,8 +33,6 @@ class Column(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
         self.allowed_values = {
             'symbol': [
@@ -81,102 +78,62 @@ class Column(object):
                 'PREDECESSOR',
                 'ABSTRACT_DATETIME']}
 
-        self._auto_number_format = None
+        self._auto_number_format = TypedObject(AutoNumberFormat)
         self._contact_options = TypedList(ContactOption)
-        self.__format = None
-        self._hidden = None
-        self.__id = None
-        self._index = None
-        self._locked = None
-        self._locked_for_user = None
+        self._format_ = String()
+        self._hidden = Boolean()
+        self._id_ = Number()
+        self._index = Number()
+        self._locked = Boolean()
+        self._locked_for_user = Boolean()
         self._options = TypedList(str)
-        self._primary = None
-        self._symbol = None
-        self._system_column_type = None
+        self._primary = Boolean()
+        self._symbol = String()
+        self._system_column_type = String(
+            accept=self.allowed_values['system_column_type']
+        )
         self._tags = TypedList(str)
-        self._title = None
-        self.__type = None
-        self._width = None
-        self._validation = None
+        self._title = String()
+        self._type_ = String(
+            accept=self.allowed_values['_type']
+        )
+        self._width = Number()
+        self._validation = Boolean()
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'autoNumberFormat' in props:
-                self.auto_number_format = props[
-                    'autoNumberFormat']
-            if 'auto_number_format' in props:
-                self.auto_number_format = props[
-                    'auto_number_format']
-            if 'contactOptions' in props:
-                self.contact_options = props['contactOptions']
-            if 'contact_options' in props:
-                self.contact_options = props['contact_options']
-            if 'format' in props:
-                self._format = props['format']
-            if '_format' in props:
-                self._format = props['_format']
-            if 'hidden' in props:
-                self.hidden = props['hidden']
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'index' in props:
-                self.index = props['index']
-            if 'locked' in props:
-                self.locked = props['locked']
-            if 'lockedForUser' in props:
-                self.locked_for_user = props['lockedForUser']
-            if 'locked_for_user' in props:
-                self.locked_for_user = props['locked_for_user']
-            if 'options' in props:
-                self.options = props['options']
-            if 'primary' in props:
-                self.primary = props['primary']
-            if 'symbol' in props:
-                self.symbol = props['symbol']
-            if 'systemColumnType' in props:
-                self.system_column_type = props[
-                    'systemColumnType']
-            if 'system_column_type' in props:
-                self.system_column_type = props[
-                    'system_column_type']
-            if 'tags' in props:
-                self.tags = props['tags']
-            if 'title' in props:
-                self.title = props['title']
-            if 'type' in props:
-                self._type = props['type']
-            if '_type' in props:
-                self._type = props['_type']
-            if 'width' in props:
-                self.width = props['width']
-            if 'validation' in props:
-                self.validation = props['validation']
+            deserialize(self, props)
+        
         # requests package Response object
         self.request_response = None
         self.__initialized = True
 
     def __getattr__(self, key):
         if key == 'format':
-            return self._format
+            return self.format_
         elif key == 'id':
-            return self._id
+            return self.id_
         elif key == 'type':
-            return self._type
+            return self.type_
         else:
             raise AttributeError(key)
-
+        
+    def __setattr__(self, key, value):
+        if key == 'format':
+            self.format_ = value 
+        elif key == 'id':
+            self.id_ = value
+        elif key == 'type':
+            self.type_ = value
+        else:
+            super(Column, self).__setattr__(key, value)
+    
     @property
     def auto_number_format(self):
-        return self._auto_number_format
+        return self._auto_number_format.value
 
     @auto_number_format.setter
     def auto_number_format(self, value):
-        if isinstance(value, AutoNumberFormat):
-            self._auto_number_format = value
-        else:
-            self._auto_number_format = AutoNumberFormat(value, self._base)
+        self._auto_number_format.value = value
 
     @property
     def contact_options(self):
@@ -184,72 +141,55 @@ class Column(object):
 
     @contact_options.setter
     def contact_options(self, value):
-        if isinstance(value, list):
-            self._contact_options.purge()
-            self._contact_options.extend([
-                (ContactOption(x)
-                 if not isinstance(x, ContactOption) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._contact_options.purge()
-            self._contact_options = value.to_list()
-        elif isinstance(value, ContactOption):
-            self._contact_options.purge()
-            self._contact_options.append(value)
+        self._contact_options.load(value)
 
     @property
-    def _format(self):
-        return self.__format
+    def format_(self):
+        return self._format_.value
 
-    @_format.setter
-    def _format(self, value):
-        if isinstance(value, six.string_types):
-            self.__format = value
+    @format_.setter
+    def format_(self, value):
+        self._format_.value = value
 
     @property
     def hidden(self):
-        return self._hidden
+        return self._hidden.value
 
     @hidden.setter
     def hidden(self, value):
-        if isinstance(value, bool):
-            self._hidden = value
+        self._hidden.value = value
 
     @property
-    def _id(self):
-        return self.__id
+    def id_(self):
+        return self._id_.value
 
-    @_id.setter
-    def _id(self, value):
-        if isinstance(value, six.integer_types):
-            self.__id = value
+    @id_.setter
+    def id_(self, value):
+        self._id_.value = value
 
     @property
     def index(self):
-        return self._index
+        return self._index.value
 
     @index.setter
     def index(self, value):
-        if isinstance(value, six.integer_types):
-            self._index = value
+        self._index.value = value
 
     @property
     def locked(self):
-        return self._locked
+        return self._locked.value
 
     @locked.setter
     def locked(self, value):
-        if isinstance(value, bool):
-            self._locked = value
+        self._locked.value = value
 
     @property
     def locked_for_user(self):
-        return self._locked_for_user
+        return self._locked_for_user.value
 
     @locked_for_user.setter
     def locked_for_user(self, value):
-        if isinstance(value, bool):
-            self._locked_for_user = value
+        self._locked_for_user.value = value
 
     @property
     def options(self):
@@ -257,55 +197,31 @@ class Column(object):
 
     @options.setter
     def options(self, value):
-        if isinstance(value, list):
-            self._options.purge()
-            self._options.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._options.purge()
-            self._options = value.to_list()
-        elif isinstance(value, str):
-            self._options.purge()
-            self._options.append(value)
+        self._options.load(value)
 
     @property
     def primary(self):
-        return self._primary
+        return self._primary.value
 
     @primary.setter
     def primary(self, value):
-        if isinstance(value, bool):
-            self._primary = value
+        self._primary.value = value
 
     @property
     def symbol(self):
-        return self._symbol
+        return self._symbol.value
 
     @symbol.setter
     def symbol(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['symbol']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Column`symbol`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['symbol']))
-            self._symbol = value
+        self._symbol.value = value
 
     @property
     def system_column_type(self):
-        return self._system_column_type
+        return self._system_column_type.value
 
     @system_column_type.setter
     def system_column_type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['system_column_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Column`system_column_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['system_column_type']))
-            self._system_column_type = value
+        self._system_column_type.value = value
 
     @property
     def tags(self):
@@ -313,169 +229,45 @@ class Column(object):
 
     @tags.setter
     def tags(self, value):
-        if isinstance(value, list):
-            self._tags.purge()
-            self._tags.extend([
-                (str(x)
-                 if not isinstance(x, str) else x) for x in value
-            ])
-        elif isinstance(value, TypedList):
-            self._tags.purge()
-            self._tags = value.to_list()
-        elif isinstance(value, str):
-            self._tags.purge()
-            self._tags.append(value)
+        self._tags.load(value)
 
     @property
     def title(self):
-        return self._title
+        return self._title.value
 
     @title.setter
     def title(self, value):
-        if isinstance(value, six.string_types):
-            self._title = value
+        self._title.value = value
 
     @property
-    def _type(self):
-        return self.__type
+    def type_(self):
+        return self._type_.value
 
-    @_type.setter
-    def _type(self, value):
-        if isinstance(value, six.string_types):
-            if value not in self.allowed_values['_type']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Column`_type`,"
-                     " must be one of {1}").format(
-                         value, self.allowed_values['_type']))
-            self.__type = value
+    @type_.setter
+    def type_(self, value):
+        self._type_.value = value
 
     @property
     def width(self):
-        return self._width
+        return self._width.value
 
     @width.setter
     def width(self, value):
-        if isinstance(value, six.integer_types):
-            self._width = value
+        self._width.value = value
 
     @property
     def validation(self):
-        return self._validation
+        return self._validation.value
 
     @validation.setter
     def validation(self, value):
-        if isinstance(value, bool):
-            self._validation = value;
+        self._validation.value = value
 
-    @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
-
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        if self.auto_number_format is not None:
-            self.auto_number_format.pre_request_filter = value
-        self._pre_request_filter = value
-
-    def to_dict(self, op_id=None, method=None):
-        req_filter = self.pre_request_filter
-        if req_filter:
-            if self.auto_number_format is not None:
-                self.auto_number_format.pre_request_filter = req_filter
-
-        obj = {
-            'autoNumberFormat': prep(self._auto_number_format),
-            'contactOptions': prep(self._contact_options),
-            'format': prep(self.__format),
-            'hidden': prep(self._hidden),
-            'id': prep(self.__id),
-            'index': prep(self._index),
-            'locked': prep(self._locked),
-            'lockedForUser': prep(self._locked_for_user),
-            'options': prep(self._options),
-            'primary': prep(self._primary),
-            'symbol': prep(self._symbol),
-            'systemColumnType': prep(self._system_column_type),
-            'tags': prep(self._tags),
-            'title': prep(self._title),
-            'type': prep(self.__type),
-            'width': prep(self._width),
-            'validation': prep(self._validation)}
-
-        return self._apply_pre_request_filter(obj)
-
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'add_columns':
-            permitted = ['title', 'type', 'symbol',
-                         'options', 'index', 'systemColumnType', 'autoNumberFormat',
-                         'validation', 'width', 'locked', 'hidden', 'contactOptions']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_sheet':
-            permitted = ['title', 'primary', 'type',
-                         'symbol', 'options', 'systemColumnType', 'autoNumberFormat',
-                         'width', 'hidden', 'contactOptions']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_sheet_in_folder':
-            permitted = ['title', 'primary', 'type',
-                         'symbol', 'options', 'systemColumnType', 'autoNumberFormat',
-                         'width', 'hidden', 'contactOptions']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'create_sheet_in_workspace':
-            permitted = ['title', 'primary', 'type',
-                         'symbol', 'options', 'systemColumnType', 'autoNumberFormat',
-                         'width', 'hidden', 'contactOptions']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-        if self.pre_request_filter == 'update_column':
-            permitted = ['index', 'title', 'type', 'symbol',
-                         'options', 'systemColumnType', 'autoNumberFormat', 'validation',
-                         'width', 'locked', 'hidden', 'contactOptions']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-
-            if self.type != 'PICKLIST':
-                del obj['options']
-            if self.type == 'TEXT_NUMBER':
-                del obj['validation']
-            if self.type != 'CONTACT_LIST' and not self.contact_options:
-                del obj['contactOptions']
-
-        return obj
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()

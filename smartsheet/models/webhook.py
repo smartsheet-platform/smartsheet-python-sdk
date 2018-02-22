@@ -17,14 +17,10 @@
 
 from __future__ import absolute_import
 
-from ..types import TypedList
-from ..util import prep
 from .webhook_stats import WebhookStats
-from datetime import datetime
-from dateutil.parser import parse
-import logging
-import six
-import json
+from ..types import *
+from ..util import serialize
+from ..util import deserialize
 
 
 class Webhook(object):
@@ -36,78 +32,32 @@ class Webhook(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-        self._pre_request_filter = None
-        self._log = logging.getLogger(__name__)
 
-        self.__id = None
-        self._name = None
-        self._api_client_id = None
-        self._api_client_name = None
-        self._scope = None
-        self._scope_object_id = None
+        self.allowed_values = {
+            'scope': [
+                'sheet']}
+
+        self._api_client_id = String()
+        self._api_client_name = String()
+        self._callback_url = String()
+        self._created_at = Timestamp()
+        self._disabled_details = String()
+        self._enabled = Boolean()
         self._events = TypedList(six.string_types)
-        self._callback_url = None
-        self._shared_secret = None
-        self._enabled = None
-        self._status = None
-        self._disabled_details = None
-        self._version = None
-        self._stats = None
-        self._created_at = None
-        self._modified_at = None
+        self._id_ = Number()
+        self._modified_at = Timestamp()
+        self._name = String()
+        self._scope = String(
+            accept=self.allowed_values['scope']
+        )
+        self._scope_object_id = Number()
+        self._shared_secret = String()
+        self._stats = TypedObject(WebhookStats)
+        self._status = String()
+        self._version = Number()
 
         if props:
-            # account for alternate variable names from raw API response
-            if 'id' in props:
-                self._id = props['id']
-            if '_id' in props:
-                self._id = props['_id']
-            if 'name' in props:
-                self.name = props['name']
-            if 'apiClientId' in props:
-                self.api_client_id = props['apiClientId']
-            if 'api_client_id' in props:
-                self.api_client_id = props['api_client_id']
-            if 'apiClientName' in props:
-                self.api_client_name = props['apiClientName']
-            if 'api_client_name' in props:
-                self.api_client_name = props['api_client_name']
-            if 'scope' in props:
-                self.scope = props['scope']
-            if 'scopeObjectId' in props:
-                self.scope_object_id = props['scopeObjectId']
-            if 'scope_object_id' in props:
-                self.scope_object_id = props['scope_object_id']
-            if 'events' in props:
-                self.events = props['events']
-            if 'callbackUrl' in props:
-                self.callback_url = props['callbackUrl']
-            if 'callback_url' in props:
-                self.callback_url = props['callback_url']
-            if 'sharedSecrect' in props:
-                self.shared_secret = props['sharedSecrect']
-            if 'shared_secrect' in props:
-                self.shared_secret = props['shared_secrect']
-            if 'enabled' in props:
-                self.enabled = props['enabled']
-            if 'status' in props:
-                self.status = props['status']
-            if 'disabledDetails' in props:
-                self.disabled_details = props['disabledDetails']
-            if 'disabled_details' in props:
-                self.disabled_details = props['disabled_details']
-            if 'version' in props:
-                self.version = props['version']
-            if 'stats' in props:
-                self.stats = props['stats']
-            if 'createdAt' in props:
-                self.created_at = props['createdAt']
-            if 'created_at' in props:
-                self.created_at = props['created_at']
-            if 'modifiedAt' in props:
-                self.modified_at = props['modifiedAt']
-            if 'modified_at' in props:
-                self.modified_at = props['modified_at']
+            deserialize(self, props)
 
         # requests package Response object
         self.request_response = None
@@ -115,63 +65,63 @@ class Webhook(object):
 
     def __getattr__(self, key):
         if key == 'id':
-            return self._id
+            return self.id_
         else:
-            raise
+            raise AttributeError(key)
 
-    @property
-    def _id(self):
-        return self.__id
-
-    @_id.setter
-    def _id(self, value):
-        if isinstance(value, six.integer_types):
-            self.__id = value
-
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, value):
-        if isinstance(value, six.string_types):
-            self._name = value
+    def __setattr__(self, key, value):
+        if key == 'id':
+            self.id_ = value
+        else:
+            super(Webhook, self).__setattr__(key, value)
 
     @property
     def api_client_id(self):
-        return self._api_client_id
+        return self._api_client_id.value
 
     @api_client_id.setter
     def api_client_id(self, value):
-        if isinstance(value, six.string_types):
-            self._api_client_id = value
+        self._api_client_id.value = value
 
     @property
     def api_client_name(self):
-        return self._api_client_name
+        return self._api_client_name.value
 
     @api_client_name.setter
     def api_client_name(self, value):
-        if isinstance(value, six.string_types):
-            self._api_client_name = value
+        self._api_client_name.value = value
 
     @property
-    def scope(self):
-        return self._scope
+    def callback_url(self):
+        return self._callback_url.value
 
-    @scope.setter
-    def scope(self, value):
-        if isinstance(value, six.string_types):
-            self._scope = value
+    @callback_url.setter
+    def callback_url(self, value):
+        self._callback_url.value = value
 
     @property
-    def scope_object_id(self):
-        return self._scope_object_id
+    def created_at(self):
+        return self._created_at.value
 
-    @scope_object_id.setter
-    def scope_object_id(self, value):
-        if isinstance(value, six.integer_types):
-            self._scope_object_id = value
+    @created_at.setter
+    def created_at(self, value):
+        self._created_at.value = value
+
+    @property
+    def disabled_details(self):
+        return self._disabled_details.value
+
+    @disabled_details.setter
+    def disabled_details(self, value):
+        self._disabled_details.value = value
+
+    @property
+    def enabled(self):
+        return self._enabled.value
+
+    @enabled.setter
+    def enabled(self, value):
+        self._enabled.value = value
 
     @property
     def events(self):
@@ -179,162 +129,85 @@ class Webhook(object):
 
     @events.setter
     def events(self, value):
-        if isinstance(value, list):
-            self._events.purge()
-            self._events.extend([
-                (six.string_types(x, self._base)
-                 if not isinstance(x, six.string_types) else x) for x in value
-             ])
-        elif isinstance(value, TypedList):
-            self._events.purge()
-            self._events = value.to_list()
-        elif isinstance(value, six.string_types):
-            self._events.purge()
-            self._events.append(value)
+        self._events.load(value)
 
     @property
-    def callback_url(self):
-        return self._callback_url
+    def id_(self):
+        return self._id_.value
 
-    @callback_url.setter
-    def callback_url(self, value):
-        if isinstance(value, six.string_types):
-            self._callback_url = value
-
-    @property
-    def shared_secret(self):
-        return self._shared_secret
-
-    @shared_secret.setter
-    def shared_secret(self, value):
-        if isinstance(value, six.string_types):
-            self._shared_secret = value
-
-    @property
-    def enabled(self):
-        return self._enabled
-
-    @enabled.setter
-    def enabled(self, value):
-        if isinstance(value, bool):
-            self._enabled = value
-
-    @property
-    def status(self):
-        return self._status
-
-    @status.setter
-    def status(self, value):
-        if isinstance(value, six.string_types):
-            self._status = value
-
-    @property
-    def disabled_details(self):
-        return self._disabled_details
-
-    @disabled_details.setter
-    def disabled_details(self, value):
-        if isinstance(value, six.string_types):
-            self._disabled_details = value
-
-    @property
-    def version(self):
-        return self._version
-
-    @version.setter
-    def version(self, value):
-        if isinstance(value, six.integer_types):
-            self._version = value
-
-    @property
-    def stats(self):
-        return self._stats
-
-    @stats.setter
-    def stats(self, value):
-        if isinstance(value, dict):
-            self._stats = WebhookStats(value, self._base)
-        if isinstance(value, WebhookStats):
-            self._stats = value
-
-    @property
-    def created_at(self):
-        return self._created_at
-
-    @created_at.setter
-    def created_at(self, value):
-        if isinstance(value, datetime):
-            self._created_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._created_at = value
+    @id_.setter
+    def id_(self, value):
+        self._id_.value = value
 
     @property
     def modified_at(self):
-        return self._modified_at
+        return self._modified_at.value
 
     @modified_at.setter
     def modified_at(self, value):
-        if isinstance(value, datetime):
-            self._modified_at = value
-        else:
-            if isinstance(value, six.string_types):
-                value = parse(value)
-                self._modified_at = value
+        self._modified_at.value = value
 
     @property
-    def pre_request_filter(self):
-        return self._pre_request_filter
+    def name(self):
+        return self._name.value
 
-    @pre_request_filter.setter
-    def pre_request_filter(self, value):
-        self._pre_request_filter = value
+    @name.setter
+    def name(self, value):
+        self._name.value = value
 
-    def to_dict(self, op_id=None, method=None):
-        obj = {
-            'id': prep(self.__id),
-            'name': prep(self._name),
-            'apiClientId': prep(self._api_client_id),
-            'apiClientName': prep(self._api_client_name),
-            'scope': prep(self._scope),
-            'scopeObjectId': prep(self._scope_object_id),
-            'events': prep(self._events),
-            'callbackUrl': prep(self._callback_url),
-            'sharedSecret':prep(self._shared_secret),
-            'enabled': prep(self._enabled),
-            'status': prep(self._status),
-            'disabledDetails': prep(self._disabled_details),
-            'version': prep(self._version),
-            'stats': prep(self._stats),
-            'createdAt': prep(self._created_at),
-            'modifiedAt': prep(self._modified_at)}
-        return self._apply_pre_request_filter(obj)
+    @property
+    def scope(self):
+        return self._scope.value
 
-    def _apply_pre_request_filter(self, obj):
-        if self.pre_request_filter == 'create_webhook':
-            permitted = ['name','callbackUrl','scope','scopeObjectId','events','version']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
-        if self.pre_request_filter == 'update_webhook':
-            permitted = ['name','events','callbackUrl','enabled','version']
-            all_keys = list(obj.keys())
-            for key in all_keys:
-                if key not in permitted:
-                    self._log.debug(
-                        'deleting %s from obj (filter: %s)',
-                        key, self.pre_request_filter)
-                    del obj[key]
+    @scope.setter
+    def scope(self, value):
+        self._scope.value = value
 
-        return obj
+    @property
+    def scope_object_id(self):
+        return self._scope_object_id.value
+
+    @scope_object_id.setter
+    def scope_object_id(self, value):
+        self._scope_object_id.value = value
+
+    @property
+    def shared_secret(self):
+        return self._shared_secret.value
+
+    @shared_secret.setter
+    def shared_secret(self, value):
+        self._shared_secret.value = value
+
+    @property
+    def stats(self):
+        return self._stats.value
+
+    @stats.setter
+    def stats(self, value):
+        self._stats.value = value
+
+    @property
+    def status(self):
+        return self._status.value
+
+    @status.setter
+    def status(self, value):
+        self._status.value = value
+
+    @property
+    def version(self):
+        return self._version.value
+
+    @version.setter
+    def version(self, value):
+        self._version.value = value
+
+    def to_dict(self):
+        return serialize(self)
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict())
 
     def __str__(self):
-        return json.dumps(self.to_dict())
+        return self.to_json()
