@@ -3,24 +3,6 @@
 # Smartsheet Python SDK
 This library is intended to simplify connecting to the [Smartsheet API](http://smartsheet-platform.github.io/api-docs/) from Python applications.
 
-## Pre-release SDK version 1.3
-Several changes have been made to the SDK to improve both the maintainability of the SDK and the predictability/reliability of the results returned by the SDK. Some of these changes may be breaking to code that currently uses the SDK. The following changes should be reviewed:
-* The JSON serializer has been changed to ignore `null` values and empty lists (`[]`). A new Smartsheet model, ExplicitNull, is provided for circumstances where there is a need to force the serialization of a null value. As an example, to clear a hyperlink value from a cell, you can perform the following operation:
-```
-        first_row = Row()
-        first_row.id = 10
-        first_row.cells.append({
-            "columnId": 101,
-            "value": "",
-            "hyperlink": ExplicitNull()
-        })
-
-        response = self.client.Sheets.update_rows(1, [first_row])
-```
-* Property values are more strongly type checked on assignment and you will get a `ValueError` exception if you attempt to assign an incompatible object. Previously, there were a number of cases where assignment of incompatible types would have resulted in a silent failure by the SDK.
-* In previous releases, property filters were executed prior to create or update operations on many models within the SDK. Unfortunately, those filters were sometimes at odds with the API and occasionally returned unpredictable results. For that reason those filters have been removed. Be aware that any property that is set in a model will be passed through to the API.
-* Properties `id`, `format`, and `type` are accessible without the preceding underscore, e.g. `cell._format` has changed to `cell.format`. 
-
 ## System Requirements
 The SDK currently supports Python 2.7, 3.4, 3.5, 3.6, pypy, and pypy3.  
 **Note** that Python version 3.4 or higher is required for Unicode support. (E.g. if your Smartsheet data includes non-ASCII characters.)  
