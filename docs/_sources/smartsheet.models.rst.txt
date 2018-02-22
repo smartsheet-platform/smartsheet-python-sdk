@@ -244,18 +244,18 @@ smartsheet.models.error\_result module
     :undoc-members:
     :show-inheritance:
 
-smartsheet.models.favorite module
----------------------------------
+smartsheet.models.explicit\_null module
+---------------------------------------
 
-.. automodule:: smartsheet.models.favorite
+.. automodule:: smartsheet.models.explicit_null
     :members:
     :undoc-members:
     :show-inheritance:
 
-smartsheet.models.filter module
--------------------------------
+smartsheet.models.favorite module
+---------------------------------
 
-.. automodule:: smartsheet.models.filter
+.. automodule:: smartsheet.models.favorite
     :members:
     :undoc-members:
     :show-inheritance:
@@ -664,6 +664,14 @@ smartsheet.models.user module
 -----------------------------
 
 .. automodule:: smartsheet.models.user
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+smartsheet.models.user\_model module
+------------------------------------
+
+.. automodule:: smartsheet.models.user_model
     :members:
     :undoc-members:
     :show-inheritance:

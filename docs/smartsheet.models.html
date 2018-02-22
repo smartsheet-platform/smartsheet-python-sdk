@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet.models package &mdash; Smartsheet Python SDK 1.2.4 documentation</title>
+  <title>smartsheet.models package &mdash; Smartsheet Python SDK 1.2.5.dev38+g7d61cc0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Smartsheet Python SDK 1.2.4 documentation" href="index.html"/>
+    <link rel="top" title="Smartsheet Python SDK 1.2.5.dev38+g7d61cc0 documentation" href="index.html"/>
         <link rel="up" title="smartsheet package" href="smartsheet.html"/>
         <link rel="prev" title="smartsheet package" href="smartsheet.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.2.4
+                1.2.5.dev38+g7d61cc0
               </div>
             
           
@@ -125,8 +125,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.email">smartsheet.models.email module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.error">smartsheet.models.error module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.error_result">smartsheet.models.error_result module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.explicit_null">smartsheet.models.explicit_null module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.favorite">smartsheet.models.favorite module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.filter">smartsheet.models.filter module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.folder">smartsheet.models.folder module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.font_family">smartsheet.models.font_family module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.format_details">smartsheet.models.format_details module</a></li>
@@ -178,6 +178,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.template">smartsheet.models.template module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.update_request">smartsheet.models.update_request module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.user">smartsheet.models.user module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.user_model">smartsheet.models.user_model module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.user_profile">smartsheet.models.user_profile module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.version">smartsheet.models.version module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.webhook">smartsheet.models.webhook module</a></li>
@@ -302,6 +303,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.access_token.AccessToken.expires_at">
+<code class="descname">expires_at</code><a class="headerlink" href="#smartsheet.models.access_token.AccessToken.expires_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.access_token.AccessToken.expires_in">
 <code class="descname">expires_in</code><a class="headerlink" href="#smartsheet.models.access_token.AccessToken.expires_in" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -313,7 +319,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.access_token.AccessToken.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.access_token.AccessToken.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.access_token.AccessToken.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -337,13 +343,18 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Smartsheet Account data model.</p>
 <dl class="attribute">
+<dt id="smartsheet.models.account.Account.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.account.Account.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.account.Account.name">
 <code class="descname">name</code><a class="headerlink" href="#smartsheet.models.account.Account.name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.account.Account.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.account.Account.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.account.Account.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -372,13 +383,13 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.alternate_email.AlternateEmail.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.alternate_email.AlternateEmail.pre_request_filter" title="Permalink to this definition">¶</a></dt>
+<dt id="smartsheet.models.alternate_email.AlternateEmail.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.alternate_email.AlternateEmail.id_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.alternate_email.AlternateEmail.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.alternate_email.AlternateEmail.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.alternate_email.AlternateEmail.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -417,8 +428,8 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.attachment.Attachment.description">
-<code class="descname">description</code><a class="headerlink" href="#smartsheet.models.attachment.Attachment.description" title="Permalink to this definition">¶</a></dt>
+<dt id="smartsheet.models.attachment.Attachment.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.attachment.Attachment.id_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -442,18 +453,13 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.attachment.Attachment.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.attachment.Attachment.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.attachment.Attachment.size_in_kb">
 <code class="descname">size_in_kb</code><a class="headerlink" href="#smartsheet.models.attachment.Attachment.size_in_kb" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.attachment.Attachment.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.attachment.Attachment.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.attachment.Attachment.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -503,7 +509,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.auto_number_format.AutoNumberFormat.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.auto_number_format.AutoNumberFormat.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.auto_number_format.AutoNumberFormat.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -553,7 +559,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.bulk_item_failure.BulkItemFailure.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.bulk_item_failure.BulkItemFailure.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.bulk_item_failure.BulkItemFailure.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -599,7 +605,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.bulk_item_result.BulkItemResult.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.bulk_item_result.BulkItemResult.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.bulk_item_result.BulkItemResult.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -643,6 +649,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.cell.Cell.format_">
+<code class="descname">format_</code><a class="headerlink" href="#smartsheet.models.cell.Cell.format_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.cell.Cell.formula">
 <code class="descname">formula</code><a class="headerlink" href="#smartsheet.models.cell.Cell.formula" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -678,18 +689,13 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.cell.Cell.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.cell.Cell.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.cell.Cell.strict">
 <code class="descname">strict</code><a class="headerlink" href="#smartsheet.models.cell.Cell.strict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.cell.Cell.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.cell.Cell.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.cell.Cell.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -744,7 +750,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.cell_data_item.CellDataItem.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.cell_data_item.CellDataItem.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.cell_data_item.CellDataItem.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -768,46 +774,6 @@
 <dd><p>Bases: <a class="reference internal" href="#smartsheet.models.cell.Cell" title="smartsheet.models.cell.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.cell.Cell</span></code></a></p>
 <p>Smartsheet CellHistory data model.</p>
 <dl class="attribute">
-<dt id="smartsheet.models.cell_history.CellHistory.column_id">
-<code class="descname">column_id</code><a class="headerlink" href="#smartsheet.models.cell_history.CellHistory.column_id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.cell_history.CellHistory.column_type">
-<code class="descname">column_type</code><a class="headerlink" href="#smartsheet.models.cell_history.CellHistory.column_type" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.cell_history.CellHistory.conditional_format">
-<code class="descname">conditional_format</code><a class="headerlink" href="#smartsheet.models.cell_history.CellHistory.conditional_format" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.cell_history.CellHistory.display_value">
-<code class="descname">display_value</code><a class="headerlink" href="#smartsheet.models.cell_history.CellHistory.display_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.cell_history.CellHistory.formula">
-<code class="descname">formula</code><a class="headerlink" href="#smartsheet.models.cell_history.CellHistory.formula" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.cell_history.CellHistory.hyperlink">
-<code class="descname">hyperlink</code><a class="headerlink" href="#smartsheet.models.cell_history.CellHistory.hyperlink" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.cell_history.CellHistory.link_in_from_cell">
-<code class="descname">link_in_from_cell</code><a class="headerlink" href="#smartsheet.models.cell_history.CellHistory.link_in_from_cell" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.cell_history.CellHistory.links_out_to_cells">
-<code class="descname">links_out_to_cells</code><a class="headerlink" href="#smartsheet.models.cell_history.CellHistory.links_out_to_cells" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.cell_history.CellHistory.modified_at">
 <code class="descname">modified_at</code><a class="headerlink" href="#smartsheet.models.cell_history.CellHistory.modified_at" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -817,24 +783,14 @@
 <code class="descname">modified_by</code><a class="headerlink" href="#smartsheet.models.cell_history.CellHistory.modified_by" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="smartsheet.models.cell_history.CellHistory.strict">
-<code class="descname">strict</code><a class="headerlink" href="#smartsheet.models.cell_history.CellHistory.strict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="smartsheet.models.cell_history.CellHistory.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.cell_history.CellHistory.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.cell_history.CellHistory.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.cell_history.CellHistory.to_json">
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.cell_history.CellHistory.to_json" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.cell_history.CellHistory.value">
-<code class="descname">value</code><a class="headerlink" href="#smartsheet.models.cell_history.CellHistory.value" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -874,7 +830,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.cell_link.CellLink.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.cell_link.CellLink.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.cell_link.CellLink.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -903,8 +859,18 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.column.Column.format_">
+<code class="descname">format_</code><a class="headerlink" href="#smartsheet.models.column.Column.format_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.column.Column.hidden">
 <code class="descname">hidden</code><a class="headerlink" href="#smartsheet.models.column.Column.hidden" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.column.Column.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.column.Column.id_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -925,11 +891,6 @@
 <dl class="attribute">
 <dt id="smartsheet.models.column.Column.options">
 <code class="descname">options</code><a class="headerlink" href="#smartsheet.models.column.Column.options" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.column.Column.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.column.Column.pre_request_filter" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -959,12 +920,17 @@
 
 <dl class="method">
 <dt id="smartsheet.models.column.Column.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.column.Column.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.column.Column.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.column.Column.to_json">
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.column.Column.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.column.Column.type_">
+<code class="descname">type_</code><a class="headerlink" href="#smartsheet.models.column.Column.type_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1008,13 +974,13 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.comment.Comment.modified_at">
-<code class="descname">modified_at</code><a class="headerlink" href="#smartsheet.models.comment.Comment.modified_at" title="Permalink to this definition">¶</a></dt>
+<dt id="smartsheet.models.comment.Comment.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.comment.Comment.id_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.comment.Comment.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.comment.Comment.pre_request_filter" title="Permalink to this definition">¶</a></dt>
+<dt id="smartsheet.models.comment.Comment.modified_at">
+<code class="descname">modified_at</code><a class="headerlink" href="#smartsheet.models.comment.Comment.modified_at" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1024,7 +990,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.comment.Comment.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.comment.Comment.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.comment.Comment.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1048,13 +1014,18 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.contact.Contact.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.contact.Contact.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.contact.Contact.name">
 <code class="descname">name</code><a class="headerlink" href="#smartsheet.models.contact.Contact.name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.contact.Contact.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact.Contact.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact.Contact.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1070,18 +1041,8 @@
 <dl class="class">
 <dt id="smartsheet.models.contact_object_value.ContactObjectValue">
 <em class="property">class </em><code class="descclassname">smartsheet.models.contact_object_value.</code><code class="descname">ContactObjectValue</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_object_value.ContactObjectValue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#smartsheet.models.contact.Contact" title="smartsheet.models.contact.Contact"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.contact.Contact</span></code></a>, <a class="reference internal" href="#smartsheet.models.object_value.ObjectValue" title="smartsheet.models.object_value.ObjectValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.object_value.ObjectValue</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#smartsheet.models.object_value.ObjectValue" title="smartsheet.models.object_value.ObjectValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.object_value.ObjectValue</span></code></a>, <a class="reference internal" href="#smartsheet.models.contact.Contact" title="smartsheet.models.contact.Contact"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.contact.Contact</span></code></a></p>
 <p>Smartsheet ContactObjectValue data model.</p>
-<dl class="method">
-<dt id="smartsheet.models.contact_object_value.ContactObjectValue.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_object_value.ContactObjectValue.to_dict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="smartsheet.models.contact_object_value.ContactObjectValue.to_json">
-<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_object_value.ContactObjectValue.to_json" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </div>
@@ -1104,7 +1065,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.contact_option.ContactOption.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_option.ContactOption.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_option.ContactOption.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1137,14 +1098,9 @@
 <code class="descname">new_name</code><a class="headerlink" href="#smartsheet.models.container_destination.ContainerDestination.new_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="smartsheet.models.container_destination.ContainerDestination.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.container_destination.ContainerDestination.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="smartsheet.models.container_destination.ContainerDestination.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.container_destination.ContainerDestination.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.container_destination.ContainerDestination.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1169,7 +1125,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.copy_or_move_row_destination.CopyOrMoveRowDestination.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.copy_or_move_row_destination.CopyOrMoveRowDestination.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.copy_or_move_row_destination.CopyOrMoveRowDestination.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1199,7 +1155,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.copy_or_move_row_directive.CopyOrMoveRowDirective.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.copy_or_move_row_directive.CopyOrMoveRowDirective.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.copy_or_move_row_directive.CopyOrMoveRowDirective.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1229,7 +1185,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.copy_or_move_row_result.CopyOrMoveRowResult.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.copy_or_move_row_result.CopyOrMoveRowResult.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.copy_or_move_row_result.CopyOrMoveRowResult.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1259,22 +1215,12 @@
 
 <dl class="method">
 <dt id="smartsheet.models.criteria.Criteria.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.criteria.Criteria.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.criteria.Criteria.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.criteria.Criteria.to_json">
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.criteria.Criteria.to_json" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.criteria.Criteria.value1">
-<code class="descname">value1</code><a class="headerlink" href="#smartsheet.models.criteria.Criteria.value1" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.criteria.Criteria.value2">
-<code class="descname">value2</code><a class="headerlink" href="#smartsheet.models.criteria.Criteria.value2" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1304,7 +1250,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.currency.Currency.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.currency.Currency.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.currency.Currency.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1322,16 +1268,6 @@
 <em class="property">class </em><code class="descclassname">smartsheet.models.date_object_value.</code><code class="descname">DateObjectValue</code><span class="sig-paren">(</span><em>props=None</em>, <em>object_type=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.date_object_value.DateObjectValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#smartsheet.models.object_value.ObjectValue" title="smartsheet.models.object_value.ObjectValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.object_value.ObjectValue</span></code></a></p>
 <p>Smartsheet DateObjectValue data model.</p>
-<dl class="method">
-<dt id="smartsheet.models.date_object_value.DateObjectValue.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.date_object_value.DateObjectValue.to_dict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="smartsheet.models.date_object_value.DateObjectValue.to_json">
-<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.date_object_value.DateObjectValue.to_json" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="attribute">
 <dt id="smartsheet.models.date_object_value.DateObjectValue.value">
 <code class="descname">value</code><a class="headerlink" href="#smartsheet.models.date_object_value.DateObjectValue.value" title="Permalink to this definition">¶</a></dt>
@@ -1378,6 +1314,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.discussion.Discussion.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.discussion.Discussion.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.discussion.Discussion.last_commented_at">
 <code class="descname">last_commented_at</code><a class="headerlink" href="#smartsheet.models.discussion.Discussion.last_commented_at" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1398,11 +1339,6 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.discussion.Discussion.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.discussion.Discussion.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.discussion.Discussion.read_only">
 <code class="descname">read_only</code><a class="headerlink" href="#smartsheet.models.discussion.Discussion.read_only" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1414,7 +1350,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.discussion.Discussion.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.discussion.Discussion.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.discussion.Discussion.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1464,7 +1400,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.downloaded_file.DownloadedFile.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.downloaded_file.DownloadedFile.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.downloaded_file.DownloadedFile.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1517,16 +1453,6 @@
 <code class="descname">seconds</code><a class="headerlink" href="#smartsheet.models.duration.Duration.seconds" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="smartsheet.models.duration.Duration.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.duration.Duration.to_dict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="smartsheet.models.duration.Duration.to_json">
-<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.duration.Duration.to_json" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="attribute">
 <dt id="smartsheet.models.duration.Duration.weeks">
 <code class="descname">weeks</code><a class="headerlink" href="#smartsheet.models.duration.Duration.weeks" title="Permalink to this definition">¶</a></dt>
@@ -1564,7 +1490,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.email.Email.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.email.Email.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.email.Email.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1594,7 +1520,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.error.Error.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.error.Error.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.error.Error.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1654,12 +1580,26 @@
 
 <dl class="method">
 <dt id="smartsheet.models.error_result.ErrorResult.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.error_result.ErrorResult.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.error_result.ErrorResult.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.error_result.ErrorResult.to_json">
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.error_result.ErrorResult.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-smartsheet.models.explicit_null">
+<span id="smartsheet-models-explicit-null-module"></span><h2>smartsheet.models.explicit_null module<a class="headerlink" href="#module-smartsheet.models.explicit_null" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.explicit_null.ExplicitNull">
+<em class="property">class </em><code class="descclassname">smartsheet.models.explicit_null.</code><code class="descname">ExplicitNull</code><a class="headerlink" href="#smartsheet.models.explicit_null.ExplicitNull" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="smartsheet.models.explicit_null.ExplicitNull.is_explicit_null">
+<code class="descname">is_explicit_null</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.explicit_null.ExplicitNull.is_explicit_null" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1679,7 +1619,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.favorite.Favorite.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.favorite.Favorite.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.favorite.Favorite.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1687,39 +1627,9 @@
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.favorite.Favorite.to_json" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</dd></dl>
-
-</div>
-<div class="section" id="module-smartsheet.models.filter">
-<span id="smartsheet-models-filter-module"></span><h2>smartsheet.models.filter module<a class="headerlink" href="#module-smartsheet.models.filter" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="smartsheet.models.filter.Filter">
-<em class="property">class </em><code class="descclassname">smartsheet.models.filter.</code><code class="descname">Filter</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.filter.Filter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Smartsheet Filter data model.</p>
 <dl class="attribute">
-<dt id="smartsheet.models.filter.Filter.criteria">
-<code class="descname">criteria</code><a class="headerlink" href="#smartsheet.models.filter.Filter.criteria" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.filter.Filter.exclude_selected">
-<code class="descname">exclude_selected</code><a class="headerlink" href="#smartsheet.models.filter.Filter.exclude_selected" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="smartsheet.models.filter.Filter.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.filter.Filter.to_dict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="smartsheet.models.filter.Filter.to_json">
-<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.filter.Filter.to_json" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.filter.Filter.values">
-<code class="descname">values</code><a class="headerlink" href="#smartsheet.models.filter.Filter.values" title="Permalink to this definition">¶</a></dt>
+<dt id="smartsheet.models.favorite.Favorite.type_">
+<code class="descname">type_</code><a class="headerlink" href="#smartsheet.models.favorite.Favorite.type_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1748,6 +1658,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.folder.Folder.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.folder.Folder.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.folder.Folder.name">
 <code class="descname">name</code><a class="headerlink" href="#smartsheet.models.folder.Folder.name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1755,11 +1670,6 @@
 <dl class="attribute">
 <dt id="smartsheet.models.folder.Folder.permalink">
 <code class="descname">permalink</code><a class="headerlink" href="#smartsheet.models.folder.Folder.permalink" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.folder.Folder.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.folder.Folder.pre_request_filter" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1784,7 +1694,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.folder.Folder.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.folder.Folder.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.folder.Folder.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1809,7 +1719,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.font_family.FontFamily.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.font_family.FontFamily.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.font_family.FontFamily.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1839,7 +1749,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.format_details.FormatDetails.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.format_details.FormatDetails.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.format_details.FormatDetails.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1924,7 +1834,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.format_tables.FormatTables.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.format_tables.FormatTables.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.format_tables.FormatTables.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1963,6 +1873,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.group.Group.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.group.Group.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.group.Group.members">
 <code class="descname">members</code><a class="headerlink" href="#smartsheet.models.group.Group.members" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1987,14 +1902,9 @@
 <code class="descname">owner_id</code><a class="headerlink" href="#smartsheet.models.group.Group.owner_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="smartsheet.models.group.Group.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.group.Group.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="smartsheet.models.group.Group.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.group.Group.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.group.Group.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2023,6 +1933,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.group_member.GroupMember.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.group_member.GroupMember.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.group_member.GroupMember.last_name">
 <code class="descname">last_name</code><a class="headerlink" href="#smartsheet.models.group_member.GroupMember.last_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -2032,14 +1947,9 @@
 <code class="descname">name</code><a class="headerlink" href="#smartsheet.models.group_member.GroupMember.name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="smartsheet.models.group_member.GroupMember.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.group_member.GroupMember.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="smartsheet.models.group_member.GroupMember.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.group_member.GroupMember.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.group_member.GroupMember.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2084,7 +1994,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.home.Home.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.home.Home.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.home.Home.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2124,7 +2034,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.hyperlink.Hyperlink.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.hyperlink.Hyperlink.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.hyperlink.Hyperlink.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2157,9 +2067,14 @@
 <code class="descname">height</code><a class="headerlink" href="#smartsheet.models.image.Image.height" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="smartsheet.models.image.Image.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.image.Image.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="smartsheet.models.image.Image.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.image.Image.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.image.Image.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2199,7 +2114,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.image_url.ImageUrl.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.image_url.ImageUrl.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.image_url.ImageUrl.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2234,7 +2149,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.image_url_map.ImageUrlMap.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.image_url_map.ImageUrlMap.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.image_url_map.ImageUrlMap.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2280,7 +2195,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.index_result.IndexResult.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.index_result.IndexResult.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.index_result.IndexResult.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2314,8 +2229,13 @@
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="smartsheet.models.json_object.JSONObject.serialize">
+<code class="descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.json_object.JSONObject.serialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="smartsheet.models.json_object.JSONObject.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.json_object.JSONObject.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.json_object.JSONObject.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2334,18 +2254,13 @@
 <dd><p>Bases: <a class="reference internal" href="#smartsheet.models.row_email.RowEmail" title="smartsheet.models.row_email.RowEmail"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.row_email.RowEmail</span></code></a></p>
 <p>Smartsheet MultiRowEmail data model.</p>
 <dl class="attribute">
-<dt id="smartsheet.models.multi_row_email.MultiRowEmail.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.multi_row_email.MultiRowEmail.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.multi_row_email.MultiRowEmail.row_ids">
 <code class="descname">row_ids</code><a class="headerlink" href="#smartsheet.models.multi_row_email.MultiRowEmail.row_ids" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.multi_row_email.MultiRowEmail.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.multi_row_email.MultiRowEmail.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.multi_row_email.MultiRowEmail.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2395,7 +2310,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.o_auth_error.OAuthError.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.o_auth_error.OAuthError.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.o_auth_error.OAuthError.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2410,7 +2325,7 @@
 <span id="smartsheet-models-object-value-module"></span><h2>smartsheet.models.object_value module<a class="headerlink" href="#module-smartsheet.models.object_value" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="smartsheet.models.object_value.ObjectValue">
-<em class="property">class </em><code class="descclassname">smartsheet.models.object_value.</code><code class="descname">ObjectValue</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.object_value.ObjectValue" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">smartsheet.models.object_value.</code><code class="descname">ObjectValue</code><span class="sig-paren">(</span><em>object_type=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.object_value.ObjectValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Smartsheet ObjectValue data model.</p>
 <dl class="attribute">
@@ -2419,8 +2334,13 @@
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="smartsheet.models.object_value.ObjectValue.serialize">
+<code class="descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.object_value.ObjectValue.serialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="smartsheet.models.object_value.ObjectValue.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.object_value.ObjectValue.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.object_value.ObjectValue.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2459,11 +2379,6 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.predecessor.Predecessor.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.predecessor.Predecessor.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.predecessor.Predecessor.row_id">
 <code class="descname">row_id</code><a class="headerlink" href="#smartsheet.models.predecessor.Predecessor.row_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -2475,7 +2390,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.predecessor.Predecessor.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.predecessor.Predecessor.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.predecessor.Predecessor.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2499,23 +2414,8 @@
 <dd><p>Bases: <a class="reference internal" href="#smartsheet.models.object_value.ObjectValue" title="smartsheet.models.object_value.ObjectValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.object_value.ObjectValue</span></code></a></p>
 <p>Smartsheet PredecessorList data model.</p>
 <dl class="attribute">
-<dt id="smartsheet.models.predecessor_list.PredecessorList.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.predecessor_list.PredecessorList.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.predecessor_list.PredecessorList.predecessors">
 <code class="descname">predecessors</code><a class="headerlink" href="#smartsheet.models.predecessor_list.PredecessorList.predecessors" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="smartsheet.models.predecessor_list.PredecessorList.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.predecessor_list.PredecessorList.to_dict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="smartsheet.models.predecessor_list.PredecessorList.to_json">
-<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.predecessor_list.PredecessorList.to_json" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2529,8 +2429,13 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Smartsheet PrimitiveObjectValue data model.</p>
 <dl class="method">
+<dt id="smartsheet.models.primitive_object_value.PrimitiveObjectValue.serialize">
+<code class="descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.primitive_object_value.PrimitiveObjectValue.serialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="smartsheet.models.primitive_object_value.PrimitiveObjectValue.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.primitive_object_value.PrimitiveObjectValue.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.primitive_object_value.PrimitiveObjectValue.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2565,7 +2470,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.project_settings.ProjectSettings.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.project_settings.ProjectSettings.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.project_settings.ProjectSettings.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2600,7 +2505,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.recipient.Recipient.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.recipient.Recipient.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.recipient.Recipient.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2619,103 +2524,13 @@
 <dd><p>Bases: <a class="reference internal" href="#smartsheet.models.sheet.Sheet" title="smartsheet.models.sheet.Sheet"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.sheet.Sheet</span></code></a></p>
 <p>Smartsheet Report data model.</p>
 <dl class="attribute">
-<dt id="smartsheet.models.report.Report.access_level">
-<code class="descname">access_level</code><a class="headerlink" href="#smartsheet.models.report.Report.access_level" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.attachments">
-<code class="descname">attachments</code><a class="headerlink" href="#smartsheet.models.report.Report.attachments" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.report.Report.columns">
 <code class="descname">columns</code><a class="headerlink" href="#smartsheet.models.report.Report.columns" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.report.Report.created_at">
-<code class="descname">created_at</code><a class="headerlink" href="#smartsheet.models.report.Report.created_at" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.dependencies_enabled">
-<code class="descname">dependencies_enabled</code><a class="headerlink" href="#smartsheet.models.report.Report.dependencies_enabled" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.discussions">
-<code class="descname">discussions</code><a class="headerlink" href="#smartsheet.models.report.Report.discussions" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.effective_attachment_options">
-<code class="descname">effective_attachment_options</code><a class="headerlink" href="#smartsheet.models.report.Report.effective_attachment_options" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.favorite">
-<code class="descname">favorite</code><a class="headerlink" href="#smartsheet.models.report.Report.favorite" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.from_id">
-<code class="descname">from_id</code><a class="headerlink" href="#smartsheet.models.report.Report.from_id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.gantt_enabled">
-<code class="descname">gantt_enabled</code><a class="headerlink" href="#smartsheet.models.report.Report.gantt_enabled" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.modified_at">
-<code class="descname">modified_at</code><a class="headerlink" href="#smartsheet.models.report.Report.modified_at" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.name">
-<code class="descname">name</code><a class="headerlink" href="#smartsheet.models.report.Report.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.owner">
-<code class="descname">owner</code><a class="headerlink" href="#smartsheet.models.report.Report.owner" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.owner_id">
-<code class="descname">owner_id</code><a class="headerlink" href="#smartsheet.models.report.Report.owner_id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.permalink">
-<code class="descname">permalink</code><a class="headerlink" href="#smartsheet.models.report.Report.permalink" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.read_only">
-<code class="descname">read_only</code><a class="headerlink" href="#smartsheet.models.report.Report.read_only" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.resource_management_enabled">
-<code class="descname">resource_management_enabled</code><a class="headerlink" href="#smartsheet.models.report.Report.resource_management_enabled" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.report.Report.rows">
 <code class="descname">rows</code><a class="headerlink" href="#smartsheet.models.report.Report.rows" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.show_parent_rows_for_filters">
-<code class="descname">show_parent_rows_for_filters</code><a class="headerlink" href="#smartsheet.models.report.Report.show_parent_rows_for_filters" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.source">
-<code class="descname">source</code><a class="headerlink" href="#smartsheet.models.report.Report.source" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2725,27 +2540,12 @@
 
 <dl class="method">
 <dt id="smartsheet.models.report.Report.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.report.Report.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.report.Report.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.report.Report.to_json">
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.report.Report.to_json" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.total_row_count">
-<code class="descname">total_row_count</code><a class="headerlink" href="#smartsheet.models.report.Report.total_row_count" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.user_settings">
-<code class="descname">user_settings</code><a class="headerlink" href="#smartsheet.models.report.Report.user_settings" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report.Report.version">
-<code class="descname">version</code><a class="headerlink" href="#smartsheet.models.report.Report.version" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2758,64 +2558,14 @@
 <em class="property">class </em><code class="descclassname">smartsheet.models.report_cell.</code><code class="descname">ReportCell</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.report_cell.ReportCell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#smartsheet.models.cell.Cell" title="smartsheet.models.cell.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.cell.Cell</span></code></a></p>
 <p>Smartsheet ReportCell data model.</p>
-<dl class="attribute">
-<dt id="smartsheet.models.report_cell.ReportCell.column_id">
-<code class="descname">column_id</code><a class="headerlink" href="#smartsheet.models.report_cell.ReportCell.column_id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_cell.ReportCell.column_type">
-<code class="descname">column_type</code><a class="headerlink" href="#smartsheet.models.report_cell.ReportCell.column_type" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_cell.ReportCell.conditional_format">
-<code class="descname">conditional_format</code><a class="headerlink" href="#smartsheet.models.report_cell.ReportCell.conditional_format" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_cell.ReportCell.display_value">
-<code class="descname">display_value</code><a class="headerlink" href="#smartsheet.models.report_cell.ReportCell.display_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_cell.ReportCell.formula">
-<code class="descname">formula</code><a class="headerlink" href="#smartsheet.models.report_cell.ReportCell.formula" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_cell.ReportCell.hyperlink">
-<code class="descname">hyperlink</code><a class="headerlink" href="#smartsheet.models.report_cell.ReportCell.hyperlink" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_cell.ReportCell.link_in_from_cell">
-<code class="descname">link_in_from_cell</code><a class="headerlink" href="#smartsheet.models.report_cell.ReportCell.link_in_from_cell" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_cell.ReportCell.links_out_to_cells">
-<code class="descname">links_out_to_cells</code><a class="headerlink" href="#smartsheet.models.report_cell.ReportCell.links_out_to_cells" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_cell.ReportCell.strict">
-<code class="descname">strict</code><a class="headerlink" href="#smartsheet.models.report_cell.ReportCell.strict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="smartsheet.models.report_cell.ReportCell.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.report_cell.ReportCell.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.report_cell.ReportCell.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.report_cell.ReportCell.to_json">
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.report_cell.ReportCell.to_json" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_cell.ReportCell.value">
-<code class="descname">value</code><a class="headerlink" href="#smartsheet.models.report_cell.ReportCell.value" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -2834,68 +2584,13 @@
 <dd><p>Bases: <a class="reference internal" href="#smartsheet.models.column.Column" title="smartsheet.models.column.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.column.Column</span></code></a></p>
 <p>Smartsheet ReportColumn data model.</p>
 <dl class="attribute">
-<dt id="smartsheet.models.report_column.ReportColumn.auto_number_format">
-<code class="descname">auto_number_format</code><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.auto_number_format" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_column.ReportColumn.hidden">
-<code class="descname">hidden</code><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.hidden" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_column.ReportColumn.index">
-<code class="descname">index</code><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.index" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_column.ReportColumn.locked">
-<code class="descname">locked</code><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.locked" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_column.ReportColumn.locked_for_user">
-<code class="descname">locked_for_user</code><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.locked_for_user" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_column.ReportColumn.options">
-<code class="descname">options</code><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.options" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_column.ReportColumn.primary">
-<code class="descname">primary</code><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.primary" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.report_column.ReportColumn.sheet_name_column">
 <code class="descname">sheet_name_column</code><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.sheet_name_column" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="smartsheet.models.report_column.ReportColumn.symbol">
-<code class="descname">symbol</code><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.symbol" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_column.ReportColumn.system_column_type">
-<code class="descname">system_column_type</code><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.system_column_type" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_column.ReportColumn.tags">
-<code class="descname">tags</code><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.tags" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_column.ReportColumn.title">
-<code class="descname">title</code><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.title" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="smartsheet.models.report_column.ReportColumn.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2908,11 +2603,6 @@
 <code class="descname">virtual_id</code><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.virtual_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="smartsheet.models.report_column.ReportColumn.width">
-<code class="descname">width</code><a class="headerlink" href="#smartsheet.models.report_column.ReportColumn.width" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </div>
@@ -2923,11 +2613,6 @@
 <em class="property">class </em><code class="descclassname">smartsheet.models.report_publish.</code><code class="descname">ReportPublish</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.report_publish.ReportPublish" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Smartsheet ReportPublish data model.</p>
-<dl class="attribute">
-<dt id="smartsheet.models.report_publish.ReportPublish.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.report_publish.ReportPublish.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="attribute">
 <dt id="smartsheet.models.report_publish.ReportPublish.read_only_full_accessible_by">
 <code class="descname">read_only_full_accessible_by</code><a class="headerlink" href="#smartsheet.models.report_publish.ReportPublish.read_only_full_accessible_by" title="Permalink to this definition">¶</a></dt>
@@ -2955,7 +2640,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.report_publish.ReportPublish.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.report_publish.ReportPublish.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.report_publish.ReportPublish.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -2974,88 +2659,8 @@
 <dd><p>Bases: <a class="reference internal" href="#smartsheet.models.row.Row" title="smartsheet.models.row.Row"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.row.Row</span></code></a></p>
 <p>Smartsheet ReportRow data model.</p>
 <dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.above">
-<code class="descname">above</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.above" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.access_level">
-<code class="descname">access_level</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.access_level" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.attachments">
-<code class="descname">attachments</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.attachments" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.report_row.ReportRow.cells">
 <code class="descname">cells</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.cells" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.columns">
-<code class="descname">columns</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.columns" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.conditional_format">
-<code class="descname">conditional_format</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.conditional_format" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.created_at">
-<code class="descname">created_at</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.created_at" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.discussions">
-<code class="descname">discussions</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.discussions" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.expanded">
-<code class="descname">expanded</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.expanded" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.filtered_out">
-<code class="descname">filtered_out</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.filtered_out" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.in_critical_path">
-<code class="descname">in_critical_path</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.in_critical_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.locked">
-<code class="descname">locked</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.locked" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.locked_for_user">
-<code class="descname">locked_for_user</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.locked_for_user" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.modified_at">
-<code class="descname">modified_at</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.modified_at" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.parent_id">
-<code class="descname">parent_id</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.parent_id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.permalink">
-<code class="descname">permalink</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.permalink" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.row_number">
-<code class="descname">row_number</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.row_number" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3063,34 +2668,14 @@
 <code class="descname">sheet_id</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.sheet_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.sibling_id">
-<code class="descname">sibling_id</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.sibling_id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.to_bottom">
-<code class="descname">to_bottom</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.to_bottom" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="smartsheet.models.report_row.ReportRow.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.report_row.ReportRow.to_json">
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.to_json" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.to_top">
-<code class="descname">to_top</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.to_top" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.report_row.ReportRow.version">
-<code class="descname">version</code><a class="headerlink" href="#smartsheet.models.report_row.ReportRow.version" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -3126,7 +2711,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.result.Result.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.result.Result.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.result.Result.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -3204,9 +2789,19 @@
 <code class="descname">filtered_out</code><a class="headerlink" href="#smartsheet.models.row.Row.filtered_out" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="smartsheet.models.row.Row.format_">
+<code class="descname">format_</code><a class="headerlink" href="#smartsheet.models.row.Row.format_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="smartsheet.models.row.Row.get_column">
 <code class="descname">get_column</code><span class="sig-paren">(</span><em>column_id</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.row.Row.get_column" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.row.Row.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.row.Row.id_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3255,11 +2850,6 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.row.Row.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.row.Row.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.row.Row.row_number">
 <code class="descname">row_number</code><a class="headerlink" href="#smartsheet.models.row.Row.row_number" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -3286,7 +2876,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.row.Row.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.row.Row.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.row.Row.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -3336,7 +2926,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.row_email.RowEmail.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.row_email.RowEmail.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.row_email.RowEmail.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -3355,13 +2945,18 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Smartsheet RowMapping data model.</p>
 <dl class="attribute">
+<dt id="smartsheet.models.row_mapping.RowMapping.from_">
+<code class="descname">from_</code><a class="headerlink" href="#smartsheet.models.row_mapping.RowMapping.from_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.row_mapping.RowMapping.to">
 <code class="descname">to</code><a class="headerlink" href="#smartsheet.models.row_mapping.RowMapping.to" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.row_mapping.RowMapping.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.row_mapping.RowMapping.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.row_mapping.RowMapping.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -3410,11 +3005,6 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.schedule.Schedule.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.schedule.Schedule.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.schedule.Schedule.repeat_every">
 <code class="descname">repeat_every</code><a class="headerlink" href="#smartsheet.models.schedule.Schedule.repeat_every" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -3426,7 +3016,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.schedule.Schedule.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.schedule.Schedule.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.schedule.Schedule.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -3435,8 +3025,8 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.schedule.Schedule.type">
-<code class="descname">type</code><a class="headerlink" href="#smartsheet.models.schedule.Schedule.type" title="Permalink to this definition">¶</a></dt>
+<dt id="smartsheet.models.schedule.Schedule.type_">
+<code class="descname">type_</code><a class="headerlink" href="#smartsheet.models.schedule.Schedule.type_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -3456,7 +3046,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.search_result.SearchResult.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.search_result.SearchResult.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.search_result.SearchResult.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -3526,7 +3116,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.search_result_item.SearchResultItem.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.search_result_item.SearchResultItem.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.search_result_item.SearchResultItem.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -3547,6 +3137,11 @@
 <dl class="attribute">
 <dt id="smartsheet.models.sent_update_request.SentUpdateRequest.column_ids">
 <code class="descname">column_ids</code><a class="headerlink" href="#smartsheet.models.sent_update_request.SentUpdateRequest.column_ids" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.sent_update_request.SentUpdateRequest.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.sent_update_request.SentUpdateRequest.id_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3596,7 +3191,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.sent_update_request.SentUpdateRequest.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sent_update_request.SentUpdateRequest.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sent_update_request.SentUpdateRequest.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -3631,7 +3226,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.server_info.ServerInfo.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.server_info.ServerInfo.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.server_info.ServerInfo.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -3675,6 +3270,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.share.Share.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.share.Share.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.share.Share.message">
 <code class="descname">message</code><a class="headerlink" href="#smartsheet.models.share.Share.message" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -3690,11 +3290,6 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.share.Share.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.share.Share.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.share.Share.scope">
 <code class="descname">scope</code><a class="headerlink" href="#smartsheet.models.share.Share.scope" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -3706,12 +3301,17 @@
 
 <dl class="method">
 <dt id="smartsheet.models.share.Share.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.share.Share.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.share.Share.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.share.Share.to_json">
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.share.Share.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.share.Share.type_">
+<code class="descname">type_</code><a class="headerlink" href="#smartsheet.models.share.Share.type_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3859,6 +3459,11 @@
 <code class="descname">get_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet.Sheet.get_version" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="smartsheet.models.sheet.Sheet.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.sheet.Sheet.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="smartsheet.models.sheet.Sheet.list_shares">
 <code class="descname">list_shares</code><span class="sig-paren">(</span><em>page_size=100</em>, <em>page=1</em>, <em>include_all=False</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet.Sheet.list_shares" title="Permalink to this definition">¶</a></dt>
@@ -3887,11 +3492,6 @@
 <dl class="attribute">
 <dt id="smartsheet.models.sheet.Sheet.permalink">
 <code class="descname">permalink</code><a class="headerlink" href="#smartsheet.models.sheet.Sheet.permalink" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.sheet.Sheet.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.sheet.Sheet.pre_request_filter" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3941,7 +3541,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.sheet.Sheet.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet.Sheet.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet.Sheet.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -3985,8 +3585,8 @@
 <dd><p>Bases: <a class="reference internal" href="#smartsheet.models.email.Email" title="smartsheet.models.email.Email"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.email.Email</span></code></a></p>
 <p>Smartsheet SheetEmail data model.</p>
 <dl class="attribute">
-<dt id="smartsheet.models.sheet_email.SheetEmail.cc_me">
-<code class="descname">cc_me</code><a class="headerlink" href="#smartsheet.models.sheet_email.SheetEmail.cc_me" title="Permalink to this definition">¶</a></dt>
+<dt id="smartsheet.models.sheet_email.SheetEmail.format_">
+<code class="descname">format_</code><a class="headerlink" href="#smartsheet.models.sheet_email.SheetEmail.format_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -3994,24 +3594,9 @@
 <code class="descname">format_details</code><a class="headerlink" href="#smartsheet.models.sheet_email.SheetEmail.format_details" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="smartsheet.models.sheet_email.SheetEmail.message">
-<code class="descname">message</code><a class="headerlink" href="#smartsheet.models.sheet_email.SheetEmail.message" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.sheet_email.SheetEmail.send_to">
-<code class="descname">send_to</code><a class="headerlink" href="#smartsheet.models.sheet_email.SheetEmail.send_to" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.sheet_email.SheetEmail.subject">
-<code class="descname">subject</code><a class="headerlink" href="#smartsheet.models.sheet_email.SheetEmail.subject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="smartsheet.models.sheet_email.SheetEmail.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_email.SheetEmail.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_email.SheetEmail.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4035,6 +3620,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.sheet_filter.SheetFilter.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.sheet_filter.SheetFilter.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.sheet_filter.SheetFilter.name">
 <code class="descname">name</code><a class="headerlink" href="#smartsheet.models.sheet_filter.SheetFilter.name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -4046,7 +3636,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.sheet_filter.SheetFilter.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_filter.SheetFilter.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_filter.SheetFilter.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4081,7 +3671,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.sheet_filter_details.SheetFilterDetails.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_filter_details.SheetFilterDetails.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_filter_details.SheetFilterDetails.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4107,11 +3697,6 @@
 <dl class="attribute">
 <dt id="smartsheet.models.sheet_publish.SheetPublish.ical_url">
 <code class="descname">ical_url</code><a class="headerlink" href="#smartsheet.models.sheet_publish.SheetPublish.ical_url" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.sheet_publish.SheetPublish.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.sheet_publish.SheetPublish.pre_request_filter" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -4181,7 +3766,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.sheet_publish.SheetPublish.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_publish.SheetPublish.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_publish.SheetPublish.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4216,7 +3801,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.sheet_user_settings.SheetUserSettings.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_user_settings.SheetUserSettings.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_user_settings.SheetUserSettings.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4266,7 +3851,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.shortcut_data_item.ShortcutDataItem.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.shortcut_data_item.ShortcutDataItem.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.shortcut_data_item.ShortcutDataItem.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4305,6 +3890,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.sight.Sight.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.sight.Sight.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.sight.Sight.modified_at">
 <code class="descname">modified_at</code><a class="headerlink" href="#smartsheet.models.sight.Sight.modified_at" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -4319,14 +3909,9 @@
 <code class="descname">permalink</code><a class="headerlink" href="#smartsheet.models.sight.Sight.permalink" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="smartsheet.models.sight.Sight.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.sight.Sight.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="smartsheet.models.sight.Sight.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sight.Sight.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sight.Sight.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4355,11 +3940,6 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Smartsheet SightPublish data model.</p>
 <dl class="attribute">
-<dt id="smartsheet.models.sight_publish.SightPublish.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.sight_publish.SightPublish.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.sight_publish.SightPublish.read_only_full_accessible_by">
 <code class="descname">read_only_full_accessible_by</code><a class="headerlink" href="#smartsheet.models.sight_publish.SightPublish.read_only_full_accessible_by" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -4376,7 +3956,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.sight_publish.SightPublish.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sight_publish.SightPublish.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sight_publish.SightPublish.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4394,14 +3974,24 @@
 <em class="property">class </em><code class="descclassname">smartsheet.models.source.</code><code class="descname">Source</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.source.Source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Smartsheet Source data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.source.Source.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.source.Source.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="smartsheet.models.source.Source.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.source.Source.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.source.Source.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="smartsheet.models.source.Source.to_json">
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.source.Source.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.source.Source.type_">
+<code class="descname">type_</code><a class="headerlink" href="#smartsheet.models.source.Source.type_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -4455,6 +4045,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.template.Template.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.template.Template.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.template.Template.image">
 <code class="descname">image</code><a class="headerlink" href="#smartsheet.models.template.Template.image" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -4481,7 +4076,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.template.Template.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.template.Template.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.template.Template.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4510,13 +4105,13 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.update_request.UpdateRequest.modified_at">
-<code class="descname">modified_at</code><a class="headerlink" href="#smartsheet.models.update_request.UpdateRequest.modified_at" title="Permalink to this definition">¶</a></dt>
+<dt id="smartsheet.models.update_request.UpdateRequest.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.update_request.UpdateRequest.id_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.update_request.UpdateRequest.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.update_request.UpdateRequest.pre_request_filter" title="Permalink to this definition">¶</a></dt>
+<dt id="smartsheet.models.update_request.UpdateRequest.modified_at">
+<code class="descname">modified_at</code><a class="headerlink" href="#smartsheet.models.update_request.UpdateRequest.modified_at" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -4531,7 +4126,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.update_request.UpdateRequest.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.update_request.UpdateRequest.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.update_request.UpdateRequest.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4547,81 +4142,16 @@
 <dl class="class">
 <dt id="smartsheet.models.user.User">
 <em class="property">class </em><code class="descclassname">smartsheet.models.user.</code><code class="descname">User</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.user.User" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#smartsheet.models.user_model.UserModel" title="smartsheet.models.user_model.UserModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.user_model.UserModel</span></code></a></p>
 <p>Smartsheet User data model.</p>
-<dl class="attribute">
-<dt id="smartsheet.models.user.User.admin">
-<code class="descname">admin</code><a class="headerlink" href="#smartsheet.models.user.User.admin" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user.User.alternate_emails">
-<code class="descname">alternate_emails</code><a class="headerlink" href="#smartsheet.models.user.User.alternate_emails" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user.User.custom_welcome_screen_viewed">
-<code class="descname">custom_welcome_screen_viewed</code><a class="headerlink" href="#smartsheet.models.user.User.custom_welcome_screen_viewed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user.User.email">
-<code class="descname">email</code><a class="headerlink" href="#smartsheet.models.user.User.email" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user.User.first_name">
-<code class="descname">first_name</code><a class="headerlink" href="#smartsheet.models.user.User.first_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user.User.group_admin">
-<code class="descname">group_admin</code><a class="headerlink" href="#smartsheet.models.user.User.group_admin" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user.User.last_login">
-<code class="descname">last_login</code><a class="headerlink" href="#smartsheet.models.user.User.last_login" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user.User.last_name">
-<code class="descname">last_name</code><a class="headerlink" href="#smartsheet.models.user.User.last_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user.User.licensed_sheet_creator">
-<code class="descname">licensed_sheet_creator</code><a class="headerlink" href="#smartsheet.models.user.User.licensed_sheet_creator" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="attribute">
 <dt id="smartsheet.models.user.User.name">
 <code class="descname">name</code><a class="headerlink" href="#smartsheet.models.user.User.name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="smartsheet.models.user.User.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.user.User.pre_request_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user.User.resource_viewer">
-<code class="descname">resource_viewer</code><a class="headerlink" href="#smartsheet.models.user.User.resource_viewer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user.User.sheet_count">
-<code class="descname">sheet_count</code><a class="headerlink" href="#smartsheet.models.user.User.sheet_count" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user.User.status">
-<code class="descname">status</code><a class="headerlink" href="#smartsheet.models.user.User.status" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="smartsheet.models.user.User.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.user.User.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.user.User.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4632,12 +4162,97 @@
 </dd></dl>
 
 </div>
+<div class="section" id="module-smartsheet.models.user_model">
+<span id="smartsheet-models-user-model-module"></span><h2>smartsheet.models.user_model module<a class="headerlink" href="#module-smartsheet.models.user_model" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.user_model.UserModel">
+<em class="property">class </em><code class="descclassname">smartsheet.models.user_model.</code><code class="descname">UserModel</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.user_model.UserModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Smartsheet UserModel data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.user_model.UserModel.admin">
+<code class="descname">admin</code><a class="headerlink" href="#smartsheet.models.user_model.UserModel.admin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.user_model.UserModel.alternate_emails">
+<code class="descname">alternate_emails</code><a class="headerlink" href="#smartsheet.models.user_model.UserModel.alternate_emails" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.user_model.UserModel.custom_welcome_screen_viewed">
+<code class="descname">custom_welcome_screen_viewed</code><a class="headerlink" href="#smartsheet.models.user_model.UserModel.custom_welcome_screen_viewed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.user_model.UserModel.email">
+<code class="descname">email</code><a class="headerlink" href="#smartsheet.models.user_model.UserModel.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.user_model.UserModel.first_name">
+<code class="descname">first_name</code><a class="headerlink" href="#smartsheet.models.user_model.UserModel.first_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.user_model.UserModel.group_admin">
+<code class="descname">group_admin</code><a class="headerlink" href="#smartsheet.models.user_model.UserModel.group_admin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.user_model.UserModel.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.user_model.UserModel.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.user_model.UserModel.last_login">
+<code class="descname">last_login</code><a class="headerlink" href="#smartsheet.models.user_model.UserModel.last_login" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.user_model.UserModel.last_name">
+<code class="descname">last_name</code><a class="headerlink" href="#smartsheet.models.user_model.UserModel.last_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.user_model.UserModel.licensed_sheet_creator">
+<code class="descname">licensed_sheet_creator</code><a class="headerlink" href="#smartsheet.models.user_model.UserModel.licensed_sheet_creator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.user_model.UserModel.resource_viewer">
+<code class="descname">resource_viewer</code><a class="headerlink" href="#smartsheet.models.user_model.UserModel.resource_viewer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.user_model.UserModel.sheet_count">
+<code class="descname">sheet_count</code><a class="headerlink" href="#smartsheet.models.user_model.UserModel.sheet_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.user_model.UserModel.status">
+<code class="descname">status</code><a class="headerlink" href="#smartsheet.models.user_model.UserModel.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.user_model.UserModel.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.user_model.UserModel.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.user_model.UserModel.to_json">
+<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.user_model.UserModel.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-smartsheet.models.user_profile">
 <span id="smartsheet-models-user-profile-module"></span><h2>smartsheet.models.user_profile module<a class="headerlink" href="#module-smartsheet.models.user_profile" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="smartsheet.models.user_profile.UserProfile">
 <em class="property">class </em><code class="descclassname">smartsheet.models.user_profile.</code><code class="descname">UserProfile</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.user_profile.UserProfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#smartsheet.models.user_model.UserModel" title="smartsheet.models.user_model.UserModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.user_model.UserModel</span></code></a></p>
 <p>Smartsheet UserProfile data model.</p>
 <dl class="attribute">
 <dt id="smartsheet.models.user_profile.UserProfile.account">
@@ -4645,48 +4260,8 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.user_profile.UserProfile.admin">
-<code class="descname">admin</code><a class="headerlink" href="#smartsheet.models.user_profile.UserProfile.admin" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user_profile.UserProfile.email">
-<code class="descname">email</code><a class="headerlink" href="#smartsheet.models.user_profile.UserProfile.email" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user_profile.UserProfile.first_name">
-<code class="descname">first_name</code><a class="headerlink" href="#smartsheet.models.user_profile.UserProfile.first_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user_profile.UserProfile.group_admin">
-<code class="descname">group_admin</code><a class="headerlink" href="#smartsheet.models.user_profile.UserProfile.group_admin" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user_profile.UserProfile.last_name">
-<code class="descname">last_name</code><a class="headerlink" href="#smartsheet.models.user_profile.UserProfile.last_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user_profile.UserProfile.licensed_sheet_creator">
-<code class="descname">licensed_sheet_creator</code><a class="headerlink" href="#smartsheet.models.user_profile.UserProfile.licensed_sheet_creator" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
 <dt id="smartsheet.models.user_profile.UserProfile.locale">
 <code class="descname">locale</code><a class="headerlink" href="#smartsheet.models.user_profile.UserProfile.locale" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user_profile.UserProfile.resource_viewer">
-<code class="descname">resource_viewer</code><a class="headerlink" href="#smartsheet.models.user_profile.UserProfile.resource_viewer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.user_profile.UserProfile.status">
-<code class="descname">status</code><a class="headerlink" href="#smartsheet.models.user_profile.UserProfile.status" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -4696,7 +4271,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.user_profile.UserProfile.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.user_profile.UserProfile.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.user_profile.UserProfile.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4716,7 +4291,7 @@
 <p>Smartsheet Version data model.</p>
 <dl class="method">
 <dt id="smartsheet.models.version.Version.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.version.Version.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.version.Version.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4775,6 +4350,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.webhook.Webhook.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.webhook.Webhook.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.webhook.Webhook.modified_at">
 <code class="descname">modified_at</code><a class="headerlink" href="#smartsheet.models.webhook.Webhook.modified_at" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -4782,11 +4362,6 @@
 <dl class="attribute">
 <dt id="smartsheet.models.webhook.Webhook.name">
 <code class="descname">name</code><a class="headerlink" href="#smartsheet.models.webhook.Webhook.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.webhook.Webhook.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.webhook.Webhook.pre_request_filter" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -4816,7 +4391,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.webhook.Webhook.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.webhook.Webhook.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.webhook.Webhook.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4846,7 +4421,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.webhook_secret.WebhookSecret.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.webhook_secret.WebhookSecret.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.webhook_secret.WebhookSecret.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4881,7 +4456,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.webhook_stats.WebhookStats.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.webhook_stats.WebhookStats.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.webhook_stats.WebhookStats.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4910,6 +4485,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.widget.Widget.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.widget.Widget.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.widget.Widget.show_title">
 <code class="descname">show_title</code><a class="headerlink" href="#smartsheet.models.widget.Widget.show_title" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -4931,7 +4511,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.widget.Widget.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.widget.Widget.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.widget.Widget.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4995,8 +4575,8 @@
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="smartsheet.models.widget_content.WidgetContent.format">
-<code class="descname">format</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.format" title="Permalink to this definition">¶</a></dt>
+<dt id="smartsheet.models.widget_content.WidgetContent.format_">
+<code class="descname">format_</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.format_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -5031,7 +4611,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.widget_content.WidgetContent.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -5070,6 +4650,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.workspace.Workspace.id_">
+<code class="descname">id_</code><a class="headerlink" href="#smartsheet.models.workspace.Workspace.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.workspace.Workspace.name">
 <code class="descname">name</code><a class="headerlink" href="#smartsheet.models.workspace.Workspace.name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -5077,11 +4662,6 @@
 <dl class="attribute">
 <dt id="smartsheet.models.workspace.Workspace.permalink">
 <code class="descname">permalink</code><a class="headerlink" href="#smartsheet.models.workspace.Workspace.permalink" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.workspace.Workspace.pre_request_filter">
-<code class="descname">pre_request_filter</code><a class="headerlink" href="#smartsheet.models.workspace.Workspace.pre_request_filter" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -5106,7 +4686,7 @@
 
 <dl class="method">
 <dt id="smartsheet.models.workspace.Workspace.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><em>op_id=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.workspace.Workspace.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.workspace.Workspace.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -5163,7 +4743,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.2.4',
+            VERSION:'1.2.5.dev38+g7d61cc0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
