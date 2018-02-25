@@ -77,6 +77,14 @@ class Image(object):
         self._id_.value = value
 
     @property
+    def image_id(self):
+        return self._id_.value
+
+    @image_id.setter
+    def image_id(self, value):
+        self._id_.value = value
+
+    @property
     def width(self):
         return self._width.value
 

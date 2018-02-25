@@ -1,5 +1,8 @@
 import pytest
 import six
+import os.path
+
+_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 @pytest.mark.usefixtures("smart_setup")
@@ -116,4 +119,10 @@ class TestUsers:
             )
             assert action.message == 'SUCCESS'
 
+    def test_add_profile_image(self, smart_setup):
+        smart = smart_setup['smart']
+        me = smart.Users.get_current_user()
+        assert isinstance(me.id, six.integer_types)
 
+        action = smart.Users.add_profile_image(me.id, _dir + '/fixtures/curly.jpg', 'image/jpeg')
+        assert action.message == 'SUCCESS'

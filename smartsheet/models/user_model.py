@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 
 from .alternate_email import AlternateEmail
+from .image import Image
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -41,7 +42,9 @@ class UserModel(object):
 
         self._admin = Boolean()
         self._alternate_emails = TypedList(AlternateEmail)
+        self._company = String()
         self._custom_welcome_screen_viewed = Timestamp()
+        self._department = String()
         self._email = String()
         self._first_name = String()
         self._group_admin = Boolean()
@@ -49,11 +52,16 @@ class UserModel(object):
         self._last_login = Timestamp()
         self._last_name = String()
         self._licensed_sheet_creator = Boolean()
+        self._mobile_phone = String()
+        self._profile_image = TypedObject(Image)
         self._resource_viewer = Boolean()
+        self._role = String()
         self._sheet_count = Number()
         self._status = String(
             accept=self.allowed_values['status']
         )
+        self._title = String()
+        self._work_phone = String()
 
         if props:
             deserialize(self, props)
@@ -89,12 +97,28 @@ class UserModel(object):
         self._alternate_emails.load(value)
 
     @property
+    def company(self):
+        return self._company.value
+
+    @company.setter
+    def company(self, value):
+        self._company.value = value
+
+    @property
     def custom_welcome_screen_viewed(self):
         return self._custom_welcome_screen_viewed.value
 
     @custom_welcome_screen_viewed.setter
     def custom_welcome_screen_viewed(self, value):
         self._custom_welcome_screen_viewed.value = value
+
+    @property
+    def department(self):
+        return self._department.value
+
+    @department.setter
+    def department(self, value):
+        self._department.value = value
 
     @property
     def email(self):
@@ -153,12 +177,36 @@ class UserModel(object):
         self._licensed_sheet_creator.value = value
 
     @property
+    def mobile_phone(self):
+        return self._mobile_phone.value
+
+    @mobile_phone.setter
+    def mobile_phone(self, value):
+        self._mobile_phone.value = value
+
+    @property
+    def profile_image(self):
+        return self._profile_image.value
+
+    @profile_image.setter
+    def profile_image(self, value):
+        self._profile_image.value = value
+
+    @property
     def resource_viewer(self):
         return self._resource_viewer.value
 
     @resource_viewer.setter
     def resource_viewer(self, value):
         self._resource_viewer.value = value
+
+    @property
+    def role(self):
+        return self._role.value
+
+    @role.setter
+    def role(self, value):
+        self._role.value = value
 
     @property
     def sheet_count(self):
@@ -175,6 +223,22 @@ class UserModel(object):
     @status.setter
     def status(self, value):
         self._status.value = value
+
+    @property
+    def title(self):
+        return self._title.value
+
+    @title.setter
+    def title(self, value):
+        self._title.value = value
+
+    @property
+    def work_phone(self):
+        return self._work_phone.value
+
+    @work_phone.setter
+    def work_phone(self, value):
+        self._work_phone.value = value
 
     def to_dict(self):
         return serialize(self)
