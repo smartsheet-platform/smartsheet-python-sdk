@@ -21,6 +21,7 @@ from .attachment import Attachment
 from .column import Column
 from .sheet_filter import SheetFilter
 from .comment import Comment
+from .cross_sheet_references import CrossSheetReference
 from .discussion import Discussion
 from .project_settings import ProjectSettings
 from .row import Row
@@ -55,6 +56,7 @@ class Sheet(object):
         self._attachments = TypedList(Attachment)
         self._columns = TypedList(Column)
         self._created_at = Timestamp()
+        self._cross_sheet_references = TypedList(CrossSheetReference)
         self._dependencies_enabled = Boolean()
         self._discussions = TypedList(Discussion)
         self._effective_attachment_options = TypedList(str)
@@ -128,6 +130,14 @@ class Sheet(object):
     @created_at.setter
     def created_at(self, value):
         self._created_at.value = value
+
+    @property
+    def cross_sheet_references(self):
+        return self._cross_sheet_references
+
+    @cross_sheet_references.setter
+    def cross_sheet_references(self, value):
+        self._cross_sheet_references.load(value)
 
     @property
     def dependencies_enabled(self):

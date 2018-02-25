@@ -476,7 +476,7 @@ class Sheets(object):
             sheet_id (int): Sheet ID
             include (list[str]): A comma-separated list of
                 optional elements to include in the response. Valid list
-                values: attachments, discussions, format, filters,
+                values: attachments, crossSheetReferences, discussions, format, filters,
                 filterDefinitions, ownerInfo, source, rowWriterInfo.
             exclude (str): Response will not include cells
                 that have never contained any data.
@@ -1348,6 +1348,77 @@ class Sheets(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/filters/' + str(filter_id)
 
         expected = ['Result', None]
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def list_cross_sheet_references(self, sheet_id, page_size=None, page=None,
+                                  include_all=None):
+        """Get the list of all CrossSheetReferences for this Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            page_size (int): The maximum number of items to
+                return per page.
+            page (int): Which page to return.
+            include_all (bool): If true, include all results
+                (i.e. do not paginate).
+
+        Returns:
+            IndexResult
+        """
+        _op = fresh_operation('list_cross_sheet_references')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/crosssheetreferences'
+        _op['query_params']['pageSize'] = page_size
+        _op['query_params']['page'] = page
+        _op['query_params']['includeAll'] = include_all
+
+        expected = ['IndexResult', 'CrossSheetReference']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def get_cross_sheet_reference(self, sheet_id, cross_sheet_reference_id):
+        """Get the CrossSheetReference.
+
+        Args:
+            sheet_id (int): Sheet ID
+            cross_sheet_reference_id (int): CrossSheetReferenceID
+
+        Returns:
+            CrossSheetReference
+        """
+        _op = fresh_operation('get_cross_sheet_reference')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/crosssheetreferences/' + str(cross_sheet_reference_id)
+
+        expected = 'CrossSheetReference'
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def create_cross_sheet_reference(self, sheet_id, cross_sheet_reference_obj):
+        """Creates a CrossSheetReference for the specified Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            cross_sheet_reference_obj (CrossSheetReference): CrossSheetReference object
+
+        Returns:
+            Result
+        """
+        _op = fresh_operation('create_update_request')
+        _op['method'] = 'POST'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/crosssheetreferences'
+        _op['json'] = cross_sheet_reference_obj
+
+        expected = ['Result', 'CrossSheetReference']
+
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
