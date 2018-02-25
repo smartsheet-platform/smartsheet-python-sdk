@@ -114,7 +114,7 @@ class Smartsheet(object):
     models = models
 
     def __init__(self, access_token=None, max_connections=8,
-                 user_agent=None, max_retry_time=30, proxies=None):
+                 user_agent=None, max_retry_time=30, proxies=None, api_base=__api_base__):
         """
         Set up base client object.
 
@@ -169,8 +169,7 @@ class Smartsheet(object):
         self._log = logging.getLogger(__name__)
         setup_logging()
         self._url = ''
-        self._api_base = os.environ.get(
-            'API_BASE', __api_base__)
+        self._api_base = api_base
         self._assume_user = None
         self._test_scenario_name = None
         self._change_agent = None
