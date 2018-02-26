@@ -23,6 +23,8 @@ from .account import Account
 from .alternate_email import AlternateEmail
 from .attachment import Attachment
 from .auto_number_format import AutoNumberFormat
+from .automation_action import AutomationAction
+from .automation_rule import AutomationRule
 from .boolean_object_value import BooleanObjectValue
 from .bulk_item_failure import BulkItemFailure
 from .bulk_item_result import BulkItemResult

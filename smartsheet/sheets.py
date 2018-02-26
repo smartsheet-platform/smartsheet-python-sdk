@@ -1412,13 +1412,105 @@ class Sheets(object):
         Returns:
             Result
         """
-        _op = fresh_operation('create_update_request')
+        _op = fresh_operation('create_cross_sheet_reference')
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/crosssheetreferences'
         _op['json'] = cross_sheet_reference_obj
 
         expected = ['Result', 'CrossSheetReference']
 
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def list_automation_rules(self, sheet_id, page_size=None, page=None,
+                                  include_all=None):
+        """Get the list of all AutomationRules for this Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            page_size (int): The maximum number of items to
+                return per page.
+            page (int): Which page to return.
+            include_all (bool): If true, include all results
+                (i.e. do not paginate).
+
+        Returns:
+            IndexResult
+        """
+        _op = fresh_operation('list_automation_rules')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/automationrules'
+        _op['query_params']['pageSize'] = page_size
+        _op['query_params']['page'] = page
+        _op['query_params']['includeAll'] = include_all
+
+        expected = ['IndexResult', 'AutomationRule']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def get_automation_rule(self, sheet_id, automation_rule_id):
+        """Get the AutomationRule.
+
+        Args:
+            sheet_id (int): Sheet ID
+            automation_rule_id (long): AutomationRuleID
+
+        Returns:
+            AutomationRule
+        """
+        _op = fresh_operation('get_automation_rule')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/automationrules/' + str(automation_rule_id)
+
+        expected = 'AutomationRule'
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def update_automation_rule(self, sheet_id, automation_rule_id, automation_rule_obj):
+        """Updates an AutomationRule for the specified Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            automation_rule_id: AutomationRule ID
+            automation_rule_obj (AutomationRule): AutomationRule object
+
+        Returns:
+            Result
+        """
+        _op = fresh_operation('update_automation_rule')
+        _op['method'] = 'PUT'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/automationrules/' + str(automation_rule_id)
+        _op['json'] = automation_rule_obj
+
+        expected = 'AutomationRule'
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def delete_automation_rule(self, sheet_id, automation_rule_id):
+        """Deletes an AutomationRule for the specified Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            automation_rule_id (int): AutomationRule ID
+
+        Returns:
+            Result
+        """
+        _op = fresh_operation('delete_automation_rule')
+        _op['method'] = 'DELETE'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/automationrules/' + str(automation_rule_id)
+
+        expected = ['Result', None]
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
