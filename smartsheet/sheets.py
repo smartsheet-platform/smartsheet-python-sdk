@@ -465,7 +465,7 @@ class Sheets(object):
         return response
 
     def get_sheet(self, sheet_id, include=None, exclude=None, row_ids=None,
-                  row_numbers=None, column_ids=None, page_size=None, page=None):
+                  row_numbers=None, column_ids=None, page_size=None, page=None, if_version_after=None):
         """Get the specified Sheet.
 
         Get the specified Sheet. Returns the Sheet, including Rows,
@@ -492,6 +492,8 @@ class Sheets(object):
             page_size (int): The maximum number of items to
                 return per page.
             page (int): Which page to return.
+            if_version_after (int): only fetch Sheet if more recent version
+                available.
 
         Returns:
             Sheet
@@ -506,6 +508,7 @@ class Sheets(object):
         _op['query_params']['columnIds'] = column_ids
         _op['query_params']['pageSize'] = page_size
         _op['query_params']['page'] = page
+        _op['query_params']['ifVersionAfter'] = if_version_after
 
         expected = 'Sheet'
         prepped_request = self._base.prepare_request(_op)
