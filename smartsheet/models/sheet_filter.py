@@ -45,6 +45,7 @@ class SheetFilter(object):
         self._id_ = Number()
         self._name = String()
         self._query = TypedObject(SheetFilterDetails)
+        self._version = Number()
 
         if props:
             deserialize(self, props)
@@ -94,6 +95,14 @@ class SheetFilter(object):
     @query.setter
     def query(self, value):
         self._query.value = value
+
+    @property
+    def version(self):
+        return self._version.value
+
+    @version.setter
+    def version(self, value):
+        self._version.value = value
 
     def to_dict(self):
         return serialize(self)

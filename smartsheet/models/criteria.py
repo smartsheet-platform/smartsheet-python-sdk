@@ -37,10 +37,11 @@ class Criteria(object):
                 'EQUAL',
                 'NOT_EQUAL',
                 'GREATER_THAN',
-                'NOT_GREATER_THAN',
+                'GREATER_THAN_OR_EQUAL',
                 'LESS_THAN',
-                'NOT_LESS_THAN',
+                'LESS_THAN_OR_EQUAL',
                 'CONTAINS',
+                'DOES_NOT_CONTAIN',
                 'BETWEEN',
                 'NOT_BETWEEN',
                 'TODAY',
@@ -64,11 +65,24 @@ class Criteria(object):
                 'IS_ONE_OF',
                 'IS_NOT_ONE_OF',
                 'IS_CURRENT_USER',
-                'IS_NOT_CURRENT_USER']}
+                'IS_NOT_CURRENT_USER',
+                'ON_CRITICAL_PATH',
+                'NOT_ON_CRITICAL_PATH',
+                'HAS_ATTACHMENTS',
+                'NO_ATTACHMENTS',
+                'HAS_COMMENTS',
+                'NO_COMMENTS'
+            ],
+            'target': [
+                'ROW'
+            ]}
 
         self._column_id = Number()
         self._operator = String(
             accept=self.allowed_values['operator']
+        )
+        self._target = String(
+            accept= self.allowed_values['target']
         )
         self._values = TypedList(str)
 
@@ -90,6 +104,14 @@ class Criteria(object):
     @operator.setter
     def operator(self, value):
         self._operator.value = value
+
+    @property
+    def target(self):
+        return self._target.value
+
+    @target.setter
+    def target(self, value):
+        self._target.value = value
 
     @property
     def values(self):
