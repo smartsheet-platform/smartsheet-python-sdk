@@ -1516,6 +1516,28 @@ class Sheets(object):
 
         return response
 
+    def sort_sheet(self, sheet_id, sort_specifier_obj):
+        """Sort Sheet according to SortSpecifier.
+
+        Args:
+            sheet_id (int): Sheet ID
+            sort_specifier_obj (SortSpecifier): SortSpecifier object
+
+        Returns:
+            Sheet
+        """
+        _op = fresh_operation('sort_sheet')
+        _op['method'] = 'POST'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/sort'
+        _op['json'] = sort_specifier_obj
+
+        expected = 'Sheet'
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
     def get_column_by_title(self, sheet_id, title, include=None):
         """For those times when you don't know the Column Id.
 

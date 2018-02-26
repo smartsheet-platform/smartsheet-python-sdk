@@ -97,6 +97,8 @@ from .sheet_user_settings import SheetUserSettings
 from .shortcut_data_item import ShortcutDataItem
 from .sight import Sight
 from .sight_publish import SightPublish
+from .sort_criterion import SortCriterion
+from .sort_specifier import SortSpecifier
 from .source import Source
 from .string_object_value import StringObjectValue
 from .template import Template
