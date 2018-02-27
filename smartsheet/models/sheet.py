@@ -27,9 +27,12 @@ from .project_settings import ProjectSettings
 from .row import Row
 from .sheet_user_settings import SheetUserSettings
 from .source import Source
+from .enums.access_level import AccessLevel
+from .enums.attachment_type import AttachmentType
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
+
 
 
 class Sheet(object):
@@ -42,24 +45,14 @@ class Sheet(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'access_level': [
-                'VIEWER',
-                'EDITOR',
-                'EDITOR_SHARE',
-                'ADMIN',
-                'OWNER']}
-
-        self._access_level = String(
-            accept=self.allowed_values['access_level']
-        )
+        self._access_level = EnumeratedValue(AccessLevel)
         self._attachments = TypedList(Attachment)
         self._columns = TypedList(Column)
         self._created_at = Timestamp()
         self._cross_sheet_references = TypedList(CrossSheetReference)
         self._dependencies_enabled = Boolean()
         self._discussions = TypedList(Discussion)
-        self._effective_attachment_options = TypedList(str)
+        self._effective_attachment_options = EnumeratedList(AttachmentType)
         self._favorite = Boolean()
         self._filters = TypedList(SheetFilter)
         self._from_id = Number()
@@ -101,11 +94,11 @@ class Sheet(object):
 
     @property
     def access_level(self):
-        return self._access_level.value
+        return self._access_level
 
     @access_level.setter
     def access_level(self, value):
-        self._access_level.value = value
+        self._access_level.set(value)
 
     @property
     def attachments(self):

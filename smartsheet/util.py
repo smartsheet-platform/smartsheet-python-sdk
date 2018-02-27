@@ -26,6 +26,7 @@ import inspect
 from datetime import date
 from datetime import datetime
 from .types import TypedList
+from .types import EnumeratedValue
 
 _log = logging.getLogger('util')
 _primitive_types = (six.string_types, six.integer_types, float, bool)
@@ -92,6 +93,10 @@ def serialize(obj):
 
     elif hasattr(obj, 'is_explicit_null'):
         retval = obj
+
+    elif isinstance(obj, EnumeratedValue):
+        if obj.value is not None:
+            retval = obj.value.name
 
     elif isinstance(obj, _list_types):
         if len(obj):

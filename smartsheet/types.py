@@ -23,6 +23,7 @@ import six
 
 from datetime import datetime
 from dateutil.parser import parse
+from enum import Enum
 
 
 class TypedList(collections.MutableSequence):
@@ -254,3 +255,57 @@ class Timestamp(object):
 
     def __str__(self):
         return str(self._value)
+
+
+class EnumeratedValue(object):
+
+    def __init__(self, enum, value=None):
+        self.__enum = enum
+        self._value = None
+        if value:
+            self.set(value)
+
+    @property
+    def value(self):
+        return self._value
+
+    def set(self, value):
+        if isinstance(value, six.string_types):
+            try:
+                self._value = self.__enum[value]
+            except KeyError:
+                self._value = None
+        elif isinstance(value, Enum):
+            self._value = value;
+        else:
+            self._value = None
+
+    def __eq__(self, other):
+        if isinstance(other, Enum):
+            return self._value == other
+        elif isinstance(other, six.string_types):
+            return self._value == self.__enum[other]
+        NotImplemented
+
+    def __str__(self):
+        return str(self._value)
+
+
+class EnumeratedList(TypedList):
+
+    def __init__(self, enum):
+        super(EnumeratedList, self).__init__(EnumeratedValue)
+        self.__enum = enum
+
+    def load(self, value):
+        if isinstance(value, TypedList):
+            value = value.to_list()
+
+        if isinstance(value, list):
+            self.purge()
+            self.extend([
+                (EnumeratedValue(self.__enum, item)) for item in value
+            ])
+        else:
+            self.purge()
+            self.append(EnumeratedValue(self.__enum, value))

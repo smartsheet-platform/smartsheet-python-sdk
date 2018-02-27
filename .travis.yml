@@ -19,7 +19,7 @@ before_install:
 install:
   - pip install --upgrade pip
   - pip install certifi
-  - pip install requests six python-dateutil coverage coveralls[yaml] pytest pytest-travis-fold pytest-instafail requests-toolbelt
+  - pip install enum34 requests six python-dateutil coverage coveralls[yaml] pytest pytest-travis-fold pytest-instafail requests-toolbelt
 
 script:
   - smartsheet-sdk-tests/travis_scripts/start_wiremock.sh
