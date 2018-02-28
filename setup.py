@@ -9,7 +9,8 @@ REQUIRES = [
     'requests-toolbelt',
     'six >= 1.9',
     'certifi',
-    'python-dateutil'
+    'python-dateutil',
+    'enum34'
 ]
 # test packages:
 # https://github.com/coagulant/coveralls-python
