@@ -1207,12 +1207,12 @@ class TestModelAttributes:
         # code, code
         # symbol, symbol
         model = smart.models.Currency({
-            'code': 'none',
-            'symbol': 'foo'
+            'code': 'USD',
+            'symbol': '$'
         })
 
-        assert model.code == 'none'
-        assert model.symbol == 'foo'
+        assert model.code == 'USD'
+        assert model.symbol == '$'
         as_dict = model.to_dict()
         assert isinstance(as_dict, dict)
 

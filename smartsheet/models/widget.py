@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums.widget_type import WidgetType
 from .widget_content import WidgetContent
 from ..types import *
 from ..util import serialize
@@ -32,18 +33,6 @@ class Widget(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'widget_type': [
-                'CELLLINK',
-                'SHEETSUMMARY',
-                'RICHTEXT',
-                'SHORTCUTICON',
-                'SHORTCUTLIST',
-                'GRIDGANTT',
-                'IMAGE',
-                'TITLE'
-            ]}
-
         self._contents = TypedObject(WidgetContent)
         self._height = Number()
         self._id_ = Number()
@@ -51,9 +40,7 @@ class Widget(object):
         self._show_title_icon = Boolean()
         self._title = String()
         self._title_format = String()
-        self._type = String(
-            accept=self.allowed_values['widget_type']
-        )
+        self._type = EnumeratedValue(WidgetType)
         self._version = Number()
         self._width = Number()
         self._x_position = Number()
@@ -134,11 +121,11 @@ class Widget(object):
 
     @property
     def type(self):
-        return self._type.value
+        return self._type
 
     @type.setter
     def type(self, value):
-        self._type.value = value
+        self._type.set(value)
 
     @property
     def version(self):

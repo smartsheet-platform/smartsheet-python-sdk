@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import DayOrdinal, DayDescriptors, ScheduleType
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -31,44 +32,15 @@ class Schedule(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'type': [
-                'ONCE',
-                'DAILY',
-                'WEEKLY',
-                'MONTHLY',
-                'YEARLY'],
-            'day_descriptors': [
-                'DAY',
-                'WEEKDAY',
-                'WEEKEND',
-                'SUNDAY',
-                'MONDAY',
-                'TUESDAY',
-                'WEDNESDAY',
-                'THURSDAY',
-                'FRIDAY',
-                'SATURDAY'],
-            'day_ordinal': [
-                'FIRST',
-                'SECOND',
-                'THIRD',
-                'FOURTH',
-                'LAST']}
-
-        self._day_descriptors = TypedList(str)
+        self._day_descriptors = EnumeratedList(DayDescriptors)
         self._day_of_month = Number()
-        self._day_ordinal = String(
-            accept=self.allowed_values['day_ordinal']
-        )
+        self._day_ordinal = EnumeratedValue(DayOrdinal)
         self._end_at = Timestamp()
         self._last_sent_at = Timestamp()
         self._next_send_at = Timestamp()
         self._repeat_every = Number()
         self._start_at = Timestamp()
-        self._type_ = String(
-            accept=self.allowed_values['type']
-        )
+        self._type_ = EnumeratedValue(ScheduleType)
 
         if props:
             deserialize(self, props)
@@ -94,12 +66,6 @@ class Schedule(object):
     @day_descriptors.setter
     def day_descriptors(self, value):
         self._day_descriptors.load(value)
-        for string in self._day_descriptors:
-            if string not in self.allowed_values['day_descriptors']:
-                raise ValueError(
-                    ("`{0}` is an invalid value for Schedule`day_descriptors`,"
-                     " must be one of {1}").format(
-                        value, self.allowed_values['day_descriptors']))
 
     @property
     def day_of_month(self):
@@ -111,11 +77,11 @@ class Schedule(object):
 
     @property
     def day_ordinal(self):
-        return self._day_ordinal.value
+        return self._day_ordinal
 
     @day_ordinal.setter
     def day_ordinal(self, value):
-        self._day_ordinal.value = value
+        self._day_ordinal.set(value)
 
     @property
     def end_at(self):
@@ -159,11 +125,11 @@ class Schedule(object):
 
     @property
     def type_(self):
-        return self._type_.value
+        return self._type_
 
     @type_.setter
     def type_(self, value):
-        self._type_.value = value
+        self._type_.set(value)
 
     def to_dict(self):
         return serialize(self)

@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import SheetFilterType
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -33,15 +34,7 @@ class SheetFilter(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            '_filter_type': [
-                'ADHOC',
-                'PERSONAL',
-                'SHARED']}
-
-        self._filter_type = String(
-            accept=self.allowed_values['_filter_type']
-        )
+        self._filter_type = EnumeratedValue(SheetFilterType)
         self._id_ = Number()
         self._name = String()
         self._query = TypedObject(SheetFilterDetails)
@@ -66,11 +59,11 @@ class SheetFilter(object):
 
     @property
     def filter_type(self):
-        return self._filter_type.value
+        return self._filter_type
 
     @filter_type.setter
     def filter_type(self, value):
-        self._filter_type.value = value
+        self._filter_type.set(value)
 
     @property
     def id_(self):

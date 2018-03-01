@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import AttachmentParentType, AttachmentSubType, AttachmentType
 from .user import User
 from ..types import *
 from ..util import serialize
@@ -33,43 +34,15 @@ class Attachment(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'attachment_sub_type': [
-                'DOCUMENT',
-                'SPREADSHEET',
-                'PRESENTATION',
-                'PDF',
-                'DRAWING',
-                'FOLDER'],
-            'attachment_type': [
-                'FILE',
-                'GOOGLE_DRIVE',
-                'LINK',
-                'BOX_COM',
-                'DROPBOX',
-                'EVERNOTE',
-                'EGNYTE',
-                'ONEDRIVE'],
-            'parent_type': [
-                'SHEET',
-                'ROW',
-                'COMMENT']}
-
-        self._attachment_sub_type = String(
-            accept=self.allowed_values['attachment_sub_type']
-        )
-        self._attachment_type = String(
-            accept=self.allowed_values['attachment_type']
-        )
+        self._attachment_sub_type = EnumeratedValue(AttachmentSubType)
+        self._attachment_type = EnumeratedValue(AttachmentType)
         self._created_at = Timestamp()
         self._created_by = TypedObject(User)
         self._id_ = Number()
         self._mime_type = String()
         self._name = String()
         self._parent_id = Number()
-        self._parent_type = String(
-            accept=self.allowed_values['parent_type']
-        )
+        self._parent_type = EnumeratedValue(AttachmentParentType)
         self._size_in_kb = Number()
         self._url = String()
         self._url_expires_in_millis = Number()
@@ -95,19 +68,19 @@ class Attachment(object):
 
     @property
     def attachment_sub_type(self):
-        return self._attachment_sub_type.value
+        return self._attachment_sub_type
 
     @attachment_sub_type.setter
     def attachment_sub_type(self, value):
-        self._attachment_sub_type.value = value
+        self._attachment_sub_type.set(value)
 
     @property
     def attachment_type(self):
-        return self._attachment_type.value
+        return self._attachment_type
 
     @attachment_type.setter
     def attachment_type(self, value):
-        self._attachment_type.value = value
+        self._attachment_type.set(value)
 
     @property
     def created_at(self):
@@ -159,11 +132,11 @@ class Attachment(object):
 
     @property
     def parent_type(self):
-        return self._parent_type.value
+        return self._parent_type
 
     @parent_type.setter
     def parent_type(self, value):
-        self._parent_type.value = value
+        self._parent_type.set(value)
 
     @property
     def size_in_kb(self):

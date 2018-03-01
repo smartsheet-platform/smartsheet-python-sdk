@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import AutomationActionFrequency, AutomationActionType
 from .recipient import Recipient
 from ..types import *
 from ..util import serialize
@@ -33,22 +34,7 @@ class AutomationAction(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            '_type': [
-                'NOTIFICATION_ACTION',
-                'UPDATE_REQUEST_ACTION',
-                'APPROVAL_REQUEST_ACTION'
-            ],
-            'frequency': [
-                'IMMEDIATELY',
-                'HOURLY',
-                'DAILY',
-                'WEEKLY'
-            ]}
-
-        self._frequency = String(
-            accept=self.allowed_values['frequency']
-        )
+        self._frequency = EnumeratedValue(AutomationActionFrequency)
         self._include_all_columns = Boolean()
         self._include_attachments = Boolean()
         self._include_discussions = Boolean()
@@ -58,9 +44,7 @@ class AutomationAction(object):
         self._recipient_column_ids = TypedList(six.integer_types)
         self._recipients = TypedList(Recipient)
         self._subject = String()
-        self._type_ = String(
-            accept=self.allowed_values['_type']
-        )
+        self._type_ = EnumeratedValue(AutomationActionType)
 
         if props:
             deserialize(self, props)
@@ -83,11 +67,11 @@ class AutomationAction(object):
 
     @property
     def frequency(self):
-        return self._frequency.value
+        return self._frequency
 
     @frequency.setter
     def frequency(self, value):
-        self._frequency.value = value
+        self._frequency.set(value)
 
     @property
     def include_all_columns(self):
@@ -163,11 +147,11 @@ class AutomationAction(object):
 
     @property
     def type_(self):
-        return self._type_.value
+        return self._type_
 
     @type_.setter
     def type_(self, value):
-        self._type_.value = value
+        self._type_.set(value)
 
     def to_dict(self):
         return serialize(self)

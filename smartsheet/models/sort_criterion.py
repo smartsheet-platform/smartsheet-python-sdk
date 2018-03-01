@@ -17,7 +17,7 @@
 
 from __future__ import absolute_import
 
-
+from .enums import SortDirection
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -33,16 +33,8 @@ class SortCriterion(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'direction': [
-                'ASCENDING',
-                'DESCENDING'
-            ]}
-
         self._column_id = Number()
-        self._direction = String(
-            accept=self.allowed_values['direction']
-        )
+        self._direction = EnumeratedValue(SortDirection)
 
         if props:
             deserialize(self, props)
@@ -57,11 +49,11 @@ class SortCriterion(object):
 
     @property
     def direction(self):
-        return self._direction.value
+        return self._direction
 
     @direction.setter
     def direction(self, value):
-        self._direction.value = value
+        self._direction.set(value)
 
     def to_dict(self):
         return serialize(self)

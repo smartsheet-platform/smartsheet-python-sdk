@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import UpdateRequestStatus
 from .user import User
 from .recipient import Recipient
 from ..util import serialize
@@ -33,12 +34,6 @@ class SentUpdateRequest(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'update_request_status': [
-                'PENDING',
-                'COMPLETE',
-                'CANCELED']}
-
         self._column_ids = TypedList(six.integer_types)
         self._id_ = Number()
         self._include_attachments = Boolean()
@@ -48,9 +43,7 @@ class SentUpdateRequest(object):
         self._sent_at = Timestamp()
         self._sent_by = TypedObject(User)
         self._sent_to = TypedObject(Recipient)
-        self._status = String(
-            accept=self.allowed_values['update_request_status']
-        )
+        self._status = EnumeratedValue(UpdateRequestStatus)
         self._subject = String()
         self._update_request_id = Number()
 
@@ -147,11 +140,11 @@ class SentUpdateRequest(object):
 
     @property
     def status(self):
-        return self._status.value
+        return self._status
 
     @status.setter
     def status(self, value):
-        self._status.value = value
+        self._status.set(value)
 
     @property
     def subject(self):

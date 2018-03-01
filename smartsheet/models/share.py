@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import AccessLevel, ShareScope, ShareType
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -32,24 +33,7 @@ class Share(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'access_level': [
-                'VIEWER',
-                'EDITOR',
-                'EDITOR_SHARE',
-                'ADMIN',
-                'OWNER'],
-            '_type': [
-                'USER',
-                'GROUP'],
-            'scope': [
-                'ITEM',
-                'WORKSPACE'
-            ]}
-
-        self._access_level = String(
-            accept=self.allowed_values['access_level']
-        )
+        self._access_level = EnumeratedValue(AccessLevel)
         self._cc_me = Boolean()
         self._created_at = Timestamp()
         self._email = String()
@@ -58,13 +42,9 @@ class Share(object):
         self._message = String()
         self._modified_at = Timestamp()
         self._name = String()
-        self._scope = String(
-            accept=self.allowed_values['scope']
-        )
+        self._scope = EnumeratedValue(ShareScope)
         self._subject = String()
-        self._type_ = String(
-            accept=self.allowed_values['_type']
-        )
+        self._type_ = EnumeratedValue(ShareType)
         self._user_id = Number()
 
         if props:
@@ -92,11 +72,11 @@ class Share(object):
 
     @property
     def access_level(self):
-        return self._access_level.value
+        return self._access_level
 
     @access_level.setter
     def access_level(self, value):
-        self._access_level.value = value
+        self._access_level.set(value)
 
     @property
     def cc_me(self):
@@ -164,11 +144,11 @@ class Share(object):
 
     @property
     def scope(self):
-        return self._scope.value
+        return self._scope
 
     @scope.setter
     def scope(self, value):
-        self._scope.value = value
+        self._scope.set(value)
 
     @property
     def subject(self):
@@ -180,11 +160,11 @@ class Share(object):
 
     @property
     def type_(self):
-        return self._type_.value
+        return self._type_
 
     @type_.setter
     def type_(self, value):
-        self._type_.value = value
+        self._type_.set(value)
 
     @property
     def user_id(self):

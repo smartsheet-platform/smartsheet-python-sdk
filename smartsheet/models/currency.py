@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import CurrencyCode
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -32,36 +33,7 @@ class Currency(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'code': [
-                'none',
-                'ARS',
-                'AUD',
-                'BRL',
-                'CAD',
-                'CLP',
-                'EUR',
-                'GBP',
-                'ILS',
-                'INR',
-                'JPY',
-                'MXN',
-                'RUB',
-                'USD',
-                'ZAR',
-                'CHF',
-                'CNY',
-                'DKK',
-                'HKD',
-                'KRW',
-                'NOK',
-                'NZD',
-                'SEK',
-                'SGD']}
-
-        self._code = String(
-            accept=self.allowed_values['code']
-        )
+        self._code = EnumeratedValue(CurrencyCode)
         self._symbol = String()
 
         if props:
@@ -69,11 +41,11 @@ class Currency(object):
 
     @property
     def code(self):
-        return self._code.value
+        return self._code
 
     @code.setter
     def code(self, value):
-        self._code.value = value
+        self._code.set(value)
 
     @property
     def symbol(self):

@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 
 from .automation_action import AutomationAction
+from .enums import AutomationRuleDisabledReason
 from .user import User
 from ..types import *
 from ..util import serialize
@@ -34,23 +35,10 @@ class AutomationRule(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'disabled_reason': [
-                'AUTOMATION_NOT_ENABLED_FOR_ORG',
-                'COLUMN_MISSING',
-                'COLUMN_TYPE_INCOMPATIBLE',
-                'NO_POTENTIAL_RECIPIENTS',
-                'NO_VALID_SELECTED_COLUMNS',
-                'APPROVAL_COLUMN_MISSING',
-                'APPROVAL_COLUMN_WRONG_TYPE'
-            ]}
-
         self._action = TypedObject(AutomationAction)
         self._created_at = Timestamp()
         self._created_by = TypedObject(User)
-        self._disabled_reason = String(
-            accept=self.allowed_values['disabled_reason']
-        )
+        self._disabled_reason = EnumeratedValue(AutomationRuleDisabledReason)
         self._disabled_reason_text = String()
         self._enabled = Boolean()
         self._id_ = Number()
@@ -104,11 +92,11 @@ class AutomationRule(object):
 
     @property
     def disabled_reason(self):
-        return self._disabled_reason.value
+        return self._disabled_reason
 
     @disabled_reason.setter
     def disabled_reason(self, value):
-        self._disabled_reason.value = value
+        self._disabled_reason.set(value)
 
     @property
     def disabled_reason_text(self):

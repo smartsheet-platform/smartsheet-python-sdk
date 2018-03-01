@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import CrossSheetReferenceStatus
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -32,18 +33,6 @@ class CrossSheetReference(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'status': [
-                'BLOCKED',
-                'BROKEN',
-                'CIRCULAR',
-                'DISABLED'
-                'INACCESSIBLE',
-                'INVALID',
-                'NOT_SHARED',
-                'OK',
-            ]}
-
         self._end_column_id = Number()
         self._end_row_id = Number()
         self._id_ = Number()
@@ -51,9 +40,7 @@ class CrossSheetReference(object):
         self._source_sheet_id = Number()
         self._start_column_id = Number()
         self._start_row_id = Number()
-        self._status = String(
-            accept=self.allowed_values['status']
-        )
+        self._status = EnumeratedValue(CrossSheetReferenceStatus)
 
         if props:
             deserialize(self, props)
@@ -132,11 +119,11 @@ class CrossSheetReference(object):
 
     @property
     def status(self):
-        return self._status.value
+        return self._status
 
     @status.setter
     def status(self, value):
-        self._status.value = value
+        self._status.set(value)
 
     def to_dict(self):
         return serialize(self)

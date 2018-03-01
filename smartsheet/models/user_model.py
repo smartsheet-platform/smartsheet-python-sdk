@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 
 from .alternate_email import AlternateEmail
+from .enums import UserStatus
 from .image import Image
 from ..types import *
 from ..util import serialize
@@ -33,12 +34,6 @@ class UserModel(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-
-        self.allowed_values = {
-            'status': [
-                'ACTIVE',
-                'PENDING',
-                'DECLINED']}
 
         self._admin = Boolean()
         self._alternate_emails = TypedList(AlternateEmail)
@@ -57,9 +52,7 @@ class UserModel(object):
         self._resource_viewer = Boolean()
         self._role = String()
         self._sheet_count = Number()
-        self._status = String(
-            accept=self.allowed_values['status']
-        )
+        self._status = EnumeratedValue(UserStatus)
         self._title = String()
         self._work_phone = String()
 
@@ -218,11 +211,11 @@ class UserModel(object):
 
     @property
     def status(self):
-        return self._status.value
+        return self._status
 
     @status.setter
     def status(self, value):
-        self._status.value = value
+        self._status.set(value)
 
     @property
     def title(self):

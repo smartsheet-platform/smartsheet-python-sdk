@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 
 from .duration import Duration
+from .enums import PredecessorType
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -32,21 +33,12 @@ class Predecessor(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'type': [
-                'FS',
-                'FF',
-                'SS',
-                'SS']}
-
         self._in_critical_path = Boolean()
         self._invalid = Boolean()
         self._lag = TypedObject(Duration)
         self._row_id = Number()
         self._row_number = Number()
-        self._type = String(
-            accept=self.allowed_values['type']
-        )
+        self._type = EnumeratedValue(PredecessorType)
 
         if props:
             deserialize(self, props)
@@ -95,11 +87,11 @@ class Predecessor(object):
 
     @property
     def type(self):
-        return self._type.value
+        return self._type
 
     @type.setter
     def type(self, value):
-        self._type.value = value
+        self._type.set(value)
 
     def to_dict(self):
         return serialize(self)

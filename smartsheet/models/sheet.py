@@ -21,14 +21,13 @@ from .attachment import Attachment
 from .column import Column
 from .sheet_filter import SheetFilter
 from .comment import Comment
-from .cross_sheet_references import CrossSheetReference
+from .cross_sheet_reference import CrossSheetReference
 from .discussion import Discussion
+from .enums import AccessLevel, AttachmentType
 from .project_settings import ProjectSettings
 from .row import Row
 from .sheet_user_settings import SheetUserSettings
 from .source import Source
-from .enums.access_level import AccessLevel
-from .enums.attachment_type import AttachmentType
 from ..types import *
 from ..util import serialize
 from ..util import deserialize

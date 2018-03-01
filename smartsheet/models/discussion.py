@@ -19,6 +19,7 @@ from __future__ import absolute_import
 
 from .attachment import Attachment
 from .comment import Comment
+from .enums import AccessLevel
 from .user import User
 from ..types import *
 from ..util import serialize
@@ -35,17 +36,7 @@ class Discussion(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'access_level': [
-                'VIEWER',
-                'EDITOR',
-                'EDITOR_SHARE',
-                'ADMIN',
-                'OWNER']}
-
-        self._access_level = String(
-            accept=self.allowed_values['access_level']
-        )
+        self._access_level = EnumeratedValue(AccessLevel)
         self._comment = TypedObject(Comment)
         self._comment_attachments = TypedList(Attachment)
         self._comment_count = Number()
@@ -80,11 +71,11 @@ class Discussion(object):
 
     @property
     def access_level(self):
-        return self._access_level.value
+        return self._access_level
 
     @access_level.setter
     def access_level(self, value):
-        self._access_level.value = value
+        self._access_level.set(value)
 
     @property
     def comment(self):

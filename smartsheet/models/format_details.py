@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import PaperType
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -32,32 +33,18 @@ class FormatDetails(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'paper_size': [
-                'LETTER',
-                'LEGAL',
-                'WIDE',
-                'ARCHD',
-                'A4',
-                'A3',
-                'A2',
-                'A1',
-                'A0']}
-
-        self._paper_size = String(
-            accept=self.allowed_values['paper_size']
-        )
+        self._paper_size = EnumeratedValue(PaperType)
 
         if props:
             deserialize(self, props)
 
     @property
     def paper_size(self):
-        return self._paper_size.value
+        return self._paper_size
 
     @paper_size.setter
     def paper_size(self, value):
-        self._paper_size.value = value
+        self._paper_size.set(value)
 
     def to_dict(self):
         return serialize(self)

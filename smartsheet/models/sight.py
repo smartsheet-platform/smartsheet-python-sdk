@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import AccessLevel
 from .widget import Widget
 from ..types import *
 from ..util import serialize
@@ -34,15 +35,7 @@ class Sight(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'access_level': [
-                'VIEWER',
-                'ADMIN',
-                'OWNER']}
-
-        self._access_level = String(
-            accept=self.allowed_values['access_level']
-        )
+        self._access_level = EnumeratedValue(AccessLevel)
         self._column_count = Number()
         self._created_at = Timestamp()
         self._favorite = Boolean()
@@ -74,11 +67,11 @@ class Sight(object):
 
     @property
     def access_level(self):
-        return self._access_level.value
+        return self._access_level
 
     @access_level.setter
     def access_level(self, value):
-        self._access_level.value = value
+        self._access_level.set(value)
 
     @property
     def column_count(self):
