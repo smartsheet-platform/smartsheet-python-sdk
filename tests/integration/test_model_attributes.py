@@ -431,7 +431,7 @@ class TestModelAttributes:
             'columns': smart.models.Column(),
             'dependenciesEnabled': True,
             'discussions': smart.models.Discussion(),
-            'effectiveAttachmentOptions': ['foo'],
+            'effectiveAttachmentOptions': ['FILE'],
             'favorite': True,
             'fromId': 19082,
             'ganttEnabled': True,
@@ -455,7 +455,7 @@ class TestModelAttributes:
         assert isinstance(model.columns[0], smart.models.Column)
         assert model.dependencies_enabled == True
         assert isinstance(model.discussions[0], smart.models.Discussion)
-        assert model.effective_attachment_options[0] == 'foo'
+        assert model.effective_attachment_options[0] == 'FILE'
         assert model.favorite == True
         assert model.from_id == 19082
         assert model.gantt_enabled == True
@@ -472,12 +472,12 @@ class TestModelAttributes:
         assert model.total_row_count == 19082
         assert isinstance(model.user_settings, smart.models.SheetUserSettings)
         assert model.version == 19082
-        model.effective_attachment_options = 'foo'
-        assert model.effective_attachment_options[0] == 'foo'
+        model.effective_attachment_options = 'FILE'
+        assert model.effective_attachment_options[0] == 'FILE'
         tmplist = smartsheet.types.TypedList(str)
-        tmplist.append('foo')
+        tmplist.append('FILE')
         model.effective_attachment_options = tmplist
-        assert model.effective_attachment_options[0] == 'foo'
+        assert model.effective_attachment_options[0] == 'FILE'
         model.source = {}
         assert isinstance(model.source, smart.models.Source)
         model.userSettings = {}
@@ -500,7 +500,7 @@ class TestModelAttributes:
             'version': 19082,
             'access_level': 'VIEWER',
             'dependencies_enabled': True,
-            'effective_attachment_options': ['foo'],
+            'effective_attachment_options': ['FILE'],
             'from_id': 19082,
             'gantt_enabled': True,
             'id': 19082,
@@ -517,7 +517,7 @@ class TestModelAttributes:
         assert isinstance(model.columns[0], smart.models.Column)
         assert model.dependencies_enabled == True
         assert isinstance(model.discussions[0], smart.models.Discussion)
-        assert model.effective_attachment_options[0] == 'foo'
+        assert model.effective_attachment_options[0] == 'FILE'
         assert model.favorite == True
         assert model.from_id == 19082
         assert model.gantt_enabled == True
@@ -670,7 +670,7 @@ class TestModelAttributes:
             'readOnly': True,
             'permalink': 'foo',
             'source': smart.models.Source(),
-            'effectiveAttachmentOptions': ['foo'],
+            'effectiveAttachmentOptions': ['FILE'],
             'owner': 'foo',
             'resourceManagementEnabled': True,
             'userSettings': smart.models.SheetUserSettings()
@@ -695,18 +695,18 @@ class TestModelAttributes:
         assert model.read_only == True
         assert model.permalink == 'foo'
         assert isinstance(model.source, smart.models.Source)
-        assert model.effective_attachment_options[0] == 'foo'
+        assert model.effective_attachment_options[0] == 'FILE'
         assert model.owner == 'foo'
         assert model.resource_management_enabled == True
         assert isinstance(model.user_settings, smart.models.SheetUserSettings)
         model.source = {}
         assert isinstance(model.source, smart.models.Source)
-        model.effective_attachment_options = 'foo'
-        assert model.effective_attachment_options[0] == 'foo'
+        model.effective_attachment_options = 'FILE'
+        assert model.effective_attachment_options[0] == 'FILE'
         tmplist = smartsheet.types.TypedList(str)
-        tmplist.append('foo')
+        tmplist.append('FILE')
         model.effective_attachment_options = tmplist
-        assert model.effective_attachment_options[0] == 'foo'
+        assert model.effective_attachment_options[0] == 'FILE'
         model.userSettings = {}
         assert isinstance(model.user_settings, smart.models.SheetUserSettings)
         as_dict = model.to_dict()
@@ -735,7 +735,7 @@ class TestModelAttributes:
             'total_row_count': 19082,
             'access_level': 'VIEWER',
             'read_only': True,
-            'effective_attachment_options': ['foo'],
+            'effective_attachment_options': ['FILE'],
             'resource_management_enabled': True,
             'user_settings': smart.models.SheetUserSettings()
         })
@@ -759,7 +759,7 @@ class TestModelAttributes:
         assert model.read_only == True
         assert model.permalink == 'foo'
         assert isinstance(model.source, smart.models.Source)
-        assert model.effective_attachment_options[0] == 'foo'
+        assert model.effective_attachment_options[0] == 'FILE'
         assert model.owner == 'foo'
         assert model.resource_management_enabled == True
         assert isinstance(model.user_settings, smart.models.SheetUserSettings)
@@ -1207,12 +1207,12 @@ class TestModelAttributes:
         # code, code
         # symbol, symbol
         model = smart.models.Currency({
-            'code': 'none',
-            'symbol': 'foo'
+            'code': 'USD',
+            'symbol': '$'
         })
 
-        assert model.code == 'none'
-        assert model.symbol == 'foo'
+        assert model.code == 'USD'
+        assert model.symbol == '$'
         as_dict = model.to_dict()
         assert isinstance(as_dict, dict)
 

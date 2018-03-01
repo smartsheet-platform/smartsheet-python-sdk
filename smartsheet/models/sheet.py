@@ -21,7 +21,9 @@ from .attachment import Attachment
 from .column import Column
 from .sheet_filter import SheetFilter
 from .comment import Comment
+from .cross_sheet_reference import CrossSheetReference
 from .discussion import Discussion
+from .enums import AccessLevel, AttachmentType
 from .project_settings import ProjectSettings
 from .row import Row
 from .sheet_user_settings import SheetUserSettings
@@ -29,6 +31,7 @@ from .source import Source
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
+
 
 
 class Sheet(object):
@@ -41,23 +44,14 @@ class Sheet(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'access_level': [
-                'VIEWER',
-                'EDITOR',
-                'EDITOR_SHARE',
-                'ADMIN',
-                'OWNER']}
-
-        self._access_level = String(
-            accept=self.allowed_values['access_level']
-        )
+        self._access_level = EnumeratedValue(AccessLevel)
         self._attachments = TypedList(Attachment)
         self._columns = TypedList(Column)
         self._created_at = Timestamp()
+        self._cross_sheet_references = TypedList(CrossSheetReference)
         self._dependencies_enabled = Boolean()
         self._discussions = TypedList(Discussion)
-        self._effective_attachment_options = TypedList(str)
+        self._effective_attachment_options = EnumeratedList(AttachmentType)
         self._favorite = Boolean()
         self._filters = TypedList(SheetFilter)
         self._from_id = Number()
@@ -99,11 +93,11 @@ class Sheet(object):
 
     @property
     def access_level(self):
-        return self._access_level.value
+        return self._access_level
 
     @access_level.setter
     def access_level(self, value):
-        self._access_level.value = value
+        self._access_level.set(value)
 
     @property
     def attachments(self):
@@ -128,6 +122,14 @@ class Sheet(object):
     @created_at.setter
     def created_at(self, value):
         self._created_at.value = value
+
+    @property
+    def cross_sheet_references(self):
+        return self._cross_sheet_references
+
+    @cross_sheet_references.setter
+    def cross_sheet_references(self, value):
+        self._cross_sheet_references.load(value)
 
     @property
     def dependencies_enabled(self):

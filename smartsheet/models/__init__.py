@@ -23,6 +23,8 @@ from .account import Account
 from .alternate_email import AlternateEmail
 from .attachment import Attachment
 from .auto_number_format import AutoNumberFormat
+from .automation_action import AutomationAction
+from .automation_rule import AutomationRule
 from .boolean_object_value import BooleanObjectValue
 from .bulk_item_failure import BulkItemFailure
 from .bulk_item_result import BulkItemResult
@@ -39,6 +41,7 @@ from .copy_or_move_row_destination import CopyOrMoveRowDestination
 from .copy_or_move_row_directive import CopyOrMoveRowDirective
 from .copy_or_move_row_result import CopyOrMoveRowResult
 from .criteria import Criteria
+from .cross_sheet_reference import CrossSheetReference
 from .currency import Currency
 from .date_object_value import DateObjectValue
 from .discussion import Discussion
@@ -94,6 +97,8 @@ from .sheet_user_settings import SheetUserSettings
 from .shortcut_data_item import ShortcutDataItem
 from .sight import Sight
 from .sight_publish import SightPublish
+from .sort_criterion import SortCriterion
+from .sort_specifier import SortSpecifier
 from .source import Source
 from .string_object_value import StringObjectValue
 from .template import Template

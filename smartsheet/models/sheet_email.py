@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 
 from .email import Email
+from .enums import SheetEmailFormat
 from .format_details import FormatDetails
 from ..types import *
 from ..util import serialize
@@ -35,15 +36,7 @@ class SheetEmail(Email):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            '_format': [
-                'PDF',
-                'PDF_GANTT',
-                'EXCEL']}
-
-        self._format_ = String(
-            accept=self.allowed_values['_format']
-        )
+        self._format_ = EnumeratedValue(SheetEmailFormat)
         self._format_details = TypedObject(FormatDetails)
 
         if props:
@@ -65,11 +58,11 @@ class SheetEmail(Email):
 
     @property
     def format_(self):
-        return self._format_.value
+        return self._format_
 
     @format_.setter
     def format_(self, value):
-        self._format_.value = value
+        self._format_.set(value)
 
     @property
     def format_details(self):

@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import PublishAccessibleBy
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -32,14 +33,7 @@ class ReportPublish(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'accessible_by': [
-                'ALL',
-                'ORG']}
-
-        self._read_only_full_accessible_by = String(
-            accept=self.allowed_values['accessible_by']
-        )
+        self._read_only_full_accessible_by = EnumeratedValue(PublishAccessibleBy)
         self._read_only_full_default_view = String()
         self._read_only_full_enabled = Boolean()
         self._read_only_full_show_toolbar = Boolean()
@@ -54,11 +48,11 @@ class ReportPublish(object):
 
     @property
     def read_only_full_accessible_by(self):
-        return self._read_only_full_accessible_by.value
+        return self._read_only_full_accessible_by
 
     @read_only_full_accessible_by.setter
     def read_only_full_accessible_by(self, value):
-        self._read_only_full_accessible_by.value = value
+        self._read_only_full_accessible_by.set(value)
 
     @property
     def read_only_full_default_view(self):

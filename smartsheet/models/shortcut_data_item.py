@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import AttachmentType
 from .hyperlink import Hyperlink
 from ..types import *
 from ..util import serialize
@@ -32,21 +33,7 @@ class ShortcutDataItem(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            '_type': [
-                'FILE',
-                'GOOGLE_DRIVE',
-                'LINK',
-                'BOX_COM',
-                'DROPBOX',
-                'EVERNOTE',
-                'EGNYTE',
-                'ONEDRIVE',
-                'SMARTSHEET']}
-
-        self._attachment_type = String(
-            accept=self.allowed_values['_type']
-        )
+        self._attachment_type = EnumeratedValue(AttachmentType)
         self._hyperlink = TypedObject(Hyperlink)
         self._label = String()
         self._label_format = String()
@@ -60,11 +47,11 @@ class ShortcutDataItem(object):
 
     @property
     def attachment_type(self):
-        return self._attachment_type.value
+        return self._attachment_type
 
     @attachment_type.setter
     def attachment_type(self, value):
-        self._attachment_type.value = value
+        self._attachment_type.set(value)
 
     @property
     def hyperlink(self):

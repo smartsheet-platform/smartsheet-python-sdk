@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import CriteriaTarget, Operator
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -32,44 +33,9 @@ class Criteria(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'operator': [
-                'EQUAL',
-                'NOT_EQUAL',
-                'GREATER_THAN',
-                'NOT_GREATER_THAN',
-                'LESS_THAN',
-                'NOT_LESS_THAN',
-                'CONTAINS',
-                'BETWEEN',
-                'NOT_BETWEEN',
-                'TODAY',
-                'NOT_TODAY',
-                'PAST',
-                'NOT_PAST',
-                'FUTURE',
-                'NOT_FUTURE',
-                'LAST_N_DAYS',
-                'NOT_LAST_N_DAYS',
-                'NEXT_N_DAYS',
-                'NOT_NEXT_N_DAYS',
-                'IS_BLANK',
-                'IS_NOT_BLANK',
-                'IS_NUMBER',
-                'IS_NOT_NUMBER',
-                'IS_DATE',
-                'IS_NOT_DATE',
-                'IS_CHECKED',
-                'IS_NOT_CHECKED',
-                'IS_ONE_OF',
-                'IS_NOT_ONE_OF',
-                'IS_CURRENT_USER',
-                'IS_NOT_CURRENT_USER']}
-
         self._column_id = Number()
-        self._operator = String(
-            accept=self.allowed_values['operator']
-        )
+        self._operator = EnumeratedValue(Operator)
+        self._target = EnumeratedValue(CriteriaTarget)
         self._values = TypedList(str)
 
         if props:
@@ -85,11 +51,19 @@ class Criteria(object):
 
     @property
     def operator(self):
-        return self._operator.value
+        return self._operator
 
     @operator.setter
     def operator(self, value):
-        self._operator.value = value
+        self._operator.set(value)
+
+    @property
+    def target(self):
+        return self._target
+
+    @target.setter
+    def target(self, value):
+        self._target.set(value)
 
     @property
     def values(self):

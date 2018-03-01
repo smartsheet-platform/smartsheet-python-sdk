@@ -19,6 +19,7 @@ from __future__ import absolute_import
 
 from .auto_number_format import AutoNumberFormat
 from .contact_option import ContactOption
+from .enums import ColumnType, Symbol, SystemColumnType
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -34,50 +35,6 @@ class Column(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'symbol': [
-                'STAR',
-                'FLAG',
-                'HARVEY_BALLS',
-                'PRIORITY',
-                'RYG',
-                'PRIORITY_HML',
-                'DECISION_SYMBOLS',
-                'DECISION_SHAPES',
-                'VCR',
-                'RYGB',
-                'RYGG',
-                'WEATHER',
-                'PROGRESS',
-                'ARROWS_3_WAY',
-                'ARROWS_4_WAY',
-                'ARROWS_5_WAY',
-                'DIRECTIONS_3_WAY',
-                'DIRECTIONS_4_WAY',
-                'SKI',
-                'SIGNAL',
-                'STAR_RATING',
-                'HEARTS',
-                'MONEY',
-                'EFFORT',
-                'PAIN'],
-            'system_column_type': [
-                'AUTO_NUMBER',
-                'MODIFIED_DATE',
-                'MODIFIED_BY',
-                'CREATED_DATE',
-                'CREATED_BY'],
-            '_type': [
-                'TEXT_NUMBER',
-                'DATE',
-                'DATETIME',
-                'CONTACT_LIST',
-                'CHECKBOX',
-                'PICKLIST',
-                'DURATION',
-                'PREDECESSOR',
-                'ABSTRACT_DATETIME']}
-
         self._auto_number_format = TypedObject(AutoNumberFormat)
         self._contact_options = TypedList(ContactOption)
         self._format_ = String()
@@ -88,15 +45,11 @@ class Column(object):
         self._locked_for_user = Boolean()
         self._options = TypedList(str)
         self._primary = Boolean()
-        self._symbol = String()
-        self._system_column_type = String(
-            accept=self.allowed_values['system_column_type']
-        )
+        self._symbol = EnumeratedValue(Symbol)
+        self._system_column_type = EnumeratedValue(SystemColumnType)
         self._tags = TypedList(str)
         self._title = String()
-        self._type_ = String(
-            accept=self.allowed_values['_type']
-        )
+        self._type_ = EnumeratedValue(ColumnType)
         self._width = Number()
         self._validation = Boolean()
 
@@ -209,19 +162,19 @@ class Column(object):
 
     @property
     def symbol(self):
-        return self._symbol.value
+        return self._symbol
 
     @symbol.setter
     def symbol(self, value):
-        self._symbol.value = value
+        self._symbol.set(value)
 
     @property
     def system_column_type(self):
-        return self._system_column_type.value
+        return self._system_column_type
 
     @system_column_type.setter
     def system_column_type(self, value):
-        self._system_column_type.value = value
+        self._system_column_type.set(value)
 
     @property
     def tags(self):
@@ -241,11 +194,11 @@ class Column(object):
 
     @property
     def type_(self):
-        return self._type_.value
+        return self._type_
 
     @type_.setter
     def type_(self, value):
-        self._type_.value = value
+        self._type_.set(value)
 
     @property
     def width(self):

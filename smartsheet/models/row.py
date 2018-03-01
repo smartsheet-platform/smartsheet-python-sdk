@@ -21,6 +21,7 @@ from .attachment import Attachment
 from .cell import Cell
 from .column import Column
 from .discussion import Discussion
+from .enums import AccessLevel
 from ..types import *
 from .user import User
 from ..util import serialize
@@ -38,18 +39,8 @@ class Row(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'access_level': [
-                'VIEWER',
-                'EDITOR',
-                'EDITOR_SHARE',
-                'ADMIN',
-                'OWNER']}
-
         self._above = Boolean()
-        self._access_level = String(
-            accept=self.allowed_values['access_level']
-        )
+        self._access_level = EnumeratedValue(AccessLevel)
         self._attachments = TypedList(Attachment)
         self._cells = TypedList(Cell)
         self._columns = TypedList(Column)
@@ -110,11 +101,11 @@ class Row(object):
 
     @property
     def access_level(self):
-        return self._access_level.value
+        return self._access_level
 
     @access_level.setter
     def access_level(self, value):
-        self._access_level.value = value
+        self._access_level.set(value)
 
     @property
     def attachments(self):

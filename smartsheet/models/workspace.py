@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import AccessLevel
 from .folder import Folder
 from .report import Report
 from .sheet import Sheet
@@ -37,17 +38,7 @@ class Workspace(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'access_level': [
-                'VIEWER',
-                'EDITOR',
-                'EDITOR_SHARE',
-                'ADMIN',
-                'OWNER']}
-
-        self._access_level = String(
-            accept=self.allowed_values['access_level']
-        )
+        self._access_level = EnumeratedValue(AccessLevel)
         self._favorite = Boolean()
         self._folders = TypedList(Folder)
         self._id_ = Number()
@@ -79,11 +70,11 @@ class Workspace(object):
 
     @property
     def access_level(self):
-        return self._access_level.value
+        return self._access_level
 
     @access_level.setter
     def access_level(self, value):
-        self._access_level.value = value
+        self._access_level.set(value)
 
     @property
     def favorite(self):

@@ -99,7 +99,7 @@ class Cells(object):
 
         _data = open(file, 'rb').read()
 
-        _op = fresh_operation('attach_file_to_row')
+        _op = fresh_operation('attach_file_to_cell')
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows/' + str(row_id) + \
                       '/columns/' + str(column_id) + '/cellimages'

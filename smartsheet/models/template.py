@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import AccessLevel, GlobalTemplate
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -33,29 +34,15 @@ class Template(object):
             self._base = base_obj
 
         self.allowed_values = {
-            'access_level': [
-                'VIEWER',
-                'EDITOR',
-                'EDITOR_SHARE',
-                'ADMIN',
-                'OWNER'],
             'type': [
                 'sheet',
-                'report'],
-            'global_template': [
-                'BLANK_SHEET',
-                'TASK_LIST',
-                'PROJECT_SHEET']}
+                'report']}
 
-        self._access_level = String(
-            accept=self.allowed_values['access_level']
-        )
+        self._access_level = EnumeratedValue(AccessLevel)
         self._blank = Boolean()
         self._categories = TypedList(six.string_types)
         self._description = String()
-        self._global_template = String(
-            accept=self.allowed_values['global_template']
-        )
+        self._global_template = EnumeratedValue(GlobalTemplate)
         self._id_ = Number()
         self._image = String()
         self._large_image = String()
@@ -85,11 +72,11 @@ class Template(object):
 
     @property
     def access_level(self):
-        return self._access_level.value
+        return self._access_level
 
     @access_level.setter
     def access_level(self, value):
-        self._access_level.value = value
+        self._access_level.set(value)
 
     @property
     def blank(self):
@@ -117,11 +104,11 @@ class Template(object):
 
     @property
     def global_template(self):
-        return self._global_template.value
+        return self._global_template
 
     @global_template.setter
     def global_template(self, value):
-        self._global_template.value = value
+        self._global_template.set(value)
 
     @property
     def id_(self):

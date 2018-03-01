@@ -371,3 +371,14 @@ class TestSheets:
     
         action = sheet.add_rows(rows)
         assert action.message == 'SUCCESS'
+
+    def test_sort_sheet(self, smart_setup):
+        smart = smart_setup['smart']
+        sort_specifier = smartsheet.models.SortSpecifier()
+        sort_criteria = smartsheet.models.SortCriterion()
+        sort_criteria.direction = 'DESCENDING'
+        sort_criteria.column_id = smart_setup['sheet'].columns[0].id
+        sort_specifier.sort_criteria = [sort_criteria]
+        sheet = smart.Sheets.sort_sheet(smart_setup['sheet'].id, sort_specifier)
+        assert isinstance(sheet, smart.models.Sheet)
+

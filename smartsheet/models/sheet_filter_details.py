@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 
 from .criteria import Criteria
+from .enums import SheetFilterOperator
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -33,16 +34,9 @@ class SheetFilterDetails(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'operator': [
-                'AND',
-                'OR']}
-
         self._criteria = TypedList(Criteria)
         self._include_parent = Boolean()
-        self._operator = String(
-            accept=self.allowed_values['operator']
-        )
+        self._operator = EnumeratedValue(SheetFilterOperator)
 
         if props:
             deserialize(self, props)
@@ -67,11 +61,11 @@ class SheetFilterDetails(object):
 
     @property
     def operator(self):
-        return self._operator.value
+        return self._operator
 
     @operator.setter
     def operator(self, value):
-        self._operator.value = value
+        self._operator.set(value)
 
     def to_dict(self):
         return serialize(self)

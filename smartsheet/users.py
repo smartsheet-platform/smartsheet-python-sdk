@@ -340,3 +340,39 @@ class Users(object):
         response = self._base.request(prepped_request, expected, _op)
 
         return response
+
+    def add_profile_image(self, user_id, file, file_type):
+        """Uploads a profile image for the specified user.
+
+        Args:
+            user_id (int): user ID
+            file (string): path to image file.
+            file_type (string): content type of image file
+
+        Returns:
+            Result
+        """
+        if not all(val is not None for val in ['user_id', 'file', 'file_type']):
+            raise ValueError(
+                ('One or more required values '
+                 'are missing from call to ' + __name__))
+
+        return self._attach_profile_image(user_id, file, file_type)
+
+    def _attach_profile_image(self, user_id, file, file_type):
+
+        _data = open(file, 'rb').read()
+
+        _op = fresh_operation('attach_profile_image')
+        _op['method'] = 'POST'
+        _op['path'] = '/users/' + str(user_id) + '/profileimage'
+        _op['headers'] = {'content-type': file_type,
+                          'content-disposition': 'attachment; filename="' + file + '"'}
+        _op['form_data'] = _data
+
+        expected = ['Result', 'User']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response

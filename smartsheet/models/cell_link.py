@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import
 
+from .enums import CellLinkStatus
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -32,24 +33,11 @@ class CellLink(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            'status': [
-                'OK',
-                'BROKEN',
-                'INACCESSIBLE',
-                'NOT_SHARED',
-                'BLOCKED',
-                'CIRCULAR',
-                'INVALID',
-                'DISABLED']}
-
         self._column_id = Number()
         self._row_id = Number()
         self._sheet_id = Number()
         self._sheet_name = String()
-        self._status = String(
-            accept=self.allowed_values['status']
-        )
+        self._status = EnumeratedValue(CellLinkStatus)
 
         if props:
             deserialize(self, props)
@@ -88,11 +76,11 @@ class CellLink(object):
 
     @property
     def status(self):
-        return self._status.value
+        return self._status
 
     @status.setter
     def status(self, value):
-        self._status.value = value
+        self._status.set(value)
 
     def to_dict(self):
         return serialize(self)

@@ -465,7 +465,7 @@ class Sheets(object):
         return response
 
     def get_sheet(self, sheet_id, include=None, exclude=None, row_ids=None,
-                  row_numbers=None, column_ids=None, page_size=None, page=None):
+                  row_numbers=None, column_ids=None, page_size=None, page=None, if_version_after=None):
         """Get the specified Sheet.
 
         Get the specified Sheet. Returns the Sheet, including Rows,
@@ -476,7 +476,7 @@ class Sheets(object):
             sheet_id (int): Sheet ID
             include (list[str]): A comma-separated list of
                 optional elements to include in the response. Valid list
-                values: attachments, discussions, format, filters,
+                values: attachments, crossSheetReferences, discussions, format, filters,
                 filterDefinitions, ownerInfo, source, rowWriterInfo.
             exclude (str): Response will not include cells
                 that have never contained any data.
@@ -492,6 +492,8 @@ class Sheets(object):
             page_size (int): The maximum number of items to
                 return per page.
             page (int): Which page to return.
+            if_version_after (int): only fetch Sheet if more recent version
+                available.
 
         Returns:
             Sheet
@@ -506,6 +508,7 @@ class Sheets(object):
         _op['query_params']['columnIds'] = column_ids
         _op['query_params']['pageSize'] = page_size
         _op['query_params']['page'] = page
+        _op['query_params']['ifVersionAfter'] = if_version_after
 
         expected = 'Sheet'
         prepped_request = self._base.prepare_request(_op)
@@ -1348,6 +1351,191 @@ class Sheets(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/filters/' + str(filter_id)
 
         expected = ['Result', None]
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def list_cross_sheet_references(self, sheet_id, page_size=None, page=None,
+                                  include_all=None):
+        """Get the list of all CrossSheetReferences for this Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            page_size (int): The maximum number of items to
+                return per page.
+            page (int): Which page to return.
+            include_all (bool): If true, include all results
+                (i.e. do not paginate).
+
+        Returns:
+            IndexResult
+        """
+        _op = fresh_operation('list_cross_sheet_references')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/crosssheetreferences'
+        _op['query_params']['pageSize'] = page_size
+        _op['query_params']['page'] = page
+        _op['query_params']['includeAll'] = include_all
+
+        expected = ['IndexResult', 'CrossSheetReference']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def get_cross_sheet_reference(self, sheet_id, cross_sheet_reference_id):
+        """Get the CrossSheetReference.
+
+        Args:
+            sheet_id (int): Sheet ID
+            cross_sheet_reference_id (int): CrossSheetReferenceID
+
+        Returns:
+            CrossSheetReference
+        """
+        _op = fresh_operation('get_cross_sheet_reference')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/crosssheetreferences/' + str(cross_sheet_reference_id)
+
+        expected = 'CrossSheetReference'
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def create_cross_sheet_reference(self, sheet_id, cross_sheet_reference_obj):
+        """Creates a CrossSheetReference for the specified Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            cross_sheet_reference_obj (CrossSheetReference): CrossSheetReference object
+
+        Returns:
+            Result
+        """
+        _op = fresh_operation('create_cross_sheet_reference')
+        _op['method'] = 'POST'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/crosssheetreferences'
+        _op['json'] = cross_sheet_reference_obj
+
+        expected = ['Result', 'CrossSheetReference']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def list_automation_rules(self, sheet_id, page_size=None, page=None,
+                                  include_all=None):
+        """Get the list of all AutomationRules for this Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            page_size (int): The maximum number of items to
+                return per page.
+            page (int): Which page to return.
+            include_all (bool): If true, include all results
+                (i.e. do not paginate).
+
+        Returns:
+            IndexResult
+        """
+        _op = fresh_operation('list_automation_rules')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/automationrules'
+        _op['query_params']['pageSize'] = page_size
+        _op['query_params']['page'] = page
+        _op['query_params']['includeAll'] = include_all
+
+        expected = ['IndexResult', 'AutomationRule']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def get_automation_rule(self, sheet_id, automation_rule_id):
+        """Get the AutomationRule.
+
+        Args:
+            sheet_id (int): Sheet ID
+            automation_rule_id (long): AutomationRuleID
+
+        Returns:
+            AutomationRule
+        """
+        _op = fresh_operation('get_automation_rule')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/automationrules/' + str(automation_rule_id)
+
+        expected = 'AutomationRule'
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def update_automation_rule(self, sheet_id, automation_rule_id, automation_rule_obj):
+        """Updates an AutomationRule for the specified Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            automation_rule_id: AutomationRule ID
+            automation_rule_obj (AutomationRule): AutomationRule object
+
+        Returns:
+            Result
+        """
+        _op = fresh_operation('update_automation_rule')
+        _op['method'] = 'PUT'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/automationrules/' + str(automation_rule_id)
+        _op['json'] = automation_rule_obj
+
+        expected = 'AutomationRule'
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def delete_automation_rule(self, sheet_id, automation_rule_id):
+        """Deletes an AutomationRule for the specified Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            automation_rule_id (int): AutomationRule ID
+
+        Returns:
+            Result
+        """
+        _op = fresh_operation('delete_automation_rule')
+        _op['method'] = 'DELETE'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/automationrules/' + str(automation_rule_id)
+
+        expected = ['Result', None]
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def sort_sheet(self, sheet_id, sort_specifier_obj):
+        """Sort Sheet according to SortSpecifier.
+
+        Args:
+            sheet_id (int): Sheet ID
+            sort_specifier_obj (SortSpecifier): SortSpecifier object
+
+        Returns:
+            Sheet
+        """
+        _op = fresh_operation('sort_sheet')
+        _op['method'] = 'POST'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/sort'
+        _op['json'] = sort_specifier_obj
+
+        expected = 'Sheet'
+
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
 
