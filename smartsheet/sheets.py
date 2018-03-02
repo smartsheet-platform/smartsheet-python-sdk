@@ -1492,7 +1492,7 @@ class Sheets(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/automationrules/' + str(automation_rule_id)
         _op['json'] = automation_rule_obj
 
-        expected = 'AutomationRule'
+        expected = ['Result', 'AutomationRule']
 
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
