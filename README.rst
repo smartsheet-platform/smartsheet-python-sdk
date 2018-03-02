@@ -8,7 +8,7 @@ applications.
 System Requirements
 -------------------
 
-The SDK currently supports Python 2.7, 3.3, 3.4, 3.5, 3.6, pypy, and pypy3.
+The SDK currently supports Python 2.7, 3.4, 3.5, 3.6, pypy, and pypy3.
 The following packages are required.
 
 -  `requests <https://pypi.python.org/pypi/requests>`__
@@ -16,6 +16,7 @@ The following packages are required.
 -  `six <https://pypi.python.org/pypi/six>`__
 -  `certifi <https://pypi.python.org/pypi/certifi>`__
 -  `python-dateutil <https://pypi.python.org/pypi/python-dateutil>`__
+-  `enum34 <https://pypi.python.org/pypi/enum34>`__
 
 Installation
 ------------
