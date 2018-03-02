@@ -6,6 +6,36 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.3.1] - 2018-3-1
+
+### Added
+- Implemented [cross-sheet References](http://smartsheet-platform.github.io/api-docs/?shell#cross-sheet-references)
+- Updated UserProfile and added support for profile images
+- Added an argument to the client constructor method to externally set the API base URI
+- Implemented [Automation Rules](http://smartsheet-platform.github.io/api-docs/?shell#automation-rules)
+- Implemented row sort objects and [Sort Rows in Sheet](http://smartsheet-platform.github.io/api-docs/?shell#sort-rows-in-sheet) endpoint
+- Added row filter properties to SheetFilter
+- Added ifVersionAfter parameter to Sheet.get_sheet() method
+
+### Changed
+In our efforts to further streamline the SDK, enumerated properties have been changed from type String to type EnumeratedValue, which wraps Python Enum. 
+In addition to allowing us to remove a number of redundant string arrays, this also provides the benefit of better code completion (in most IDEs) 
+and provides for more programmatic clarity, for example:
+ ```
+sheet = smartsheet.Sheets.get_sheet(sheet_id)
+if sheet.access_level == AccessLevel.OWNER:
+    # perform some task for OWNER
+    ...
+```
+However, string comparisons will continue to operate as they did previously. No change is required if your code uses comparisons such as:
+```
+sheet = smartsheet.Sheets.get_sheet(sheet_id)
+if sheet.access_level == 'OWNER':
+    # perform some task for OWNER
+    ...
+```
+[enum34](https://pypi.python.org/pypi/enum34) has been added as a required package for the SDK  
+
 ## [1.3.0] - 2018-2-21
 
 ### Changed 
