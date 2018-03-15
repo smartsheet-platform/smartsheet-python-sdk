@@ -42,7 +42,7 @@ class Search(object):
                 limits the response to only those items in the user's Workspaces
             modified_since (str): includes items that are modified on or after the
                 date and time specified
-            scopes (str): comma-seperated list of search filters:
+            scopes (str): comma-separated list of search filters:
                 attachments
                 cellData
                 comments
