@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.3.2] - 2018-3-15
+
+### Fixed
+- String representations for EnumeratedValue should contain just their `name` not `class_name.name`
+[(SO reported)](https://stackoverflow.com/questions/49256434/writing-column-type-now-has-columntype-option-instead-of-option).
+
 ## [1.3.1] - 2018-3-1
 
 ### Added
