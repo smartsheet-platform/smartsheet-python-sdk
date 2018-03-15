@@ -288,7 +288,10 @@ class EnumeratedValue(object):
         NotImplemented
 
     def __str__(self):
-        return str(self._value)
+        if self._value is not None:
+            return self._value.name
+        else:
+            return str(None)
 
 
 class EnumeratedList(TypedList):
