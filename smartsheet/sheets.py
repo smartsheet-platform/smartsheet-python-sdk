@@ -227,9 +227,9 @@ class Sheets(object):
             container_destination_obj
                 (ContainerDestination): Container Destination object.
             include (list[str]): A comma-separated list of
-                optional elements to include in the response. Valid list
-                values: attachments, cellLinks, data, discussions, forms,
-                    ruleRecipients, rules, shares, all (deprecated).
+                optional elements to include in the response. Valid list values:
+                attachments, cellLinks, data, discussions, forms, ruleRecipients,
+                rules, shares, all (deprecated).
             omit (list[str]): A comma-seperated list of optional elements
                 to omit. Only current valid value is sheetHyperlinks
 

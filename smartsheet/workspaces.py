@@ -39,13 +39,11 @@ class Workspaces(object):
             workspace_id (int): Workspace ID
             container_destination_obj (ContainerDestination): Container Destination object.
             include (list[str]): A comma-separated list of optional elements to copy.
-                Valid list values: attachments, brand, cellLinks, data, discussions, filters,
-                    forms, ruleRecipients, rules, shares, all (deprecated).
-                Cell history will not be copied, regardless of which **include** parameter values
-                    are specified.
+                Valid list values: attachments, brand, cellLinks, data, discussions, filters, forms,
+                ruleRecipients, rules, shares, all (deprecated). Cell history will not be copied,
+                regardless of which **include** parameter values are specified.
             skip_remap (list[str]): A comma separated list of references to NOT re-map for
-                the newly created resource.
-                    Valid list items: cellLinks, reports, sheetHyperlinks, sights
+                the newly created resource. Valid list items: cellLinks, reports, sheetHyperlinks, sights
             omit (list[str]): a comma seperated list of items to exclude. The only
                 currently valid option is sheetHyperlinks
         Returns:

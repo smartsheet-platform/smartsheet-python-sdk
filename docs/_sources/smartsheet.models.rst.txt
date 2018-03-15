@@ -1,6 +1,13 @@
 smartsheet.models package
 =========================
 
+Subpackages
+-----------
+
+.. toctree::
+
+    smartsheet.models.enums
+
 Submodules
 ----------
 
@@ -40,6 +47,22 @@ smartsheet.models.auto\_number\_format module
 ---------------------------------------------
 
 .. automodule:: smartsheet.models.auto_number_format
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+smartsheet.models.automation\_action module
+-------------------------------------------
+
+.. automodule:: smartsheet.models.automation_action
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+smartsheet.models.automation\_rule module
+-----------------------------------------
+
+.. automodule:: smartsheet.models.automation_rule
     :members:
     :undoc-members:
     :show-inheritance:
@@ -176,6 +199,14 @@ smartsheet.models.criteria module
 ---------------------------------
 
 .. automodule:: smartsheet.models.criteria
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+smartsheet.models.cross\_sheet\_reference module
+------------------------------------------------
+
+.. automodule:: smartsheet.models.cross_sheet_reference
     :members:
     :undoc-members:
     :show-inheritance:
@@ -624,6 +655,22 @@ smartsheet.models.sight\_publish module
 ---------------------------------------
 
 .. automodule:: smartsheet.models.sight_publish
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+smartsheet.models.sort\_criterion module
+----------------------------------------
+
+.. automodule:: smartsheet.models.sort_criterion
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+smartsheet.models.sort\_specifier module
+----------------------------------------
+
+.. automodule:: smartsheet.models.sort_specifier
     :members:
     :undoc-members:
     :show-inheritance:

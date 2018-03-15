@@ -62,13 +62,11 @@ class Reports(object):
 
         Args:
             report_id (int): Report ID
-            page_size (int): The maximum number of items to
-                return per page.
+            page_size (int): The maximum number of items to return per page.
             page (int): Which page to return.
             include (list[str]): A comma-separated list of
-                optional elements to include in the response. Valid list
-                values: discussions, attachments, format, sheetVersion(requires sourceSheets),
-                    sourceSheets.
+                optional elements to include in the response. Valid list values:
+                discussions, attachments, format, sheetVersion(requires sourceSheets), sourceSheets.
 
         Returns:
             Report
