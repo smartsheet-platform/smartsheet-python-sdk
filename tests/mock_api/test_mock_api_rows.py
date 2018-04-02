@@ -638,3 +638,35 @@ class TestMockApiRows(MockApiTestHelper):
         response = self.client.Sheets.update_rows(1, [first_row])
 
         assert response.result[0].row_number == 100
+
+    @clean_api_error
+    def test_move_row_to_another_sheet(self):
+        self.client.as_test_scenario('Move row to another sheet')
+
+        result = self.client.Sheets.move_rows(
+            1228520367122308,
+            self.client.models.CopyOrMoveRowDirective({
+                'row_ids': [1765250516182916],
+                'to': self.client.models.CopyOrMoveRowDestination({
+                    'sheet_id': 799249123305348
+                })
+            })
+        )
+
+        assert result.destination_sheet_id == 799249123305348
+
+    @clean_api_error
+    def test_copy_row_to_another_sheet(self):
+        self.client.as_test_scenario('Copy row to another sheet')
+
+        result = self.client.Sheets.copy_rows(
+            1228520367122308,
+            self.client.models.CopyOrMoveRowDirective({
+                'row_ids': [2891150423025540],
+                'to': self.client.models.CopyOrMoveRowDestination({
+                    'sheet_id': 799249123305348
+                })
+            })
+        )
+
+        assert result.destination_sheet_id == 799249123305348

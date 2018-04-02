@@ -17,12 +17,12 @@
 
 from __future__ import absolute_import
 
-from .models.column import Column
-from .models.row import Row
-from .types import TypedList
 import logging
 import os.path
 from datetime import datetime
+from .models.column import Column
+from .models.row import Row
+from .types import TypedList
 from .util import deprecated
 from . import fresh_operation
 
@@ -209,8 +209,9 @@ class Sheets(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows/copy'
         _op['query_params']['include'] = include
-        _op['query_params']['ignoreRowsNotFound'] = ignore_rows_not_found
         _op['json'] = copy_or_move_row_directive_obj
+        if ignore_rows_not_found:
+            _op['query_params']['ignoreRowsNotFound'] = ignore_rows_not_found
 
         expected = 'CopyOrMoveRowResult'
         prepped_request = self._base.prepare_request(_op)
@@ -757,8 +758,9 @@ class Sheets(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows/move'
         _op['query_params']['include'] = include
-        _op['query_params']['ignoreRowsNotFound'] = ignore_rows_not_found
         _op['json'] = copy_or_move_row_directive_obj
+        if ignore_rows_not_found:
+            _op['query_params']['ignoreRowsNotFound'] = ignore_rows_not_found
 
         expected = 'CopyOrMoveRowResult'
         prepped_request = self._base.prepare_request(_op)
