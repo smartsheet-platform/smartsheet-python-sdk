@@ -14,6 +14,11 @@ The following packages are required.
 * [certifi](https://pypi.python.org/pypi/certifi)
 * [python-dateutil](https://pypi.python.org/pypi/python-dateutil)
 
+### Smartsheet Will Require TLS 1.1 or Higher Post 5/22/2018
+There are many security vulnerabilities in SSL and early TLS version. To remain compliant with PCI standards most companies are now removing support for TLS 1.0.
+
+Smartsheet Python SDK versions earlier than 1.3.0 requires TLS 1.0. Once Smartsheet disables support for TLS1.0 on 5/22/2018 any user who is still using an earlier version of Python SDK will receive a SSL handshake error. Please upgrade your Smartsheet Python SDK, preferably to 1.3.2 by 5/22/2018 to avoid any impact.
+
 ## Installation
 The SDK can be installed by using a package manager (pip) or manually by downloading the SDK directly from Git. These two steps are outlined below.
 
