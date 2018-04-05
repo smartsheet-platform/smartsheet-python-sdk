@@ -15,7 +15,7 @@ The following packages are required.
 * [python-dateutil](https://pypi.python.org/pypi/python-dateutil)
 
 ### Smartsheet Will Require TLS 1.1 or Higher Post 5/22/2018
-There are many security vulnerabilities in SSL and early TLS version. To remain compliant with PCI standards most companies are now removing support for TLS 1.0.
+There are many security vulnerabilities in SSL and early TLS versions. To remain compliant with PCI standards, most companies are now removing support for TLS 1.0.
 
 Smartsheet Python SDK versions earlier than 1.3.0 do not support TLS 1.1. Once Smartsheet disables support for TLS 1.0 on 5/22/2018 any user who is still using an earlier version of the Python SDK will receive a SSL handshake error. Please upgrade your Smartsheet Python SDK, preferably to 1.3.2 by 5/22/2018 to avoid any impact.
 
