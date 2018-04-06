@@ -943,8 +943,9 @@ class Sheets(object):
         _op = fresh_operation('share_sheet')
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/shares'
-        _op['query_params']['sendEmail'] = send_email
         _op['json'] = share_obj
+        if send_email:
+            _op['query_params']['sendEmail'] = 'true'
 
         expected = ['Result', 'Share']
 
