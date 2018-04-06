@@ -59,7 +59,7 @@ class Sheets(object):
 
         return response
 
-    def add_rows(self, sheet_id, list_of_rows):
+    def add_rows(self, sheet_id, row_or_list_of_rows, include=None, allow_partial_success=False):
         """Insert one or more Rows into the specified Sheet.
 
         If multiple rows are specified in the request, all rows
@@ -74,7 +74,8 @@ class Sheets(object):
 
         Args:
             sheet_id (int): Sheet ID
-            list_of_rows (list[Row]): An array of Row objects with the following attributes:
+            row_or_list_of_rows (Row | list[Row]): A Row object or array of Row objects with the
+               following attributes:
 
                One or more location-specifier attributes (optional)
 
@@ -97,21 +98,25 @@ class Sheets(object):
                    format (optional)
 
                    hyperlink (optional)
+            include (list[str]): A comma-separated list of row elements to include
+            allow_partial_success (bool, optional): If not provided or set to False, bulk additions
+                will fail if any of the rows to be added encounter a failure.  If set to True, this
+                allows partial success of bulk additions, with each row succeeding or failing
+                independently
 
         Returns:
             Result
         """
-        if isinstance(list_of_rows, (dict, Row)):
-            arg_value = list_of_rows
-            list_of_rows = TypedList(Row)
-            list_of_rows.append(arg_value)
-
         _op = fresh_operation('add_rows')
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows'
-        _op['json'] = list_of_rows
+        _op['json'] = row_or_list_of_rows
+        if include is not None:
+            _op['query_params']['include'] = include
+        if allow_partial_success:
+            _op['query_params']['allowPartialSuccess'] = 'true'
 
-        expected = ['Result', 'Row']
+        expected = ['BulkItemResult', 'Row'] if allow_partial_success else ['Result', 'Row']
 
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)
