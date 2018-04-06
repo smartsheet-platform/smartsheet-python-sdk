@@ -38,6 +38,7 @@ class Attachment(object):
         self._attachment_type = EnumeratedValue(AttachmentType)
         self._created_at = Timestamp()
         self._created_by = TypedObject(User)
+        self._description = String()
         self._id_ = Number()
         self._mime_type = String()
         self._name = String()
@@ -97,6 +98,14 @@ class Attachment(object):
     @created_by.setter
     def created_by(self, value):
         self._created_by.value = value
+    
+    @property
+    def description(self):
+        return self._description.value
+    
+    @description.setter
+    def description(self, value):
+        self._description.value = value
 
     @property
     def id_(self):
