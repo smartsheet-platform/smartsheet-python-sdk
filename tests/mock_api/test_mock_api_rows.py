@@ -526,6 +526,33 @@ class TestMockApiRows(MockApiTestHelper):
         assert response.result[0].cells[1].display_value == "2FS +2d 4h"
 
     @clean_api_error
+    def test_add_rows_assign_object_value_predecessor_list_using_float_duration(self):
+        self.client.as_test_scenario(
+            'Add Rows - Assign Object Value - Predecessor List (using floats)')
+
+        lag = Duration({
+            'objectType': 'DURATION',
+            'days': 2.5
+        })
+
+        predecessor_list = PredecessorList()
+        predecessor_list.predecessors.append({
+            'rowId': 10,
+            'type': 'FS',
+            'lag': lag
+        })
+
+        row = Row()
+        row.cells.append({
+            'columnId': 101,
+            'objectValue': predecessor_list
+        })
+
+        response = self.client.Sheets.add_rows(1, [row])
+
+        assert response.result[0].cells[1].display_value == '2FS +2.5d'
+
+    @clean_api_error
     def test_update_rows_clear_value_text_number(self):
         self.client.as_test_scenario('Update Rows - Clear Value - Text Number')
 
@@ -592,6 +619,22 @@ class TestMockApiRows(MockApiTestHelper):
         assert response.result[0].cells[0].column_id == 101
         assert response.result[0].cells[0].value is None
         assert response.result[0].cells[0].link_in_from_cell is None
+
+    @clean_api_error
+    def test_update_rows_clear_value_predecessor_list(self):
+        self.client.as_test_scenario('Update Rows - Clear Value - Predecessor List')
+
+        row = Row()
+        row.id = 10
+        row.cells.append({
+            'columnId': 123,
+            'value': ExplicitNull()
+        })
+
+        response = self.client.Sheets.update_rows(1, [row])
+
+        assert response.result[0].cells[0].column_id == 123
+        assert response.result[0].cells[0].value is None
 
     @clean_api_error
     def test_update_rows_invalid_assign_hyperlink_and_cell_link(self):
