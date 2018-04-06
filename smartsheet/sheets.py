@@ -36,26 +36,21 @@ class Sheets(object):
         self._base = smartsheet_obj
         self._log = logging.getLogger(__name__)
 
-    def add_columns(self, sheet_id, list_of_columns):
+    def add_columns(self, sheet_id, column_or_list_of_columns):
         """Insert one or more Columns into the specified Sheet
 
         Args:
             sheet_id (int): Sheet ID
-            list_of_columns (list[Column]): One or more
-                Column objects.
+            column_or_list_of_columns (Column | list[Column]): One or more Column objects
 
         Returns:
             Result
         """
-        if isinstance(list_of_columns, (dict, Column)):
-            arg_value = list_of_columns
-            list_of_columns = TypedList(Column)
-            list_of_columns.append(arg_value)
 
         _op = fresh_operation('add_columns')
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/columns'
-        _op['json'] = list_of_columns
+        _op['json'] = column_or_list_of_columns
 
         expected = ['Result', 'Column']
 
