@@ -6,7 +6,6 @@ from smartsheet.models import (
     Discussion, ExplicitNull, Favorite, FormatDetails, Group, ImageUrl, MultiRowEmail, Recipient,
     Row, Schedule, Share, Sheet, SheetEmail, UpdateRequest, User, Workspace
 )
-# from smartsheet.exceptions import ApiError
 from smartsheet.models.object_value import DURATION
 
 from mock_api_test_helper import MockApiTestHelper, clean_api_error
