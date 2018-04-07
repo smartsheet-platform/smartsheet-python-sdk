@@ -78,7 +78,7 @@ setup(
             'pytest-instafail'
         ]
     },
-    tests_require=['pytest', 'parameterized'],
+    tests_require=['pytest'],
     cmdclass={
         'test': PyTest
     }
