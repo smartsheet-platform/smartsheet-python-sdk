@@ -132,7 +132,7 @@ class TypedObject(object):
         elif hasattr(value, 'is_explicit_null'):
             self._value = value
         else:
-            raise ValueError("`[0]` invalid type for [1] value".format(value, self.object_type))
+            raise ValueError("`{0}` invalid type for {1} value".format(value, self.object_type))
 
     def __str(self):
         return json.dumps(self._value)
@@ -156,7 +156,7 @@ class Number(object):
         elif isinstance(value, (six.integer_types, float)):
             self._value = value
         else:
-            raise ValueError("`[0]` invalid type for Number value".format(value))
+            raise ValueError("`{0}` invalid type for Number value".format(value))
 
     def __str__(self):
         return str(self.value)
@@ -187,7 +187,7 @@ class String(object):
                         value, self.accept))
             self._value = value
         else:
-            raise ValueError("`[0]` invalid type for String value".format(value))
+            raise ValueError("`{0}` invalid type for String value".format(value))
 
     @property
     def accept(self):
@@ -200,7 +200,7 @@ class String(object):
         elif isinstance(value, six.string_types):
             self._accept = [value]
         else:
-            raise ValueError("`[0]` invalid type for accept".format(value))
+            raise ValueError("`{0}` invalid type for accept".format(value))
 
     def __str__(self):
         return self._value
@@ -224,7 +224,7 @@ class Boolean(object):
         elif isinstance(value, bool):
             self._value = value
         else:
-            raise ValueError("`[0]` invalid type for Boolean value".format(value))
+            raise ValueError("`{0}` invalid type for Boolean value".format(value))
 
     def __str__(self):
         return str(self._value)
@@ -251,7 +251,7 @@ class Timestamp(object):
             value = parse(value)
             self._value = value
         else:
-            raise ValueError("`[0]` invalid type for Timestamp value".format(value))
+            raise ValueError("`{0}` invalid type for Timestamp value".format(value))
 
     def __str__(self):
         return str(self._value)

@@ -102,8 +102,9 @@ class Users(object):
         _op = fresh_operation('add_user')
         _op['method'] = 'POST'
         _op['path'] = '/users'
-        _op['query_params']['sendEmail'] = send_email
         _op['json'] = user_obj
+        if send_email:
+            _op['query_params']['sendEmail'] = send_email
 
         expected = ['Result', 'User']
 

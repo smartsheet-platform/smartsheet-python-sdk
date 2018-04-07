@@ -66,7 +66,11 @@ setup(
     include_package_data=True,
     long_description=open('README.rst').read(),
     extras_require={
-        'test': ['coverage', 'coveralls', 'pytest'],
+        'test': [
+            'coverage',
+            'coveralls',
+            'pytest'
+        ],
         'develop': [
             'coverage',
             'coveralls[yaml]',

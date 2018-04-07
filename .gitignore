@@ -28,5 +28,8 @@ smartsheet/version.py
 .cache/*
 .pytest_cache/*
 
+# ignore VSCode files
+.vscode/*
+
 # ignore ugly batch files
 *.bat
