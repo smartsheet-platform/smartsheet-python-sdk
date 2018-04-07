@@ -132,7 +132,7 @@ class TypedObject(object):
         elif hasattr(value, 'is_explicit_null'):
             self._value = value
         else:
-            raise ValueError("`{0}` invalid type for [1] value".format(value, self.object_type))
+            raise ValueError("`{0}` invalid type for {1} value".format(value, self.object_type))
 
     def __str(self):
         return json.dumps(self._value)
