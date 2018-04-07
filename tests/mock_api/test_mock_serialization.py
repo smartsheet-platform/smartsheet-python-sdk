@@ -279,7 +279,7 @@ class TestMockSerialization(MockApiTestHelper):
             'value': 'Some Value'
         })
 
-        response = self.client.Sheets.add_rows(1, [row1, row2], allow_partial_success=True)
+        response = self.client.Sheets.add_rows_with_partial_success(1, [row1, row2])
 
         assert response.result[0].cells[0].value == 'Some Value'
         assert response.failed_items[0].error.error_code == 1036
