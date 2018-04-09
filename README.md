@@ -4,7 +4,7 @@ This library is intended to simplify connecting to the [Smartsheet API](http://s
 
 ## System Requirements
 The SDK currently supports Python 2.7, 3.4, 3.5, 3.6, pypy, and pypy3.  
-**Note** that Python version 3.4 or higher is required for Unicode support. (E.g. if your Smartsheet data includes non-ASCII characters.)  
+**Note**: Python version 3.4 or higher is required for Unicode support, for example, if your Smartsheet data includes non-ASCII characters.  
 
 The following packages are required.
 
@@ -17,7 +17,7 @@ The following packages are required.
 ### Smartsheet Will Require TLS 1.1 or Higher Post 5/22/2018
 There are many security vulnerabilities in SSL and early TLS versions. To remain compliant with PCI standards, most companies are now removing support for TLS 1.0.
 
-Smartsheet Python SDK versions earlier than 1.3.0 do not support TLS 1.1. Once Smartsheet disables support for TLS 1.0 on 5/22/2018 any user who is still using an earlier version of the Python SDK will receive a SSL handshake error. Please upgrade your Smartsheet Python SDK, preferably to 1.3.2 by 5/22/2018 to avoid any impact.
+Smartsheet Python SDK versions earlier than 1.3.0 do not support TLS 1.1. Once Smartsheet disables support for TLS 1.0 on 5/22/2018, any user who is still using an earlier version of the Python SDK will receive a SSL handshake error. Please upgrade your Smartsheet Python SDK, preferably to 1.3.2 by 5/22/2018 to avoid any impact.
 
 To upgrade a current installation using pip:
 
@@ -74,7 +74,7 @@ See a sample application here: https://github.com/smartsheet-samples/python-read
 
 ## Passthrough Option
 
-If there is an API Feature that is not yet supported by the Python SDK, there is a passthrough option that allows you to pass and receive raw JSON objects.
+If there is an API feature that is not yet supported by the Python SDK, there is a passthrough option that allows you to pass and receive raw JSON objects.
 
 To invoke the passthrough, your code can call one of the following four methods:
 
@@ -107,20 +107,20 @@ The following example shows how to POST data to `https://api.smartsheet.com/2.0/
   response = ss_client.Passthrough.post('/sheets', payload)
 ```
 
-## Contributing
-If you would like to contribute a change to the SDK, please fork a branch and then submit a pull request.
-
-### Running the Tests
-#### All
+## Running Integration or Mock API Tests
+### All
 1. Run `pytest`. Note, the integration and mock API tests will fail unless the mock server is running. See [Mock API Tests](#mock-api-tests) and [Integration Tests](#integration-tests)
 
-#### Integration Tests
+### Integration Tests
 1. Follow the instructions [here](tests/integration/README.md)
 2. Run `pytest tests/integration`
 
-#### Mock API Tests
-1. Clone the [Smartsheet SDK tests](https://github.com/smartsheet-platform/smartsheet-sdk-tests) repo and follow the instructions from the README to start the mock server
+### Mock API Tests
+1. Clone the [Smartsheet SDK tests](https://github.com/smartsheet-platform/smartsheet-sdk-tests) repository, and then follow the instructions from the README to start the mock server
 2. Run `pytest tests/mock_api`
+
+## Contributing
+If you would like to contribute a change to the SDK, please fork a branch and then submit a pull request.
 
 ## Support
 If you have any questions or issues with this SDK please post on StackOverflow using the tag ["smartsheet-api"](http://stackoverflow.com/questions/tagged/smartsheet-api) or contact us directly at api@smartsheet.com.
