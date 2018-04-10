@@ -107,7 +107,7 @@ The following example shows how to POST data to `https://api.smartsheet.com/2.0/
   response = ss_client.Passthrough.post('/sheets', payload)
 ```
 
-## Running Integration or Mock API Tests
+## Testing
 ### All
 1. Run `pytest`. Note, the integration and mock API tests will fail unless the mock server is running. See [Mock API Tests](#mock-api-tests) and [Integration Tests](#integration-tests)
 
@@ -124,5 +124,6 @@ If you would like to contribute a change to the SDK, please fork a branch and th
 
 ## Support
 If you have any questions or issues with this SDK please post on StackOverflow using the tag ["smartsheet-api"](http://stackoverflow.com/questions/tagged/smartsheet-api) or contact us directly at api@smartsheet.com.
+
 ## Release Notes
 Each release with notes is available for download on the [Github Releases page](https://github.com/smartsheet-platform/smartsheet-python-sdk/releases).
