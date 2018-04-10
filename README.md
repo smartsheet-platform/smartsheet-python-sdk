@@ -108,14 +108,13 @@ The following example shows how to POST data to `https://api.smartsheet.com/2.0/
 ```
 
 ## Testing
-### All
-1. Run `pytest`. Note, the integration and mock API tests will fail unless the mock server is running. See [Mock API Tests](#mock-api-tests) and [Integration Tests](#integration-tests)
-
 ### Integration Tests
 1. Follow the instructions [here](tests/integration/README.md)
 2. Run `pytest tests/integration`
 
 ### Mock API Tests
+**NOTE:** the mock API tests will fail unless the mock server is running.
+
 1. Clone the [Smartsheet SDK tests](https://github.com/smartsheet-platform/smartsheet-sdk-tests) repository, and then follow the instructions from the README to start the mock server
 2. Run `pytest tests/mock_api`
 
