@@ -36,21 +36,27 @@ class Sheets(object):
         self._base = smartsheet_obj
         self._log = logging.getLogger(__name__)
 
-    def add_columns(self, sheet_id, column_or_list_of_columns):
+    def add_columns(self, sheet_id, list_of_columns):
         """Insert one or more Columns into the specified Sheet
 
         Args:
             sheet_id (int): Sheet ID
-            column_or_list_of_columns (Column | list[Column]): One or more Column objects
+            list_of_columns (list[Column]): One or more
+                Column objects
 
         Returns:
             Result
         """
 
+        if isinstance(list_of_columns, (dict, Column)):
+            arg_value = list_of_columns
+            list_of_columns = TypedList(Column)
+            list_of_columns.append(arg_value)
+
         _op = fresh_operation('add_columns')
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/columns'
-        _op['json'] = column_or_list_of_columns
+        _op['json'] = list_of_columns
 
         expected = ['Result', 'Column']
 
@@ -59,7 +65,7 @@ class Sheets(object):
 
         return response
 
-    def add_rows(self, sheet_id, row_or_list_of_rows, include=None):
+    def add_rows(self, sheet_id, list_of_rows):
         """Insert one or more Rows into the specified Sheet.
 
         If multiple rows are specified in the request, all rows
@@ -74,8 +80,7 @@ class Sheets(object):
 
         Args:
             sheet_id (int): Sheet ID
-            row_or_list_of_rows (Row | list[Row]): A Row object or array of Row objects with the
-               following attributes:
+            row_or_list_of_rows (list[Row]): An array of Row objects with the following attributes:
 
                One or more location-specifier attributes (optional)
 
@@ -98,17 +103,19 @@ class Sheets(object):
                    format (optional)
 
                    hyperlink (optional)
-            include (list[str]): A comma-separated list of row elements to include
 
         Returns:
             Result
         """
+        if isinstance(list_of_rows, (dict, Row)):
+            arg_value = list_of_rows
+            list_of_rows = TypedList(Row)
+            list_of_rows.append(arg_value)
+
         _op = fresh_operation('add_rows')
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows'
-        _op['json'] = row_or_list_of_rows
-        if include is not None:
-            _op['query_params']['include'] = include
+        _op['json'] = list_of_rows
 
         expected = ['Result', 'Row']
 
@@ -178,7 +185,7 @@ class Sheets(object):
         return response
 
     def copy_rows(self, sheet_id, copy_or_move_row_directive_obj,
-                  include=None, ignore_rows_not_found=False):
+                  include=None, ignore_rows_not_found=None):
         """Copies Row(s) from the specified Sheet to the bottom of another
         Sheet.
 
@@ -203,9 +210,8 @@ class Sheets(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows/copy'
         _op['query_params']['include'] = include
+        _op['query_params']['ignoreRowsNotFound'] = ignore_rows_not_found
         _op['json'] = copy_or_move_row_directive_obj
-        if ignore_rows_not_found:
-            _op['query_params']['ignoreRowsNotFound'] = ignore_rows_not_found
 
         expected = 'CopyOrMoveRowResult'
         prepped_request = self._base.prepare_request(_op)
@@ -719,7 +725,7 @@ class Sheets(object):
         return response
 
     def move_rows(self, sheet_id, copy_or_move_row_directive_obj,
-                  include=None, ignore_rows_not_found=False):
+                  include=None, ignore_rows_not_found=None):
         """Moves Row(s) to the bottom of another Sheet.
 
         Up to 5,000 row IDs can be specified in the request, but if
@@ -752,9 +758,8 @@ class Sheets(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows/move'
         _op['query_params']['include'] = include
+        _op['query_params']['ignoreRowsNotFound'] = ignore_rows_not_found
         _op['json'] = copy_or_move_row_directive_obj
-        if ignore_rows_not_found:
-            _op['query_params']['ignoreRowsNotFound'] = ignore_rows_not_found
 
         expected = 'CopyOrMoveRowResult'
         prepped_request = self._base.prepare_request(_op)
@@ -918,7 +923,7 @@ class Sheets(object):
 
         return response
 
-    def share_sheet(self, sheet_id, share_obj, send_email=False):
+    def share_sheet(self, sheet_id, share_obj, send_email=None):
         """Share the specified Sheet.
 
         Share the specified Sheet with the specified Users and
@@ -938,8 +943,7 @@ class Sheets(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/shares'
         _op['json'] = share_obj
-        if send_email:
-            _op['query_params']['sendEmail'] = 'true'
+        _op['query_params']['sendEmail'] = 'true'
 
         expected = ['Result', 'Share']
 

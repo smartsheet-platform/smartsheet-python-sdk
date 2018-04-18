@@ -75,7 +75,7 @@ class Users(object):
 
         return response
 
-    def add_user(self, user_obj, send_email=False):
+    def add_user(self, user_obj, send_email=None):
         """Add a User to the organization.
 
         Args:
@@ -103,8 +103,7 @@ class Users(object):
         _op['method'] = 'POST'
         _op['path'] = '/users'
         _op['json'] = user_obj
-        if send_email:
-            _op['query_params']['sendEmail'] = send_email
+        _op['query_params']['sendEmail'] = send_email
 
         expected = ['Result', 'User']
 

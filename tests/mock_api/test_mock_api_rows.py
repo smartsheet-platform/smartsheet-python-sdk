@@ -229,6 +229,60 @@ class TestMockApiRows(MockApiTestHelper):
         self.check_error_code(e, 1112)
 
     @clean_api_error
+    def test_add_rows_assign_object_value_predecessor_list(self):
+        self.client.as_test_scenario('Add Rows - Assign Object Value - Predecessor List')
+
+        lag = Duration({
+            "objectType": "DURATION",
+            "days": 2,
+            "hours": 4
+        })
+
+        predecessor_list = PredecessorList()
+        predecessor_list.predecessors.append({
+            "rowId": 10,
+            "type": "FS",
+            "lag": lag
+        })
+
+        first_row = Row()
+        first_row.cells.append({
+            "columnId": 101,
+            "objectValue": predecessor_list
+        })
+
+        response = self.client.Sheets.add_rows(1, [first_row])
+
+        assert response.result[0].cells[1].display_value == "2FS +2d 4h"
+
+    @clean_api_error
+    def test_add_rows_assign_object_value_predecessor_list_using_float_duration(self):
+        self.client.as_test_scenario(
+            'Add Rows - Assign Object Value - Predecessor List (using floats)')
+
+        lag = Duration({
+            'objectType': 'DURATION',
+            'days': 2.5
+        })
+
+        predecessor_list = PredecessorList()
+        predecessor_list.predecessors.append({
+            'rowId': 10,
+            'type': 'FS',
+            'lag': lag
+        })
+
+        row = Row()
+        row.cells.append({
+            'columnId': 101,
+            'objectValue': predecessor_list
+        })
+
+        response = self.client.Sheets.add_rows(1, [row])
+
+        assert response.result[0].cells[1].display_value == '2FS +2.5d'
+
+    @clean_api_error
     def test_add_rows_location_top(self):
         self.client.as_test_scenario('Add Rows - Location - Top')
 
@@ -497,60 +551,6 @@ class TestMockApiRows(MockApiTestHelper):
             self.client.Sheets.update_rows(1, [first_row])
 
         self.check_error_code(e, 1112)
-
-    @clean_api_error
-    def test_add_rows_assign_object_value_predecessor_list(self):
-        self.client.as_test_scenario('Add Rows - Assign Object Value - Predecessor List')
-
-        lag = Duration({
-            "objectType": "DURATION",
-            "days": 2,
-            "hours": 4
-        })
-
-        predecessor_list = PredecessorList()
-        predecessor_list.predecessors.append({
-            "rowId": 10,
-            "type": "FS",
-            "lag": lag
-        })
-
-        first_row = Row()
-        first_row.cells.append({
-            "columnId": 101,
-            "objectValue": predecessor_list
-        })
-
-        response = self.client.Sheets.add_rows(1, [first_row])
-
-        assert response.result[0].cells[1].display_value == "2FS +2d 4h"
-
-    @clean_api_error
-    def test_add_rows_assign_object_value_predecessor_list_using_float_duration(self):
-        self.client.as_test_scenario(
-            'Add Rows - Assign Object Value - Predecessor List (using floats)')
-
-        lag = Duration({
-            'objectType': 'DURATION',
-            'days': 2.5
-        })
-
-        predecessor_list = PredecessorList()
-        predecessor_list.predecessors.append({
-            'rowId': 10,
-            'type': 'FS',
-            'lag': lag
-        })
-
-        row = Row()
-        row.cells.append({
-            'columnId': 101,
-            'objectValue': predecessor_list
-        })
-
-        response = self.client.Sheets.add_rows(1, [row])
-
-        assert response.result[0].cells[1].display_value == '2FS +2.5d'
 
     @clean_api_error
     def test_update_rows_clear_value_text_number(self):
