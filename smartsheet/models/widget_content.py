@@ -41,9 +41,9 @@ class WidgetContent(object):
         self._hyperlink = TypedObject(Hyperlink)
 
         """Represents the ChartWidgetContent object"""
-        self._axes = String()
-        self._legend = String()
-        self._series = String()
+        self._axes = TypedObject(object)
+        self._legend = TypedObject(object)
+        self._series = TypedObject(object)
 
         """Represents the ImageWidgetContent object."""
         self._file_name = String()
@@ -113,7 +113,7 @@ class WidgetContent(object):
 
     @axes.setter
     def axes(self, value):
-        self._axes.value = json.dumps(value)
+        self._axes.value = value
 
     @property
     def legend(self):
@@ -121,7 +121,7 @@ class WidgetContent(object):
 
     @legend.setter
     def legend(self, value):
-        self._legend.value = json.dumps(value)
+        self._legend.value = value
 
     @property
     def series(self):
@@ -129,7 +129,7 @@ class WidgetContent(object):
 
     @series.setter
     def series(self, value):
-        self._series.value = json.dumps(value)
+        self._series.value = value
 
     """Represents the ImageWidgetContent object."""
     @property
