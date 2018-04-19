@@ -1542,6 +1542,71 @@ class Sheets(object):
 
         return response
 
+    def import_csv_sheet(self, file, sheet_name=None, header_row_index=None, primary_column_index=None ):
+        """Imports a sheet.
+
+        Args:
+            file (string): path to CSV file.
+            sheet_name (string): destination sheet name
+            header_row_index (int): index (0 based) of row to be used for column names
+            primary_column_index (int): index (0 based) of primary column
+
+        Returns:
+            Result
+            """
+        if not all(val is not None for val in ['folder_id', 'file']):
+            raise ValueError(
+                ('One or more required values '
+                 'are missing from call to ' + __name__))
+
+        return self._import_sheet(file, "text/csv", sheet_name, header_row_index, primary_column_index)
+
+    def import_xlsx_sheet(self, file, sheet_name=None, header_row_index=None, primary_column_index=None ):
+        """Imports a sheet.
+
+        Args:
+            file (string): path to XLSX file.
+            sheet_name (string): destination sheet name
+            header_row_index (int): index (0 based) of row to be used for column names
+            primary_column_index (int): index (0 based) of primary column
+
+        Returns:
+            Result
+            """
+        if not all(val is not None for val in ['folder_id', 'file']):
+            raise ValueError(
+                ('One or more required values '
+                 'are missing from call to ' + __name__))
+
+        return self._import_sheet(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                  sheet_name, header_row_index, primary_column_index)
+
+    def _import_sheet(self, file, file_type, sheet_name, header_row_index, primary_column_index):
+        """Internal function used to import sheet"""
+
+        if sheet_name is None:
+            head, tail = os.path.split(file)
+            sheet_name = tail or os.path.basename(head)
+
+        _data = open(file, 'rb').read()
+
+        _op = fresh_operation('import_sheet_into_folder')
+        _op['method'] = 'POST'
+        _op['path'] = '/sheets/import'
+        _op['headers'] = {'content-type': file_type,
+                          'content-disposition': 'attachment'}
+        _op['form_data'] = _data
+        _op['query_params']['sheetName'] = sheet_name
+        _op['query_params']['headerRowIndex'] = header_row_index
+        _op['query_params']['primaryColumnIndex'] = primary_column_index
+
+        expected = ['Result', 'Sheet']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
     def get_column_by_title(self, sheet_id, title, include=None):
         """For those times when you don't know the Column Id.
 

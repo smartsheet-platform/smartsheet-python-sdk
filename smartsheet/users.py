@@ -360,6 +360,7 @@ class Users(object):
         return self._attach_profile_image(user_id, file, file_type)
 
     def _attach_profile_image(self, user_id, file, file_type):
+        """Internal function used to load image"""
 
         _data = open(file, 'rb').read()
 
