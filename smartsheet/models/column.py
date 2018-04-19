@@ -18,7 +18,7 @@
 from __future__ import absolute_import
 
 from .auto_number_format import AutoNumberFormat
-from .contact_option import ContactOption
+from .contact import Contact
 from .enums import ColumnType, Symbol, SystemColumnType
 from ..types import *
 from ..util import serialize
@@ -36,7 +36,7 @@ class Column(object):
             self._base = base_obj
 
         self._auto_number_format = TypedObject(AutoNumberFormat)
-        self._contact_options = TypedList(ContactOption)
+        self._contact_options = TypedList(Contact)
         self._format_ = String()
         self._hidden = Boolean()
         self._id_ = Number()
