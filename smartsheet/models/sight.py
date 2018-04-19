@@ -36,6 +36,7 @@ class Sight(object):
             self._base = base_obj
 
         self._access_level = EnumeratedValue(AccessLevel)
+        self._background_color = String()
         self._column_count = Number()
         self._created_at = Timestamp()
         self._favorite = Boolean()
@@ -72,6 +73,14 @@ class Sight(object):
     @access_level.setter
     def access_level(self, value):
         self._access_level.set(value)
+
+    @property
+    def background_color(self):
+        return self._background_color.value
+
+    @background_color.setter
+    def background_color(self, value):
+        self._background_color.value = value
 
     @property
     def column_count(self):
