@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.3.3] - 2018-4-19
+
+### Added
+- XLSX and CSV import endpoints for workspaces, folders and sheets
+- Rudimentary support Sight chart objects (chart contents read into JSON strings) 
+- Exclude `permalinks` option to Home.list_all_contents
+- backgroundColor to Sight object
+
+### Fixed
+- [Improper format strings in Types](https://github.com/smartsheet-platform/smartsheet-python-sdk/issues/92)
+
 ## [1.3.2] - 2018-3-15
 
 ### Fixed

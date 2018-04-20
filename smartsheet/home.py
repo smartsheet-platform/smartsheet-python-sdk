@@ -119,7 +119,7 @@ class Home(object):
 
         return response
 
-    def list_all_contents(self, include=None):
+    def list_all_contents(self, include=None, exclude=None):
         """Get a nested list of all Home objects, including Sheets,
         Workspaces, Folders, Reports and Templates.
 
@@ -127,6 +127,9 @@ class Home(object):
             include (list[str]): A comma-separated list of
                 optional elements to include in the response. Valid list
                 values: ownerInfo, sheetVersion, source.
+            include (list[str]): A comma-separated list of
+                optional elements to exclude from the response. Valid list
+                values: permalinks.
 
         Returns:
             Home
@@ -135,6 +138,7 @@ class Home(object):
         _op['method'] = 'GET'
         _op['path'] = '/home'
         _op['query_params']['include'] = include
+        _op['query_params']['exclude'] = exclude
 
         expected = 'Home'
         prepped_request = self._base.prepare_request(_op)

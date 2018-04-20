@@ -75,7 +75,7 @@ class Users(object):
 
         return response
 
-    def add_user(self, user_obj, send_email=False):
+    def add_user(self, user_obj, send_email=None):
         """Add a User to the organization.
 
         Args:
@@ -102,8 +102,8 @@ class Users(object):
         _op = fresh_operation('add_user')
         _op['method'] = 'POST'
         _op['path'] = '/users'
-        _op['query_params']['sendEmail'] = send_email
         _op['json'] = user_obj
+        _op['query_params']['sendEmail'] = send_email
 
         expected = ['Result', 'User']
 
@@ -360,6 +360,7 @@ class Users(object):
         return self._attach_profile_image(user_id, file, file_type)
 
     def _attach_profile_image(self, user_id, file, file_type):
+        """Internal function used to load image"""
 
         _data = open(file, 'rb').read()
 

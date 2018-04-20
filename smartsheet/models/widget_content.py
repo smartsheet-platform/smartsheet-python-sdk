@@ -40,14 +40,10 @@ class WidgetContent(object):
         self._columns = TypedList(Column)
         self._hyperlink = TypedObject(Hyperlink)
 
-        """Represents the RichtextWidgetContent object."""
-        self._html = String()
-
-        """Represents the ShortcutWidgetContent object."""
-        self._shortcut_data = TypedList(ShortcutDataItem)
-
-        """Represents the ReportWidgetContent object."""
-        self._html_content = String()
+        """Represents the ChartWidgetContent object"""
+        self._axes = TypedObject(object)
+        self._legend = TypedObject(object)
+        self._series = TypedObject(object)
 
         """Represents the ImageWidgetContent object."""
         self._file_name = String()
@@ -55,6 +51,15 @@ class WidgetContent(object):
         self._height = Number()
         self._private_id = String()
         self._width = Number()
+
+        """Represents the ReportWidgetContent object."""
+        self._html_content = String()
+
+        """Represents the RichtextWidgetContent object."""
+        self._html = String()
+
+        """Represents the ShortcutWidgetContent object."""
+        self._shortcut_data = TypedList(ShortcutDataItem)
 
         """Represents the TitleWidgetContent object."""
         self._background_color = String()
@@ -101,32 +106,30 @@ class WidgetContent(object):
     def hyperlink(self, value):
         self._hyperlink.value = value
 
-    """Represents the RichtextWidgetContent object."""
+    """Represents the ChartWidgetContent object"""
     @property
-    def html(self):
-        return self._html.value
+    def axes(self):
+        return self._axes.value
 
-    @html.setter
-    def html(self, value):
-        self._html.value = value
+    @axes.setter
+    def axes(self, value):
+        self._axes.value = value
 
-    """Represents the ShortcutWidgetContent object."""
     @property
-    def shortcut_data(self):
-        return self._shortcut_data
+    def legend(self):
+        return self._legend.value
 
-    @shortcut_data.setter
-    def shortcut_data(self, value):
-        self._shortcut_data.load(value)
+    @legend.setter
+    def legend(self, value):
+        self._legend.value = value
 
-    """Represents the ReportWidgetContent object."""
     @property
-    def html_content(self):
-        return self._html_content.value
+    def series(self):
+        return self._series.value
 
-    @html_content.setter
-    def html_content(self, value):
-        self._html_content.value = value
+    @series.setter
+    def series(self, value):
+        self._series.value = value
 
     """Represents the ImageWidgetContent object."""
     @property
@@ -168,6 +171,33 @@ class WidgetContent(object):
     @width.setter
     def width(self, value):
         self._width.value = value
+
+    """Represents the ReportWidgetContent object."""
+    @property
+    def html_content(self):
+        return self._html_content.value
+
+    @html_content.setter
+    def html_content(self, value):
+        self._html_content.value = value
+
+    """Represents the RichtextWidgetContent object."""
+    @property
+    def html(self):
+        return self._html.value
+
+    @html.setter
+    def html(self, value):
+        self._html.value = value
+
+    """Represents the ShortcutWidgetContent object."""
+    @property
+    def shortcut_data(self):
+        return self._shortcut_data
+
+    @shortcut_data.setter
+    def shortcut_data(self, value):
+        self._shortcut_data.load(value)
 
     """Represents the TitleWidgetContent object."""
     @property

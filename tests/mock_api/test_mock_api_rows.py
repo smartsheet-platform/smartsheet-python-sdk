@@ -229,6 +229,60 @@ class TestMockApiRows(MockApiTestHelper):
         self.check_error_code(e, 1112)
 
     @clean_api_error
+    def test_add_rows_assign_object_value_predecessor_list(self):
+        self.client.as_test_scenario('Add Rows - Assign Object Value - Predecessor List')
+
+        lag = Duration({
+            "objectType": "DURATION",
+            "days": 2,
+            "hours": 4
+        })
+
+        predecessor_list = PredecessorList()
+        predecessor_list.predecessors.append({
+            "rowId": 10,
+            "type": "FS",
+            "lag": lag
+        })
+
+        first_row = Row()
+        first_row.cells.append({
+            "columnId": 101,
+            "objectValue": predecessor_list
+        })
+
+        response = self.client.Sheets.add_rows(1, [first_row])
+
+        assert response.result[0].cells[1].display_value == "2FS +2d 4h"
+
+    @clean_api_error
+    def test_add_rows_assign_object_value_predecessor_list_using_float_duration(self):
+        self.client.as_test_scenario(
+            'Add Rows - Assign Object Value - Predecessor List (using floats)')
+
+        lag = Duration({
+            'objectType': 'DURATION',
+            'days': 2.5
+        })
+
+        predecessor_list = PredecessorList()
+        predecessor_list.predecessors.append({
+            'rowId': 10,
+            'type': 'FS',
+            'lag': lag
+        })
+
+        row = Row()
+        row.cells.append({
+            'columnId': 101,
+            'objectValue': predecessor_list
+        })
+
+        response = self.client.Sheets.add_rows(1, [row])
+
+        assert response.result[0].cells[1].display_value == '2FS +2.5d'
+
+    @clean_api_error
     def test_add_rows_location_top(self):
         self.client.as_test_scenario('Add Rows - Location - Top')
 
@@ -499,33 +553,6 @@ class TestMockApiRows(MockApiTestHelper):
         self.check_error_code(e, 1112)
 
     @clean_api_error
-    def test_add_rows_assign_object_value_predecessor_list(self):
-        self.client.as_test_scenario('Add Rows - Assign Object Value - Predecessor List')
-
-        lag = Duration({
-            "objectType": "DURATION",
-            "days": 2,
-            "hours": 4
-        })
-
-        predecessor_list = PredecessorList()
-        predecessor_list.predecessors.append({
-            "rowId": 10,
-            "type": "FS",
-            "lag": lag
-        })
-
-        first_row = Row()
-        first_row.cells.append({
-            "columnId": 101,
-            "objectValue": predecessor_list
-        })
-
-        response = self.client.Sheets.add_rows(1, [first_row])
-
-        assert response.result[0].cells[1].display_value == "2FS +2d 4h"
-
-    @clean_api_error
     def test_update_rows_clear_value_text_number(self):
         self.client.as_test_scenario('Update Rows - Clear Value - Text Number')
 
@@ -594,6 +621,22 @@ class TestMockApiRows(MockApiTestHelper):
         assert response.result[0].cells[0].link_in_from_cell is None
 
     @clean_api_error
+    def test_update_rows_clear_value_predecessor_list(self):
+        self.client.as_test_scenario('Update Rows - Clear Value - Predecessor List')
+
+        row = Row()
+        row.id = 10
+        row.cells.append({
+            'columnId': 123,
+            'value': ExplicitNull()
+        })
+
+        response = self.client.Sheets.update_rows(1, [row])
+
+        assert response.result[0].cells[0].column_id == 123
+        assert response.result[0].cells[0].value is None
+
+    @clean_api_error
     def test_update_rows_invalid_assign_hyperlink_and_cell_link(self):
         self.client.as_test_scenario('Update Rows - Invalid - Assign Hyperlink and Cell Link')
 
@@ -638,3 +681,35 @@ class TestMockApiRows(MockApiTestHelper):
         response = self.client.Sheets.update_rows(1, [first_row])
 
         assert response.result[0].row_number == 100
+
+    @clean_api_error
+    def test_move_row_to_another_sheet(self):
+        self.client.as_test_scenario('Move row to another sheet')
+
+        result = self.client.Sheets.move_rows(
+            1228520367122308,
+            self.client.models.CopyOrMoveRowDirective({
+                'row_ids': [1765250516182916],
+                'to': self.client.models.CopyOrMoveRowDestination({
+                    'sheet_id': 799249123305348
+                })
+            })
+        )
+
+        assert result.destination_sheet_id == 799249123305348
+
+    @clean_api_error
+    def test_copy_row_to_another_sheet(self):
+        self.client.as_test_scenario('Copy row to another sheet')
+
+        result = self.client.Sheets.copy_rows(
+            1228520367122308,
+            self.client.models.CopyOrMoveRowDirective({
+                'row_ids': [2891150423025540],
+                'to': self.client.models.CopyOrMoveRowDestination({
+                    'sheet_id': 799249123305348
+                })
+            })
+        )
+
+        assert result.destination_sheet_id == 799249123305348
