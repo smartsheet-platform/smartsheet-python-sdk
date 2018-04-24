@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet.models package &mdash; Smartsheet Python SDK 1.3.2 documentation</title>
+  <title>smartsheet.models package &mdash; Smartsheet Python SDK 1.3.3.dev31+g68731d8 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Smartsheet Python SDK 1.3.2 documentation" href="index.html"/>
+    <link rel="top" title="Smartsheet Python SDK 1.3.3.dev31+g68731d8 documentation" href="index.html"/>
         <link rel="up" title="smartsheet package" href="smartsheet.html"/>
         <link rel="next" title="smartsheet.models.enums package" href="smartsheet.models.enums.html"/>
         <link rel="prev" title="smartsheet package" href="smartsheet.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                1.3.2
+                1.3.3.dev31+g68731d8
               </div>
             
           
@@ -115,7 +115,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.comment">smartsheet.models.comment module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.contact">smartsheet.models.contact module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.contact_object_value">smartsheet.models.contact_object_value module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.contact_option">smartsheet.models.contact_option module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.container_destination">smartsheet.models.container_destination module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.copy_or_move_row_destination">smartsheet.models.copy_or_move_row_destination module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.copy_or_move_row_directive">smartsheet.models.copy_or_move_row_directive module</a></li>
@@ -475,6 +474,11 @@
 <dl class="attribute">
 <dt id="smartsheet.models.attachment.Attachment.created_by">
 <code class="descname">created_by</code><a class="headerlink" href="#smartsheet.models.attachment.Attachment.created_by" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.attachment.Attachment.description">
+<code class="descname">description</code><a class="headerlink" href="#smartsheet.models.attachment.Attachment.description" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1243,36 +1247,6 @@
 <em class="property">class </em><code class="descclassname">smartsheet.models.contact_object_value.</code><code class="descname">ContactObjectValue</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_object_value.ContactObjectValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#smartsheet.models.object_value.ObjectValue" title="smartsheet.models.object_value.ObjectValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.object_value.ObjectValue</span></code></a>, <a class="reference internal" href="#smartsheet.models.contact.Contact" title="smartsheet.models.contact.Contact"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.contact.Contact</span></code></a></p>
 <p>Smartsheet ContactObjectValue data model.</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-smartsheet.models.contact_option">
-<span id="smartsheet-models-contact-option-module"></span><h2>smartsheet.models.contact_option module<a class="headerlink" href="#module-smartsheet.models.contact_option" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="smartsheet.models.contact_option.ContactOption">
-<em class="property">class </em><code class="descclassname">smartsheet.models.contact_option.</code><code class="descname">ContactOption</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_option.ContactOption" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Smartsheet ContactOption data model.</p>
-<dl class="attribute">
-<dt id="smartsheet.models.contact_option.ContactOption.email">
-<code class="descname">email</code><a class="headerlink" href="#smartsheet.models.contact_option.ContactOption.email" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="smartsheet.models.contact_option.ContactOption.name">
-<code class="descname">name</code><a class="headerlink" href="#smartsheet.models.contact_option.ContactOption.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="smartsheet.models.contact_option.ContactOption.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_option.ContactOption.to_dict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="smartsheet.models.contact_option.ContactOption.to_json">
-<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_option.ContactOption.to_json" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </div>
@@ -4155,6 +4129,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.sight.Sight.background_color">
+<code class="descname">background_color</code><a class="headerlink" href="#smartsheet.models.sight.Sight.background_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.sight.Sight.column_count">
 <code class="descname">column_count</code><a class="headerlink" href="#smartsheet.models.sight.Sight.column_count" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -4925,6 +4904,11 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Smartsheet WidgetContent data model.</p>
 <dl class="attribute">
+<dt id="smartsheet.models.widget_content.WidgetContent.axes">
+<code class="descname">axes</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.axes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.widget_content.WidgetContent.background_color">
 <code class="descname">background_color</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.background_color" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -4970,8 +4954,18 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.widget_content.WidgetContent.legend">
+<code class="descname">legend</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.legend" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.widget_content.WidgetContent.private_id">
 <code class="descname">private_id</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.private_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.widget_content.WidgetContent.series">
+<code class="descname">series</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.series" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -5115,7 +5109,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.3.2',
+            VERSION:'1.3.3.dev31+g68731d8',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

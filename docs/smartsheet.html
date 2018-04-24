@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet package &mdash; Smartsheet Python SDK 1.3.2 documentation</title>
+  <title>smartsheet package &mdash; Smartsheet Python SDK 1.3.3.dev31+g68731d8 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Smartsheet Python SDK 1.3.2 documentation" href="index.html"/>
+    <link rel="top" title="Smartsheet Python SDK 1.3.3.dev31+g68731d8 documentation" href="index.html"/>
         <link rel="next" title="smartsheet.models package" href="smartsheet.models.html"/>
         <link rel="prev" title="Smartsheet Python SDK Documentation" href="index.html"/> 
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.3.2
+                1.3.3.dev31+g68731d8
               </div>
             
           
@@ -252,7 +252,6 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.comment">smartsheet.models.comment module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.contact">smartsheet.models.contact module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.contact_object_value">smartsheet.models.contact_object_value module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.contact_option">smartsheet.models.contact_option module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.container_destination">smartsheet.models.container_destination module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.copy_or_move_row_destination">smartsheet.models.copy_or_move_row_destination module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.copy_or_move_row_directive">smartsheet.models.copy_or_move_row_directive module</a></li>
@@ -1468,6 +1467,54 @@ values: ownerInfo, sheetVersion, source.</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="smartsheet.folders.Folders.import_csv_sheet">
+<code class="descname">import_csv_sheet</code><span class="sig-paren">(</span><em>folder_id</em>, <em>file</em>, <em>sheet_name=None</em>, <em>header_row_index=None</em>, <em>primary_column_index=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.folders.Folders.import_csv_sheet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports a sheet in the specified folder.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>folder_id</strong> (<em>int</em>) – folder ID</li>
+<li><strong>file</strong> (<em>string</em>) – path to CSV file.</li>
+<li><strong>sheet_name</strong> (<em>string</em>) – destination sheet name</li>
+<li><strong>header_row_index</strong> (<em>int</em>) – index (0 based) of row to be used for column names</li>
+<li><strong>primary_column_index</strong> (<em>int</em>) – index (0 based) of primary column</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Result</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.folders.Folders.import_xlsx_sheet">
+<code class="descname">import_xlsx_sheet</code><span class="sig-paren">(</span><em>folder_id</em>, <em>file</em>, <em>sheet_name=None</em>, <em>header_row_index=None</em>, <em>primary_column_index=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.folders.Folders.import_xlsx_sheet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports a sheet in the specified folder.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>folder_id</strong> (<em>int</em>) – folder ID</li>
+<li><strong>file</strong> (<em>string</em>) – path to XLSX file.</li>
+<li><strong>sheet_name</strong> (<em>string</em>) – destination sheet name</li>
+<li><strong>header_row_index</strong> (<em>int</em>) – index (0 based) of row to be used for column names</li>
+<li><strong>primary_column_index</strong> (<em>int</em>) – index (0 based) of primary column</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Result</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="smartsheet.folders.Folders.list_folders">
 <code class="descname">list_folders</code><span class="sig-paren">(</span><em>folder_id</em>, <em>page_size=None</em>, <em>page=None</em>, <em>include_all=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.folders.Folders.list_folders" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of top-level child Folders within the specified Folder.</p>
@@ -1758,18 +1805,25 @@ data, attachments, discussions, cellLinks, forms.</li>
 
 <dl class="method">
 <dt id="smartsheet.home.Home.list_all_contents">
-<code class="descname">list_all_contents</code><span class="sig-paren">(</span><em>include=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.home.Home.list_all_contents" title="Permalink to this definition">¶</a></dt>
+<code class="descname">list_all_contents</code><span class="sig-paren">(</span><em>include=None</em>, <em>exclude=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.home.Home.list_all_contents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a nested list of all Home objects, including Sheets,
 Workspaces, Folders, Reports and Templates.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – A comma-separated list of
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – A comma-separated list of
 optional elements to include in the response. Valid list
-values: ownerInfo, sheetVersion, source.</td>
+values: ownerInfo, sheetVersion, source.</li>
+<li><strong>include</strong> – A comma-separated list of
+optional elements to exclude from the response. Valid list
+values: permalinks.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Home</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Home</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -2329,7 +2383,7 @@ search.</li>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>sheet_id</strong> (<em>int</em>) – Sheet ID</li>
 <li><strong>list_of_columns</strong> (<em>list</em><em>[</em><a class="reference internal" href="smartsheet.models.html#smartsheet.models.column.Column" title="smartsheet.models.column.Column"><em>Column</em></a><em>]</em>) – One or more
-Column objects.</li>
+Column objects</li>
 </ul>
 </td>
 </tr>
@@ -2358,7 +2412,7 @@ Complete.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>sheet_id</strong> (<em>int</em>) – Sheet ID</li>
-<li><strong>list_of_rows</strong> (<em>list</em><em>[</em><a class="reference internal" href="smartsheet.models.html#smartsheet.models.row.Row" title="smartsheet.models.row.Row"><em>Row</em></a><em>]</em>) – <p>An array of Row objects with the following attributes:</p>
+<li><strong>row_or_list_of_rows</strong> (<em>list</em><em>[</em><a class="reference internal" href="smartsheet.models.html#smartsheet.models.row.Row" title="smartsheet.models.row.Row"><em>Row</em></a><em>]</em>) – <p>An array of Row objects with the following attributes:</p>
 <p>One or more location-specifier attributes (optional)</p>
 <p>format (optional)</p>
 <p>expanded (optional)</p>
@@ -2428,7 +2482,7 @@ Each Cell object may contain the following attributes:</p>
 
 <dl class="method">
 <dt id="smartsheet.sheets.Sheets.copy_rows">
-<code class="descname">copy_rows</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>copy_or_move_row_directive_obj</em>, <em>include=None</em>, <em>ignore_rows_not_found=False</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.copy_rows" title="Permalink to this definition">¶</a></dt>
+<code class="descname">copy_rows</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>copy_or_move_row_directive_obj</em>, <em>include=None</em>, <em>ignore_rows_not_found=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.copy_rows" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copies Row(s) from the specified Sheet to the bottom of another
 Sheet.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -3085,6 +3139,52 @@ instead of name suggested by Content-Disposition.</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="smartsheet.sheets.Sheets.import_csv_sheet">
+<code class="descname">import_csv_sheet</code><span class="sig-paren">(</span><em>file</em>, <em>sheet_name=None</em>, <em>header_row_index=None</em>, <em>primary_column_index=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.import_csv_sheet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports a sheet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>file</strong> (<em>string</em>) – path to CSV file.</li>
+<li><strong>sheet_name</strong> (<em>string</em>) – destination sheet name</li>
+<li><strong>header_row_index</strong> (<em>int</em>) – index (0 based) of row to be used for column names</li>
+<li><strong>primary_column_index</strong> (<em>int</em>) – index (0 based) of primary column</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Result</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.sheets.Sheets.import_xlsx_sheet">
+<code class="descname">import_xlsx_sheet</code><span class="sig-paren">(</span><em>file</em>, <em>sheet_name=None</em>, <em>header_row_index=None</em>, <em>primary_column_index=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.import_xlsx_sheet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports a sheet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>file</strong> (<em>string</em>) – path to XLSX file.</li>
+<li><strong>sheet_name</strong> (<em>string</em>) – destination sheet name</li>
+<li><strong>header_row_index</strong> (<em>int</em>) – index (0 based) of row to be used for column names</li>
+<li><strong>primary_column_index</strong> (<em>int</em>) – index (0 based) of primary column</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Result</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="smartsheet.sheets.Sheets.list_automation_rules">
 <code class="descname">list_automation_rules</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>page_size=None</em>, <em>page=None</em>, <em>include_all=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.list_automation_rules" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of all AutomationRules for this Sheet.</p>
@@ -3276,7 +3376,7 @@ return per page.</li>
 
 <dl class="method">
 <dt id="smartsheet.sheets.Sheets.move_rows">
-<code class="descname">move_rows</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>copy_or_move_row_directive_obj</em>, <em>include=None</em>, <em>ignore_rows_not_found=False</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.move_rows" title="Permalink to this definition">¶</a></dt>
+<code class="descname">move_rows</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>copy_or_move_row_directive_obj</em>, <em>include=None</em>, <em>ignore_rows_not_found=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.move_rows" title="Permalink to this definition">¶</a></dt>
 <dd><p>Moves Row(s) to the bottom of another Sheet.</p>
 <p>Up to 5,000 row IDs can be specified in the request, but if
 the total number of rows in the destination Sheet after the move
@@ -3446,7 +3546,7 @@ object.</li>
 
 <dl class="method">
 <dt id="smartsheet.sheets.Sheets.share_sheet">
-<code class="descname">share_sheet</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>share_obj</em>, <em>send_email=False</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.share_sheet" title="Permalink to this definition">¶</a></dt>
+<code class="descname">share_sheet</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>share_obj</em>, <em>send_email=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.share_sheet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Share the specified Sheet.</p>
 <p>Share the specified Sheet with the specified Users and
 Groups.</p>
@@ -4407,7 +4507,7 @@ using the token will fail.
 
 <dl class="method">
 <dt id="smartsheet.users.Users.add_user">
-<code class="descname">add_user</code><span class="sig-paren">(</span><em>user_obj</em>, <em>send_email=False</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.users.Users.add_user" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_user</code><span class="sig-paren">(</span><em>user_obj</em>, <em>send_email=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.users.Users.add_user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a User to the organization.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -5044,6 +5144,54 @@ values: ownerInfo, sheetVersion, source.</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="smartsheet.workspaces.Workspaces.import_csv_sheet">
+<code class="descname">import_csv_sheet</code><span class="sig-paren">(</span><em>workspace_id</em>, <em>file</em>, <em>sheet_name=None</em>, <em>header_row_index=None</em>, <em>primary_column_index=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.workspaces.Workspaces.import_csv_sheet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports a sheet in the specified workspace.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>workspace_id</strong> (<em>int</em>) – workspace ID</li>
+<li><strong>file</strong> (<em>string</em>) – path to CSV file.</li>
+<li><strong>sheet_name</strong> (<em>string</em>) – destination sheet name</li>
+<li><strong>header_row_index</strong> (<em>int</em>) – index (0 based) of row to be used for column names</li>
+<li><strong>primary_column_index</strong> (<em>int</em>) – index (0 based) of primary column</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Result</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.workspaces.Workspaces.import_xlsx_sheet">
+<code class="descname">import_xlsx_sheet</code><span class="sig-paren">(</span><em>workspace_id</em>, <em>file</em>, <em>sheet_name=None</em>, <em>header_row_index=None</em>, <em>primary_column_index=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.workspaces.Workspaces.import_xlsx_sheet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports a sheet in the specified workspace.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>workspace_id</strong> (<em>int</em>) – workspace ID</li>
+<li><strong>file</strong> (<em>string</em>) – path to XLSX file.</li>
+<li><strong>sheet_name</strong> (<em>string</em>) – destination sheet name</li>
+<li><strong>header_row_index</strong> (<em>int</em>) – index (0 based) of row to be used for column names</li>
+<li><strong>primary_column_index</strong> (<em>int</em>) – index (0 based) of primary column</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Result</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="smartsheet.workspaces.Workspaces.list_folders">
 <code class="descname">list_folders</code><span class="sig-paren">(</span><em>workspace_id</em>, <em>page_size=None</em>, <em>page=None</em>, <em>include_all=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.workspaces.Workspaces.list_folders" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of top-level child Folders within the specified
@@ -5238,7 +5386,7 @@ Workspace.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.3.2',
+            VERSION:'1.3.3.dev31+g68731d8',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

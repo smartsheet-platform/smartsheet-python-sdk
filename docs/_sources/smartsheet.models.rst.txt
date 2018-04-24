@@ -155,14 +155,6 @@ smartsheet.models.contact\_object\_value module
     :undoc-members:
     :show-inheritance:
 
-smartsheet.models.contact\_option module
-----------------------------------------
-
-.. automodule:: smartsheet.models.contact_option
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 smartsheet.models.container\_destination module
 -----------------------------------------------
 
