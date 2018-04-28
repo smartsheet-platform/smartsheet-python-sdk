@@ -533,13 +533,10 @@ class TestMockSerialization(MockApiTestHelper):
 
     @clean_api_error
     def test_container_destination_serialization(self):
-        pytest.skip('Models currently have no concept of a nullable / optional type')
-
         self.client.as_test_scenario('Serialization - Container Destination')
 
         response = self.client.Folders.copy_folder(1, ContainerDestination({
-            'destinationType': 'home',
-            'destinationId': ExplicitNull(),
+            'destinationType': 'HOME',
             'newName': 'Copy of Some Folder'
         }))
 
