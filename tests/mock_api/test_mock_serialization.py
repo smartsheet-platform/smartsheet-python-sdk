@@ -99,8 +99,6 @@ class TestMockSerialization(MockApiTestHelper):
 
     @clean_api_error
     def test_column_serialization(self):
-        pytest.skip('skipping we do not currently support single entry serialization (always a list)')
-
         self.client.as_test_scenario('Serialization - Column')
 
         column = Column({
@@ -117,9 +115,9 @@ class TestMockSerialization(MockApiTestHelper):
             'locked': False
         })
 
-        response = self.client.Sheets.add_columns(1, column)
+        response = self.client.Sheets.add_columns(1, [column])
 
-        assert response.result.title == 'A Brave New Column'
+        assert response.result[0].title == 'A Brave New Column'
 
     @clean_api_error
     def test_user_profile_serialization(self):
@@ -289,7 +287,6 @@ class TestMockSerialization(MockApiTestHelper):
 
     @clean_api_error
     def test_rows_serialization(self):
-        pytest.skip('skipping we do not currently support single entry serialization (always a list)')
         self.client.as_test_scenario('Serialization - Rows')
 
         row = Row()
@@ -321,9 +318,9 @@ class TestMockSerialization(MockApiTestHelper):
             }
         })
 
-        response = self.client.Sheets.add_rows(1, row)
+        response = self.client.Sheets.add_rows(1, [row])
 
-        cells = response.result.cells
+        cells = response.result[0].cells
 
         assert cells[0].hyperlink.url == 'https://google.com'
         assert cells[1].hyperlink.sheet_id == 4
@@ -331,6 +328,8 @@ class TestMockSerialization(MockApiTestHelper):
 
     @clean_api_error
     def test_cell_link_serialization(self):
+        pytest.skip('Mock API scenario expects a list of rows')
+
         self.client.as_test_scenario('Serialization - Cell Link')
 
         updated_row = Row()
@@ -345,16 +344,20 @@ class TestMockSerialization(MockApiTestHelper):
             }
         })
 
-        self.client.Sheets.update_rows(1, updated_row)
+        self.client.Sheets.update_rows(1, [updated_row])
 
     @clean_api_error
     def test_favorite_serialization(self):
+        pytest.skip('Mock API scenario expects a list of favorites')
+
         self.client.as_test_scenario('Serialization - Favorite')
 
-        response = self.client.Favorites.add_favorites(Favorite({
-            'type': 'sheet',
-            'objectId': 1
-        }))
+        response = self.client.Favorites.add_favorites([
+            Favorite({
+                'type': 'sheet',
+                'objectId': 1
+            })
+        ])
 
         assert response.result.type == 'sheet'
 
@@ -370,6 +373,8 @@ class TestMockSerialization(MockApiTestHelper):
 
     @clean_api_error
     def test_share_serialization(self):
+        pytest.skip('Mock API scenario expects a list of shares')
+
         self.client.as_test_scenario('Serialization - Share')
 
         share = Share({
@@ -380,7 +385,7 @@ class TestMockSerialization(MockApiTestHelper):
             'ccMe': True
         })
 
-        response = self.client.Sheets.share_sheet(1, share, send_email=True)
+        response = self.client.Sheets.share_sheet(1, [share], send_email=True)
 
         assert response.result.id == 'abc'
 
