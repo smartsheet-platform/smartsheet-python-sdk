@@ -36,7 +36,10 @@ class ContainerDestination(object):
             'destination_type': [
                 'home',
                 'workspace',
-                'folder']}
+                'folder',
+                'HOME',
+                'WORKSPACE',
+                'FOLDER']}
 
         self._destination_id = Number()
         self._destination_type = String(
