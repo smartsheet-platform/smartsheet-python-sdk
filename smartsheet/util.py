@@ -28,7 +28,7 @@ from datetime import datetime
 from .types import TypedList
 from .types import EnumeratedValue
 
-_log = logging.getLogger('util')
+_log = logging.getLogger(__name__)
 _primitive_types = (six.string_types, six.integer_types, float, bool)
 _list_types = (TypedList, list)
 
