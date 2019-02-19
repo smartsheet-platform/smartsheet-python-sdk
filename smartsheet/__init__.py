@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 
 __api_base__ = 'https://api.smartsheet.com/2.0'
+__gov_base__ = 'https://api.smartsheetgov.com/2.0'
 __api_version__ = '2.0'
 
 try:

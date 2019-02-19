@@ -9,9 +9,12 @@ REQUIRES = [
     'requests-toolbelt',
     'six >= 1.9',
     'certifi',
-    'python-dateutil',
-    'enum34'
+    'python-dateutil'
 ]
+
+if sys.version_info < (3, 4):
+    REQUIRES.append('enum34')
+
 # test packages:
 # https://github.com/coagulant/coveralls-python
 # https://github.com/pytest-dev/pytest

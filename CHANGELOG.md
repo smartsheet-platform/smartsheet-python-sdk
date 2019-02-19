@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.4.0] - 2019-2-19
+### Added
+- Added BASE URI definition for Smartsheetgov
+ 
+### Changed
+- Remove [enum34](https://pypi.python.org/pypi/enum34) as a dependency for versions of Python after 3.4 
+
 ## [1.3.3] - 2018-4-19
 
 ### Added
