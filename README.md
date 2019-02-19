@@ -78,13 +78,13 @@ If there is an API Feature that is not yet supported by the Python SDK, there is
 
 To invoke the passthrough, your code can call one of the following four methods:
 
-`response = ss_client.Passthrough.get(endpoint, query_params)`
+`response = client.Passthrough.get(endpoint, query_params)`
 
-`response = ss_client.Passthrough.post(endpoint, payload, query_params)`
+`response = client.Passthrough.post(endpoint, payload, query_params)`
 
-`response = ss_client.Passthrough.put(endpoint, payload, query_parameters)`
+`response = client.Passthrough.put(endpoint, payload, query_parameters)`
 
-`response = ss_client.Passthrough.delete(endpoint)`
+`response = client.Passthrough.delete(endpoint)`
 
 * `endpoint`: The specific API endpoint you wish to invoke. The client object base URL gets prepended to the caller’s endpoint URL argument, so in the above `get` example, if endpoint is `'/sheets'` an HTTP GET is requested from the URL `https://api.smartsheet.com/2.0/sheets`
 * `payload`: The data to be passed through, can be either a dictionary or string.
@@ -97,15 +97,26 @@ All calls to passthrough methods return a JSON result. The `data` attribute cont
 The following example shows how to POST data to `https://api.smartsheet.com/2.0/sheets` using the passthrough method and a dictionary:
 
 ```python
-  payload = {"name": "my new sheet",
-              "columns": [
-                {"title": "Favorite", "type": "CHECKBOX", "symbol": "STAR"},
-                {"title": "Primary Column", "primary": True, "type": "TEXT_NUMBER"}
-              ]
-            }
+payload = {"name": "my new sheet",
+            "columns": [
+              {"title": "Favorite", "type": "CHECKBOX", "symbol": "STAR"},
+              {"title": "Primary Column", "primary": True, "type": "TEXT_NUMBER"}
+            ]
+          }
 
-  response = ss_client.Passthrough.post('/sheets', payload)
+response = client.Passthrough.post('/sheets', payload)
 ```
+
+## Working with Smartsheetgov.com Accounts
+If you need to access Smartsheetgov you will need to specify the Smartsheetgov API URI as the base URI during creation 
+of the Smartsheet client object. Smartsheetgov uses a base URI of https://api.smartsheetgov.com/2.0/. The base URI is 
+defined as a constant (`smartsheet.__gov_base__`).
+
+You can create a client using the Smartsheetgov.com URI using the api_base parameter:
+```python
+client = smartsheet.Smartsheet(api_base=smartsheet.__gov_base__)
+```
+
 ## Support
 If you have any questions or issues with this SDK please post on StackOverflow using the tag ["smartsheet-api"](http://stackoverflow.com/questions/tagged/smartsheet-api) or contact us directly at api@smartsheet.com.
 
