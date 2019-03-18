@@ -154,7 +154,7 @@ class Users(object):
 
         return response
 
-    def get_current_user(self):
+    def get_current_user(self, include=None):
         """Get the currently authenticated User.
         Returns:
             UserProfile
@@ -162,6 +162,7 @@ class Users(object):
         _op = fresh_operation('get_current_user')
         _op['method'] = 'GET'
         _op['path'] = '/users/me'
+        _op['query_params']['include'] = include
 
         expected = 'UserProfile'
         prepped_request = self._base.prepare_request(_op)
