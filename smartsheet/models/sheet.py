@@ -21,6 +21,7 @@ from .attachment import Attachment
 from .column import Column
 from .sheet_filter import SheetFilter
 from .comment import Comment
+from .contact_object_value import ContactObjectValue
 from .cross_sheet_reference import CrossSheetReference
 from .discussion import Discussion
 from .enums import AccessLevel, AttachmentType
@@ -51,6 +52,7 @@ class Sheet(object):
         self._access_level = EnumeratedValue(AccessLevel)
         self._attachments = TypedList(Attachment)
         self._columns = TypedList(Column)
+        self._contact_references = TypedList(ContactObjectValue)
         self._created_at = Timestamp()
         self._cross_sheet_references = TypedList(CrossSheetReference)
         self._dependencies_enabled = Boolean()
@@ -119,6 +121,14 @@ class Sheet(object):
     @columns.setter
     def columns(self, value):
         self._columns.load(value)
+
+    @property
+    def contact_references(self):
+        return self._contact_references
+
+    @contact_references.setter
+    def contact_references(self, value):
+        self._contact_references.load(value)
 
     @property
     def created_at(self):

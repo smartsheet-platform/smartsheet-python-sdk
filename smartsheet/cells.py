@@ -31,7 +31,7 @@ class Cells(object):
         self._log = logging.getLogger(__name__)
 
     def get_cell_history(self, sheet_id, row_id, column_id, include=None,
-                         page_size=None, page=None, include_all=None):
+                         page_size=None, page=None, include_all=None, level=None):
         """Get the Cell modification history.
 
         Args:
@@ -64,6 +64,7 @@ class Cells(object):
         _op['query_params']['pageSize'] = page_size
         _op['query_params']['page'] = page
         _op['query_params']['includeAll'] = include_all
+        _op['query_params']['level'] = level
 
         expected = ['IndexResult', 'CellHistory']
 

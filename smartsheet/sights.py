@@ -61,7 +61,7 @@ class Sights(object):
 
         return response
 
-    def get_sight(self, sight_id):
+    def get_sight(self, sight_id, level=None):
         """Get the specified Sight.
 
         Args:
@@ -73,6 +73,7 @@ class Sights(object):
         _op = fresh_operation('get_sight')
         _op['method'] = 'GET'
         _op['path'] = '/sights/' + str(sight_id)
+        _op['query_params']['level'] = level
 
         expected = 'Sight'
         prepped_request = self._base.prepare_request(_op)

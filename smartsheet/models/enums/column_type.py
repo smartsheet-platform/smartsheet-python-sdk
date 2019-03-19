@@ -27,3 +27,4 @@ class ColumnType(Enum):
     DURATION = 7
     PREDECESSOR = 8
     ABSTRACT_DATETIME = 9
+    MULTI_CONTACT_LIST = 10

@@ -52,6 +52,7 @@ class Column(object):
         self._type_ = EnumeratedValue(ColumnType)
         self._width = Number()
         self._validation = Boolean()
+        self._version = Number()
 
         if props:
             deserialize(self, props)
@@ -215,6 +216,14 @@ class Column(object):
     @validation.setter
     def validation(self, value):
         self._validation.value = value
+
+    @property
+    def version(self):
+        return self._version.value
+
+    @version.setter
+    def version(self, value):
+        self._version.value = value;
 
     def to_dict(self):
         return serialize(self)
