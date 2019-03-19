@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.5.0] - 2019-3-19
+### Added 
+- WEBCONTENT sight widget type
+- Add Workspace to sheet model
+- Support for groups in get_current_user
+- Multi-contact feature support
+
+### Fixed
+- Fixed setter for modified_at attribute in row model
+ 
 ## [1.4.0] - 2019-2-19
 ### Added
 - Added BASE URI definition for Smartsheetgov
