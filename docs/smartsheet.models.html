@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet.models package &mdash; Smartsheet Python SDK 1.4.0 documentation</title>
+  <title>smartsheet.models package &mdash; Smartsheet Python SDK 1.4.1.dev10+gaba9c58.d20190319 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.4.0
+                1.4.1.dev10+gaba9c58.d20190319
               </div>
             
           
@@ -136,6 +136,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.image_url_map">smartsheet.models.image_url_map module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.index_result">smartsheet.models.index_result module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.json_object">smartsheet.models.json_object module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.multi_contact_object_value">smartsheet.models.multi_contact_object_value module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.multi_row_email">smartsheet.models.multi_row_email module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.number_object_value">smartsheet.models.number_object_value module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.o_auth_error">smartsheet.models.o_auth_error module</a></li>
@@ -1136,6 +1137,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.column.Column.version">
+<code class="descname">version</code><a class="headerlink" href="#smartsheet.models.column.Column.version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.column.Column.width">
 <code class="descname">width</code><a class="headerlink" href="#smartsheet.models.column.Column.width" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1240,6 +1246,16 @@
 <em class="property">class </em><code class="descclassname">smartsheet.models.contact_object_value.</code><code class="descname">ContactObjectValue</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.contact_object_value.ContactObjectValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#smartsheet.models.object_value.ObjectValue" title="smartsheet.models.object_value.ObjectValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.object_value.ObjectValue</span></code></a>, <a class="reference internal" href="#smartsheet.models.contact.Contact" title="smartsheet.models.contact.Contact"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.contact.Contact</span></code></a></p>
 <p>Smartsheet ContactObjectValue data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.contact_object_value.ContactObjectValue.image_id">
+<code class="descname">image_id</code><a class="headerlink" href="#smartsheet.models.contact_object_value.ContactObjectValue.image_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.contact_object_value.ContactObjectValue.ref_index">
+<code class="descname">ref_index</code><a class="headerlink" href="#smartsheet.models.contact_object_value.ContactObjectValue.ref_index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>
@@ -2483,6 +2499,21 @@
 </dd></dl>
 
 </div>
+<div class="section" id="module-smartsheet.models.multi_contact_object_value">
+<span id="smartsheet-models-multi-contact-object-value-module"></span><h2>smartsheet.models.multi_contact_object_value module<a class="headerlink" href="#module-smartsheet.models.multi_contact_object_value" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.multi_contact_object_value.MultiContactObjectValue">
+<em class="property">class </em><code class="descclassname">smartsheet.models.multi_contact_object_value.</code><code class="descname">MultiContactObjectValue</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.multi_contact_object_value.MultiContactObjectValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#smartsheet.models.object_value.ObjectValue" title="smartsheet.models.object_value.ObjectValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">smartsheet.models.object_value.ObjectValue</span></code></a></p>
+<p>Smartsheet MultiContactObjectValue data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.multi_contact_object_value.MultiContactObjectValue.values">
+<code class="descname">values</code><a class="headerlink" href="#smartsheet.models.multi_contact_object_value.MultiContactObjectValue.values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-smartsheet.models.multi_row_email">
 <span id="smartsheet-models-multi-row-email-module"></span><h2>smartsheet.models.multi_row_email module<a class="headerlink" href="#module-smartsheet.models.multi_row_email" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -3596,6 +3627,11 @@
 <code class="descname">columns</code><a class="headerlink" href="#smartsheet.models.sheet.Sheet.columns" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="smartsheet.models.sheet.Sheet.contact_references">
+<code class="descname">contact_references</code><a class="headerlink" href="#smartsheet.models.sheet.Sheet.contact_references" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="smartsheet.models.sheet.Sheet.create_discussion">
 <code class="descname">create_discussion</code><span class="sig-paren">(</span><em>title</em>, <em>comment</em>, <em>_file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet.Sheet.create_discussion" title="Permalink to this definition">¶</a></dt>
@@ -3814,6 +3850,11 @@
 <dl class="attribute">
 <dt id="smartsheet.models.sheet.Sheet.version">
 <code class="descname">version</code><a class="headerlink" href="#smartsheet.models.sheet.Sheet.version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.sheet.Sheet.workspace">
+<code class="descname">workspace</code><a class="headerlink" href="#smartsheet.models.sheet.Sheet.workspace" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -4602,6 +4643,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.user_profile.UserProfile.groups">
+<code class="descname">groups</code><a class="headerlink" href="#smartsheet.models.user_profile.UserProfile.groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.user_profile.UserProfile.locale">
 <code class="descname">locale</code><a class="headerlink" href="#smartsheet.models.user_profile.UserProfile.locale" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -4977,6 +5023,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="smartsheet.models.widget_content.WidgetContent.url">
+<code class="descname">url</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="smartsheet.models.widget_content.WidgetContent.width">
 <code class="descname">width</code><a class="headerlink" href="#smartsheet.models.widget_content.WidgetContent.width" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -5100,7 +5151,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.4.0',
+            VERSION:'1.4.1.dev10+gaba9c58.d20190319',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

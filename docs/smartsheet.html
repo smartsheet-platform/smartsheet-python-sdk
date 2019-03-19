@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet package &mdash; Smartsheet Python SDK 1.4.0 documentation</title>
+  <title>smartsheet package &mdash; Smartsheet Python SDK 1.4.1.dev10+gaba9c58.d20190319 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.4.0
+                1.4.1.dev10+gaba9c58.d20190319
               </div>
             
           
@@ -275,6 +275,7 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.image_url_map">smartsheet.models.image_url_map module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.index_result">smartsheet.models.index_result module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.json_object">smartsheet.models.json_object module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.multi_contact_object_value">smartsheet.models.multi_contact_object_value module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.multi_row_email">smartsheet.models.multi_row_email module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.number_object_value">smartsheet.models.number_object_value module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.o_auth_error">smartsheet.models.o_auth_error module</a></li>
@@ -769,7 +770,7 @@ return per page.</li>
 
 <dl class="method">
 <dt id="smartsheet.cells.Cells.get_cell_history">
-<code class="descname">get_cell_history</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>row_id</em>, <em>column_id</em>, <em>include=None</em>, <em>page_size=None</em>, <em>page=None</em>, <em>include_all=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.cells.Cells.get_cell_history" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_cell_history</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>row_id</em>, <em>column_id</em>, <em>include=None</em>, <em>page_size=None</em>, <em>page=None</em>, <em>include_all=None</em>, <em>level=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.cells.Cells.get_cell_history" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the Cell modification history.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2017,7 +2018,7 @@ including URLs of any enabled publishings.</p>
 
 <dl class="method">
 <dt id="smartsheet.reports.Reports.get_report">
-<code class="descname">get_report</code><span class="sig-paren">(</span><em>report_id</em>, <em>page_size=None</em>, <em>page=None</em>, <em>include=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.reports.Reports.get_report" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_report</code><span class="sig-paren">(</span><em>report_id</em>, <em>page_size=None</em>, <em>page=None</em>, <em>include=None</em>, <em>level=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.reports.Reports.get_report" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the specified Report, including one page of Rows.</p>
 <p>Get the specified Report, including one page of Rows, and
 optionally populated with Discussions, Attachments, and
@@ -2965,7 +2966,7 @@ that have never contained any data.</li>
 
 <dl class="method">
 <dt id="smartsheet.sheets.Sheets.get_sheet">
-<code class="descname">get_sheet</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>include=None</em>, <em>exclude=None</em>, <em>row_ids=None</em>, <em>row_numbers=None</em>, <em>column_ids=None</em>, <em>page_size=None</em>, <em>page=None</em>, <em>if_version_after=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.get_sheet" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_sheet</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>include=None</em>, <em>exclude=None</em>, <em>row_ids=None</em>, <em>row_numbers=None</em>, <em>column_ids=None</em>, <em>page_size=None</em>, <em>page=None</em>, <em>if_version_after=None</em>, <em>level=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.get_sheet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the specified Sheet.</p>
 <p>Get the specified Sheet. Returns the Sheet, including Rows,
 and optionally populated with Discussion and Attachment
@@ -3566,7 +3567,7 @@ is false.</li>
 
 <dl class="method">
 <dt id="smartsheet.sheets.Sheets.sort_sheet">
-<code class="descname">sort_sheet</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>sort_specifier_obj</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.sort_sheet" title="Permalink to this definition">¶</a></dt>
+<code class="descname">sort_sheet</code><span class="sig-paren">(</span><em>sheet_id</em>, <em>sort_specifier_obj</em>, <em>level=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.sort_sheet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sort Sheet according to SortSpecifier.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -3863,7 +3864,7 @@ including URLs of any enabled publishings.</p>
 
 <dl class="method">
 <dt id="smartsheet.sights.Sights.get_sight">
-<code class="descname">get_sight</code><span class="sig-paren">(</span><em>sight_id</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sights.Sights.get_sight" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_sight</code><span class="sig-paren">(</span><em>sight_id</em>, <em>level=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sights.Sights.get_sight" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the specified Sight.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -4572,7 +4573,7 @@ using the token will fail.
 
 <dl class="method">
 <dt id="smartsheet.users.Users.get_current_user">
-<code class="descname">get_current_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.users.Users.get_current_user" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_current_user</code><span class="sig-paren">(</span><em>include=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.users.Users.get_current_user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the currently authenticated User.
 :returns: UserProfile</p>
 </dd></dl>
@@ -5378,7 +5379,7 @@ Workspace.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.4.0',
+            VERSION:'1.4.1.dev10+gaba9c58.d20190319',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

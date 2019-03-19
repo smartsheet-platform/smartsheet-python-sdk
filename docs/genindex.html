@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; Smartsheet Python SDK 1.4.0 documentation</title>
+  <title>Index &mdash; Smartsheet Python SDK 1.4.1.dev10+gaba9c58.d20190319 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                1.4.0
+                1.4.1.dev10+gaba9c58.d20190319
               </div>
             
           
@@ -555,12 +555,14 @@
 </li>
       <li><a href="smartsheet.models.html#smartsheet.models.column.Column.contact_options">contact_options (smartsheet.models.column.Column attribute)</a>
 </li>
-      <li><a href="smartsheet.models.html#smartsheet.models.contact_object_value.ContactObjectValue">ContactObjectValue (class in smartsheet.models.contact_object_value)</a>
+      <li><a href="smartsheet.models.html#smartsheet.models.sheet.Sheet.contact_references">contact_references (smartsheet.models.sheet.Sheet attribute)</a>
 </li>
-      <li><a href="smartsheet.html#smartsheet.contacts.Contacts">Contacts (class in smartsheet.contacts)</a>
+      <li><a href="smartsheet.models.html#smartsheet.models.contact_object_value.ContactObjectValue">ContactObjectValue (class in smartsheet.models.contact_object_value)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="smartsheet.html#smartsheet.contacts.Contacts">Contacts (class in smartsheet.contacts)</a>
+</li>
       <li><a href="smartsheet.models.html#smartsheet.models.container_destination.ContainerDestination">ContainerDestination (class in smartsheet.models.container_destination)</a>
 </li>
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.operator.Operator.CONTAINS">CONTAINS (smartsheet.models.enums.operator.Operator attribute)</a>
@@ -1245,6 +1247,8 @@
 </li>
       <li><a href="smartsheet.html#smartsheet.groups.Groups">Groups (class in smartsheet.groups)</a>
 </li>
+      <li><a href="smartsheet.models.html#smartsheet.models.user_profile.UserProfile.groups">groups (smartsheet.models.user_profile.UserProfile attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -1253,9 +1257,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.symbol.Symbol.HARVEY_BALLS">HARVEY_BALLS (smartsheet.models.enums.symbol.Symbol attribute)</a>
 </li>
+      <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.operator.Operator.HAS_ALL_OF">HAS_ALL_OF (smartsheet.models.enums.operator.Operator attribute)</a>
+</li>
+      <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.operator.Operator.HAS_ANY_OF">HAS_ANY_OF (smartsheet.models.enums.operator.Operator attribute)</a>
+</li>
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.operator.Operator.HAS_ATTACHMENTS">HAS_ATTACHMENTS (smartsheet.models.enums.operator.Operator attribute)</a>
 </li>
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.operator.Operator.HAS_COMMENTS">HAS_COMMENTS (smartsheet.models.enums.operator.Operator attribute)</a>
+</li>
+      <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.operator.Operator.HAS_NONE_OF">HAS_NONE_OF (smartsheet.models.enums.operator.Operator attribute)</a>
 </li>
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.symbol.Symbol.HEARTS">HEARTS (smartsheet.models.enums.symbol.Symbol attribute)</a>
 </li>
@@ -1271,6 +1281,8 @@
       </ul></li>
       <li><a href="smartsheet.models.html#smartsheet.models.column.Column.hidden">hidden (smartsheet.models.column.Column attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.currency_code.CurrencyCode.HKD">HKD (smartsheet.models.enums.currency_code.CurrencyCode attribute)</a>
 </li>
       <li><a href="smartsheet.html#smartsheet.home.Home">Home (class in smartsheet.home)</a>
@@ -1279,8 +1291,6 @@
         <li><a href="smartsheet.models.html#smartsheet.models.home.Home">(class in smartsheet.models.home)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="smartsheet.models.html#smartsheet.models.format_tables.FormatTables.horizontal_align">horizontal_align (smartsheet.models.format_tables.FormatTables attribute)</a>
 </li>
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.automation_action_frequency.AutomationActionFrequency.HOURLY">HOURLY (smartsheet.models.enums.automation_action_frequency.AutomationActionFrequency attribute)</a>
@@ -1377,9 +1387,11 @@
 </li>
       <li><a href="smartsheet.models.html#smartsheet.models.template.Template.image">image (smartsheet.models.template.Template attribute)</a>
 </li>
-      <li><a href="smartsheet.models.html#smartsheet.models.image.Image.image_id">image_id (smartsheet.models.image.Image attribute)</a>
+      <li><a href="smartsheet.models.html#smartsheet.models.contact_object_value.ContactObjectValue.image_id">image_id (smartsheet.models.contact_object_value.ContactObjectValue attribute)</a>
 
       <ul>
+        <li><a href="smartsheet.models.html#smartsheet.models.image.Image.image_id">(smartsheet.models.image.Image attribute)</a>
+</li>
         <li><a href="smartsheet.models.html#smartsheet.models.image_url.ImageUrl.image_id">(smartsheet.models.image_url.ImageUrl attribute)</a>
 </li>
       </ul></li>
@@ -1775,6 +1787,10 @@
 </li>
       <li><a href="smartsheet.html#smartsheet.sights.Sights.move_sight">move_sight() (smartsheet.sights.Sights method)</a>
 </li>
+      <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.column_type.ColumnType.MULTI_CONTACT_LIST">MULTI_CONTACT_LIST (smartsheet.models.enums.column_type.ColumnType attribute)</a>
+</li>
+      <li><a href="smartsheet.models.html#smartsheet.models.multi_contact_object_value.MultiContactObjectValue">MultiContactObjectValue (class in smartsheet.models.multi_contact_object_value)</a>
+</li>
       <li><a href="smartsheet.models.html#smartsheet.models.multi_row_email.MultiRowEmail">MultiRowEmail (class in smartsheet.models.multi_row_email)</a>
 </li>
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.currency_code.CurrencyCode.MXN">MXN (smartsheet.models.enums.currency_code.CurrencyCode attribute)</a>
@@ -1831,10 +1847,10 @@
 </li>
       <li><a href="smartsheet.models.html#smartsheet.models.schedule.Schedule.next_send_at">next_send_at (smartsheet.models.schedule.Schedule attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.operator.Operator.NO_ATTACHMENTS">NO_ATTACHMENTS (smartsheet.models.enums.operator.Operator attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.operator.Operator.NO_COMMENTS">NO_COMMENTS (smartsheet.models.enums.operator.Operator attribute)</a>
 </li>
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.automation_rule_disabled_reason.AutomationRuleDisabledReason.NO_POTENTIAL_RECIPIENTS">NO_POTENTIAL_RECIPIENTS (smartsheet.models.enums.automation_rule_disabled_reason.AutomationRuleDisabledReason attribute)</a>
@@ -1844,6 +1860,8 @@
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.currency_code.CurrencyCode.NOK">NOK (smartsheet.models.enums.currency_code.CurrencyCode attribute)</a>
 </li>
       <li><a href="smartsheet.models.html#smartsheet.models.project_settings.ProjectSettings.non_working_days">non_working_days (smartsheet.models.project_settings.ProjectSettings attribute)</a>
+</li>
+      <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.operator.Operator.NOT_ALL_OF">NOT_ALL_OF (smartsheet.models.enums.operator.Operator attribute)</a>
 </li>
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.operator.Operator.NOT_BETWEEN">NOT_BETWEEN (smartsheet.models.enums.operator.Operator attribute)</a>
 </li>
@@ -2176,6 +2194,8 @@
       <li><a href="smartsheet.html#smartsheet.session.redact_token">redact_token() (in module smartsheet.session)</a>
 </li>
       <li><a href="smartsheet.models.html#smartsheet.models.error_result.ErrorResult.ref_id">ref_id (smartsheet.models.error_result.ErrorResult attribute)</a>
+</li>
+      <li><a href="smartsheet.models.html#smartsheet.models.contact_object_value.ContactObjectValue.ref_index">ref_index (smartsheet.models.contact_object_value.ContactObjectValue attribute)</a>
 </li>
       <li><a href="smartsheet.html#smartsheet.token.Token.refresh_access_token">refresh_access_token() (smartsheet.token.Token method)</a>
 </li>
@@ -2712,6 +2732,8 @@
       <li><a href="smartsheet.models.html#module-smartsheet.models.index_result">smartsheet.models.index_result (module)</a>
 </li>
       <li><a href="smartsheet.models.html#module-smartsheet.models.json_object">smartsheet.models.json_object (module)</a>
+</li>
+      <li><a href="smartsheet.models.html#module-smartsheet.models.multi_contact_object_value">smartsheet.models.multi_contact_object_value (module)</a>
 </li>
       <li><a href="smartsheet.models.html#module-smartsheet.models.multi_row_email">smartsheet.models.multi_row_email (module)</a>
 </li>
@@ -3461,10 +3483,10 @@
 </li>
       <li><a href="smartsheet.html#smartsheet.sights.Sights.update_sight">update_sight() (smartsheet.sights.Sights method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="smartsheet.html#smartsheet.sheets.Sheets.update_update_request">update_update_request() (smartsheet.sheets.Sheets method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="smartsheet.html#smartsheet.users.Users.update_user">update_user() (smartsheet.users.Users method)</a>
 </li>
       <li><a href="smartsheet.html#smartsheet.webhooks.Webhooks.update_webhook">update_webhook() (smartsheet.webhooks.Webhooks method)</a>
@@ -3481,6 +3503,8 @@
         <li><a href="smartsheet.models.html#smartsheet.models.hyperlink.Hyperlink.url">(smartsheet.models.hyperlink.Hyperlink attribute)</a>
 </li>
         <li><a href="smartsheet.models.html#smartsheet.models.image_url.ImageUrl.url">(smartsheet.models.image_url.ImageUrl attribute)</a>
+</li>
+        <li><a href="smartsheet.models.html#smartsheet.models.widget_content.WidgetContent.url">(smartsheet.models.widget_content.WidgetContent attribute)</a>
 </li>
       </ul></li>
       <li><a href="smartsheet.models.html#smartsheet.models.attachment.Attachment.url_expires_in_millis">url_expires_in_millis (smartsheet.models.attachment.Attachment attribute)</a>
@@ -3540,7 +3564,11 @@
       <li><a href="smartsheet.models.html#smartsheet.models.cell_data_item.CellDataItem.value_format">value_format (smartsheet.models.cell_data_item.CellDataItem attribute)</a>
 </li>
       <li><a href="smartsheet.models.html#smartsheet.models.criteria.Criteria.values">values (smartsheet.models.criteria.Criteria attribute)</a>
+
+      <ul>
+        <li><a href="smartsheet.models.html#smartsheet.models.multi_contact_object_value.MultiContactObjectValue.values">(smartsheet.models.multi_contact_object_value.MultiContactObjectValue attribute)</a>
 </li>
+      </ul></li>
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.symbol.Symbol.VCR">VCR (smartsheet.models.enums.symbol.Symbol attribute)</a>
 </li>
   </ul></td>
@@ -3550,6 +3578,8 @@
       <li><a href="smartsheet.models.html#smartsheet.models.bulk_item_result.BulkItemResult.version">version (smartsheet.models.bulk_item_result.BulkItemResult attribute)</a>
 
       <ul>
+        <li><a href="smartsheet.models.html#smartsheet.models.column.Column.version">(smartsheet.models.column.Column attribute)</a>
+</li>
         <li><a href="smartsheet.models.html#smartsheet.models.result.Result.version">(smartsheet.models.result.Result attribute)</a>
 </li>
         <li><a href="smartsheet.models.html#smartsheet.models.row.Row.version">(smartsheet.models.row.Row attribute)</a>
@@ -3580,6 +3610,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.symbol.Symbol.WEATHER">WEATHER (smartsheet.models.enums.symbol.Symbol attribute)</a>
+</li>
+      <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.widget_type.WidgetType.WEBCONTENT">WEBCONTENT (smartsheet.models.enums.widget_type.WidgetType attribute)</a>
 </li>
       <li><a href="smartsheet.models.html#smartsheet.models.webhook.Webhook">Webhook (class in smartsheet.models.webhook)</a>
 </li>
@@ -3637,8 +3669,12 @@
 </li>
       <li><a href="smartsheet.models.enums.html#smartsheet.models.enums.share_scope.ShareScope.WORKSPACE">WORKSPACE (smartsheet.models.enums.share_scope.ShareScope attribute)</a>
 </li>
-      <li><a href="smartsheet.models.html#smartsheet.models.sight.Sight.workspace">workspace (smartsheet.models.sight.Sight attribute)</a>
+      <li><a href="smartsheet.models.html#smartsheet.models.sheet.Sheet.workspace">workspace (smartsheet.models.sheet.Sheet attribute)</a>
+
+      <ul>
+        <li><a href="smartsheet.models.html#smartsheet.models.sight.Sight.workspace">(smartsheet.models.sight.Sight attribute)</a>
 </li>
+      </ul></li>
       <li><a href="smartsheet.html#smartsheet.workspaces.Workspaces">Workspaces (class in smartsheet.workspaces)</a>
 </li>
       <li><a href="smartsheet.models.html#smartsheet.models.home.Home.workspaces">workspaces (smartsheet.models.home.Home attribute)</a>
@@ -3707,7 +3743,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.4.0',
+            VERSION:'1.4.1.dev10+gaba9c58.d20190319',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
