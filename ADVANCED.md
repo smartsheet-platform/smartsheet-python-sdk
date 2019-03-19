@@ -62,6 +62,18 @@ response = client.Passthrough.post('/sheets', payload)
 1. Clone the [Smartsheet SDK tests](https://github.com/smartsheet-platform/smartsheet-sdk-tests) repo and follow the instructions from the README to start the mock server
 2. Run `pytest tests/mock_api`
 
+## HTTP Proxy
+The following example shows how to enable a proxy by providing a `proxies` argument when initializing the Smartsheet 
+client.
+ 
+```python
+# Initialize client
+proxies = {
+    'https': 'http://127.0.0.1:8888'
+}
+
+smartsheet_client = smartsheet.Smartsheet(proxies=proxies)
+```
 ## Working with Smartsheetgov.com Accounts
 If you need to access Smartsheetgov you will need to specify the Smartsheetgov API URI as the base URI during creation 
 of the Smartsheet client object. Smartsheetgov uses a base URI of https://api.smartsheetgov.com/2.0/. The base URI is 
