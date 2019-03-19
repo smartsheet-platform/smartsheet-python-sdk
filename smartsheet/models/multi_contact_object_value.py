@@ -17,25 +17,23 @@
 
 from __future__ import absolute_import
 
-from .contact import Contact
+from .contact_object_value import ContactObjectValue
 from .object_value import *
 from ..types import *
 from ..util import deserialize
 
 
-class ContactObjectValue(ObjectValue, Contact):
-    """Smartsheet ContactObjectValue data model."""
+class MultiContactObjectValue(ObjectValue):
+    """Smartsheet MultiContactObjectValue data model."""
 
     def __init__(self, props=None, base_obj=None):
-        """Initialize the ContactObjectValue model."""
-        ObjectValue.__init__(self, CONTACT, base_obj)
-        Contact.__init__(self, None, base_obj)
+        """Initialize the MultiContactObjectValue model."""
+        ObjectValue.__init__(self, MULTI_CONTACT, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj
 
-        self._image_id = String()
-        self._ref_index = Number()
+        self._values = TypedList(ContactObjectValue)
 
         if props:
             deserialize(self, props)
@@ -43,17 +41,9 @@ class ContactObjectValue(ObjectValue, Contact):
         self.__initialized = True
 
     @property
-    def image_id(self):
-        return self._image_id.value
+    def values(self):
+        return self._values
 
-    @image_id.setter
-    def image_id(self, value):
-        self._image_id.value = value
-
-    @property
-    def ref_index(self):
-        return self._ref_index.value
-
-    @ref_index.setter
-    def ref_index(self, value):
-        self._ref_index.value = value
+    @values.setter
+    def values(self, value):
+        self._values.load(value)

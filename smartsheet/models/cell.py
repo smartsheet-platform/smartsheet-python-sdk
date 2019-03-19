@@ -24,6 +24,7 @@ from .object_value import *
 from .duration import Duration
 from .predecessor_list import PredecessorList
 from .contact_object_value import ContactObjectValue
+from .multi_contact_object_value import MultiContactObjectValue
 from .date_object_value import DateObjectValue
 from .string_object_value import StringObjectValue
 from .number_object_value import NumberObjectValue
@@ -176,6 +177,8 @@ class Cell(object):
                 elif enum_object_type == DATE or enum_object_type == DATETIME or \
                         enum_object_type == ABSTRACT_DATETIME:
                     self._object_value = DateObjectValue(value, enum_object_value_type, self._base)
+                elif enum_object_type == MULTI_CONTACT:
+                    self._object_value = MultiContactObjectValue(value, self._base)
                 else:
                     self._object_value = None
             else:

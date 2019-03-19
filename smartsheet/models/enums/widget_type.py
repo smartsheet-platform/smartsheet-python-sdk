@@ -27,3 +27,4 @@ class WidgetType(Enum):
     SHORTCUTICON = 7
     SHORTCUTLIST = 8
     TITLE = 9
+    WEBCONTENT = 10

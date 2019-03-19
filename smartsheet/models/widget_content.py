@@ -64,6 +64,9 @@ class WidgetContent(object):
         """Represents the TitleWidgetContent object."""
         self._background_color = String()
 
+        """Represents the WebContentWidgetContent object"""
+        self._url = String()
+
         if props:
             deserialize(self, props)
 
@@ -207,6 +210,15 @@ class WidgetContent(object):
     @background_color.setter
     def background_color(self, value):
         self._background_color.value = value
+
+    """Represents the WebContentWidgetContent object."""
+    @property
+    def url(self):
+        return self._url.value
+
+    @url.setter
+    def url(self, value):
+        self._url.value = value
 
     def to_dict(self):
         return serialize(self)

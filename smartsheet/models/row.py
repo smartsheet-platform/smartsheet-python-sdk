@@ -233,8 +233,7 @@ class Row(object):
 
     @modified_at.setter
     def modified_at(self, value):
-        if isinstance(value, datetime):
-            self._modified_at.value = value
+        self._modified_at.value = value
 
     @property
     def modified_by(self):

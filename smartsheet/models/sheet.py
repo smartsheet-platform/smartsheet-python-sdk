@@ -21,6 +21,7 @@ from .attachment import Attachment
 from .column import Column
 from .sheet_filter import SheetFilter
 from .comment import Comment
+from .contact_object_value import ContactObjectValue
 from .cross_sheet_reference import CrossSheetReference
 from .discussion import Discussion
 from .enums import AccessLevel, AttachmentType
@@ -44,9 +45,14 @@ class Sheet(object):
         if base_obj is not None:
             self._base = base_obj
 
+        # Workspace creates a circular import dependency, so, as much as I'm not a fan of moving the import
+        # into the __init__, its the most pragmatic approach for this simple problem.
+        from .workspace import Workspace
+
         self._access_level = EnumeratedValue(AccessLevel)
         self._attachments = TypedList(Attachment)
         self._columns = TypedList(Column)
+        self._contact_references = TypedList(ContactObjectValue)
         self._created_at = Timestamp()
         self._cross_sheet_references = TypedList(CrossSheetReference)
         self._dependencies_enabled = Boolean()
@@ -71,6 +77,7 @@ class Sheet(object):
         self._total_row_count = Number()
         self._user_settings = TypedObject(SheetUserSettings)
         self._version = Number()
+        self._workspace = TypedObject(Workspace)
 
         if props:
             deserialize(self, props)
@@ -114,6 +121,14 @@ class Sheet(object):
     @columns.setter
     def columns(self, value):
         self._columns.load(value)
+
+    @property
+    def contact_references(self):
+        return self._contact_references
+
+    @contact_references.setter
+    def contact_references(self, value):
+        self._contact_references.load(value)
 
     @property
     def created_at(self):
@@ -306,6 +321,14 @@ class Sheet(object):
     @version.setter
     def version(self, value):
         self._version.value = value
+
+    @property
+    def workspace(self):
+        return self._workspace.value
+
+    @workspace.setter
+    def workspace(self, value):
+        self._workspace.value = value
 
     def add_columns(self, list_of_columns):
         return self._base.Sheets.add_columns(self.id, list_of_columns)

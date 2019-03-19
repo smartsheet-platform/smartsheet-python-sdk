@@ -16,7 +16,6 @@ The following packages are required.
 -  `six <https://pypi.python.org/pypi/six>`__
 -  `certifi <https://pypi.python.org/pypi/certifi>`__
 -  `python-dateutil <https://pypi.python.org/pypi/python-dateutil>`__
--  `enum34 <https://pypi.python.org/pypi/enum34>`__
 
 Installation
 ------------
@@ -45,12 +44,6 @@ and then run:
 
 ``$ python setup.py install``
 
-Documentation
--------------
-
-The SDK documentation can be viewed online at
-http://smartsheet-platform.github.io/smartsheet-python-sdk/.
-
 Getting Started
 ---------------
 
@@ -70,6 +63,12 @@ Getting started with the Python SDK is easy:
 4. Refer to the `Smartsheet API
    Documentation <https://smartsheet-platform.github.io/api-docs/?python#python-sample-code>`__
    for Python SDK usage examples.
+
+Documentation
+-------------
+
+The SDK documentation can be viewed online at
+http://smartsheet-platform.github.io/smartsheet-python-sdk/.
 
 Contributing
 ------------

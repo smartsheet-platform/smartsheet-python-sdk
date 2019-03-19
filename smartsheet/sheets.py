@@ -466,7 +466,7 @@ class Sheets(object):
         return response
 
     def get_sheet(self, sheet_id, include=None, exclude=None, row_ids=None,
-                  row_numbers=None, column_ids=None, page_size=None, page=None, if_version_after=None):
+                  row_numbers=None, column_ids=None, page_size=None, page=None, if_version_after=None, level=None):
         """Get the specified Sheet.
 
         Get the specified Sheet. Returns the Sheet, including Rows,
@@ -510,6 +510,7 @@ class Sheets(object):
         _op['query_params']['pageSize'] = page_size
         _op['query_params']['page'] = page
         _op['query_params']['ifVersionAfter'] = if_version_after
+        _op['query_params']['level'] = level
 
         expected = 'Sheet'
         prepped_request = self._base.prepare_request(_op)
@@ -1520,7 +1521,7 @@ class Sheets(object):
 
         return response
 
-    def sort_sheet(self, sheet_id, sort_specifier_obj):
+    def sort_sheet(self, sheet_id, sort_specifier_obj, level=None):
         """Sort Sheet according to SortSpecifier.
 
         Args:
@@ -1534,6 +1535,7 @@ class Sheets(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/sort'
         _op['json'] = sort_specifier_obj
+        _op['query_params']['level'] = level
 
         expected = 'Sheet'
 

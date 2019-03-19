@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 
 from .account import Account
+from .group import Group
 from .user_model import UserModel
 from ..types import *
 from ..util import serialize
@@ -36,6 +37,7 @@ class UserProfile(UserModel):
             self._base = base_obj
 
         self._account = TypedObject(Account)
+        self._groups = TypedList(Group)
         self._locale = String()
         self._time_zone = String()
 
@@ -53,6 +55,14 @@ class UserProfile(UserModel):
     @account.setter
     def account(self, value):
         self._account.value = value
+
+    @property
+    def groups(self):
+        return self._groups
+
+    @groups.setter
+    def groups(self, value):
+        self._groups.load(value)
 
     @property
     def locale(self):

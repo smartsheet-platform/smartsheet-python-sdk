@@ -56,3 +56,7 @@ class Operator(Enum):
     NO_ATTACHMENTS = 36
     HAS_COMMENTS = 37
     NO_COMMENTS = 38
+    HAS_ANY_OF = 39
+    HAS_NONE_OF = 40
+    HAS_ALL_OF = 41
+    NOT_ALL_OF = 42

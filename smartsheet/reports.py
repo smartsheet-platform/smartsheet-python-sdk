@@ -53,7 +53,7 @@ class Reports(object):
 
         return response
 
-    def get_report(self, report_id, page_size=None, page=None, include=None):
+    def get_report(self, report_id, page_size=None, page=None, include=None, level=None):
         """Get the specified Report, including one page of Rows.
 
         Get the specified Report, including one page of Rows, and
@@ -77,6 +77,8 @@ class Reports(object):
         _op['query_params']['pageSize'] = page_size
         _op['query_params']['page'] = page
         _op['query_params']['include'] = include
+        _op['query_params']['level'] = level
+
 
         expected = 'Report'
         prepped_request = self._base.prepare_request(_op)

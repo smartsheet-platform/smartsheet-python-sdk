@@ -37,7 +37,7 @@ class Discussion(object):
             self._base = base_obj
 
         self._access_level = EnumeratedValue(AccessLevel)
-        self._comment = TypedObject(Comment)
+        self._comment = TypedObject(Comment)  # outbound (POST) only - singular
         self._comment_attachments = TypedList(Attachment)
         self._comment_count = Number()
         self._comments = TypedList(Comment)
