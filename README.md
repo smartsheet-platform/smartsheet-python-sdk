@@ -53,7 +53,7 @@ Getting started with the Python SDK is easy:
 
 See a sample application here: https://github.com/smartsheet-samples/python-read-write-sheet
 
-##Advanced Topics
+## Advanced Topics
 For details about logging, testing, how to use a passthrough option, and how to override HTTP client behavior, 
 see [Advanced Topics](ADVANCED.md).
 
