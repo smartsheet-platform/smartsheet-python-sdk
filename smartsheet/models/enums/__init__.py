@@ -32,6 +32,9 @@ from .cross_sheet_reference_status import CrossSheetReferenceStatus
 from .currency_code import CurrencyCode
 from .day_descriptors import DayDescriptors
 from .day_ordinal import DayOrdinal
+from .event_action import EventAction
+from .event_obejct_type import EventObjectType
+from .event_source import EventSource
 from .global_template import GlobalTemplate
 from .operator import Operator
 from .paper_type import PaperType
