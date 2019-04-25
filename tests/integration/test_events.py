@@ -1,6 +1,6 @@
 import pytest
 import six
-from datetime import datetime
+from datetime import datetime, timedelta
 import smartsheet
 
 
@@ -10,7 +10,8 @@ class TestEvents:
     def test_list_events(self, smart_setup):
         smart = smart_setup['smart']
 
-        events_list = smart.Events.list_events(since='2019-03-20T22:33:44Z', max_count=10)
+        yesterday = datetime.now() - timedelta(days=1)
+        events_list = smart.Events.list_events(since=yesterday.isoformat(), max_count=10)
         assert isinstance(events_list, smart.models.EventResult)
         assert len(events_list.data) <= 10
         for event in events_list.data:
