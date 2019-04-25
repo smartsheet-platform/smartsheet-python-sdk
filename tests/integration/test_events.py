@@ -11,6 +11,7 @@ class TestEvents:
         smart = smart_setup['smart']
 
         events_list = smart.Events.list_events(since='2019-03-20T22:33:44Z', max_count=10)
+        assert isinstance(events_list, smart.models.EventResult)
         assert len(events_list.data) <= 10
         for event in events_list.data:
             assert event.object_type.value is not None
@@ -38,3 +39,12 @@ class TestEvents:
                 assert event.request_user_id is not None
                 # assert event.access_token_name is not None
                 assert event.source.value is not None
+
+    def test_invalid_params(self, smart_setup):
+        smart = smart_setup['smart']
+
+        result = smart.Events.list_events(since=0, stream_position='2.1.0An4ZapaQaOXPdojlmediSZ1WqMdi5U_3l9gViOW7ic')
+        assert isinstance(result, smart.models.Error)
+
+        result = smart.Events.list_events(since='2019-03-20T22:33:44Z', numeric_dates=True)
+        assert isinstance(result, smart.models.Error)
