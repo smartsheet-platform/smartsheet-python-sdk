@@ -10,8 +10,8 @@ class TestEvents:
     def test_list_events(self, smart_setup):
         smart = smart_setup['smart']
 
-        yesterday = datetime.now() - timedelta(days=1)
-        events_list = smart.Events.list_events(since=yesterday.isoformat(), max_count=10)
+        last_hour = datetime.now() - timedelta(hours=1)
+        events_list = smart.Events.list_events(since=last_hour.isoformat(), max_count=10)
         assert isinstance(events_list, smart.models.EventResult)
         assert len(events_list.data) <= 10
         for event in events_list.data:
