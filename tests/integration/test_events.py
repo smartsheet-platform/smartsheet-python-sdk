@@ -33,7 +33,7 @@ class TestEvents:
                 assert event.action.value is not None
                 assert event.object_id is not None
                 assert event.event_id is not None
-                assert isinstance(event.event_timestamp, long)
+                assert isinstance(event.event_timestamp, six.integer_types)
                 assert event.user_id is not None
                 assert event.request_user_id is not None
                 # assert event.access_token_name is not None
