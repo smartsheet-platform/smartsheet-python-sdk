@@ -74,6 +74,50 @@ proxies = {
 
 smartsheet_client = smartsheet.Smartsheet(proxies=proxies)
 ```
+## Event Reporting
+The following sample demostrates 'best' practices for enumerating events using the Smartsheet Event Reporting feature. 
+All enumerations must begin using the `since` parameter to the `list_events` method. Specify `0` as an argument 
+(i.e. `since=0`) if you wish to begin enumeration at the beginning of stored event history. A more common scenario 
+would be to enumerate events over a certain time frame by providing an ISO 8601 formatted or numerical (UNIX epoch) 
+date as an argument to `list_events`. In this sample, events for the previous 7 days are enumerated.
+
+After the initial list of events is returned, you should only continue to enumerate events if the `more_available` flag
+in the previous response indicates that more data is available. To continue the enumeration, supply an argument to the
+`stream_position` parameter to the `list_events` method (`since` must be unset or `None`). The `stream_position` 
+argument you supply was provided by the `next_stream_position` attribute of the previous response.
+
+Many events have additional information available as a part of the event. That information can be accessed using 
+the Python dictionary stored in the `additional_details` attribute (Note that attributes of the `additional_details` 
+dictionary use camelCase/JSON names, e.g. `sheetName` not `sheet_name`). An example is provided for `sheetName` 
+below. Information about the additional details provided can be found [here.](https://smartsheet-platform.github.io/event-reporting-docs/) 
+
+```python
+# this example is looking specifically for new sheet events
+def find_new_sheet_events_in_list(events_list):
+    # enumerate all events in the list of returned events
+    for event in events_list.data:
+        # find all created sheets
+        if event.object_type == smartsheet.models.enums.EventObjectType.SHEET and event.action == smartsheet.models.enums.EventAction.CREATE:
+            # additional details are available for some events, they can be accessed as a Python dictionary
+            # in the additional_details attribute
+            print(event.additional_details['sheetName'])
+
+
+smartsheet_client = smartsheet.Smartsheet()
+smartsheet_client.errors_as_exceptions()
+
+# all event enumerations start by using the `since` parameter
+last_week = datetime.now() - timedelta(days=7)
+# this example looks at the previous 7 days of events by providing a `since` argument set to last week's date in ISO format
+events_list = smartsheet_client.Events.list_events(since=last_week.isoformat(), max_count=1000)
+find_new_sheet_events_in_list(events_list)
+
+# continue enumeration using the stream_position, if the previous response indicates that more data is available.
+while events_list.more_available:
+    events_list = smartsheet_client.Events.list_events(stream_position=events_list.next_stream_position, max_count=10000,
+                                        numeric_dates=True)
+    find_new_sheet_events_in_list(events_list)
+```
 ## Working with Smartsheetgov.com Accounts
 If you need to access Smartsheetgov you will need to specify the Smartsheetgov API URI as the base URI during creation 
 of the Smartsheet client object. Smartsheetgov uses a base URI of https://api.smartsheetgov.com/2.0/. The base URI is 
