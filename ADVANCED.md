@@ -75,7 +75,7 @@ proxies = {
 smartsheet_client = smartsheet.Smartsheet(proxies=proxies)
 ```
 ## Event Reporting
-The following sample demostrates 'best' practices for enumerating events using the Smartsheet Event Reporting feature. 
+The following sample demonstrates 'best' practices for enumerating events using the Smartsheet Event Reporting feature. 
 All enumerations must begin using the `since` parameter to the `list_events` method. Specify `0` as an argument 
 (i.e. `since=0`) if you wish to begin enumeration at the beginning of stored event history. A more common scenario 
 would be to enumerate events over a certain time frame by providing an ISO 8601 formatted or numerical (UNIX epoch) 
