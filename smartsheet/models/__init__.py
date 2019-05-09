@@ -50,6 +50,8 @@ from .duration import Duration
 from .email import Email
 from .error import Error
 from .error_result import ErrorResult
+from .event import Event
+from .event_result import EventResult
 from .explicit_null import ExplicitNull
 from .favorite import Favorite
 from .folder import Folder

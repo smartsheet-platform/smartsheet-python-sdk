@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.68.0] - 2019-5-9
+### Added
+- Event Reporting functionality
+
 ## [1.5.0] - 2019-3-19
 ### Added 
 - WEBCONTENT sight widget type
