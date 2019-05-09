@@ -113,13 +113,14 @@ def print_new_sheet_events_in_list(events_list):
 smartsheet_client = smartsheet.Smartsheet()
 smartsheet_client.errors_as_exceptions()
 
-# all event enumerations start by using the `since` parameter
+# begin listing events in the stream starting with the `since` parameter
 last_week = datetime.now() - timedelta(days=7)
 # this example looks at the previous 7 days of events by providing a `since` argument set to last week's date in ISO format
 events_list = smartsheet_client.Events.list_events(since=last_week.isoformat(), max_count=1000)
 print_new_sheet_events_in_list(events_list)
 
-# continue enumeration using the stream_position, if the previous response indicates that more data is available.
+# continue listing events in the stream by using the stream_position, if the previous response indicates that more 
+# data is available.
 while events_list.more_available:
     events_list = smartsheet_client.Events.list_events(stream_position=events_list.next_stream_position, max_count=10000,
                                         numeric_dates=True)
