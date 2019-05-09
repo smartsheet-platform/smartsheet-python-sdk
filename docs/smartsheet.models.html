@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet.models package &mdash; Smartsheet Python SDK 1.5.0 documentation</title>
+  <title>smartsheet.models package &mdash; Smartsheet Python SDK 1.5.1.dev14+g0f5c87a documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.5.0
+                1.5.1.dev14+g0f5c87a
               </div>
             
           
@@ -121,6 +121,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.email">smartsheet.models.email module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.error">smartsheet.models.error module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.error_result">smartsheet.models.error_result module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.event">smartsheet.models.event module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.event_result">smartsheet.models.event_result module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.explicit_null">smartsheet.models.explicit_null module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.favorite">smartsheet.models.favorite module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.folder">smartsheet.models.folder module</a></li>
@@ -196,6 +198,7 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.cells">smartsheet.cells module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.contacts">smartsheet.contacts module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.discussions">smartsheet.discussions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.events">smartsheet.events module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.exceptions">smartsheet.exceptions module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.favorites">smartsheet.favorites module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.folders">smartsheet.folders module</a></li>
@@ -1834,6 +1837,111 @@
 <dl class="method">
 <dt id="smartsheet.models.error_result.ErrorResult.to_json">
 <code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.error_result.ErrorResult.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-smartsheet.models.event">
+<span id="smartsheet-models-event-module"></span><h2>smartsheet.models.event module<a class="headerlink" href="#module-smartsheet.models.event" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.event.Event">
+<em class="property">class </em><code class="descclassname">smartsheet.models.event.</code><code class="descname">Event</code><span class="sig-paren">(</span><em>props=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.event.Event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Smartsheet Event data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.event.Event.access_token_name">
+<code class="descname">access_token_name</code><a class="headerlink" href="#smartsheet.models.event.Event.access_token_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.event.Event.action">
+<code class="descname">action</code><a class="headerlink" href="#smartsheet.models.event.Event.action" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.event.Event.additional_details">
+<code class="descname">additional_details</code><a class="headerlink" href="#smartsheet.models.event.Event.additional_details" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.event.Event.event_id">
+<code class="descname">event_id</code><a class="headerlink" href="#smartsheet.models.event.Event.event_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.event.Event.event_timestamp">
+<code class="descname">event_timestamp</code><a class="headerlink" href="#smartsheet.models.event.Event.event_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.event.Event.object_id">
+<code class="descname">object_id</code><a class="headerlink" href="#smartsheet.models.event.Event.object_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.event.Event.object_type">
+<code class="descname">object_type</code><a class="headerlink" href="#smartsheet.models.event.Event.object_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.event.Event.request_user_id">
+<code class="descname">request_user_id</code><a class="headerlink" href="#smartsheet.models.event.Event.request_user_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.event.Event.source">
+<code class="descname">source</code><a class="headerlink" href="#smartsheet.models.event.Event.source" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.event.Event.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.event.Event.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.event.Event.to_json">
+<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.event.Event.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.event.Event.user_id">
+<code class="descname">user_id</code><a class="headerlink" href="#smartsheet.models.event.Event.user_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-smartsheet.models.event_result">
+<span id="smartsheet-models-event-result-module"></span><h2>smartsheet.models.event_result module<a class="headerlink" href="#module-smartsheet.models.event_result" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.event_result.EventResult">
+<em class="property">class </em><code class="descclassname">smartsheet.models.event_result.</code><code class="descname">EventResult</code><span class="sig-paren">(</span><em>props=None</em>, <em>dynamic_data_type=None</em>, <em>base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.event_result.EventResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Smartsheet EventResult data model.</p>
+<dl class="attribute">
+<dt id="smartsheet.models.event_result.EventResult.data">
+<code class="descname">data</code><a class="headerlink" href="#smartsheet.models.event_result.EventResult.data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.event_result.EventResult.more_available">
+<code class="descname">more_available</code><a class="headerlink" href="#smartsheet.models.event_result.EventResult.more_available" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="smartsheet.models.event_result.EventResult.next_stream_position">
+<code class="descname">next_stream_position</code><a class="headerlink" href="#smartsheet.models.event_result.EventResult.next_stream_position" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.event_result.EventResult.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.event_result.EventResult.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.event_result.EventResult.to_json">
+<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.event_result.EventResult.to_json" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -5151,7 +5259,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.5.0',
+            VERSION:'1.5.1.dev14+g0f5c87a',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

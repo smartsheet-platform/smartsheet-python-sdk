@@ -267,6 +267,22 @@ smartsheet.models.error\_result module
     :undoc-members:
     :show-inheritance:
 
+smartsheet.models.event module
+------------------------------
+
+.. automodule:: smartsheet.models.event
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+smartsheet.models.event\_result module
+--------------------------------------
+
+.. automodule:: smartsheet.models.event_result
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 smartsheet.models.explicit\_null module
 ---------------------------------------
 
