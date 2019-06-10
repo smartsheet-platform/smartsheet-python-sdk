@@ -43,6 +43,14 @@ smartsheet.discussions module
     :undoc-members:
     :show-inheritance:
 
+smartsheet.events module
+------------------------
+
+.. automodule:: smartsheet.events
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 smartsheet.exceptions module
 ----------------------------
 
