@@ -944,7 +944,7 @@ class Sheets(object):
         _op['method'] = 'POST'
         _op['path'] = '/sheets/' + str(sheet_id) + '/shares'
         _op['json'] = share_obj
-        _op['query_params']['sendEmail'] = 'true'
+        _op['query_params']['sendEmail'] = send_email
 
         expected = ['Result', 'Share']
 
