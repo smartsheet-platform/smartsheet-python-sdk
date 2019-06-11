@@ -8,6 +8,16 @@ python:
   - "pypy"
   - "pypy3"
 
+matrix:
+  exclude:
+    - if: env(skipTests) = true
+    - python: "2.7"
+    - python: "3.4"
+    - python: "3.5"
+    - python: "3.6"
+    - python: "pypy"
+    - python: "pypy3"
+      
 cache:
   directories:
     - $HOME/.cache/pip
@@ -20,12 +30,16 @@ install:
   - pip install --upgrade pip
   - pip install certifi
   - pip install enum34 requests six python-dateutil coverage coveralls[yaml] pytest pytest-travis-fold pytest-instafail requests-toolbelt
-  - pip install gitchangelog pystache
 
 script:
   - smartsheet-sdk-tests/travis_scripts/start_wiremock.sh
-  # - coverage run --source=smartsheet setup.py test -a tests/integration
-  - coverage run --source=smartsheet setup.py test # use this line instead to enable mock api tests
+  - coverage run --source=smartsheet setup.py test
 
 after_success:
   - coveralls --verbose
+
+deploy:
+  provider: script
+  script: sh deploy.sh
+  if: env(deploy) = true
+
