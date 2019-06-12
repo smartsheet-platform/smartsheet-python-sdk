@@ -10,8 +10,6 @@ python:
 
 jobs:
   include:
-    - script: smartsheet-sdk-tests/travis_scripts/start_wiremock.sh
-    - script: coverage run --source=smartsheet setup.py test
     - stage: deploy
       script: skip
       if: env(deploy) IS present
@@ -31,6 +29,10 @@ install:
   - pip install --upgrade pip
   - pip install certifi
   - pip install enum34 requests six python-dateutil coverage coveralls[yaml] pytest pytest-travis-fold pytest-instafail requests-toolbelt
+
+script:
+  - smartsheet-sdk-tests/travis_scripts/start_wiremock.sh
+  - coverage run --source=smartsheet setup.py test
 
 after_success:
   - coveralls --verbose
