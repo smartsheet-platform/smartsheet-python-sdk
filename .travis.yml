@@ -8,16 +8,13 @@ python:
   - "pypy"
   - "pypy3"
 
-matrix:
-  exclude:
-    - if: env(skipTests) = true
-    - python: "2.7"
-    - python: "3.4"
-    - python: "3.5"
-    - python: "3.6"
-    - python: "pypy"
-    - python: "pypy3"
-      
+jobs:
+  include:
+    - stage: deploy
+      python: "3.6"
+      script: sh deploy.sh
+      if: env(deploy) IS present
+
 cache:
   directories:
     - $HOME/.cache/pip
@@ -31,15 +28,11 @@ install:
   - pip install certifi
   - pip install enum34 requests six python-dateutil coverage coveralls[yaml] pytest pytest-travis-fold pytest-instafail requests-toolbelt
 
+test:
+
 script:
-  - smartsheet-sdk-tests/travis_scripts/start_wiremock.sh
-  - coverage run --source=smartsheet setup.py test
+    smartsheet-sdk-tests/travis_scripts/start_wiremock.sh
+    coverage run --source=smartsheet setup.py test
 
 after_success:
   - coveralls --verbose
-
-deploy:
-  provider: script
-  script: sh deploy.sh
-  if: env(deploy) = true
-
