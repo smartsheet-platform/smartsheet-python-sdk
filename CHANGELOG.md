@@ -6,11 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [2.68.0] - 2019-5-9
+## [2.68.0] - 2019-05-09
 ### Added
 - Event Reporting functionality
 
-## [1.5.0] - 2019-3-19
+## [1.5.0] - 2019-03-19
 ### Added 
 - WEBCONTENT sight widget type
 - Add Workspace to sheet model
@@ -20,14 +20,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Fixed setter for modified_at attribute in row model
  
-## [1.4.0] - 2019-2-19
+## [1.4.0] - 2019-02-19
 ### Added
 - Added BASE URI definition for Smartsheetgov
  
 ### Changed
 - Remove [enum34](https://pypi.python.org/pypi/enum34) as a dependency for versions of Python after 3.4 
 
-## [1.3.3] - 2018-4-19
+## [1.3.3] - 2018-04-19
 
 ### Added
 - XLSX and CSV import endpoints for workspaces, folders and sheets
@@ -38,13 +38,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - [Improper format strings in Types](https://github.com/smartsheet-platform/smartsheet-python-sdk/issues/92)
 
-## [1.3.2] - 2018-3-15
+## [1.3.2] - 2018-03-15
 
 ### Fixed
 - String representations for EnumeratedValue should contain just their `name` not `class_name.name`
 [(SO reported)](https://stackoverflow.com/questions/49256434/writing-column-type-now-has-columntype-option-instead-of-option).
 
-## [1.3.1] - 2018-3-1
+## [1.3.1] - 2018-03-01
 
 ### Added
 - Implemented [cross-sheet References](http://smartsheet-platform.github.io/api-docs/?shell#cross-sheet-references)
@@ -74,7 +74,7 @@ if sheet.access_level == 'OWNER':
 ```
 [enum34](https://pypi.python.org/pypi/enum34) has been added as a required package for the SDK  
 
-## [1.3.0] - 2018-2-21
+## [1.3.0] - 2018-02-21
 
 ### Changed 
 
@@ -95,7 +95,7 @@ Several changes have been made to the SDK to improve both the maintainability of
 * In previous releases, property filters were executed prior to create or update operations on many models within the SDK. Unfortunately, those filters were sometimes at odds with the API and occasionally returned unpredictable results. For that reason those filters have been removed. Be aware that any property that is set in a model will be passed through to the API.
 * Properties `id`, `format`, and `type` are accessible without the preceding underscore, e.g. `cell._format` has changed to `cell.format`. 
 
-## [1.2.4] - 2018-2-21
+## [1.2.4] - 2018-02-21
 
 ### Fixed
 
@@ -108,7 +108,7 @@ terminated without a response (UnexpectedRequestError). This release is made to 
 ### Fixed
 
 - Safe defaults for mock api test name and module name
-## [1.2.2] - 2017-12-7
+## [1.2.2] - 2017-12-07
 ### Added
 - Support for column validation
 - New `Passthrough` object supports `get`, `post`, `put`, or `delete` with arbitrary json payload. Use this for access to any API feature that isn't yet modeled in the API. Requests still benefit from error retry and logging.

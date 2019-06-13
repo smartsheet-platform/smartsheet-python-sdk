@@ -1,30 +1,44 @@
 language: python
 
-python:
-  - "2.7"
-  - "3.4"
-  - "3.5"
-  - "3.6"
-  - "pypy"
-  - "pypy3"
-
 cache:
   directories:
     - $HOME/.cache/pip
 
-before_install:
-  - git clone https://github.com/smartsheet-platform/smartsheet-sdk-tests.git
-  - smartsheet-sdk-tests/travis_scripts/install_wiremock.sh
+git:
+  depth: false
 
-install:
-  - pip install --upgrade pip
-  - pip install certifi
-  - pip install enum34 requests six python-dateutil coverage coveralls[yaml] pytest pytest-travis-fold pytest-instafail requests-toolbelt
-
-script:
-  - smartsheet-sdk-tests/travis_scripts/start_wiremock.sh
-  # - coverage run --source=smartsheet setup.py test -a tests/integration
-  - coverage run --source=smartsheet setup.py test # use this line instead to enable mock api tests
-
-after_success:
-  - coveralls --verbose
+jobs:
+  include:
+    - stage: test
+      python: "2.7"
+      script: sh test.sh
+      if: env(deploy) IS NOT present
+    - # stage name not required
+      python: "3.4"
+      script: sh test.sh
+      if: env(deploy) IS NOT present
+    - # stage name not required
+      python: "3.5"
+      script: sh test.sh
+      if: env(deploy) IS NOT present
+    - # stage name not required
+      python: "3.6"
+      script: sh test.sh
+    - # stage name not required
+      python: "pypy"
+      script: sh test.sh
+      if: env(deploy) IS NOT present
+    - # stage name not required
+      python: "pypy3"
+      script: sh test.sh
+      if: env(deploy) IS NOT present
+    - stage: deploy
+      python: "3.6"
+      script: skip
+      if: env(deploy) IS present
+      deploy:
+        - provider: script
+          script: sh deploy.sh
+        - provider: releases
+          api_key: $GH_ACCESS_TOKEN
+          tag_name: $deploy
