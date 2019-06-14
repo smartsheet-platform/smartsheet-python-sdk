@@ -33,7 +33,7 @@ git config --global user.name "Automated Build"
 echo "docs 1st pass..."
 make_docs
 git add docs/*
-git commit -am "docs: build ${RELEASE_TAG} docs 1st pass"
+git commit -am "doc: build ${RELEASE_TAG} docs 1st pass"
 git push https://${GH_USER}:${GH_ACCESS_TOKEN}@github.com/smartsheet-platform/smartsheet-python-sdk.git \
     HEAD:${TRAVIS_BRANCH} > /dev/null 2>&1
 
@@ -53,13 +53,13 @@ twine upload -u "smartsheet-platform" -p ${PYPI_PASSWORD} dist/*
 echo "docs final pass..."
 make_docs
 git add docs/*
-git commit -am "docs: build ${RELEASE_TAG} final docs"
+git commit -am "doc: build ${RELEASE_TAG} final docs"
 git push https://${GH_USER}:${GH_ACCESS_TOKEN}@github.com/smartsheet-platform/smartsheet-python-sdk.git \
     HEAD:${TRAVIS_BRANCH} > /dev/null 2>&1
 echo "update CHANGELOG.md..."
 
 gitchangelog
 git add CHANGELOG.md
-git commit -am "docs: update CHANGELOG.md"
+git commit -am "doc: update CHANGELOG.md"
 git push https://${GH_USER}:${GH_ACCESS_TOKEN}@github.com/smartsheet-platform/smartsheet-python-sdk.git \
     HEAD:${TRAVIS_BRANCH} > /dev/null 2>&1
