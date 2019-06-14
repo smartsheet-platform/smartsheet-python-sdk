@@ -13,7 +13,8 @@ make_docs() {
 }
 
 install_packages() {
-  pip install -U sphinx
+  pip install enum34 requests six python-dateutil
+  pip install sphinx
   pip install sphinx_rtd_theme
   pip install setuptools-scm
   pip install gitchangelog mako
