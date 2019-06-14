@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.68.3] - 2019-06-14
+### Changed
+- automated doc updates should be ignored in changelist
+
+### Fixed
+- bug-21961 sendEmail is hardcoded to true in share_sheet api
+
+### Other
+- doc: update CHANGELOG.md
+- doc: build 2.68.2 final docs
+
 ## [2.68.2] - 2019-06-14
 ### Changed
 - install dependencies for sphinx
