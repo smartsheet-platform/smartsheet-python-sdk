@@ -191,8 +191,8 @@ unreleased_version_label = "[Unreleased]"
 ##
 #output_engine = rest_py
 #output_engine = mustache("restructuredtext")
-output_engine = mustache(".gitchangelog.tpl")
-#output_engine = makotemplate("restructuredtext")
+#output_engine = mustache(".gitchangelog.tpl")
+output_engine = makotemplate(".gitchangelog.tpl")
 
 
 ## ``include_merge`` is a boolean

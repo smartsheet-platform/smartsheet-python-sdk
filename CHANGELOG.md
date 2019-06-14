@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [2.68.2] - 2019-06-14
+### Changed
+- install dependencies for sphinx
+- automated doc updates should be ignored in changelist
+
+## [2.68.1] - 2019-06-14
+### Fixed
+- fix arguments for current versions of pytest
+
 ## [2.68.0] - 2019-05-09
 ### Added
 - Event Reporting functionality

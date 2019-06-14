@@ -6,7 +6,7 @@ Subpackages
 
 .. toctree::
 
-    smartsheet.models.enums
+   smartsheet.models.enums
 
 Submodules
 ----------
@@ -15,799 +15,799 @@ smartsheet.models.access\_token module
 --------------------------------------
 
 .. automodule:: smartsheet.models.access_token
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.account module
 --------------------------------
 
 .. automodule:: smartsheet.models.account
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.alternate\_email module
 -----------------------------------------
 
 .. automodule:: smartsheet.models.alternate_email
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.attachment module
 -----------------------------------
 
 .. automodule:: smartsheet.models.attachment
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.auto\_number\_format module
 ---------------------------------------------
 
 .. automodule:: smartsheet.models.auto_number_format
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.automation\_action module
 -------------------------------------------
 
 .. automodule:: smartsheet.models.automation_action
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.automation\_rule module
 -----------------------------------------
 
 .. automodule:: smartsheet.models.automation_rule
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.boolean\_object\_value module
 -----------------------------------------------
 
 .. automodule:: smartsheet.models.boolean_object_value
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.bulk\_item\_failure module
 --------------------------------------------
 
 .. automodule:: smartsheet.models.bulk_item_failure
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.bulk\_item\_result module
 -------------------------------------------
 
 .. automodule:: smartsheet.models.bulk_item_result
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.cell module
 -----------------------------
 
 .. automodule:: smartsheet.models.cell
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.cell\_data\_item module
 -----------------------------------------
 
 .. automodule:: smartsheet.models.cell_data_item
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.cell\_history module
 --------------------------------------
 
 .. automodule:: smartsheet.models.cell_history
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.cell\_link module
 -----------------------------------
 
 .. automodule:: smartsheet.models.cell_link
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.column module
 -------------------------------
 
 .. automodule:: smartsheet.models.column
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.comment module
 --------------------------------
 
 .. automodule:: smartsheet.models.comment
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.contact module
 --------------------------------
 
 .. automodule:: smartsheet.models.contact
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.contact\_object\_value module
 -----------------------------------------------
 
 .. automodule:: smartsheet.models.contact_object_value
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.container\_destination module
 -----------------------------------------------
 
 .. automodule:: smartsheet.models.container_destination
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.copy\_or\_move\_row\_destination module
 ---------------------------------------------------------
 
 .. automodule:: smartsheet.models.copy_or_move_row_destination
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.copy\_or\_move\_row\_directive module
 -------------------------------------------------------
 
 .. automodule:: smartsheet.models.copy_or_move_row_directive
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.copy\_or\_move\_row\_result module
 ----------------------------------------------------
 
 .. automodule:: smartsheet.models.copy_or_move_row_result
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.criteria module
 ---------------------------------
 
 .. automodule:: smartsheet.models.criteria
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.cross\_sheet\_reference module
 ------------------------------------------------
 
 .. automodule:: smartsheet.models.cross_sheet_reference
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.currency module
 ---------------------------------
 
 .. automodule:: smartsheet.models.currency
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.date\_object\_value module
 --------------------------------------------
 
 .. automodule:: smartsheet.models.date_object_value
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.discussion module
 -----------------------------------
 
 .. automodule:: smartsheet.models.discussion
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.downloaded\_file module
 -----------------------------------------
 
 .. automodule:: smartsheet.models.downloaded_file
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.duration module
 ---------------------------------
 
 .. automodule:: smartsheet.models.duration
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.email module
 ------------------------------
 
 .. automodule:: smartsheet.models.email
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.error module
 ------------------------------
 
 .. automodule:: smartsheet.models.error
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.error\_result module
 --------------------------------------
 
 .. automodule:: smartsheet.models.error_result
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.event module
 ------------------------------
 
 .. automodule:: smartsheet.models.event
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.event\_result module
 --------------------------------------
 
 .. automodule:: smartsheet.models.event_result
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.explicit\_null module
 ---------------------------------------
 
 .. automodule:: smartsheet.models.explicit_null
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.favorite module
 ---------------------------------
 
 .. automodule:: smartsheet.models.favorite
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.folder module
 -------------------------------
 
 .. automodule:: smartsheet.models.folder
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.font\_family module
 -------------------------------------
 
 .. automodule:: smartsheet.models.font_family
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.format\_details module
 ----------------------------------------
 
 .. automodule:: smartsheet.models.format_details
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.format\_tables module
 ---------------------------------------
 
 .. automodule:: smartsheet.models.format_tables
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.group module
 ------------------------------
 
 .. automodule:: smartsheet.models.group
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.group\_member module
 --------------------------------------
 
 .. automodule:: smartsheet.models.group_member
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.home module
 -----------------------------
 
 .. automodule:: smartsheet.models.home
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.hyperlink module
 ----------------------------------
 
 .. automodule:: smartsheet.models.hyperlink
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.image module
 ------------------------------
 
 .. automodule:: smartsheet.models.image
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.image\_url module
 -----------------------------------
 
 .. automodule:: smartsheet.models.image_url
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.image\_url\_map module
 ----------------------------------------
 
 .. automodule:: smartsheet.models.image_url_map
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.index\_result module
 --------------------------------------
 
 .. automodule:: smartsheet.models.index_result
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.json\_object module
 -------------------------------------
 
 .. automodule:: smartsheet.models.json_object
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.multi\_contact\_object\_value module
 ------------------------------------------------------
 
 .. automodule:: smartsheet.models.multi_contact_object_value
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.multi\_row\_email module
 ------------------------------------------
 
 .. automodule:: smartsheet.models.multi_row_email
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.number\_object\_value module
 ----------------------------------------------
 
 .. automodule:: smartsheet.models.number_object_value
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.o\_auth\_error module
 ---------------------------------------
 
 .. automodule:: smartsheet.models.o_auth_error
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.object\_value module
 --------------------------------------
 
 .. automodule:: smartsheet.models.object_value
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.predecessor module
 ------------------------------------
 
 .. automodule:: smartsheet.models.predecessor
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.predecessor\_list module
 ------------------------------------------
 
 .. automodule:: smartsheet.models.predecessor_list
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.primitive\_object\_value module
 -------------------------------------------------
 
 .. automodule:: smartsheet.models.primitive_object_value
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.project\_settings module
 ------------------------------------------
 
 .. automodule:: smartsheet.models.project_settings
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.recipient module
 ----------------------------------
 
 .. automodule:: smartsheet.models.recipient
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.report module
 -------------------------------
 
 .. automodule:: smartsheet.models.report
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.report\_cell module
 -------------------------------------
 
 .. automodule:: smartsheet.models.report_cell
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.report\_column module
 ---------------------------------------
 
 .. automodule:: smartsheet.models.report_column
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.report\_publish module
 ----------------------------------------
 
 .. automodule:: smartsheet.models.report_publish
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.report\_row module
 ------------------------------------
 
 .. automodule:: smartsheet.models.report_row
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.result module
 -------------------------------
 
 .. automodule:: smartsheet.models.result
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.row module
 ----------------------------
 
 .. automodule:: smartsheet.models.row
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.row\_email module
 -----------------------------------
 
 .. automodule:: smartsheet.models.row_email
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.row\_mapping module
 -------------------------------------
 
 .. automodule:: smartsheet.models.row_mapping
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.schedule module
 ---------------------------------
 
 .. automodule:: smartsheet.models.schedule
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.search\_result module
 ---------------------------------------
 
 .. automodule:: smartsheet.models.search_result
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.search\_result\_item module
 ---------------------------------------------
 
 .. automodule:: smartsheet.models.search_result_item
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.sent\_update\_request module
 ----------------------------------------------
 
 .. automodule:: smartsheet.models.sent_update_request
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.server\_info module
 -------------------------------------
 
 .. automodule:: smartsheet.models.server_info
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.share module
 ------------------------------
 
 .. automodule:: smartsheet.models.share
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.sheet module
 ------------------------------
 
 .. automodule:: smartsheet.models.sheet
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.sheet\_email module
 -------------------------------------
 
 .. automodule:: smartsheet.models.sheet_email
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.sheet\_filter module
 --------------------------------------
 
 .. automodule:: smartsheet.models.sheet_filter
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.sheet\_filter\_details module
 -----------------------------------------------
 
 .. automodule:: smartsheet.models.sheet_filter_details
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.sheet\_publish module
 ---------------------------------------
 
 .. automodule:: smartsheet.models.sheet_publish
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.sheet\_user\_settings module
 ----------------------------------------------
 
 .. automodule:: smartsheet.models.sheet_user_settings
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.shortcut\_data\_item module
 ---------------------------------------------
 
 .. automodule:: smartsheet.models.shortcut_data_item
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.sight module
 ------------------------------
 
 .. automodule:: smartsheet.models.sight
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.sight\_publish module
 ---------------------------------------
 
 .. automodule:: smartsheet.models.sight_publish
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.sort\_criterion module
 ----------------------------------------
 
 .. automodule:: smartsheet.models.sort_criterion
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.sort\_specifier module
 ----------------------------------------
 
 .. automodule:: smartsheet.models.sort_specifier
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.source module
 -------------------------------
 
 .. automodule:: smartsheet.models.source
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.string\_object\_value module
 ----------------------------------------------
 
 .. automodule:: smartsheet.models.string_object_value
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.template module
 ---------------------------------
 
 .. automodule:: smartsheet.models.template
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.update\_request module
 ----------------------------------------
 
 .. automodule:: smartsheet.models.update_request
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.user module
 -----------------------------
 
 .. automodule:: smartsheet.models.user
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.user\_model module
 ------------------------------------
 
 .. automodule:: smartsheet.models.user_model
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.user\_profile module
 --------------------------------------
 
 .. automodule:: smartsheet.models.user_profile
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.version module
 --------------------------------
 
 .. automodule:: smartsheet.models.version
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.webhook module
 --------------------------------
 
 .. automodule:: smartsheet.models.webhook
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.webhook\_secret module
 ----------------------------------------
 
 .. automodule:: smartsheet.models.webhook_secret
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.webhook\_stats module
 ---------------------------------------
 
 .. automodule:: smartsheet.models.webhook_stats
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.widget module
 -------------------------------
 
 .. automodule:: smartsheet.models.widget
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.widget\_content module
 ----------------------------------------
 
 .. automodule:: smartsheet.models.widget_content
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 smartsheet.models.workspace module
 ----------------------------------
 
 .. automodule:: smartsheet.models.workspace
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 
 Module contents
 ---------------
 
 .. automodule:: smartsheet.models
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
