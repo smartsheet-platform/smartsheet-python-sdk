@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.68.2] - 2019-06-14
+### Changed
+- install dependencies for sphinx
+- automated doc updates should be ignored in changelist
+
 ## [2.68.1] - 2019-06-14
 ### Fixed
 - fix arguments for current versions of pytest
