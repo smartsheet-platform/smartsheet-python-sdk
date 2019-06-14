@@ -6,17 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [Unreleased]
-### Other
-- docs: build 2.68.1 final docs
-
 ## [2.68.1] - 2019-06-14
 ### Fixed
 - fix arguments for current versions of pytest
-
-### Other
-- docs: build 2.68.1 docs 1st pass
-- docs version 2.68.0
 
 ## [2.68.0] - 2019-05-09
 ### Added
