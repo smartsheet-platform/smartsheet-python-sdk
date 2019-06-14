@@ -203,6 +203,14 @@ smartsheet.util module
    :undoc-members:
    :show-inheritance:
 
+smartsheet.version module
+-------------------------
+
+.. automodule:: smartsheet.version
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smartsheet.webhooks module
 --------------------------
 
