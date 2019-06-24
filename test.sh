@@ -12,4 +12,4 @@ pip install enum34 requests six python-dateutil coverage coveralls[yaml] pytest 
 smartsheet-sdk-tests/travis_scripts/start_wiremock.sh
 coverage run --source=smartsheet setup.py test
 
-# coveralls --verbose
+coveralls --verbose
