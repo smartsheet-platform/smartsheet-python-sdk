@@ -17,32 +17,42 @@
 
 from __future__ import absolute_import
 
-from .column import Column
-from .cell_data_item import CellDataItem
-from .shortcut_data_item import ShortcutDataItem
-from .hyperlink import Hyperlink
+from .enums import WidgetType
+from .widget_content import WidgetContent
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
 
-class WidgetContent(object):
-    """Smartsheet WidgetContent data model."""
+class WebContentWidgetContent(WidgetContent):
+    """Smartsheet WebContentWidgetContent data model."""
 
-    def __init__(self, widget_type=None, base_obj=None):
-        """Initialize the WidgetContent model."""
+    def __init__(self, props=None, base_obj=None):
+        """Initialize the WebContentWidgetContent model."""
+        super(WebContentWidgetContent, self).__init__(WidgetType.WEBCONTENT, base_obj)
+
         self._base = None
         if base_obj is not None:
             self._base = base_obj
 
-        self._widget_type = widget_type
+        """Represents the WebContentWidgetContent object"""
+        self._url = String()
+
+        if props:
+            deserialize(self, props)
 
         self.__initialized = True
 
+    """Represents the WebContentWidgetContent object."""
     @property
-    def widget_type(self):
-        return self._widget_type
+    def url(self):
+        return self._url.value
 
+    @url.setter
+    def url(self, value):
+        self._url.value = value
+
+    @property
     def to_dict(self):
         return serialize(self)
 

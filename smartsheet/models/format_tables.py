@@ -37,6 +37,7 @@ class FormatTables(object):
         self._bold = TypedList(str)
         self._color = TypedList(str)
         self._currency = TypedList(Currency)
+        self._date_format = TypedList(str)
         self._decimal_count = TypedList(str)
         self._defaults = String()
         self._font_family = TypedList(FontFamily)
@@ -76,6 +77,14 @@ class FormatTables(object):
     @currency.setter
     def currency(self, value):
         self._currency.load(value)
+
+    @property
+    def date_format(self):
+        return self._date_format
+
+    @date_format.setter
+    def date_format(self, value):
+        self._date_format.load(value)
 
     @property
     def decimal_count(self):

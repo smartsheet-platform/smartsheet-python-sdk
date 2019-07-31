@@ -18,6 +18,13 @@
 from __future__ import absolute_import
 
 from .enums.widget_type import WidgetType
+from .cell_link_widget_content import CellLinkWidgetContent
+from .chart_widget_content import ChartWidgetContent
+from .image_widget_content import ImageWidgetContent
+from .report_widget_content import ReportWidgetContent
+from .shortcut_widget_content import ShortcutWidgetContent
+from .title_rich_text_widget_content import TitleRichTextWidgetContent
+from .web_content_widget_content import WebContentWidgetContent
 from .widget_content import WidgetContent
 from ..types import *
 from ..util import serialize
@@ -33,7 +40,7 @@ class Widget(object):
         if base_obj is not None:
             self._base = base_obj
 
-        self._contents = TypedObject(WidgetContent)
+        self._contents = None
         self._height = Number()
         self._id_ = Number()
         self._show_title = Boolean()
@@ -65,11 +72,37 @@ class Widget(object):
 
     @property
     def contents(self):
-        return self._contents.value
+        return self._contents
 
     @contents.setter
     def contents(self, value):
-        self._contents.value = value
+        if isinstance(value, WidgetContent):
+            self._contents = value
+        elif isinstance(value, dict):
+            widget_type = value['type']
+            try:
+                widget_type = WidgetType[widget_type]
+            except KeyError:
+                if widget_type == "WidgetWebContent":
+                    widget_type = WidgetType.WEBCONTENT
+                else:
+                    widget_type = None
+            if widget_type == WidgetType.CHART:
+                self._contents = ChartWidgetContent(value, self._base)
+            elif widget_type == WidgetType.IMAGE:
+                self._contents = ImageWidgetContent(value, self._base)
+            elif widget_type == WidgetType.METRIC:
+                self._contents = CellLinkWidgetContent(value, self._base)
+            elif widget_type == WidgetType.GRIDGANTT:
+                self._contents = ReportWidgetContent(value, self._base)
+            elif widget_type == WidgetType.RICHTEXT or widget_type == WidgetType.TITLE:
+                self._contents = TitleRichTextWidgetContent(value, self._base)
+            elif widget_type == WidgetType.SHORTCUT:
+                self._contents = ShortcutWidgetContent(value, self._base)
+            elif widget_type == WidgetType.WEBCONTENT:
+                self._contents = WebContentWidgetContent(value, self._base)
+            else:
+                self._contents = None
 
     @property
     def height(self):

@@ -61,11 +61,13 @@ class Sights(object):
 
         return response
 
-    def get_sight(self, sight_id, level=None):
+    def get_sight(self, sight_id, level=None, include=None):
         """Get the specified Sight.
 
         Args:
             sight_id (int): Sight ID
+            level (int): compatibility level
+            include (list[str]): optional include parameters
 
         Returns:
             Sight
@@ -73,6 +75,7 @@ class Sights(object):
         _op = fresh_operation('get_sight')
         _op['method'] = 'GET'
         _op['path'] = '/sights/' + str(sight_id)
+        _op['query_params']['include'] = include
         _op['query_params']['level'] = level
 
         expected = 'Sight'

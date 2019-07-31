@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2018 Smartsheet.com, Inc.
+# Copyright 2019 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,69 +17,58 @@
 
 from __future__ import absolute_import
 
+from .enums import WidgetType
+from .widget_content import WidgetContent
+from .widget_hyperlink import WidgetHyperlink
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
 
-class Source(object):
-
-    """Smartsheet Source data model."""
+class ReportWidgetContent(WidgetContent):
+    """Smartsheet ReportWidgetContent data model."""
 
     def __init__(self, props=None, base_obj=None):
-        """Initialize the Source model."""
+        """Initialize the ReportWidgetContent model."""
+        super(ReportWidgetContent, self).__init__(WidgetType.GRIDGANTT, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj
 
-        self.allowed_values = {
-            '_type': [
-                'report',
-                'sheet',
-                'sight',
-                'template']}
-
-        self._id_ = Number()
-        self._type_ = String(
-            accept=self.allowed_values['_type']
-        )
+        """Represents the ReportWidgetContent object."""
+        self._html_content = String()
+        self._hyperlink = TypedObject(WidgetHyperlink)
+        self._report_id = Number()
 
         if props:
             deserialize(self, props)
 
         self.__initialized = True
 
-    def __getattr__(self, key):
-        if key == 'id':
-            return self.id_
-        elif key == 'type':
-            return self.type_
-        else:
-            raise AttributeError(key)
+    """Represents the ReportWidgetContent object."""
+    @property
+    def html_content(self):
+        return self._html_content.value
 
-    def __setattr__(self, key, value):
-        if key == 'id':
-            self.id_ = value
-        elif key == 'type':
-            self.type_ = value
-        else:
-            super(Source, self).__setattr__(key, value)
+    @html_content.setter
+    def html_content(self, value):
+        self._html_content.value = value
 
     @property
-    def id_(self):
-        return self._id_.value
+    def hyperlink(self):
+        return self._hyperlink.value
 
-    @id_.setter
-    def id_(self, value):
-        self._id_.value = value
+    @hyperlink.setter
+    def hyperlink(self, value):
+        self._hyperlink.value = value
 
     @property
-    def type_(self):
-        return self._type_.value
+    def report_id(self):
+        return self._report_id.value
 
-    @type_.setter
-    def type_(self, value):
-        self._type_.value = value
+    @report_id.setter
+    def report_id(self, value):
+        self._report_id.value = value
 
     def to_dict(self):
         return serialize(self)

@@ -18,13 +18,11 @@ from enum import Enum
 
 
 class WidgetType(Enum):
-    CELLLINK = 1
-    CHART = 2
-    GRIDGANTT = 3
-    IMAGE = 4
+    CHART = 1
+    IMAGE = 2
+    METRIC = 3
+    GRIDGANTT = 4
     RICHTEXT = 5
-    SHEETSUMMARY = 6
-    SHORTCUTICON = 7
-    SHORTCUTLIST = 8
-    TITLE = 9
-    WEBCONTENT = 10
+    SHORTCUT = 6
+    TITLE = 7
+    WEBCONTENT = 8
