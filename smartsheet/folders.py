@@ -33,7 +33,7 @@ class Folders(object):
         self._log = logging.getLogger(__name__)
 
     def copy_folder(self, folder_id, container_destination_obj,
-                    include=None, skip_remap=None, omit=None):
+                    include=None, skip_remap=None):
         """Creates a copy of the specified Folder.
 
         Args:
@@ -42,13 +42,11 @@ class Folders(object):
                 (ContainerDestination): Container Destination object.
             include (list[str]): A comma separated list of
                 elements to copy. Valid list values: attachments,
-                cellLinks, data, discussions, filters, forms, ruleRecipients,
+                attachments, cellLinks, data, discussions, filters, forms, ruleRecipients,
                 rules, shares, all (deprecated).
             skip_remap (list[str]): A comma separated list
                 of references to NOT re-map for the newly created resource.
                 Valid list items: cellLinks, reports, sheetHyperlinks, sights
-            omit (list[str]): A comma separated list of elements to omit.
-                The only current valid item is sheetHyperlinks
 
         Returns:
             Result
@@ -58,7 +56,6 @@ class Folders(object):
         _op['path'] = '/folders/' + str(folder_id) + '/copy'
         _op['query_params']['include'] = include
         _op['query_params']['skipRemap'] = skip_remap
-        _op['query_params']['omit'] = omit
         _op['json'] = container_destination_obj
 
         expected = ['Result', 'Folder']
