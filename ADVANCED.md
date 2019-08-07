@@ -16,7 +16,7 @@ Use the logging facility's [basicConfig](https://docs.python.org/2/library/loggi
 
 ## Passthrough Option
 
-If there is an API Feature that is not yet supported by the Python SDK, there is a passthrough option that allows you to pass and receive raw JSON objects.
+If there is an API feature that is not yet supported by the Python SDK, there is a passthrough option that allows you to pass and receive raw JSON objects.
 
 To invoke the passthrough, your code can call one of the following four methods:
 
@@ -51,14 +51,12 @@ response = client.Passthrough.post('/sheets', payload)
 
 ## Testing
 
-### All
-1. Run `pytest`. Note, the integration and mock API tests will fail unless the mock server is running. See [Mock API Tests](#mock-api-tests) and [Integration Tests](#integration-tests)
-
 ### Integration Tests
 1. Follow the instructions [here](tests/integration/README.md)
 2. Run `pytest tests/integration`
 
 ### Mock API Tests
+**NOTE:** the mock API tests will fail unless the mock server is running.
 1. Clone the [Smartsheet SDK tests](https://github.com/smartsheet-platform/smartsheet-sdk-tests) repo and follow the instructions from the README to start the mock server
 2. Run `pytest tests/mock_api`
 
