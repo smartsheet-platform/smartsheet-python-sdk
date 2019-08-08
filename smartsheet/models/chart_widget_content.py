@@ -41,7 +41,7 @@ class ChartWidgetContent(WidgetContent):
         self._sheet_id = Number()
         self._axes = TypedObject(object)
         self._hyperlink = TypedObject(WidgetHyperlink)
-        self._included_column_ids = TypedList(long)
+        self._included_column_ids = TypedList(six.integer_types)
         self._legend = TypedObject(object)
         self._selection_ranges = TypedList(SelectionRange)
         self._series = TypedObject(object)
