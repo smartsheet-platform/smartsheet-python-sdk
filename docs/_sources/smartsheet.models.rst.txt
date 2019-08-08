@@ -123,6 +123,22 @@ smartsheet.models.cell\_link module
    :undoc-members:
    :show-inheritance:
 
+smartsheet.models.cell\_link\_widget\_content module
+----------------------------------------------------
+
+.. automodule:: smartsheet.models.cell_link_widget_content
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+smartsheet.models.chart\_widget\_content module
+-----------------------------------------------
+
+.. automodule:: smartsheet.models.chart_widget_content
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smartsheet.models.column module
 -------------------------------
 
@@ -387,6 +403,14 @@ smartsheet.models.image\_url\_map module
    :undoc-members:
    :show-inheritance:
 
+smartsheet.models.image\_widget\_content module
+-----------------------------------------------
+
+.. automodule:: smartsheet.models.image_widget_content
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smartsheet.models.index\_result module
 --------------------------------------
 
@@ -523,6 +547,14 @@ smartsheet.models.report\_row module
    :undoc-members:
    :show-inheritance:
 
+smartsheet.models.report\_widget\_content module
+------------------------------------------------
+
+.. automodule:: smartsheet.models.report_widget_content
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smartsheet.models.result module
 -------------------------------
 
@@ -563,6 +595,14 @@ smartsheet.models.schedule module
    :undoc-members:
    :show-inheritance:
 
+smartsheet.models.scope module
+------------------------------
+
+.. automodule:: smartsheet.models.scope
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smartsheet.models.search\_result module
 ---------------------------------------
 
@@ -575,6 +615,14 @@ smartsheet.models.search\_result\_item module
 ---------------------------------------------
 
 .. automodule:: smartsheet.models.search_result_item
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+smartsheet.models.selection\_range module
+-----------------------------------------
+
+.. automodule:: smartsheet.models.selection_range
    :members:
    :undoc-members:
    :show-inheritance:
@@ -659,6 +707,14 @@ smartsheet.models.shortcut\_data\_item module
    :undoc-members:
    :show-inheritance:
 
+smartsheet.models.shortcut\_widget\_content module
+--------------------------------------------------
+
+.. automodule:: smartsheet.models.shortcut_widget_content
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smartsheet.models.sight module
 ------------------------------
 
@@ -715,6 +771,14 @@ smartsheet.models.template module
    :undoc-members:
    :show-inheritance:
 
+smartsheet.models.title\_rich\_text\_widget\_content module
+-----------------------------------------------------------
+
+.. automodule:: smartsheet.models.title_rich_text_widget_content
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smartsheet.models.update\_request module
 ----------------------------------------
 
@@ -755,6 +819,14 @@ smartsheet.models.version module
    :undoc-members:
    :show-inheritance:
 
+smartsheet.models.web\_content\_widget\_content module
+------------------------------------------------------
+
+.. automodule:: smartsheet.models.web_content_widget_content
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smartsheet.models.webhook module
 --------------------------------
 
@@ -791,6 +863,14 @@ smartsheet.models.widget\_content module
 ----------------------------------------
 
 .. automodule:: smartsheet.models.widget_content
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+smartsheet.models.widget\_hyperlink module
+------------------------------------------
+
+.. automodule:: smartsheet.models.widget_hyperlink
    :members:
    :undoc-members:
    :show-inheritance:
