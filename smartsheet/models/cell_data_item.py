@@ -38,10 +38,13 @@ class CellDataItem(object):
 
         self._cell = TypedObject(Cell)
         self._column_id = Number()
+        self._data_source = String()
         self._label = String()
         self._label_format = String()
         self._object_value = None
         self._order = Number()
+        self._row_id = Number()
+        self._sheet_id = Number()
         self._value_format = String()
 
         if props:
@@ -64,6 +67,14 @@ class CellDataItem(object):
     @column_id.setter
     def column_id(self, value):
         self._column_id.value = value
+
+    @property
+    def data_source(self):
+        return self._data_source.value
+
+    @data_source.setter
+    def data_source(self, value):
+        self._data_source.value = value
 
     @property
     def label(self):
@@ -103,6 +114,22 @@ class CellDataItem(object):
     @order.setter
     def order(self, value):
         self._order.value = value
+
+    @property
+    def row_id(self):
+        return self._row_id.value
+
+    @row_id.setter
+    def row_id(self, value):
+        self._row_id.value = value
+
+    @property
+    def sheet_id(self):
+        return self._sheet_id.value
+
+    @sheet_id.setter
+    def sheet_id(self, value):
+        self._sheet_id.value = value
 
     @property
     def value_format(self):

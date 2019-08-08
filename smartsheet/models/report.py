@@ -17,12 +17,11 @@
 
 from __future__ import absolute_import
 
-import json
-
 from .report_column import ReportColumn
 from .report_row import ReportRow
 from .sheet import Sheet
-from ..types import TypedList
+from .scope import Scope
+from ..types import *
 from ..util import deserialize
 from ..util import serialize
 
@@ -40,6 +39,7 @@ class Report(Sheet):
 
         self._columns = TypedList(ReportColumn)
         self._rows = TypedList(ReportRow)
+        self._scope = TypedObject(Scope)
         self._source_sheets = TypedList(Sheet)
 
         if props:
@@ -64,6 +64,14 @@ class Report(Sheet):
     @rows.setter
     def rows(self, value):
         self._rows.load(value)
+
+    @property
+    def scope(self):
+        return self._scope.value
+
+    @scope.setter
+    def scope(self, value):
+        self._scope.value = value
 
     @property
     def source_sheets(self):

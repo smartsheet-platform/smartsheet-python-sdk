@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2017 Smartsheet.com, Inc.
+# Copyright 2019 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,31 +17,48 @@
 
 from __future__ import absolute_import
 
-from .column import Column
-from .cell_data_item import CellDataItem
-from .shortcut_data_item import ShortcutDataItem
-from .hyperlink import Hyperlink
+from .enums import WidgetType
+from .widget_content import WidgetContent
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
 
-class WidgetContent(object):
-    """Smartsheet WidgetContent data model."""
+class TitleRichTextWidgetContent(WidgetContent):
+    """Smartsheet TitleRichTextWidgetContent data model."""
 
-    def __init__(self, widget_type=None, base_obj=None):
-        """Initialize the WidgetContent model."""
+    def __init__(self, props=None, base_obj=None):
+        """Initialize the TitleRichTextWidgetContent model."""
+        super(TitleRichTextWidgetContent, self).__init__(WidgetType.TITLE, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj
 
-        self._widget_type = widget_type
+        """Represents the TitleWidgetContent object."""
+        self._background_color = String()
+        self._html_content = String()
+
+        if props:
+            deserialize(self, props)
 
         self.__initialized = True
 
+    """Represents the TitleWidgetContent object."""
     @property
-    def widget_type(self):
-        return self._widget_type
+    def background_color(self):
+        return self._background_color.value
+
+    @background_color.setter
+    def background_color(self, value):
+        self._background_color.value = value
+
+    @property
+    def html_content(self):
+        return self._html_content.value
+
+    @html_content.setter
+    def html_content(self, value):
+        self._html_content.value = value
 
     def to_dict(self):
         return serialize(self)

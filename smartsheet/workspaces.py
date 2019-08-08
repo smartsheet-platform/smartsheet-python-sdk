@@ -33,20 +33,18 @@ class Workspaces(object):
         self._log = logging.getLogger(__name__)
 
     def copy_workspace(self, workspace_id, container_destination_obj,
-                       include=None, skip_remap=None, omit=None):
+                       include=None, skip_remap=None):
         """Create a copy of the specified Workspace.
 
         Args:
             workspace_id (int): Workspace ID
             container_destination_obj (ContainerDestination): Container Destination object.
             include (list[str]): A comma-separated list of optional elements to copy.
-                Valid list values: attachments, brand, cellLinks, data, discussions, filters, forms,
+                Valid list values: attachments, cellLinks, data, discussions, filters, forms,
                 ruleRecipients, rules, shares, all (deprecated). Cell history will not be copied,
                 regardless of which **include** parameter values are specified.
             skip_remap (list[str]): A comma separated list of references to NOT re-map for
                 the newly created resource. Valid list items: cellLinks, reports, sheetHyperlinks, sights
-            omit (list[str]): a comma separated list of items to exclude. The only
-                currently valid option is sheetHyperlinks
         Returns:
             Result
         """
@@ -55,7 +53,6 @@ class Workspaces(object):
         _op['path'] = '/workspaces/' + str(workspace_id) + '/copy'
         _op['query_params']['include'] = include
         _op['query_params']['skipRemap'] = skip_remap
-        _op['query_params']['omit'] = omit
         _op['json'] = container_destination_obj
 
         expected = ['Result', 'Workspace']

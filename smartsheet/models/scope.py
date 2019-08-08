@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2017 Smartsheet.com, Inc.
+# Copyright 2019 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,31 +17,48 @@
 
 from __future__ import absolute_import
 
-from .column import Column
-from .cell_data_item import CellDataItem
-from .shortcut_data_item import ShortcutDataItem
-from .hyperlink import Hyperlink
+from .sheet import Sheet
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
 
-class WidgetContent(object):
-    """Smartsheet WidgetContent data model."""
+class Scope(object):
+    """Smartsheet Scope data model."""
 
-    def __init__(self, widget_type=None, base_obj=None):
-        """Initialize the WidgetContent model."""
+    def __init__(self, props=None, base_obj=None):
+        """Initialize the Scope model."""
         self._base = None
         if base_obj is not None:
             self._base = base_obj
 
-        self._widget_type = widget_type
+        # Workspace creates a circular import dependency, so, as much as I'm not a fan of moving the import
+        # into the __init__, its the most pragmatic approach for this simple problem.
+        from .workspace import Workspace
+
+        self._sheets = TypedList(Sheet)
+        self._workspaces = TypedList(Workspace)
+
+        if props:
+            deserialize(self, props)
 
         self.__initialized = True
 
     @property
-    def widget_type(self):
-        return self._widget_type
+    def sheets(self):
+        return self._sheets
+
+    @sheets.setter
+    def sheets(self, value):
+        self._sheets.load(value)
+
+    @property
+    def workspaces(self):
+        return self._workspaces
+
+    @workspaces.setter
+    def workspaces(self, value):
+        self._workspaces.load(value)
 
     def to_dict(self):
         return serialize(self)

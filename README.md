@@ -4,7 +4,7 @@ This library is intended to simplify connecting to the [Smartsheet API](http://s
 
 ## System Requirements
 The SDK currently supports Python 2.7, 3.4, 3.5, 3.6, pypy, and pypy3.  
-**Note** that Python version 3.4 or higher is required for Unicode support. (E.g. if your Smartsheet data includes non-ASCII characters.)  
+**Note:** Python version 3.4 or higher is required for Unicode support, for example, if your Smartsheet data includes non-ASCII characters.  
 
 The following packages are required.
 
@@ -17,7 +17,7 @@ The following packages are required.
 ### Smartsheet Will Require TLS 1.1 or Higher Post 5/22/2018
 There are many security vulnerabilities in SSL and early TLS versions. To remain compliant with PCI standards, most companies are now removing support for TLS 1.0.
 
-Smartsheet Python SDK versions earlier than 1.3.0 do not support TLS 1.1. Once Smartsheet disables support for TLS 1.0 on 5/22/2018 any user who is still using an earlier version of the Python SDK will receive a SSL handshake error. Please upgrade your Smartsheet Python SDK, preferably to 1.3.2 by 5/22/2018 to avoid any impact.
+Smartsheet Python SDK versions earlier than 1.3.0 do not support TLS 1.1. Once Smartsheet disables support for TLS 1.0 on 5/22/2018, any user who is still using an earlier version of the Python SDK will receive a SSL handshake error. Please upgrade your Smartsheet Python SDK, preferably to 1.3.2 by 5/22/2018 to avoid any impact.
 
 To upgrade a current installation using pip:
 

@@ -37,6 +37,7 @@ class Column(object):
 
         self._auto_number_format = TypedObject(AutoNumberFormat)
         self._contact_options = TypedList(Contact)
+        self._description = String()
         self._format_ = String()
         self._hidden = Boolean()
         self._id_ = Number()
@@ -96,6 +97,14 @@ class Column(object):
     @contact_options.setter
     def contact_options(self, value):
         self._contact_options.load(value)
+
+    @property
+    def description(self):
+        return self._description.value
+
+    @description.setter
+    def description(self, value):
+        self._description.value = value
 
     @property
     def format_(self):

@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2017 Smartsheet.com, Inc.
+# Copyright 2019 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,31 +17,40 @@
 
 from __future__ import absolute_import
 
-from .column import Column
-from .cell_data_item import CellDataItem
+from .enums import WidgetType
 from .shortcut_data_item import ShortcutDataItem
-from .hyperlink import Hyperlink
+from .widget_content import WidgetContent
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
 
-class WidgetContent(object):
-    """Smartsheet WidgetContent data model."""
+class ShortcutWidgetContent(WidgetContent):
+    """Smartsheet ShortcutWidgetContent data model."""
 
-    def __init__(self, widget_type=None, base_obj=None):
-        """Initialize the WidgetContent model."""
+    def __init__(self, props=None, base_obj=None):
+        """Initialize the ShortcutWidgetContent model."""
+        super(ShortcutWidgetContent, self).__init__(WidgetType.SHORTCUT, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj
 
-        self._widget_type = widget_type
+        """Represents the ShortcutWidgetContent object."""
+        self._shortcut_data = TypedList(ShortcutDataItem)
+
+        if props:
+            deserialize(self, props)
 
         self.__initialized = True
 
+    """Represents the ShortcutWidgetContent object."""
     @property
-    def widget_type(self):
-        return self._widget_type
+    def shortcut_data(self):
+        return self._shortcut_data
+
+    @shortcut_data.setter
+    def shortcut_data(self, value):
+        self._shortcut_data.load(value)
 
     def to_dict(self):
         return serialize(self)

@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 
 from .enums import AccessLevel
+from .source import Source
 from .widget import Widget
 from ..types import *
 from ..util import serialize
@@ -44,6 +45,7 @@ class Sight(object):
         self._modified_at = Timestamp()
         self._name = String()
         self._permalink = String()
+        self._source = TypedObject(Source)
         self._widgets = TypedList(Widget)
         self._workspace = TypedObject(Workspace)
 
@@ -137,6 +139,14 @@ class Sight(object):
     @permalink.setter
     def permalink(self, value):
         self._permalink.value = value
+
+    @property
+    def source(self):
+        return self._source.value
+
+    @source.setter
+    def source(self, value):
+        self._source.value = value
 
     @property
     def widgets(self):

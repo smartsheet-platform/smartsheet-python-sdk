@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2017 Smartsheet.com, Inc.
+# Copyright 2019 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,31 +17,53 @@
 
 from __future__ import absolute_import
 
-from .column import Column
-from .cell_data_item import CellDataItem
-from .shortcut_data_item import ShortcutDataItem
 from .hyperlink import Hyperlink
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
 
 
-class WidgetContent(object):
-    """Smartsheet WidgetContent data model."""
+class WidgetHyperlink(Hyperlink):
 
-    def __init__(self, widget_type=None, base_obj=None):
-        """Initialize the WidgetContent model."""
+    """Smartsheet WidgetHyperlink data model."""
+
+    def __init__(self, props=None, base_obj=None):
+        """Initialize the WidgetHyperlink model."""
+        super(WidgetHyperlink, self).__init__(None, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj
 
-        self._widget_type = widget_type
+        self._interaction_type = String()
+        self._folder_id = Number()
+        self._workspace_id = Number()
 
-        self.__initialized = True
+        if props:
+            deserialize(self, props)
 
     @property
-    def widget_type(self):
-        return self._widget_type
+    def interaction_type(self):
+        return self._interaction_type.value
+
+    @interaction_type.setter
+    def interaction_type(self, value):
+        self._interaction_type.value = value
+
+    @property
+    def folder_id(self):
+        return self._folder_id.value
+
+    @folder_id.setter
+    def folder_id(self, value):
+        self._folder_id.value = value
+
+    @property
+    def workspace_id(self):
+        return self._workspace_id.value
+
+    @workspace_id.setter
+    def workspace_id(self, value):
+        self._worksspace_id.value = value
 
     def to_dict(self):
         return serialize(self)
