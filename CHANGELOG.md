@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.77.0] - 2019-08-08
+### Changed
+- enable Coveralls
+
+### Fixed
+- changed long to six.integer_types for 3.x compat
+- removed errant property tag on to_dict
+
+### Other
+- Fix logging to use existing module logger instead of a new logger
+  'util'
+- APISDK-1346 cleaned up include/exclude flags on copy
+  sheet/folder/workspace
+- Significant overhaul of Sights
+
 ## [2.68.3] - 2019-06-14
 ### Changed
 - automated doc updates should be ignored in changelist
