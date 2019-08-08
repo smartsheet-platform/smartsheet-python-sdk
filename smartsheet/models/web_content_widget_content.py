@@ -52,7 +52,6 @@ class WebContentWidgetContent(WidgetContent):
     def url(self, value):
         self._url.value = value
 
-    @property
     def to_dict(self):
         return serialize(self)
 
