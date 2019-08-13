@@ -40,6 +40,7 @@ class SearchResultItem(object):
                 'folder',
                 'workspace',
                 'sight',
+                'summaryField',
                 'template',
                 'discussion',
                 'attachment'],

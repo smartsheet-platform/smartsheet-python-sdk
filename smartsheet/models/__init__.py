@@ -95,6 +95,7 @@ from .sheet_email import SheetEmail
 from .sheet_filter import SheetFilter
 from .sheet_filter_details import SheetFilterDetails
 from .sheet_publish import SheetPublish
+from .sheet_summary import SheetSummary
 from .sheet_user_settings import SheetUserSettings
 from .shortcut_data_item import ShortcutDataItem
 from .sight import Sight
@@ -103,6 +104,7 @@ from .sort_criterion import SortCriterion
 from .sort_specifier import SortSpecifier
 from .source import Source
 from .string_object_value import StringObjectValue
+from .summary_field import SummaryField
 from .template import Template
 from .update_request import UpdateRequest
 from .user import User

@@ -51,6 +51,7 @@ class Search(object):
                 reportNames
                 sheetNames
                 sightNames
+                summaryFields
                 templateNames
                 workspaceNames
 
