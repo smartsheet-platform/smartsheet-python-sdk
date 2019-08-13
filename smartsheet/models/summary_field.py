@@ -17,20 +17,12 @@
 
 from __future__ import absolute_import
 
-from .boolean_object_value import BooleanObjectValue
 from .contact import Contact
-from .contact_object_value import ContactObjectValue
-from .date_object_value import DateObjectValue
-from .duration import Duration
 from .enums.column_type import ColumnType
 from .hyperlink import Hyperlink
 from .image import Image
-from .multi_contact_object_value import MultiContactObjectValue
-from .number_object_value import NumberObjectValue
-from .object_value import *
-from .predecessor_list import PredecessorList
-from .string_object_value import StringObjectValue
 from .user import User
+from ..object_value import assign_to_object_value
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -60,7 +52,7 @@ class SummaryField(object):
         self._locked_for_user = Boolean()
         self._modified_at = Timestamp()
         self._modified_by = TypedObject(User)
-        self._object_value = TypedObject(ObjectValue)
+        self._object_value = None
         self._options = TypedList(str)
         self._symbol = String()
         self._title = String()
@@ -208,40 +200,11 @@ class SummaryField(object):
 
     @property
     def object_value(self):
-        return self._object_value.value
+        return self._object_value
 
     @object_value.setter
     def object_value(self, value):
-        if isinstance(value, ObjectValue):
-            self._object_value = value
-        elif isinstance(value, dict):
-            object_type = value['objectType']
-            if object_type in OBJECT_VALUE['object_type']:
-                enum_object_type = enum_object_value_type(object_type)
-                if enum_object_type == DURATION:
-                    self._object_value = Duration(value, self._base)
-                elif enum_object_type == PREDECESSOR_LIST:
-                    self._object_value = PredecessorList(value, self._base)
-                elif enum_object_type == CONTACT:
-                    self._object_value = ContactObjectValue(value, self._base)
-                elif enum_object_type == DATE or enum_object_type == DATETIME or \
-                        enum_object_type == ABSTRACT_DATETIME:
-                    self._object_value = DateObjectValue(value, enum_object_value_type, self._base)
-                elif enum_object_type == MULTI_CONTACT:
-                    self._object_value = MultiContactObjectValue(value, self._base)
-                else:
-                    self._object_value = None
-            else:
-                raise ValueError(
-                    ("`{0}` is an invalid value for ObjectValue`object_type`,"
-                     " must be one of {1}").format(
-                        object_type, OBJECT_VALUE['object_type']))
-        elif isinstance(value, six.string_types):
-            self._object_value = StringObjectValue(value)
-        elif isinstance(value, (six.integer_types, float)):
-            self._object_value = NumberObjectValue(value)
-        elif isinstance(value, bool):
-            self._object_value = BooleanObjectValue(value)
+        self._object_value = assign_to_object_value(value)
 
     @property
     def options(self):
