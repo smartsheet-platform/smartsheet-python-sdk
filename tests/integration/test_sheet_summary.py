@@ -50,7 +50,7 @@ class TestSheetSummary:
             'id': 123,
             'title': 'today'
         })
-        summary_field_update = smart.Sheets.update_sheet_summary_fields_with_partial_success(8916774927263620,
+        summary_field_update = smart.Sheets.update_sheet_summary_fields_with_partial_success(smart_setup['sheet_b'].id,
                                                                                              [summary_field1, summary_field2],
                                                                                              rename_if_conflict=True)
         assert summary_field_update.message == 'PARTIAL_SUCCESS'
