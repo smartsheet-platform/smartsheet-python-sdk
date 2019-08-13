@@ -270,7 +270,7 @@ class Smartsheet(object):
                 body_dumps = json.dumps(json.loads(body), indent=4, sort_keys=True)
             self._log.debug('Request Body: {\n%s\n}', body_dumps)
         # response
-        content_dumps = response.content.decode('utf8')  # '<< {} content type suppressed >>'.format(response.headers['Content-Type'])
+        content_dumps = '<< {} content type suppressed >>'.format(response.headers['Content-Type'])
         if 'application/json' in response.headers['Content-Type']:
             content = response.content.decode('utf8')
             content_dumps = json.dumps(json.loads(content), indent=4, sort_keys=True)
