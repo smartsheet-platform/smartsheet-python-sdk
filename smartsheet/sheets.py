@@ -1719,7 +1719,7 @@ class Sheets(object):
         """Insert one or more SummaryFields into the specified Sheet
 
         When partial success is enabled, and one or more of the objects in the request fail to be added/updated/deleted,
-        a standard Result object is returned, but with a message of 'PARTIAL_SUCCESS’ (instead of 'SUCCESS’), and a
+        a standard Result object is returned, but with a message of 'PARTIAL_SUCCESS' (instead of 'SUCCESS'), and a
         resultCode of 3. The object will contain a failedItems attribute – an array of BulkItemFailure objects that
         contains an item for each object in the request that failed to be added/updated/deleted
 
