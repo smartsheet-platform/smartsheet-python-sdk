@@ -53,7 +53,7 @@ def assign_to_object_value(value):
                     object_type, OBJECT_VALUE['object_type']))
     elif isinstance(value, six.string_types):
         return StringObjectValue(value)
-    elif isinstance(value, (six.integer_types, float)):
-        return NumberObjectValue(value)
     elif isinstance(value, bool):
         return BooleanObjectValue(value)
+    elif isinstance(value, (six.integer_types, float)):
+        return NumberObjectValue(value)
