@@ -19,9 +19,11 @@ from __future__ import absolute_import
 
 import logging
 import os.path
+import six
 from datetime import datetime
 from .models.column import Column
 from .models.row import Row
+from .models.summary_field import SummaryField
 from .types import TypedList
 from .util import deprecated
 from . import fresh_operation
@@ -477,8 +479,9 @@ class Sheets(object):
             sheet_id (int): Sheet ID
             include (list[str]): A comma-separated list of
                 optional elements to include in the response. Valid list
-                values: attachments, crossSheetReferences, discussions, format, filters,
-                filterDefinitions, ownerInfo, source, rowWriterInfo.
+                values: attachments, columnType, crossSheetReferences, discussions, filters,
+                filterDefinitions, format, objectValue, ownerInfo, rowPermalink,
+                rowWriterInfo (deprecated - use writerInfo), source, summary, writerInfo.
             exclude (str): Response will not include cells
                 that have never contained any data.
             row_ids (list[int]): comma-separated list of Row
@@ -1603,6 +1606,256 @@ class Sheets(object):
         _op['query_params']['primaryColumnIndex'] = primary_column_index
 
         expected = ['Result', 'Sheet']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def get_sheet_summary(self, sheet_id, include=None, exclude=None, ):
+        """Get the SheetSummary.
+
+        Args:
+            sheet_id (int): Sheet ID
+            include (list[str]): A comma-separated list of
+                optional elements to include in the response. Valid list
+                values: format, writerInfo
+            exclude (list[str]): A comma-separated list of
+                optional elements to exclude from the response. Valid list
+                values: displayValue, image, imageAltText
+
+        Returns:
+            SheetSummary
+        """
+        _op = fresh_operation('get_sheet_summary')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/summary'
+        _op['query_params']['include'] = include
+        _op['query_params']['exclude'] = exclude
+
+        expected = 'SheetSummary'
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def get_sheet_summary_fields(self, sheet_id,  include=None, exclude=None,
+                                 page_size=None, page=None, include_all=None):
+        """Get the list of summary fields for this Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            include (list[str]): A comma-separated list of
+                optional elements to include in the response. Valid list
+                values: format, writerInfo
+            exclude (list[str]): A comma-separated list of
+                optional elements to exclude from the response. Valid list
+                values: displayValue, image, imageAltText
+            page_size (int): The maximum number of items to
+                return per page.
+            page (int): Which page to return.
+            include_all (bool): If true, include all results
+                (i.e. do not paginate).
+
+        Returns:
+            IndexResult
+        """
+        _op = fresh_operation('list_summary_fields')
+        _op['method'] = 'GET'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/summary/fields'
+        _op['query_params']['include'] = include
+        _op['query_params']['exclude'] = exclude
+        _op['query_params']['pageSize'] = page_size
+        _op['query_params']['page'] = page
+        _op['query_params']['includeAll'] = include_all
+
+        expected = ['IndexResult', 'SummaryField']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def add_sheet_summary_fields(self, sheet_id, list_of_fields, rename_if_conflict=None):
+        """Insert one or more SummaryFields into the specified Sheet
+
+        If an error occurs, the Error object returned will contain a detail attribute set to an object with the
+        following attributes:
+            - index: the array index of the summary field that caused the error
+                (0 if a single summary field was passed in)
+
+        If any error occurs, the entire request will fail (no summary fields will be updated), and the Error response
+        returned will describe the first problem that was encountered.
+
+        Args:
+            sheet_id (int): Sheet ID
+            list_of_fields (list[SummaryField]): An array of SummaryField objects.
+            rename_if_conflict(Boolean): Normally, this call will fail if it attempts to create a summary field name
+                that already exists. (summary field names must be unique within a sheet.) If this parameter is set to
+                true, then new summary field names will be adjusted to ensure uniqueness.
+
+         Returns:
+             Result
+        """
+        if isinstance(list_of_fields, (dict, SummaryField)):
+            arg_value = list_of_fields
+            list_of_fields = TypedList(SummaryField)
+            list_of_fields.append(arg_value)
+
+        _op = fresh_operation('add_sheet_summary_fields')
+        _op['method'] = 'POST'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/summary/fields'
+        _op['json'] = list_of_fields
+        _op['query_params']['renameIfConflict'] = rename_if_conflict
+
+        expected = ['Result', 'SummaryField']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def add_sheet_summary_fields_with_partial_success(self, sheet_id, list_of_fields, rename_if_conflict=None):
+        """Insert one or more SummaryFields into the specified Sheet
+
+        When partial success is enabled, and one or more of the objects in the request fail to be added/updated/deleted,
+        a standard Result object is returned, but with a message of 'PARTIAL_SUCCESS’ (instead of 'SUCCESS’), and a
+        resultCode of 3. The object will contain a failedItems attribute – an array of BulkItemFailure objects that
+        contains an item for each object in the request that failed to be added/updated/deleted
+
+        Args:
+            sheet_id (int): Sheet ID
+            list_of_fields (list[SummaryField]): An array of SummaryField objects.
+            rename_if_conflict(Boolean): Normally, this call will fail if it attempts to create a summary field name
+                that already exists. (summary field names must be unique within a sheet.) If this parameter is set to
+                true, then new summary field names will be adjusted to ensure uniqueness.
+
+         Returns:
+             Result
+        """
+        if isinstance(list_of_fields, (dict, SummaryField)):
+            arg_value = list_of_fields
+            list_of_fields = TypedList(SummaryField)
+            list_of_fields.append(arg_value)
+
+        _op = fresh_operation('add_sheet_summary_fields')
+        _op['method'] = 'POST'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/summary/fields'
+        _op['json'] = list_of_fields
+        _op['query_params']['renameIfConflict'] = rename_if_conflict
+        _op['query_params']['allowPartialSuccess'] = 'true'
+
+        expected = ['BulkItemResult', 'SummaryField']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def delete_sheet_summary_fields(self, sheet_id, list_of_ids, ignore_summary_fields_not_found=None):
+        """Deletes a list of SummaryFields for the specified Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            list_of_ids (list[int]): list of SummaryField ids
+            ignore_summary_fields_not_found (Boolean): By default, any specified fieldId that isn't found in the sheet
+                summary will cause the entire operation to fail with a "not found" error. If true (default is false),
+                then the operation will not be blocked by fieldIds that are not found. Response will indicate which
+                fields were deleted.
+
+        Returns:
+            Result
+        """
+        if isinstance(list_of_ids, six.integer_types):
+            arg_value = list_of_ids
+            list_of_ids = TypedList(six.integer_types)
+            list_of_ids.append(arg_value)
+
+        _op = fresh_operation('delete_sheet_summary_fields')
+        _op['method'] = 'DELETE'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/summary/fields'
+        _op['query_params']['ids'] = list_of_ids
+        _op['query_params']['ignoreSummaryFieldsNotFound'] = ignore_summary_fields_not_found
+
+        expected = ['Result', 'NumberObjectValue']
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def update_sheet_summary_fields(self, sheet_id, list_of_summary_fields, rename_if_conflict=None):
+        """Updates a list of SummaryFields for the specified Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            list_of_summary_fields (list[SummaryField]): list of SummaryFields
+            rename_if_conflict (Boolean): true to rename if a name conflict occurs
+
+        Returns:
+            Result
+        """
+        if isinstance(list_of_summary_fields, (dict, SummaryField)):
+            arg_value = list_of_summary_fields
+            list_of_summary_fields = TypedList(SummaryField)
+            list_of_summary_fields.append(arg_value)
+
+        _op = fresh_operation('update_sheet_summary_fields')
+        _op['method'] = 'PUT'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/summary/fields'
+        _op['json'] = list_of_summary_fields
+        _op['query_params']['renameIfConflict'] = rename_if_conflict
+
+        expected = ['Result', 'SummaryField']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def update_sheet_summary_fields_with_partial_success(self, sheet_id, list_of_summary_fields,
+                                                         rename_if_conflict=None):
+        """Updates a list of SummaryFields for the specified Sheet.
+
+        Args:
+            sheet_id (int): Sheet ID
+            list_of_summary_fields (list[SummaryField]): list of SummaryFields
+            rename_if_conflict (Boolean): true to rename if a name conflict occurs
+
+        Returns:
+            Result
+        """
+        if isinstance(list_of_summary_fields, (dict, SummaryField)):
+            arg_value = list_of_summary_fields
+            list_of_summary_fields = TypedList(SummaryField)
+            list_of_summary_fields.append(arg_value)
+
+        _op = fresh_operation('update_sheet_summary_fields')
+        _op['method'] = 'PUT'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/summary/fields'
+        _op['json'] = list_of_summary_fields
+        _op['query_params']['renameIfConflict'] = rename_if_conflict
+        _op['query_params']['allowPartialSuccess'] = 'true'
+
+        expected = ['BulkItemResult', 'SummaryField']
+
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def add_sheet_summary_field_image(self, sheet_id, field_id, file, file_type, alt_text=None):
+
+        _data = open(file, 'rb').read()
+
+        _op = fresh_operation('add_sheet_summary_field_image')
+        _op['method'] = 'POST'
+        _op['path'] = '/sheets/' + str(sheet_id) + '/summary/fields/' + str(field_id) + '/images'
+        _op['headers'] = {'content-type': file_type,
+                          'content-disposition': 'attachment; filename="' + file + '"'}
+        _op['query_params']['altText'] = alt_text
+        _op['form_data'] = _data
+
+        expected = ['Result', 'SummaryField']
 
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)

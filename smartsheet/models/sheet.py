@@ -27,6 +27,8 @@ from .discussion import Discussion
 from .enums import AccessLevel, AttachmentType
 from .project_settings import ProjectSettings
 from .row import Row
+from .sheet_summary import SheetSummary
+from .sheet_user_permissions import SheetUserPermissions
 from .sheet_user_settings import SheetUserSettings
 from .source import Source
 from ..types import *
@@ -61,6 +63,7 @@ class Sheet(object):
         self._filters = TypedList(SheetFilter)
         self._from_id = Number()
         self._gantt_enabled = Boolean()
+        self._has_summary_fields = Boolean()
         self._id_ = Number()
         self._modified_at = Timestamp()
         self._name = String()
@@ -73,7 +76,9 @@ class Sheet(object):
         self._rows = TypedList(Row)
         self._show_parent_rows_for_filters = Boolean()
         self._source = TypedObject(Source)
+        self._summary = TypedObject(SheetSummary)
         self._total_row_count = Number()
+        self._user_permissions = TypedObject(SheetUserPermissions)
         self._user_settings = TypedObject(SheetUserSettings)
         self._version = Number()
         self._workspace = TypedObject(Workspace)
@@ -202,6 +207,14 @@ class Sheet(object):
         self._gantt_enabled.value = value
 
     @property
+    def has_summary_fields(self):
+        return self._has_summary_fields.value
+
+    @has_summary_fields.setter
+    def has_summary_fields(self, value):
+        self._has_summary_fields.value = value
+
+    @property
     def id_(self):
         return self._id_.value
 
@@ -298,12 +311,28 @@ class Sheet(object):
         self._source.value = value
 
     @property
+    def summary(self):
+        return self._summary.value
+
+    @summary.setter
+    def summary(self, value):
+        self._summary.value = value
+
+    @property
     def total_row_count(self):
         return self._total_row_count.value
 
     @total_row_count.setter
     def total_row_count(self, value):
         self._total_row_count.value = value
+
+    @property
+    def user_permissions(self):
+        return self._user_permissions.value
+
+    @user_permissions.setter
+    def user_permissions(self, value):
+        self._user_permissions.value = value
 
     @property
     def user_settings(self):
