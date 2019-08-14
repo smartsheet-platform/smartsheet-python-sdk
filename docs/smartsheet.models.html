@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet.models package &mdash; Smartsheet Python SDK 2.77.0 documentation</title>
+  <title>smartsheet.models package &mdash; Smartsheet Python SDK 2.77.1.dev16+g9a7ad27 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                2.77.0
+                2.77.1.dev16+g9a7ad27
               </div>
             
           
@@ -175,6 +175,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sheet_filter">smartsheet.models.sheet_filter module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sheet_filter_details">smartsheet.models.sheet_filter_details module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sheet_publish">smartsheet.models.sheet_publish module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sheet_summary">smartsheet.models.sheet_summary module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sheet_user_permissions">smartsheet.models.sheet_user_permissions module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sheet_user_settings">smartsheet.models.sheet_user_settings module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.shortcut_data_item">smartsheet.models.shortcut_data_item module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.shortcut_widget_content">smartsheet.models.shortcut_widget_content module</a></li>
@@ -184,6 +186,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.sort_specifier">smartsheet.models.sort_specifier module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.source">smartsheet.models.source module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.string_object_value">smartsheet.models.string_object_value module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.summary_field">smartsheet.models.summary_field module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.template">smartsheet.models.template module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.title_rich_text_widget_content">smartsheet.models.title_rich_text_widget_content module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smartsheet.models.update_request">smartsheet.models.update_request module</a></li>
@@ -216,6 +219,7 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.groups">smartsheet.groups module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.home">smartsheet.home module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.images">smartsheet.images module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.object_value">smartsheet.object_value module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.passthrough">smartsheet.passthrough module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.reports">smartsheet.reports module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.search">smartsheet.search module</a></li>
@@ -229,7 +233,6 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.types">smartsheet.types module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.users">smartsheet.users module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.util">smartsheet.util module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.version">smartsheet.version module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.webhooks">smartsheet.webhooks module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet.workspaces">smartsheet.workspaces module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.html#module-smartsheet">Module contents</a></li>
@@ -4145,6 +4148,11 @@
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="smartsheet.models.sheet.Sheet.has_summary_fields">
+<em class="property">property </em><code class="sig-name descname">has_summary_fields</code><a class="headerlink" href="#smartsheet.models.sheet.Sheet.has_summary_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="smartsheet.models.sheet.Sheet.id_">
 <em class="property">property </em><code class="sig-name descname">id_</code><a class="headerlink" href="#smartsheet.models.sheet.Sheet.id_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -4225,6 +4233,11 @@
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="smartsheet.models.sheet.Sheet.summary">
+<em class="property">property </em><code class="sig-name descname">summary</code><a class="headerlink" href="#smartsheet.models.sheet.Sheet.summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="smartsheet.models.sheet.Sheet.to_dict">
 <code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet.Sheet.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -4247,6 +4260,11 @@
 <dl class="method">
 <dt id="smartsheet.models.sheet.Sheet.update_share">
 <code class="sig-name descname">update_share</code><span class="sig-paren">(</span><em class="sig-param">share_id</em>, <em class="sig-param">share_obj</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet.Sheet.update_share" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.sheet.Sheet.user_permissions">
+<em class="property">property </em><code class="sig-name descname">user_permissions</code><a class="headerlink" href="#smartsheet.models.sheet.Sheet.user_permissions" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -4467,6 +4485,56 @@
 <dl class="method">
 <dt id="smartsheet.models.sheet_publish.SheetPublish.to_json">
 <code class="sig-name descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_publish.SheetPublish.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-smartsheet.models.sheet_summary">
+<span id="smartsheet-models-sheet-summary-module"></span><h2>smartsheet.models.sheet_summary module<a class="headerlink" href="#module-smartsheet.models.sheet_summary" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.sheet_summary.SheetSummary">
+<em class="property">class </em><code class="sig-prename descclassname">smartsheet.models.sheet_summary.</code><code class="sig-name descname">SheetSummary</code><span class="sig-paren">(</span><em class="sig-param">props=None</em>, <em class="sig-param">base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_summary.SheetSummary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Smartsheet SheetSummary data model.</p>
+<dl class="method">
+<dt id="smartsheet.models.sheet_summary.SheetSummary.fields">
+<em class="property">property </em><code class="sig-name descname">fields</code><a class="headerlink" href="#smartsheet.models.sheet_summary.SheetSummary.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.sheet_summary.SheetSummary.to_dict">
+<code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_summary.SheetSummary.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.sheet_summary.SheetSummary.to_json">
+<code class="sig-name descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_summary.SheetSummary.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-smartsheet.models.sheet_user_permissions">
+<span id="smartsheet-models-sheet-user-permissions-module"></span><h2>smartsheet.models.sheet_user_permissions module<a class="headerlink" href="#module-smartsheet.models.sheet_user_permissions" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.sheet_user_permissions.SheetUserPermissions">
+<em class="property">class </em><code class="sig-prename descclassname">smartsheet.models.sheet_user_permissions.</code><code class="sig-name descname">SheetUserPermissions</code><span class="sig-paren">(</span><em class="sig-param">props=None</em>, <em class="sig-param">base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_user_permissions.SheetUserPermissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Smartsheet SheetUserPermissions data model.</p>
+<dl class="method">
+<dt id="smartsheet.models.sheet_user_permissions.SheetUserPermissions.summary_permissions">
+<em class="property">property </em><code class="sig-name descname">summary_permissions</code><a class="headerlink" href="#smartsheet.models.sheet_user_permissions.SheetUserPermissions.summary_permissions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.sheet_user_permissions.SheetUserPermissions.to_dict">
+<code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_user_permissions.SheetUserPermissions.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.sheet_user_permissions.SheetUserPermissions.to_json">
+<code class="sig-name descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.sheet_user_permissions.SheetUserPermissions.to_json" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -4792,6 +4860,126 @@
 <dl class="method">
 <dt id="smartsheet.models.string_object_value.StringObjectValue.object_type">
 <em class="property">property </em><code class="sig-name descname">object_type</code><a class="headerlink" href="#smartsheet.models.string_object_value.StringObjectValue.object_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-smartsheet.models.summary_field">
+<span id="smartsheet-models-summary-field-module"></span><h2>smartsheet.models.summary_field module<a class="headerlink" href="#module-smartsheet.models.summary_field" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="smartsheet.models.summary_field.SummaryField">
+<em class="property">class </em><code class="sig-prename descclassname">smartsheet.models.summary_field.</code><code class="sig-name descname">SummaryField</code><span class="sig-paren">(</span><em class="sig-param">props=None</em>, <em class="sig-param">base_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Smartsheet SummaryField data model.</p>
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.contact_options">
+<em class="property">property </em><code class="sig-name descname">contact_options</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.contact_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.created_at">
+<em class="property">property </em><code class="sig-name descname">created_at</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.created_by">
+<em class="property">property </em><code class="sig-name descname">created_by</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.created_by" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.display_value">
+<em class="property">property </em><code class="sig-name descname">display_value</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.display_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.format_">
+<em class="property">property </em><code class="sig-name descname">format_</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.format_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.formula">
+<em class="property">property </em><code class="sig-name descname">formula</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.formula" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.hyperlink">
+<em class="property">property </em><code class="sig-name descname">hyperlink</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.hyperlink" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.id_">
+<em class="property">property </em><code class="sig-name descname">id_</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.id_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.image">
+<em class="property">property </em><code class="sig-name descname">image</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.index">
+<em class="property">property </em><code class="sig-name descname">index</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.locked">
+<em class="property">property </em><code class="sig-name descname">locked</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.locked" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.locked_for_user">
+<em class="property">property </em><code class="sig-name descname">locked_for_user</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.locked_for_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.modified_at">
+<em class="property">property </em><code class="sig-name descname">modified_at</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.modified_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.modified_by">
+<em class="property">property </em><code class="sig-name descname">modified_by</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.modified_by" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.object_value">
+<em class="property">property </em><code class="sig-name descname">object_value</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.object_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.options">
+<em class="property">property </em><code class="sig-name descname">options</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.symbol">
+<em class="property">property </em><code class="sig-name descname">symbol</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.symbol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.title">
+<em class="property">property </em><code class="sig-name descname">title</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.title" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.to_dict">
+<code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.to_json">
+<code class="sig-name descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.to_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.type_">
+<em class="property">property </em><code class="sig-name descname">type_</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.type_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.models.summary_field.SummaryField.validation">
+<em class="property">property </em><code class="sig-name descname">validation</code><a class="headerlink" href="#smartsheet.models.summary_field.SummaryField.validation" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

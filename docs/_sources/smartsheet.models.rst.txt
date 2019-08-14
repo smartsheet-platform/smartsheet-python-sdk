@@ -691,6 +691,22 @@ smartsheet.models.sheet\_publish module
    :undoc-members:
    :show-inheritance:
 
+smartsheet.models.sheet\_summary module
+---------------------------------------
+
+.. automodule:: smartsheet.models.sheet_summary
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+smartsheet.models.sheet\_user\_permissions module
+-------------------------------------------------
+
+.. automodule:: smartsheet.models.sheet_user_permissions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smartsheet.models.sheet\_user\_settings module
 ----------------------------------------------
 
@@ -759,6 +775,14 @@ smartsheet.models.string\_object\_value module
 ----------------------------------------------
 
 .. automodule:: smartsheet.models.string_object_value
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+smartsheet.models.summary\_field module
+---------------------------------------
+
+.. automodule:: smartsheet.models.summary_field
    :members:
    :undoc-members:
    :show-inheritance:

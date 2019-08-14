@@ -99,6 +99,14 @@ smartsheet.images module
    :undoc-members:
    :show-inheritance:
 
+smartsheet.object\_value module
+-------------------------------
+
+.. automodule:: smartsheet.object_value
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smartsheet.passthrough module
 -----------------------------
 
@@ -199,14 +207,6 @@ smartsheet.util module
 ----------------------
 
 .. automodule:: smartsheet.util
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-smartsheet.version module
--------------------------
-
-.. automodule:: smartsheet.version
    :members:
    :undoc-members:
    :show-inheritance:

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet package &mdash; Smartsheet Python SDK 2.77.0 documentation</title>
+  <title>smartsheet package &mdash; Smartsheet Python SDK 2.77.1.dev16+g9a7ad27 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                2.77.0
+                2.77.1.dev16+g9a7ad27
               </div>
             
           
@@ -102,6 +102,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.groups">smartsheet.groups module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.home">smartsheet.home module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.images">smartsheet.images module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.object_value">smartsheet.object_value module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.passthrough">smartsheet.passthrough module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.reports">smartsheet.reports module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.search">smartsheet.search module</a></li>
@@ -115,7 +116,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.types">smartsheet.types module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.users">smartsheet.users module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.util">smartsheet.util module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.version">smartsheet.version module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.webhooks">smartsheet.webhooks module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.workspaces">smartsheet.workspaces module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet">Module contents</a></li>
@@ -318,6 +318,8 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sheet_filter">smartsheet.models.sheet_filter module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sheet_filter_details">smartsheet.models.sheet_filter_details module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sheet_publish">smartsheet.models.sheet_publish module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sheet_summary">smartsheet.models.sheet_summary module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sheet_user_permissions">smartsheet.models.sheet_user_permissions module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sheet_user_settings">smartsheet.models.sheet_user_settings module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.shortcut_data_item">smartsheet.models.shortcut_data_item module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.shortcut_widget_content">smartsheet.models.shortcut_widget_content module</a></li>
@@ -327,6 +329,7 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.sort_specifier">smartsheet.models.sort_specifier module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.source">smartsheet.models.source module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.string_object_value">smartsheet.models.string_object_value module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.summary_field">smartsheet.models.summary_field module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.template">smartsheet.models.template module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.title_rich_text_widget_content">smartsheet.models.title_rich_text_widget_content module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.update_request">smartsheet.models.update_request module</a></li>
@@ -1710,6 +1713,14 @@ or more ImageURL objects.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-smartsheet.object_value">
+<span id="smartsheet-object-value-module"></span><h2>smartsheet.object_value module<a class="headerlink" href="#module-smartsheet.object_value" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="smartsheet.object_value.assign_to_object_value">
+<code class="sig-prename descclassname">smartsheet.object_value.</code><code class="sig-name descname">assign_to_object_value</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.object_value.assign_to_object_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
 <div class="section" id="module-smartsheet.passthrough">
 <span id="smartsheet-passthrough-module"></span><h2>smartsheet.passthrough module<a class="headerlink" href="#module-smartsheet.passthrough" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -2062,6 +2073,7 @@ profileFields
 reportNames
 sheetNames
 sightNames
+summaryFields
 templateNames
 workspaceNames</p></li>
 </ul>
@@ -2224,6 +2236,62 @@ Each Cell object may contain the following attributes:</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Result</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.sheets.Sheets.add_sheet_summary_field_image">
+<code class="sig-name descname">add_sheet_summary_field_image</code><span class="sig-paren">(</span><em class="sig-param">sheet_id</em>, <em class="sig-param">field_id</em>, <em class="sig-param">file</em>, <em class="sig-param">file_type</em>, <em class="sig-param">alt_text=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.add_sheet_summary_field_image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.sheets.Sheets.add_sheet_summary_fields">
+<code class="sig-name descname">add_sheet_summary_fields</code><span class="sig-paren">(</span><em class="sig-param">sheet_id</em>, <em class="sig-param">list_of_fields</em>, <em class="sig-param">rename_if_conflict=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.add_sheet_summary_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert one or more SummaryFields into the specified Sheet</p>
+<p>If an error occurs, the Error object returned will contain a detail attribute set to an object with the
+following attributes:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>index: the array index of the summary field that caused the error</dt><dd><p>(0 if a single summary field was passed in)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>If any error occurs, the entire request will fail (no summary fields will be updated), and the Error response
+returned will describe the first problem that was encountered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sheet_id</strong> (<em>int</em>) – Sheet ID</p></li>
+<li><p><strong>list_of_fields</strong> (<em>list</em><em>[</em><a class="reference internal" href="smartsheet.models.html#smartsheet.models.summary_field.SummaryField" title="smartsheet.models.summary_field.SummaryField"><em>SummaryField</em></a><em>]</em>) – An array of SummaryField objects.</p></li>
+<li><p><strong>rename_if_conflict</strong> – Normally, this call will fail if it attempts to create a summary field name
+that already exists. (summary field names must be unique within a sheet.) If this parameter is set to
+true, then new summary field names will be adjusted to ensure uniqueness.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.sheets.Sheets.add_sheet_summary_fields_with_partial_success">
+<code class="sig-name descname">add_sheet_summary_fields_with_partial_success</code><span class="sig-paren">(</span><em class="sig-param">sheet_id</em>, <em class="sig-param">list_of_fields</em>, <em class="sig-param">rename_if_conflict=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.add_sheet_summary_fields_with_partial_success" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert one or more SummaryFields into the specified Sheet</p>
+<p>When partial success is enabled, and one or more of the objects in the request fail to be added/updated/deleted,
+a standard Result object is returned, but with a message of ‘PARTIAL_SUCCESS’ (instead of ‘SUCCESS’), and a
+resultCode of 3. The object will contain a failedItems attribute - an array of BulkItemFailure objects that
+contains an item for each object in the request that failed to be added/updated/deleted</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sheet_id</strong> (<em>int</em>) – Sheet ID</p></li>
+<li><p><strong>list_of_fields</strong> (<em>list</em><em>[</em><a class="reference internal" href="smartsheet.models.html#smartsheet.models.summary_field.SummaryField" title="smartsheet.models.summary_field.SummaryField"><em>SummaryField</em></a><em>]</em>) – An array of SummaryField objects.</p></li>
+<li><p><strong>rename_if_conflict</strong> – Normally, this call will fail if it attempts to create a summary field name
+that already exists. (summary field names must be unique within a sheet.) If this parameter is set to
+true, then new summary field names will be adjusted to ensure uniqueness.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -2428,6 +2496,27 @@ will be altered).</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>sheet_id</strong> (<em>int</em>) – Sheet ID</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Result</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.sheets.Sheets.delete_sheet_summary_fields">
+<code class="sig-name descname">delete_sheet_summary_fields</code><span class="sig-paren">(</span><em class="sig-param">sheet_id</em>, <em class="sig-param">list_of_ids</em>, <em class="sig-param">ignore_summary_fields_not_found=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.delete_sheet_summary_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a list of SummaryFields for the specified Sheet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sheet_id</strong> (<em>int</em>) – Sheet ID</p></li>
+<li><p><strong>list_of_ids</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – list of SummaryField ids</p></li>
+<li><p><strong>ignore_summary_fields_not_found</strong> (<a class="reference internal" href="#smartsheet.types.Boolean" title="smartsheet.types.Boolean"><em>Boolean</em></a>) – By default, any specified fieldId that isn’t found in the sheet
+summary will cause the entire operation to fail with a “not found” error. If true (default is false),
+then the operation will not be blocked by fieldIds that are not found. Response will indicate which
+fields were deleted.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Result</p>
@@ -2646,8 +2735,9 @@ objects.</p>
 <li><p><strong>sheet_id</strong> (<em>int</em>) – Sheet ID</p></li>
 <li><p><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – A comma-separated list of
 optional elements to include in the response. Valid list
-values: attachments, crossSheetReferences, discussions, format, filters,
-filterDefinitions, ownerInfo, source, rowWriterInfo.</p></li>
+values: attachments, columnType, crossSheetReferences, discussions, filters,
+filterDefinitions, format, objectValue, ownerInfo, rowPermalink,
+rowWriterInfo (deprecated - use writerInfo), source, summary, writerInfo.</p></li>
 <li><p><strong>exclude</strong> (<em>str</em>) – Response will not include cells
 that have never contained any data.</p></li>
 <li><p><strong>row_ids</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – comma-separated list of Row
@@ -2742,6 +2832,55 @@ instead of name suggested by Content-Disposition.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>arguments for get_sheet</strong><strong>(</strong><strong>)</strong> (<em>See</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.sheets.Sheets.get_sheet_summary">
+<code class="sig-name descname">get_sheet_summary</code><span class="sig-paren">(</span><em class="sig-param">sheet_id</em>, <em class="sig-param">include=None</em>, <em class="sig-param">exclude=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.get_sheet_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the SheetSummary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sheet_id</strong> (<em>int</em>) – Sheet ID</p></li>
+<li><p><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – A comma-separated list of
+optional elements to include in the response. Valid list
+values: format, writerInfo</p></li>
+<li><p><strong>exclude</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – A comma-separated list of
+optional elements to exclude from the response. Valid list
+values: displayValue, image, imageAltText</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>SheetSummary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.sheets.Sheets.get_sheet_summary_fields">
+<code class="sig-name descname">get_sheet_summary_fields</code><span class="sig-paren">(</span><em class="sig-param">sheet_id</em>, <em class="sig-param">include=None</em>, <em class="sig-param">exclude=None</em>, <em class="sig-param">page_size=None</em>, <em class="sig-param">page=None</em>, <em class="sig-param">include_all=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.get_sheet_summary_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of summary fields for this Sheet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sheet_id</strong> (<em>int</em>) – Sheet ID</p></li>
+<li><p><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – A comma-separated list of
+optional elements to include in the response. Valid list
+values: format, writerInfo</p></li>
+<li><p><strong>exclude</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – A comma-separated list of
+optional elements to exclude from the response. Valid list
+values: displayValue, image, imageAltText</p></li>
+<li><p><strong>page_size</strong> (<em>int</em>) – The maximum number of items to
+return per page.</p></li>
+<li><p><strong>page</strong> (<em>int</em>) – Which page to return.</p></li>
+<li><p><strong>include_all</strong> (<em>bool</em>) – If true, include all results
+(i.e. do not paginate).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>IndexResult</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3273,6 +3412,42 @@ or more Row objects.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sheet_id</strong> (<em>int</em>) – Sheet ID</p></li>
 <li><p><strong>sheet_obj</strong> (<a class="reference internal" href="smartsheet.models.html#smartsheet.models.sheet.Sheet" title="smartsheet.models.sheet.Sheet"><em>Sheet</em></a>) – Sheet object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Result</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.sheets.Sheets.update_sheet_summary_fields">
+<code class="sig-name descname">update_sheet_summary_fields</code><span class="sig-paren">(</span><em class="sig-param">sheet_id</em>, <em class="sig-param">list_of_summary_fields</em>, <em class="sig-param">rename_if_conflict=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.update_sheet_summary_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates a list of SummaryFields for the specified Sheet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sheet_id</strong> (<em>int</em>) – Sheet ID</p></li>
+<li><p><strong>list_of_summary_fields</strong> (<em>list</em><em>[</em><a class="reference internal" href="smartsheet.models.html#smartsheet.models.summary_field.SummaryField" title="smartsheet.models.summary_field.SummaryField"><em>SummaryField</em></a><em>]</em>) – list of SummaryFields</p></li>
+<li><p><strong>rename_if_conflict</strong> (<a class="reference internal" href="#smartsheet.types.Boolean" title="smartsheet.types.Boolean"><em>Boolean</em></a>) – true to rename if a name conflict occurs</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Result</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="smartsheet.sheets.Sheets.update_sheet_summary_fields_with_partial_success">
+<code class="sig-name descname">update_sheet_summary_fields_with_partial_success</code><span class="sig-paren">(</span><em class="sig-param">sheet_id</em>, <em class="sig-param">list_of_summary_fields</em>, <em class="sig-param">rename_if_conflict=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.update_sheet_summary_fields_with_partial_success" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates a list of SummaryFields for the specified Sheet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sheet_id</strong> (<em>int</em>) – Sheet ID</p></li>
+<li><p><strong>list_of_summary_fields</strong> (<em>list</em><em>[</em><a class="reference internal" href="smartsheet.models.html#smartsheet.models.summary_field.SummaryField" title="smartsheet.models.summary_field.SummaryField"><em>SummaryField</em></a><em>]</em>) – list of SummaryFields</p></li>
+<li><p><strong>rename_if_conflict</strong> (<a class="reference internal" href="#smartsheet.types.Boolean" title="smartsheet.types.Boolean"><em>Boolean</em></a>) – true to rename if a name conflict occurs</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -4225,9 +4400,6 @@ when the function is used.</p>
 <code class="sig-prename descclassname">smartsheet.util.</code><code class="sig-name descname">serialize</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.util.serialize" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</div>
-<div class="section" id="module-smartsheet.version">
-<span id="smartsheet-version-module"></span><h2>smartsheet.version module<a class="headerlink" href="#module-smartsheet.version" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-smartsheet.webhooks">
 <span id="smartsheet-webhooks-module"></span><h2>smartsheet.webhooks module<a class="headerlink" href="#module-smartsheet.webhooks" title="Permalink to this headline">¶</a></h2>
