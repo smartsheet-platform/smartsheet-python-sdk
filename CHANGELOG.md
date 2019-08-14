@@ -10,9 +10,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - add support for sheet summary
 
-### Other
-- revert build environment to trusty for the time being
-
 ## [2.77.0] - 2019-08-08
 ### Added
 - column descriptions
