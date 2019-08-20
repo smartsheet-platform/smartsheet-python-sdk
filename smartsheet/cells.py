@@ -38,9 +38,8 @@ class Cells(object):
             sheet_id (int): Sheet ID
             row_id (int): Row ID
             column_id (int): Column ID
-            include (str): When specified with a value of
-                \"columnType\", response will include the columnType
-                attribute for each Cell.
+            include (str): Valid includes for CellHistory are:
+                columnType, format, objectValue
             page_size (int): The maximum number of items to
                 return per page.
             page (int): Which page to return.
