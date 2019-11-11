@@ -28,3 +28,4 @@ class ColumnType(Enum):
     PREDECESSOR = 8
     ABSTRACT_DATETIME = 9
     MULTI_CONTACT_LIST = 10
+    MULTI_PICKLIST = 11
