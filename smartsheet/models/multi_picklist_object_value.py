@@ -17,7 +17,6 @@
 
 from __future__ import absolute_import
 
-from .contact_object_value import ContactObjectValue
 from .object_value import *
 from ..types import *
 from ..util import deserialize
