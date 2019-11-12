@@ -22,7 +22,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Other
 - Make INFO+ level logging return either strings or well-formed json for
   log parsing
-- Update CHANGELOG.md
 
 ## [2.83.0] - 2019-08-14
 ### Added
