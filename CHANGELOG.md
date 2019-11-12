@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.86.0] - 2019-11-12
+### Added
+- type and object definitions to support multi-picklist columns
+
+### Changed
+- additions to CellDataItem widget contents to support METRIC widgets
+  containing sheet summary fields
+- dashboards widget model to support widgets that are in an error state
+- get_columns needs level support
+- update doc to indicate format and objectValue are valid for cell
+  history includes
+- continue to support level 0 widget type names
+
+### Other
+- Make INFO+ level logging return either strings or well-formed json for
+  log parsing
+- Update CHANGELOG.md
+
 ## [2.83.0] - 2019-08-14
 ### Added
 - add support for sheet summary
