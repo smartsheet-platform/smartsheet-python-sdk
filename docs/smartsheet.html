@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet package &mdash; Smartsheet Python SDK 2.83.0 documentation</title>
+  <title>smartsheet package &mdash; Smartsheet Python SDK 2.83.1.dev16+g71ed4a4 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                2.83.0
+                2.83.1.dev16+g71ed4a4
               </div>
             
           
@@ -116,7 +116,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.types">smartsheet.types module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.users">smartsheet.users module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.util">smartsheet.util module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.version">smartsheet.version module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.webhooks">smartsheet.webhooks module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.workspaces">smartsheet.workspaces module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet">Module contents</a></li>
@@ -287,6 +286,7 @@
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.index_result">smartsheet.models.index_result module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.json_object">smartsheet.models.json_object module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.multi_contact_object_value">smartsheet.models.multi_contact_object_value module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.multi_picklist_object_value">smartsheet.models.multi_picklist_object_value module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.multi_row_email">smartsheet.models.multi_row_email module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.number_object_value">smartsheet.models.number_object_value module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smartsheet.models.html#module-smartsheet.models.o_auth_error">smartsheet.models.o_auth_error module</a></li>
@@ -735,9 +735,8 @@ return per page.</p></li>
 <li><p><strong>sheet_id</strong> (<em>int</em>) – Sheet ID</p></li>
 <li><p><strong>row_id</strong> (<em>int</em>) – Row ID</p></li>
 <li><p><strong>column_id</strong> (<em>int</em>) – Column ID</p></li>
-<li><p><strong>include</strong> (<em>str</em>) – When specified with a value of
-“columnType”, response will include the columnType
-attribute for each Cell.</p></li>
+<li><p><strong>include</strong> (<em>str</em>) – Valid includes for CellHistory are:
+columnType, format, objectValue</p></li>
 <li><p><strong>page_size</strong> (<em>int</em>) – The maximum number of items to
 return per page.</p></li>
 <li><p><strong>page</strong> (<em>int</em>) – Which page to return.</p></li>
@@ -2595,7 +2594,7 @@ fields were deleted.</p></li>
 
 <dl class="method">
 <dt id="smartsheet.sheets.Sheets.get_columns">
-<code class="sig-name descname">get_columns</code><span class="sig-paren">(</span><em class="sig-param">sheet_id</em>, <em class="sig-param">include=None</em>, <em class="sig-param">page_size=None</em>, <em class="sig-param">page=None</em>, <em class="sig-param">include_all=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.get_columns" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_columns</code><span class="sig-paren">(</span><em class="sig-param">sheet_id</em>, <em class="sig-param">include=None</em>, <em class="sig-param">page_size=None</em>, <em class="sig-param">page=None</em>, <em class="sig-param">include_all=None</em>, <em class="sig-param">level=None</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.get_columns" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all columns belonging to the specified Sheet.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -2607,6 +2606,7 @@ return per page.</p></li>
 <li><p><strong>page</strong> (<em>int</em>) – Which page to return.</p></li>
 <li><p><strong>include_all</strong> (<em>bool</em>) – If true, include all results
 (i.e. do not paginate).</p></li>
+<li><p><strong>level</strong> (<em>int</em>) – compatibility level</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -4401,9 +4401,6 @@ when the function is used.</p>
 <code class="sig-prename descclassname">smartsheet.util.</code><code class="sig-name descname">serialize</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.util.serialize" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</div>
-<div class="section" id="module-smartsheet.version">
-<span id="smartsheet-version-module"></span><h2>smartsheet.version module<a class="headerlink" href="#module-smartsheet.version" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-smartsheet.webhooks">
 <span id="smartsheet-webhooks-module"></span><h2>smartsheet.webhooks module<a class="headerlink" href="#module-smartsheet.webhooks" title="Permalink to this headline">¶</a></h2>
