@@ -366,7 +366,7 @@ class Sheets(object):
         return response
 
     def get_columns(self, sheet_id, include=None, page_size=None, page=None,
-                    include_all=None):
+                    include_all=None, level=None):
         """Get all columns belonging to the specified Sheet.
 
         Args:
@@ -377,6 +377,7 @@ class Sheets(object):
             page (int): Which page to return.
             include_all (bool): If true, include all results
                 (i.e. do not paginate).
+            level (int): compatibility level
 
         Returns:
             IndexResult
@@ -388,6 +389,7 @@ class Sheets(object):
         _op['query_params']['pageSize'] = page_size
         _op['query_params']['page'] = page
         _op['query_params']['includeAll'] = include_all
+        _op['query_params']['level'] = level
 
         expected = ['IndexResult', 'Column']
 

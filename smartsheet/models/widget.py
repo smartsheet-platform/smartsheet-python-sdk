@@ -20,6 +20,7 @@ from __future__ import absolute_import
 from .enums.widget_type import WidgetType
 from .cell_link_widget_content import CellLinkWidgetContent
 from .chart_widget_content import ChartWidgetContent
+from .error_result import ErrorResult
 from .image_widget_content import ImageWidgetContent
 from .report_widget_content import ReportWidgetContent
 from .shortcut_widget_content import ShortcutWidgetContent
@@ -41,6 +42,7 @@ class Widget(object):
             self._base = base_obj
 
         self._contents = None
+        self._error = TypedObject(ErrorResult)
         self._height = Number()
         self._id_ = Number()
         self._show_title = Boolean()
@@ -103,6 +105,14 @@ class Widget(object):
                 self._contents = WebContentWidgetContent(value, self._base)
             else:
                 self._contents = None
+
+    @property
+    def error(self):
+        return self._error.value
+
+    @error.setter
+    def error(self, value):
+        self._error.value = value
 
     @property
     def height(self):

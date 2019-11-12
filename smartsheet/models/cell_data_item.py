@@ -22,6 +22,8 @@ from .object_value import ObjectValue
 from .string_object_value import StringObjectValue
 from .boolean_object_value import BooleanObjectValue
 from .number_object_value import NumberObjectValue
+from .summary_field import SummaryField
+from ..object_value import assign_to_object_value
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -43,6 +45,7 @@ class CellDataItem(object):
         self._label_format = String()
         self._object_value = None
         self._order = Number()
+        self._profile_field = TypedObject(SummaryField)
         self._row_id = Number()
         self._sheet_id = Number()
         self._value_format = String()
@@ -98,14 +101,7 @@ class CellDataItem(object):
 
     @object_value.setter
     def object_value(self, value):
-        if isinstance(value, ObjectValue):
-            self._object_value = value
-        elif isinstance(value, six.string_types):
-            self._object_value = StringObjectValue(value)
-        elif isinstance(value, (six.integer_types, float)):
-            self._object_value = NumberObjectValue(value)
-        elif isinstance(value, bool):
-            self._object_value = BooleanObjectValue(value)
+        self._object_value = assign_to_object_value(value)
 
     @property
     def order(self):
@@ -114,6 +110,14 @@ class CellDataItem(object):
     @order.setter
     def order(self, value):
         self._order.value = value
+
+    @property
+    def profile_field(self):
+        return self._profile_field.value
+
+    @profile_field.setter
+    def profile_field(self, value):
+        self._profile_field.value = value
 
     @property
     def row_id(self):

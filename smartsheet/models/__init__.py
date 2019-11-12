@@ -67,6 +67,8 @@ from .image_url import ImageUrl
 from .image_url_map import ImageUrlMap
 from .index_result import IndexResult
 from .json_object import JSONObject
+from .multi_contact_object_value import MultiContactObjectValue
+from .multi_picklist_object_value import MultiPicklistObjectValue
 from .multi_row_email import MultiRowEmail
 from .number_object_value import NumberObjectValue
 from .o_auth_error import OAuthError
