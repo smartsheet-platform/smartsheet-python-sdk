@@ -260,29 +260,29 @@ class Smartsheet(object):
             response (Response):
         """
         # request
-        self._log.info('Request: {\ncommand: %s %s\n}', response.request.method, response.request.url)
+        self._log.info('{"request": {"command": "%s %s"}}', response.request.method, response.request.url)
         if response.request.body is not None:
-            body_dumps = '<< {} content type suppressed >>'.format(response.request.headers['Content-Type'])
+            body_dumps = '"<< {} content type suppressed >>"'.format(response.request.headers['Content-Type'])
             if is_multipart(response.request):
-                body_dumps = '<< multipart body suppressed >>'
+                body_dumps = '"<< multipart body suppressed >>"'
             elif 'application/json' in response.request.headers['Content-Type']:
                 body = response.request.body.decode('utf8')
-                body_dumps = json.dumps(json.loads(body), indent=4, sort_keys=True)
-            self._log.debug('Request Body: {\n%s\n}', body_dumps)
+                body_dumps = json.dumps(json.loads(body), sort_keys=True)
+            self._log.debug('{"requestBody": %s}', body_dumps)
         # response
-        content_dumps = '<< {} content type suppressed >>'.format(response.headers['Content-Type'])
+        content_dumps = '"<< {} content type suppressed >>"'.format(response.headers['Content-Type'])
         if 'application/json' in response.headers['Content-Type']:
             content = response.content.decode('utf8')
-            content_dumps = json.dumps(json.loads(content), indent=4, sort_keys=True)
+            content_dumps = json.dumps(json.loads(content), sort_keys=True)
         if 200 <= response.status_code <= 299:
             if operation['dl_path'] is None:
-                self._log.debug('Response: {\nstatus: %d %s\ncontent: {\n%s\n}',
+                self._log.debug('{"response": {"statusCode": %d, "reason": "%s", "content": %s}}',
                                 response.status_code, response.reason, content_dumps)
             else:
-                self._log.debug('Response: {\nstatus: %d %s',
+                self._log.debug('{"response": {"statusCode": %d, "reason": "%s"}}',
                                 response.status_code, response.reason)
         else:
-            self._log.error('Response: {\nstatus: %d %s\ncontent: {\n%s\n}',
+            self._log.error('{"response": {"statusCode": %d, "reason": "%s", "content": %s}}',
                             response.status_code, response.reason, content_dumps)
 
     def _request(self, prepped_request, operation):
