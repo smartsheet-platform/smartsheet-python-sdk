@@ -1213,7 +1213,7 @@ class Sheets(object):
         Returns:
             Result
         """
-        _op = fresh_operation('create_update_request')
+        _op = fresh_operation('update_update_request')
         _op['method'] = 'PUT'
         _op['path'] = '/sheets/' + str(sheet_id) + '/updaterequests/' + str(update_request_id)
         _op['json'] = update_request_obj

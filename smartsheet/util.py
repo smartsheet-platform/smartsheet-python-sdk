@@ -130,7 +130,7 @@ def deserialize(obj, props):
                 setattr(obj, key_, value)
 
             else:
-                _log.info('object \'%s\' is missing property \'%s\'', obj.__class__.__name__, key_)
+                _log.debug('object \'%s\' is missing property \'%s\'', obj.__class__.__name__, key_)
 
 
 def dump_message_headers(request):
