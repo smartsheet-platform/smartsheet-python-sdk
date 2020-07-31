@@ -39,18 +39,6 @@ class ProfileImage(object):
         if props:
             deserialize(self, props)
 
-    def __getattr__(self, key):
-        if key == 'id':
-            return self.id_
-        else:
-            raise AttributeError(key)
-
-    def __setattr__(self, key, value):
-        if key == 'id':
-            self.id_ = value
-        else:
-            super(ProfileImage, self).__setattr__(key, value)
-
     @property
     def height(self):
         return self._height.value
