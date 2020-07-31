@@ -27,9 +27,9 @@ class WebhookSubscope(object):
 
     def __init__(self, column_ids=None):
         """Initialize the Webhook Subscope model."""
-        self._column_ids = []
+        self._column_ids = TypedList(six.integer_types)
         if column_ids is not None:
-            self._column_ids = column_ids
+            self._column_ids.load(column_ids)
 
     @property
     def column_ids(self):
@@ -37,7 +37,7 @@ class WebhookSubscope(object):
 
     @column_ids.setter
     def column_ids(self, value):
-        self._column_ids = value
+        self._column_ids.load(value)
 
     def to_dict(self):
         return serialize(self)
