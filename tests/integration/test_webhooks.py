@@ -15,7 +15,7 @@ class TestWebhooks:
         webhook.scope_object_id = smart_setup['sheet'].id
         webhook.events.append('*.*')
         webhook.version = 1
-        webhook.subscope = smart.models.WebhookSubscope(column_ids=[smart_setup['sheet'].columns[0].id])
+        webhook.subscope = smart.models.WebhookSubscope({'column_ids': [smart_setup['sheet'].columns[0].id]})
 
         action = smart.Webhooks.create_webhook(webhook)
         assert action.message == 'SUCCESS'
