@@ -68,8 +68,6 @@ class Webhook(object):
     def __getattr__(self, key):
         if key == 'id':
             return self.id_
-        elif key == 'subscope':
-            return None
         else:
             raise AttributeError(key)
 
