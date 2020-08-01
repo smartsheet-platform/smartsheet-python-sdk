@@ -11,12 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - #144 bumped missing property message to debug.
 - Model Profile Image as different object from Image
 
-### Other
-- add: Webhooks for Columns
-- Update CHANGELOG.md
-- Make INFO+ level logging return either strings or well-formed json for
-  log parsing
-- Update CHANGELOG.md
+### Added
+- Webhooks for Columns
 
 ## [2.86.0] - 2019-11-12
 ### Added
