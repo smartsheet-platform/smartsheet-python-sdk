@@ -56,7 +56,7 @@ class Webhook(object):
         self._stats = TypedObject(WebhookStats)
         self._status = String()
         self._version = Number()
-        self._subscope = WebhookSubscope()
+        self._subscope = TypedObject(WebhookSubscope)
 
         if props:
             deserialize(self, props)
@@ -196,6 +196,14 @@ class Webhook(object):
     @status.setter
     def status(self, value):
         self._status.value = value
+
+    @property
+    def subscope(self):
+        return self._subscope.value
+
+    @subscope.setter
+    def subscope(self, value):
+        self._subscope.value = value
 
     @property
     def version(self):
