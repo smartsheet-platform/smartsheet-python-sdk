@@ -215,6 +215,14 @@ class Webhook(object):
     def version(self, value):
         self._version.value = value
 
+    @property
+    def subscope(self):
+        return self._subscope.value
+
+    @subscope.setter
+    def subscope(self, value):
+        self._subscope.value = value
+
     def to_dict(self):
         return serialize(self)
 
