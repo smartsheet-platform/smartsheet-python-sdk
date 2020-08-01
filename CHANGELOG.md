@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.101.0] - 2020-08-01
+### Changed
+- #144 bumped missing property message to debug.
+- Model Profile Image as different object from Image
+
+### Added
+- Webhooks for Columns
+
 ## [2.86.0] - 2019-11-12
 ### Added
 - type and object definitions to support multi-picklist columns

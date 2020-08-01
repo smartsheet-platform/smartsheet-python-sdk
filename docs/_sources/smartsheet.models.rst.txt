@@ -5,6 +5,7 @@ Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
    smartsheet.models.enums
 
@@ -499,6 +500,14 @@ smartsheet.models.primitive\_object\_value module
    :undoc-members:
    :show-inheritance:
 
+smartsheet.models.profile\_image module
+---------------------------------------
+
+.. automodule:: smartsheet.models.profile_image
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smartsheet.models.project\_settings module
 ------------------------------------------
 
@@ -879,6 +888,14 @@ smartsheet.models.webhook\_stats module
 ---------------------------------------
 
 .. automodule:: smartsheet.models.webhook_stats
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+smartsheet.models.webhook\_subscope module
+------------------------------------------
+
+.. automodule:: smartsheet.models.webhook_subscope
    :members:
    :undoc-members:
    :show-inheritance:

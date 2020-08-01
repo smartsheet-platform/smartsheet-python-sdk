@@ -19,17 +19,19 @@ from __future__ import absolute_import
 
 from ..types import *
 from ..util import serialize
+from ..util import deserialize
 
 
 class WebhookSubscope(object):
 
     """Represents the webhook subscope object."""
 
-    def __init__(self, column_ids=None):
+    def __init__(self, props=None):
         """Initialize the Webhook Subscope model."""
         self._column_ids = TypedList(six.integer_types)
-        if column_ids is not None:
-            self._column_ids.load(column_ids)
+
+        if props:
+            deserialize(self, props)
 
     @property
     def column_ids(self):
