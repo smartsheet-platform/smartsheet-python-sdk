@@ -1,7 +1,7 @@
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
-# Copyright 2017 Smartsheet.com, Inc.
+# Copyright 2017 - 2020 Smartsheet.com, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"): you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 
 from .webhook_stats import WebhookStats
+from .webhook_subscope import WebhookSubscope
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -55,6 +56,7 @@ class Webhook(object):
         self._stats = TypedObject(WebhookStats)
         self._status = String()
         self._version = Number()
+        self._subscope = WebhookSubscope()
 
         if props:
             deserialize(self, props)
@@ -202,6 +204,14 @@ class Webhook(object):
     @version.setter
     def version(self, value):
         self._version.value = value
+
+    @property
+    def subscope(self):
+        return self._subscope.value
+
+    @subscope.setter
+    def subscope(self, value):
+        self._subscope.value = value
 
     def to_dict(self):
         return serialize(self)

@@ -19,7 +19,7 @@ from __future__ import absolute_import
 
 from .alternate_email import AlternateEmail
 from .enums import UserStatus
-from .image import Image
+from .profile_image import ProfileImage
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -48,7 +48,7 @@ class UserModel(object):
         self._last_name = String()
         self._licensed_sheet_creator = Boolean()
         self._mobile_phone = String()
-        self._profile_image = TypedObject(Image)
+        self._profile_image = TypedObject(ProfileImage)
         self._resource_viewer = Boolean()
         self._role = String()
         self._sheet_count = Number()

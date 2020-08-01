@@ -435,6 +435,14 @@ smartsheet.models.multi\_contact\_object\_value module
    :undoc-members:
    :show-inheritance:
 
+smartsheet.models.multi\_picklist\_object\_value module
+-------------------------------------------------------
+
+.. automodule:: smartsheet.models.multi_picklist_object_value
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smartsheet.models.multi\_row\_email module
 ------------------------------------------
 

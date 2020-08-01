@@ -119,6 +119,7 @@ class TestUsers:
             )
             assert action.message == 'SUCCESS'
 
+
     def test_add_profile_image(self, smart_setup):
         smart = smart_setup['smart']
         me = smart.Users.get_current_user()
@@ -126,3 +127,8 @@ class TestUsers:
 
         action = smart.Users.add_profile_image(me.id, _dir + '/fixtures/curly.jpg', 'image/jpeg')
         assert action.message == 'SUCCESS'
+        me = smart.Users.get_current_user()
+        assert me.profile_image.image_id is not None
+        square_profile_image_size = 1050
+        assert me.profile_image.width == square_profile_image_size
+        assert me.profile_image.height == square_profile_image_size
