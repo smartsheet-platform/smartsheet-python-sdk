@@ -471,7 +471,8 @@ class Sheets(object):
 
     def get_sheet(self, sheet_id, include=None, exclude=None, row_ids=None,
                   row_numbers=None, column_ids=None, page_size=None, page=None,
-                  if_version_after=None, level=None, rows_modified_since=None):
+                  if_version_after=None, level=None, rows_modified_since=None,
+                  filter_id=None):
         """Get the specified Sheet.
 
         Get the specified Sheet. Returns the Sheet, including Rows,
@@ -502,6 +503,8 @@ class Sheets(object):
             if_version_after (int): only fetch Sheet if more recent version
                 available.
             rows_modified_since: Date should be in ISO-8601 format, for example, rowsModifiedSince=2020-01-30T13:25:32-07:00.
+            filter_id (int): Applies the given filter (if accessible by the calling user)
+                and marks the affected rows as "filteredOut": true
 
         Returns:
             Sheet
@@ -519,6 +522,7 @@ class Sheets(object):
         _op['query_params']['ifVersionAfter'] = if_version_after
         _op['query_params']['level'] = level
         _op['query_params']['rowsModifiedSince'] = rows_modified_since
+        _op['query_params']['filterId'] = filter_id
 
         expected = 'Sheet'
         prepped_request = self._base.prepare_request(_op)
