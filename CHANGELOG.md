@@ -9,18 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [2.105.0] - 2020-10-07
 ### Added
 - add column formulas
-
-### Changed
+- add filterId to get_sheets
+- Adding rowsModifiedSince parameter to sheet.get_sheet
 - add `rules` and `ruleRecipients` to create sheet from template
   inclusion
-
-### Fixed
-- #144 bumped missing property message to debug.
-
-### Other
-- add: add filterId to get_sheets
-- Adding rowsModifiedSince parameter to sheet.get_sheet
-- Update CHANGELOG.md
 
 ## [2.101.0] - 2020-08-01
 ### Changed
