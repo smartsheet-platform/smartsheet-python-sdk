@@ -932,7 +932,6 @@ smartsheet.models.workspace module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

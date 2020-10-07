@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>smartsheet package &mdash; Smartsheet Python SDK 2.101.0 documentation</title>
+  <title>smartsheet package &mdash; Smartsheet Python SDK 2.101.1.dev12+g14021f9 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                2.101.0
+                2.101.1.dev12+g14021f9
               </div>
             
           
@@ -118,7 +118,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.types">smartsheet.types module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.users">smartsheet.users module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.util">smartsheet.util module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.version">smartsheet.version module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.webhooks">smartsheet.webhooks module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet.workspaces">smartsheet.workspaces module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smartsheet">Module contents</a></li>
@@ -1639,7 +1638,7 @@ cellLinks, forms</p>
 <li><p><strong>sheet_obj</strong> (<a class="reference internal" href="smartsheet.models.html#smartsheet.models.sheet.Sheet" title="smartsheet.models.sheet.Sheet"><em>Sheet</em></a>) – Sheet object.</p></li>
 <li><p><strong>include</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – A list of optional elements
 to include from the source Template. Valid list values:
-data, attachments, discussions, cellLinks, forms.</p></li>
+attachments, cellLinks, data, discussions, forms, rules and ruleRecipients.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -2731,7 +2730,7 @@ that have never contained any data.</p></li>
 
 <dl class="py method">
 <dt id="smartsheet.sheets.Sheets.get_sheet">
-<code class="sig-name descname">get_sheet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sheet_id</span></em>, <em class="sig-param"><span class="n">include</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">row_ids</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">row_numbers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">column_ids</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">if_version_after</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">level</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.get_sheet" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_sheet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sheet_id</span></em>, <em class="sig-param"><span class="n">include</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">row_ids</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">row_numbers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">column_ids</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">if_version_after</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">level</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rows_modified_since</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">filter_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.sheets.Sheets.get_sheet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the specified Sheet.</p>
 <p>Get the specified Sheet. Returns the Sheet, including Rows,
 and optionally populated with Discussion and Attachment
@@ -2761,6 +2760,9 @@ return per page.</p></li>
 <li><p><strong>page</strong> (<em>int</em>) – Which page to return.</p></li>
 <li><p><strong>if_version_after</strong> (<em>int</em>) – only fetch Sheet if more recent version
 available.</p></li>
+<li><p><strong>rows_modified_since</strong> – Date should be in ISO-8601 format, for example, rowsModifiedSince=2020-01-30T13:25:32-07:00.</p></li>
+<li><p><strong>filter_id</strong> (<em>int</em>) – Applies the given filter (if accessible by the calling user)
+and marks the affected rows as “filteredOut”: true</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -4407,9 +4409,6 @@ when the function is used.</p>
 <code class="sig-prename descclassname">smartsheet.util.</code><code class="sig-name descname">serialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#smartsheet.util.serialize" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</div>
-<div class="section" id="module-smartsheet.version">
-<span id="smartsheet-version-module"></span><h2>smartsheet.version module<a class="headerlink" href="#module-smartsheet.version" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-smartsheet.webhooks">
 <span id="smartsheet-webhooks-module"></span><h2>smartsheet.webhooks module<a class="headerlink" href="#module-smartsheet.webhooks" title="Permalink to this headline">¶</a></h2>

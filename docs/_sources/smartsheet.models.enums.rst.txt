@@ -276,7 +276,6 @@ smartsheet.models.enums.widget\_type module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 
