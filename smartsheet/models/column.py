@@ -39,6 +39,7 @@ class Column(object):
         self._contact_options = TypedList(Contact)
         self._description = String()
         self._format_ = String()
+        self._formula = String()
         self._hidden = Boolean()
         self._id_ = Number()
         self._index = Number()
@@ -113,6 +114,14 @@ class Column(object):
     @format_.setter
     def format_(self, value):
         self._format_.value = value
+
+    @property
+    def formula(self):
+        return self._formula.value
+
+    @formula.setter
+    def formula(self, value):
+        self._formula.value = value
 
     @property
     def hidden(self):

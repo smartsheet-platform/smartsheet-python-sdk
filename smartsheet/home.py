@@ -101,7 +101,7 @@ class Home(object):
             sheet_obj (Sheet): Sheet object.
             include (list[str]): A list of optional elements
                 to include from the source Template. Valid list values:
-                data, attachments, discussions, cellLinks, forms.
+                attachments, cellLinks, data, discussions, forms, rules and ruleRecipients.
 
         Returns:
             Result

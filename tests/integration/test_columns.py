@@ -71,3 +71,21 @@ class TestColumns:
             col.id
         )
         assert action.message == 'SUCCESS'
+
+    def test_column_formulas(self, smart_setup):
+        smart = smart_setup['smart']
+        action = smart_setup['sheet'].add_columns({
+            'title': 'Column Formula',
+            'type': 'DATE',
+            'index': 1,
+            'formula': '=TODAY()'
+        })
+        cols = action.result
+        assert action.message == 'SUCCESS'
+        assert cols[0].formula is not None
+
+        action = smart.Sheets.update_column(smart_setup['sheet'].id, cols[0].id,
+                                            {'formula': ''})
+        col = action.result
+        assert action.message == 'SUCCESS'
+        assert col.formula is None
