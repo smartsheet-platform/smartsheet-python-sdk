@@ -237,3 +237,4 @@ class TestRegression:
             })
         )
         assert action.message == 'SUCCESS'
+        smart.Sheets.delete_sheet(sheet.id)
