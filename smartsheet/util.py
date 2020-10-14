@@ -85,8 +85,11 @@ def serialize(obj):
     if hasattr(obj, 'serialize'):
         retval = obj.serialize()
 
-    elif isinstance(obj, (datetime, date)):
+    elif isinstance(obj, datetime):
         retval = obj.isoformat() + 'Z'
+
+    elif isinstance(obj, date):
+        retval = obj.isoformat()
 
     elif isinstance(obj, _primitive_types):
         retval = obj
