@@ -213,3 +213,27 @@ class TestRegression:
         # clean up
         action = smart.Sheets.delete_sheet(sheet.id)
         assert action.message == 'SUCCESS'
+
+    def test_non_working_days(self, smart_setup):
+        smart = smart_setup['smart']
+
+        templates = smart.Templates.list_public_templates(include_all=True)
+        for template in templates.data:
+            if template.global_template == smart.models.enums.GlobalTemplate.PROJECT_SHEET:
+                sheet = smart.models.Sheet({
+                    'name': 'Gantt Sheet',
+                    'from_id': template.id
+                })
+                action = smart.Home.create_sheet(sheet)
+                assert action.message == 'SUCCESS'
+                break
+        sheet = action.data
+        action = smart.Sheets.update_sheet(
+            sheet.id,
+            smart.models.Sheet({
+                'project_settings': smart.models.ProjectSettings({
+                    'non_working_days': ['2020-10-13', '2020-12-23']
+                })
+            })
+        )
+        assert action.message == 'SUCCESS'
