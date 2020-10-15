@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.105.1] - 2020-10-15
+### Other
+- don't add time offset to date types when serializing
+
 ## [2.105.0] - 2020-10-07
 ### Added
 - add column formulas
