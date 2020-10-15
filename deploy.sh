@@ -36,7 +36,7 @@ make_docs
 git add docs/*
 git commit -am "chg: doc: build ${RELEASE_TAG} docs 1st pass"
 git push https://${GH_USER}:${GH_ACCESS_TOKEN}@github.com/smartsheet-platform/smartsheet-python-sdk.git \
-    HEAD:${TRAVIS_BRANCH}
+    HEAD:${TRAVIS_BRANCH} > /dev/null 2>&1
 
 echo "updating release tag..."
 git tag ${RELEASE_TAG} -m "Release ${RELEASE_TAG}"
