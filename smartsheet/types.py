@@ -15,7 +15,6 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import collections
 import importlib
 import json
 import logging
@@ -25,8 +24,12 @@ from datetime import datetime
 from dateutil.parser import parse
 from enum import Enum
 
+try:
+    from collections.abc import MutableSequence
+except ImportError:
+    from collections import MutableSequence
 
-class TypedList(collections.MutableSequence):
+class TypedList(MutableSequence):
 
     def __init__(self, item_type):
         self.item_type = item_type
