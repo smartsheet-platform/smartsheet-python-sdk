@@ -17,7 +17,6 @@
 
 from __future__ import absolute_import
 
-from .enums import SheetFilterType
 from ..types import *
 from ..util import serialize
 from ..util import deserialize
@@ -32,17 +31,31 @@ class SheetForm(object):
         self._base = None
         if base_obj is not None:
             self._base = base_obj
-            self._id = Number()
-            self._publish_type = String()
-            self._publish_key = String()
-            self._publish_url = String()
-            self._title = String()
-            self._published = Boolean()
+        
+        self._id = Number()
+        self._publish_type = String()
+        self._publish_key = String()
+        self._publish_url = String()
+        self._title = String()
+        self._published = Boolean()
 
         if props:
             deserialize(self, props)
 
         self.request_response = None
+        self.__initialized = True
+
+    # def __getattr__(self, key):
+    #     if key == 'id':
+    #         return self.id_
+    #     else:
+    #         raise AttributeError(key)
+
+    # def __setattr__(self, key, value):
+    #     if key == 'id':
+    #         self.id_ = value
+    #     else:
+    #         super(SheetForm, self).__setattr__(key, value)
 
     @property
     def id(self):
