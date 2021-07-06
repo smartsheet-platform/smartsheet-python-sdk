@@ -20,6 +20,7 @@ from __future__ import absolute_import
 from .attachment import Attachment
 from .column import Column
 from .sheet_filter import SheetFilter
+from .sheet_form import SheetForm
 from .comment import Comment
 from .contact_object_value import ContactObjectValue
 from .cross_sheet_reference import CrossSheetReference
@@ -61,6 +62,7 @@ class Sheet(object):
         self._effective_attachment_options = EnumeratedList(AttachmentType)
         self._favorite = Boolean()
         self._filters = TypedList(SheetFilter)
+        self._forms = TypedList(SheetForm)
         self._from_id = Number()
         self._gantt_enabled = Boolean()
         self._has_summary_fields = Boolean()
@@ -189,6 +191,14 @@ class Sheet(object):
     @filters.setter
     def filters(self, value):
         self._filters.load(value)
+
+    @property
+    def forms(self):
+        return self._forms
+    
+    @forms.setter
+    def forms(self, value):
+        self._forms.load(value)
 
     @property
     def from_id(self):
