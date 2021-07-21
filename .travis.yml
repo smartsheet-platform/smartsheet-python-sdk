@@ -12,9 +12,6 @@ git:
 jobs:
   include:
     - stage: test
-      python: "2.7"
-      script: sh test.sh
-      if: env(deploy) IS NOT present
     - # stage name not required
       python: "3.4"
       script: sh test.sh
