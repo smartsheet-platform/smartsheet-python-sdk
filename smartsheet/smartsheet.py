@@ -173,6 +173,7 @@ class Smartsheet(object):
         self._assume_user = None
         self._test_scenario_name = None
         self._change_agent = None
+        self._custom_properties = None
 
     def assume_user(self, email=None):
         """Assume identity of specified user.
@@ -218,10 +219,19 @@ class Smartsheet(object):
         """
         Request headers will contain the 'Smartsheet-Change-Agent' header value
 
-        Agrs:
+        Args:
             change_agent: (str) the name of this change agent
         """
         self._change_agent = change_agent
+
+    def with_custom_properties(self, custom_properties):
+        """
+        Request headers will contain custom header values defined in the 'custom_properties'
+
+        Args:
+            'custom_properties': (dict) the dictionary of custom headers
+        """
+        self._custom_properties = custom_properties
 
     def request(self, prepped_request, expected, operation):
         """
@@ -415,6 +425,11 @@ class Smartsheet(object):
                 del prepped_request.headers['Smartsheet-Change-Agent']
             except KeyError:
                 pass
+
+        if self._custom_properties is not None:
+            for custom_property in self._custom_properties:
+                prepped_request.headers.update(
+                    {custom_property: self._custom_properties[custom_property]})
 
         return prepped_request
 

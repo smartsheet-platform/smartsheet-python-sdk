@@ -20,6 +20,7 @@ from __future__ import absolute_import
 import logging
 from . import fresh_operation
 
+import hashlib
 
 class Token(object):
 
@@ -69,6 +70,45 @@ class Token(object):
 
         return response
 
+    def get_access_token(self, client_id, code, client_secret, redirect_uri=None):
+        """Get an access token, as part of the OAuth process. For more
+        information, see [OAuth
+        Flow](http://smartsheet-platform.github.io/api-docs/index.html#oauth-flow)
+
+        Args:
+            client_id (str)
+            code (str)
+            _client_secret (str): Plain text of your `app_secret`.
+            redirect_uri (str): Redirect URL registered for
+                your app, including protocol (e.g. \"http://\"); if not
+                provided, the redirect URL set during registration is used.
+
+        Returns:
+            AccessToken
+        """
+        if not all(val is not None for val in ['client_id', 'code', 'client_secret']):
+            raise ValueError(
+                ('One or more required values '
+                 'are missing from call to ' + __name__))
+        app_secret = hashlib.sha256(client_secret + '|' + code)
+
+        _op = fresh_operation('get_access_token')
+        _op['method'] = 'POST'
+        _op['path'] = '/token'
+        _op['form_data'] = {}
+        _op['form_data']['grant_type'] = 'authorization_code'
+        _op['form_data']['client_id'] = client_id
+        _op['form_data']['code'] = code
+        _op['form_data']['redirect_uri'] = redirect_uri
+        _op['form_data']['hash'] = app_secret
+        _op['auth_settings'] = None
+
+        expected = 'AccessToken'
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
     def refresh_access_token(self, client_id, refresh_token, _hash,
                              redirect_uri=None):
         """Refresh an access token, as part of the OAuth process. For more
@@ -102,6 +142,47 @@ class Token(object):
         _op['form_data']['refresh_token'] = refresh_token
         _op['form_data']['redirect_uri'] = redirect_uri
         _op['form_data']['hash'] = _hash
+
+        expected = 'AccessToken'
+        prepped_request = self._base.prepare_request(_op)
+        response = self._base.request(prepped_request, expected, _op)
+
+        return response
+
+    def refresh_access_token(self, client_id, refresh_token, client_secret,
+                             redirect_uri=None):
+        """Refresh an access token, as part of the OAuth process. For more
+        information, see [OAuth
+        Flow](http://smartsheet-platform.github.io/api-docs/index.html#oauth-flow)
+
+        Args:
+            client_id (str)
+            refresh_token (str)
+            client_secret (str): Plain text of your `app_secret`
+            redirect_uri (str): Redirect URL registered for
+                your app, including protocol (e.g. \"http://\"); if not
+                provided, the redirect URL set during registration is used.
+
+        Returns:
+            AccessToken
+        """
+        if not all(val is not None for val in ['client_id', 'refresh_token',
+                                               'client_secret']):
+            raise ValueError(
+                ('One or more required values '
+                 'are missing from call to ' + __name__))
+
+        app_secret = hashlib.sha256(client_secret + '|' + code)
+
+        _op = fresh_operation('refresh_access_token')
+        _op['method'] = 'POST'
+        _op['path'] = '/token'
+        _op['form_data'] = {}
+        _op['form_data']['grant_type'] = 'refresh_token'
+        _op['form_data']['client_id'] = client_id
+        _op['form_data']['refresh_token'] = refresh_token
+        _op['form_data']['redirect_uri'] = redirect_uri
+        _op['form_data']['hash'] = app_secret
 
         expected = 'AccessToken'
         prepped_request = self._base.prepare_request(_op)

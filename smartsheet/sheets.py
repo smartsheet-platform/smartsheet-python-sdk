@@ -420,7 +420,7 @@ class Sheets(object):
 
         return response
 
-    def get_row(self, sheet_id, row_id, include=None, exclude=None, level=None):
+    def get_row(self, sheet_id, row_id, include=None, exclude=None):
         """Get the specified Row of the specified Sheet.
 
         Args:
@@ -430,15 +430,10 @@ class Sheets(object):
                 flags that indicate additional attributes to be included in
                 each Row object within the response. Valid list values:
                 discussions, attachments, format, filters, columnType,
-                rowPermalink, rowWriterInfo.
+                rowPermalink, rowPropertyReleaseFlag, rowWriterInfo.
             exclude (str): Response will not include cells
                 that have never contained any data.
-            level (int): Indicates compatibility level of data to return.
-                Valid options: 0, 1, 2com
-                Option Descriptors:
-                    0 - Backwards compatible text format
-                    1 - multi-contact complex object
-                    2 - multi-picklist complex object
+
         Returns:
             Row
         """
@@ -447,7 +442,7 @@ class Sheets(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows/' + str(row_id)
         _op['query_params']['include'] = include
         _op['query_params']['exclude'] = exclude
-        _op['query_params']['level'] = level
+
         expected = 'Row'
         prepped_request = self._base.prepare_request(_op)
         response = self._base.request(prepped_request, expected, _op)

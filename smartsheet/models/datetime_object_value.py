@@ -1,3 +1,4 @@
+
 # pylint: disable=C0111,R0902,R0904,R0912,R0913,R0915,E1101
 # Smartsheet Python SDK.
 #
@@ -23,12 +24,12 @@ from datetime import datetime
 from dateutil.parser import parse
 
 
-class DateObjectValue(ObjectValue):
+class DatetimeObjectValue(ObjectValue):
     """Smartsheet DateObjectValue data model."""
 
-    def __init__(self, props=None, base_obj=None):
+    def __init__(self, props=None, object_type=None, base_obj=None):
         """Initialize the DateObjectValue model."""
-        super(DateObjectValue, self).__init__(base_obj)
+        super(DatetimeObjectValue, self).__init__(object_type, base_obj)
         self._base = None
         if base_obj is not None:
             self._base = base_obj
@@ -50,5 +51,5 @@ class DateObjectValue(ObjectValue):
             self._value = value
         else:
             if isinstance(value, six.string_types):
-                value = parse(value).date()
+                value = parse(value)
                 self._value = value

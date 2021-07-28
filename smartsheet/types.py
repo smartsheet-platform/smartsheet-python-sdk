@@ -284,7 +284,7 @@ class EnumeratedValue(object):
             self._value = None
 
     def __eq__(self, other):
-        if isinstance(other, Enum):
+        if isinstance(other, Enum) or other is None:
             return self._value == other
         elif isinstance(other, six.string_types):
             return self._value == self.__enum[other]
