@@ -1,0 +1,37 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/rows\\/?",
+    "method": "PUT",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Update Rows - Invalid - Assign Value and Formulae"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "[{\"id\":10,\"cells\":[{\"columnId\":101,\"formula\":\"=SUM([Column2]3, [Column2]4)*2\",\"value\":\"20\"},{\"columnId\":102,\"formula\":\"=SUM([Column2]3, [Column2]3, [Column2]4)\"}]}]",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "status": 400,
+    "statusMessage": "Bad Request",
+    "jsonBody": {
+      "errorCode": 1163,
+      "message": "If cell.formula is specified, then value, objectValue, image, hyperlink, and linkInFromCell must not be specified.",
+      "refId": "123abc",
+      "detail": {
+        "index": 0,
+        "rowId": 10
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

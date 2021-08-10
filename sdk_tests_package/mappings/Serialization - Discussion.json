@@ -1,0 +1,59 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/rows/2/discussions\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Discussion"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"comment\":{\"text\":\"This is a comment!\"}}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": {
+        "id": 1,
+        "title": "This is a comment!",
+        "comments": [
+          {
+            "id": 2,
+            "text": "This is a comment!",
+            "createdBy": {
+              "name": "John Doe",
+              "email": "john.doe@smartsheet.com"
+            },
+            "createdAt": "2018-03-16T16:06:52Z",
+            "modifiedAt": "2018-03-16T16:06:52Z"
+          }
+        ],
+        "commentCount": 1,
+        "lastCommentedAt": "2018-03-16T16:06:52Z",
+        "lastCommentedUser": {
+          "name": "John Doe",
+          "email": "john.doe@smartsheet.com"
+        },
+        "createdBy": {
+          "name": "John Doe",
+          "email": "john.doe@smartsheet.com"
+        }
+      },
+      "version": 76
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

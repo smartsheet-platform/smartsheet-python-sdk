@@ -1,0 +1,60 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/rows\\/?",
+    "method": "PUT",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Update Rows - Assign Values - Hyperlink ReportID"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "[{\"id\":10,\"cells\":[{\"columnId\":101,\"value\":\"Report9\",\"hyperlink\":{\"reportId\":9}},{\"columnId\":102,\"value\":\"Report8\",\"hyperlink\":{\"reportId\":8}}]}]",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": [
+        {
+          "id": 10,
+          "rowNumber": 1,
+          "expanded": true,
+          "createdAt": "2017-10-17T23:16:08Z",
+          "modifiedAt": "2017-10-17T23:20:18Z",
+          "cells": [
+            {
+              "columnId": 101,
+              "value": "Report9",
+              "displayValue": "Report9",
+              "hyperlink": {
+                "reportId": 9
+              }
+            },
+            {
+              "columnId": 102,
+              "value": "Report8",
+              "displayValue": "Report8",
+              "hyperlink": {
+                "reportId": 8
+              }
+            }
+          ]
+        }
+      ],
+      "version": 7
+    },
+    "status": 200,
+    "statusMessage": "OK",
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

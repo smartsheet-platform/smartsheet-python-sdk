@@ -1,0 +1,51 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets\\/?",
+    "method": "GET",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "List Sheets - Include Owner Info"
+      }
+    },
+    "queryParameters": {
+      "include": {
+        "equalTo": "ownerInfo"
+      }
+    }
+  },
+  "response": {
+    "jsonBody": {
+      "pageNumber": 1,
+      "pageSize": 100,
+      "totalPages": 1,
+      "totalCount": 2,
+      "data": [
+        {
+          "id": 1,
+          "name": "Copy of Sample Sheet",
+          "accessLevel": "OWNER",
+          "owner": "john.doe@smartsheet.com",
+          "ownerId": 10,
+          "permalink": "https://app.smartsheet.com/b/home?lx=*****************",
+          "createdAt": "2017-10-09T01:54:15Z",
+          "modifiedAt": "2017-10-09T01:54:15Z"
+        },
+        {
+          "id": 2,
+          "name": "Task Tracking Document",
+          "accessLevel": "EDITOR_SHARE",
+          "owner": "john.doe@smartsheet.com",
+          "ownerId": 10,
+          "permalink": "https://app.smartsheet.com/b/home?lx=*****************",
+          "createdAt": "2017-09-21T18:36:23Z",
+          "modifiedAt": "2017-10-17T22:30:57Z"
+        }
+      ]
+    },
+    "status": 200,
+    "statusMessage": "OK",
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

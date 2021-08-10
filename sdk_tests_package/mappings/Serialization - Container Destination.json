@@ -1,0 +1,37 @@
+{
+  "request": {
+    "urlPathPattern": "/folders/1/copy\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Container Destination"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"destinationType\":\"HOME\",\"newName\":\"Copy of Some Folder\"}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": {
+        "id": 2,
+        "name": "Copy of Some Folder",
+        "permalink": "https://app.smartsheet.com/b/home?lx=a"
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

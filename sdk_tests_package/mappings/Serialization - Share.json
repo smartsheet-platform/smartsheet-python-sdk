@@ -1,0 +1,48 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/shares\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Share"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "queryParameters": {
+      "sendEmail": {
+        "equalTo": "true"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "[{\"email\":\"john.doe@smartsheet.com\",\"accessLevel\":\"VIEWER\",\"subject\":\"Check out this sheet\",\"message\":\"Let me know what you think. Thanks!\",\"ccMe\":true}]",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": [
+        {
+          "id": "abc",
+          "type": "USER",
+          "userId": 2,
+          "email": "john.doe@smartsheet.com",
+          "name": "John Doe",
+          "accessLevel": "VIEWER",
+          "scope": "ITEM"
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

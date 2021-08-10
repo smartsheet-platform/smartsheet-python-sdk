@@ -1,0 +1,37 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1228520367122308/rows/move\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Move row to another sheet"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"rowIds\":[1765250516182916],\"to\":{\"sheetId\":799249123305348}}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "destinationSheetId": 799249123305348,
+      "rowMappings": [
+        {
+          "from": 1765250516182916,
+          "to": 6754140747523972
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1228520367122308/rows/copy\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Copy row to another sheet"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"rowIds\":[2891150423025540],\"to\":{\"sheetId\":799249123305348}}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "destinationSheetId": 799249123305348,
+      "rowMappings": [
+        {
+          "from": 2891150423025540,
+          "to": 1655705329526660
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

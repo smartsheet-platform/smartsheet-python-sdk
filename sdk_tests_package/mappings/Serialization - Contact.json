@@ -1,0 +1,23 @@
+{
+  "request": {
+    "urlPathPattern": "/contacts/ABC\\/?",
+    "method": "GET",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Contact"
+      }
+    }
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "id": "ABC",
+      "name": "John Doe",
+      "email": "john.doe@smartsheet.com"
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

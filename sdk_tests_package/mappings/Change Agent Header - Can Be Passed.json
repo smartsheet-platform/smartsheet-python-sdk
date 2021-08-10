@@ -1,0 +1,52 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Change Agent Header - Can Be Passed"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      },
+      "Smartsheet-Change-Agent": {
+        "equalTo": "MyChangeAgent"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"My new sheet\",\"columns\":[{\"title\":\"Col1\",\"primary\":true,\"type\":\"TEXT_NUMBER\"}]}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": {
+        "id": 12345,
+        "name": "My new sheet",
+        "accessLevel": "OWNER",
+        "permalink": "https://app.smartsheet.com/b/home?lx=HrZUjI0TKih546aFyBaeoA",
+        "columns": [
+          {
+            "id": 23456,
+            "index": 0,
+            "title": "Col1",
+            "type": "TEXT_NUMBER",
+            "primary": true,
+            "validation": false,
+            "width": 150
+          }
+        ]
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

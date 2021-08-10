@@ -1,0 +1,33 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Create Sheet - Invalid - No Columns"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"New Sheet\",\"columns\":[]}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "status": 400,
+    "statusMessage": "Bad Request",
+    "jsonBody": {
+      "errorCode": 1054,
+      "message": "The new sheet requires either a fromId or columns.",
+      "refId": "123abc"
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/emails\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Send via Email"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"sendTo\":[{\"email\":\"john.doe@smartsheet.com\"},{\"groupId\":2}],\"subject\":\"Some subject\",\"message\":\"Some message\",\"ccMe\":true,\"format\":\"PDF\",\"formatDetails\":{\"paperSize\":\"LETTER\"}}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

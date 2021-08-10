@@ -1,0 +1,37 @@
+{
+  "request": {
+    "urlPathPattern": "/sights/812/publish\\/?",
+    "method": "PUT",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Set Sight Publish Status"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"readOnlyFullAccessibleBy\":\"ALL\",\"readOnlyFullEnabled\":true}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": {
+        "readOnlyFullEnabled": true,
+        "readOnlyFullAccessibleBy": "ALL",
+        "readOnlyFullUrl": "https://app.smartsheet.com/b/publish"
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

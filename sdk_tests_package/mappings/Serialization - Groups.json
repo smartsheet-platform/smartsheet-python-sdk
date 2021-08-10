@@ -1,0 +1,57 @@
+{
+  "request": {
+    "urlPathPattern": "/groups\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Groups"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"mock api test group\",\"description\":\"it's a group\",\"members\":[{\"email\":\"john.doe@smartsheet.com\"},{\"email\":\"jane.doe@smartsheet.com\"}]}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": {
+        "id": 1,
+        "name": "mock api test group",
+        "description": "it's a group",
+        "owner": "john.doe@smartsheet.com",
+        "ownerId": 2,
+        "members": [
+          {
+            "id": 2,
+            "email": "john.doe@smartsheet.com",
+            "firstName": "John",
+            "lastName": "Doe",
+            "name": "John Doe"
+          },
+          {
+            "id": 3,
+            "email": "jane.doe@smartsheet.com",
+            "firstName": "Jane",
+            "lastName": "Doe",
+            "name": "Jane Doe"
+          }
+        ],
+        "createdAt": "2018-03-09T23:51:26Z",
+        "modifiedAt": "2018-03-09T23:51:26Z"
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

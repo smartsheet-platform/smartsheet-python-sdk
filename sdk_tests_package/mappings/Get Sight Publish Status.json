@@ -1,0 +1,23 @@
+{
+  "request": {
+    "urlPathPattern": "/sights/812/publish\\/?",
+    "method": "GET",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Get Sight Publish Status"
+      }
+    }
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "readOnlyFullEnabled": true,
+      "readOnlyFullAccessibleBy": "ALL",
+      "readOnlyFullUrl": "https://app.smartsheet.com/b/publish"
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

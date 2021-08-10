@@ -1,0 +1,58 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/324/automationrules/284\\/?",
+    "method": "PUT",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Update Automation Rule"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"action\":{\"frequency\":\"WEEKLY\",\"recipients\":[{\"email\":\"jane@example.com\"}],\"type\":\"NOTIFICATION_ACTION\"}}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "id": 284,
+      "name": "End Date Changed",
+      "enabled": true,
+      "createdBy": {
+        "name": "John Doe",
+        "email": "j.doe@example.com"
+      },
+      "createdAt": "2018-02-25T23:04:36Z",
+      "modifiedBy": {
+        "name": "John Doe",
+        "email": "j.doe@example.com"
+      },
+      "modifiedAt": "2018-02-25T23:13:53Z",
+      "userCanModify": true,
+      "action": {
+        "type": "NOTIFICATION_ACTION",
+        "recipients": [
+          {
+            "email": "jane@example.com"
+          }
+        ],
+        "frequency": "WEEKLY",
+        "message": "",
+        "includeAllColumns": true,
+        "includeAttachments": true,
+        "includeDiscussions": true,
+        "notifyAllSharedUsers": false
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

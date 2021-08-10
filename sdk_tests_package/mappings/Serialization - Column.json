@@ -1,0 +1,47 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/columns\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Column"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "[{\"title\":\"A Brave New Column\",\"type\":\"PICKLIST\",\"options\":[\"option1\",\"option2\",\"option3\"],\"index\":2,\"validation\":false,\"width\":42,\"locked\":false}]",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": [
+        {
+          "id": 2,
+          "index": 2,
+          "title": "A Brave New Column",
+          "type": "PICKLIST",
+          "options": [
+            "option1",
+            "option2",
+            "option3"
+          ],
+          "validation": false,
+          "width": 42
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

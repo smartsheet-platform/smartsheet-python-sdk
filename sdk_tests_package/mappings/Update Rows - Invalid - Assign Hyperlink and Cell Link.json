@@ -1,0 +1,37 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/rows\\/?",
+    "method": "PUT",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Update Rows - Invalid - Assign Hyperlink and Cell Link"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "[{\"id\":10,\"cells\":[{\"columnId\":101,\"value\":\"\",\"linkInFromCell\":{\"sheetId\":2,\"rowId\":20,\"columnId\":201},\"hyperlink\":{\"url\":\"www.google.com\"}}]}]",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "status": 400,
+    "statusMessage": "Bad Request",
+    "jsonBody": {
+      "errorCode": 1109,
+      "message": "Only one of cell.hyperlink or cell.linkInFromCell may be non-null.",
+      "refId": "4ns6urv44dgrw",
+      "detail": {
+        "index": 0,
+        "rowId": 10
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

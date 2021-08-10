@@ -1,0 +1,49 @@
+{
+  "request": {
+    "urlPathPattern": "/users\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - User"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"email\":\"john.doe@smartsheet.com\",\"admin\":false,\"licensedSheetCreator\":true,\"firstName\":\"John\",\"lastName\":\"Doe\",\"groupAdmin\":false,\"resourceViewer\":true}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": {
+        "id": 1,
+        "email": "john.doe@smartsheet.com",
+        "name": "John Doe",
+        "firstName": "John",
+        "lastName": "Doe",
+        "profileImage": {
+          "imageId": "abc",
+          "height": 1050,
+          "width": 1050
+        },
+        "status": "ACTIVE",
+        "admin": false,
+        "licensedSheetCreator": true,
+        "groupAdmin": false,
+        "resourceViewer": true
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "request": {
+    "urlPathPattern": "/reports/1\\/?",
+    "method": "GET",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Report"
+      }
+    }
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "id": 1,
+      "name": "Test Report",
+      "totalRowCount": 11,
+      "accessLevel": "OWNER",
+      "effectiveAttachmentOptions": [
+        "GOOGLE_DRIVE",
+        "DROPBOX",
+        "ONEDRIVE",
+        "EVERNOTE",
+        "BOX_COM",
+        "EGNYTE",
+        "FILE"
+      ],
+      "ganttEnabled": false,
+      "cellImageUploadEnabled": true,
+      "permalink": "https://app.smartsheet.com/b/home?lx=a",
+      "createdAt": "2017-10-06T19:57:40Z",
+      "modifiedAt": "2018-03-23T18:55:50Z",
+      "columns": [
+        {
+          "virtualId": 2,
+          "index": 0,
+          "title": "Sheet Name",
+          "type": "TEXT_NUMBER",
+          "sheetNameColumn": true,
+          "validation": false,
+          "width": 150
+        }
+      ],
+      "rows": [
+        {
+          "id": 3,
+          "sheetId": 4,
+          "rowNumber": 1,
+          "expanded": true,
+          "accessLevel": "OWNER",
+          "createdAt": "2017-08-29T15:54:47Z",
+          "modifiedAt": "2017-08-29T15:54:47Z",
+          "cells": [
+            {
+              "virtualColumnId": 2,
+              "value": "Sheet Copy 2",
+              "displayValue": "Sheet Copy 2"
+            }
+          ]
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

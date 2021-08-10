@@ -1,0 +1,47 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/rows\\/?",
+    "method": "PUT",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Update Rows - Clear Value - Hyperlink"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "[{\"id\":10,\"cells\":[{\"columnId\":101,\"value\":\"\",\"hyperlink\":null}]}]",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": [
+        {
+          "id": 10,
+          "rowNumber": 1,
+          "expanded": true,
+          "createdAt": "2017-11-03T15:31:33Z",
+          "modifiedAt": "2017-11-03T15:43:27Z",
+          "cells": [
+            {
+              "columnId": 101
+            }
+          ]
+        }
+      ],
+      "version": 8
+    },
+    "status": 200,
+    "statusMessage": "OK",
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

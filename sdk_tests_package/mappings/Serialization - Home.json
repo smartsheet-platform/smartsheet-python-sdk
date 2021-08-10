@@ -1,0 +1,156 @@
+{
+  "request": {
+    "urlPathPattern": "/home\\/?",
+    "method": "GET",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Home"
+      }
+    }
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "sheets": [
+        {
+          "id": 1,
+          "name": "editor share sheet",
+          "accessLevel": "EDITOR_SHARE",
+          "permalink": "https://app.smartsheet.com/b/home?lx=a",
+          "createdAt": "2017-09-21T18:36:23Z",
+          "modifiedAt": "2018-03-09T20:40:48Z"
+        },
+        {
+          "id": 2,
+          "name": "owner sheet",
+          "accessLevel": "OWNER",
+          "permalink": "https://app.smartsheet.com/b/home?lx=b",
+          "createdAt": "2018-02-02T18:44:43Z",
+          "modifiedAt": "2018-02-02T18:44:43Z"
+        },
+        {
+          "id": 3,
+          "name": "admin sheet",
+          "accessLevel": "ADMIN",
+          "permalink": "https://app.smartsheet.com/b/home?lx=c",
+          "createdAt": "2017-04-21T18:42:21Z",
+          "modifiedAt": "2017-10-11T17:57:21Z"
+        }
+      ],
+      "folders": [
+        {
+          "id": 4,
+          "name": "empty folder",
+          "permalink": "https://app.smartsheet.com/b/home?lx=d"
+        },
+        {
+          "id": 5,
+          "name": "full folder",
+          "permalink": "https://app.smartsheet.com/b/home?lx=e",
+          "sheets": [
+            {
+              "id": 6,
+              "name": "folder sheet",
+              "accessLevel": "OWNER",
+              "permalink": "https://app.smartsheet.com/b/home?lx=f",
+              "createdAt": "2017-10-31T18:17:36Z",
+              "modifiedAt": "2017-10-31T18:17:36Z"
+            }
+          ]
+        }
+      ],
+      "reports": [
+        {
+          "id": 7,
+          "name": "admin report",
+          "accessLevel": "ADMIN",
+          "permalink": "https://app.smartsheet.com/b/home?lx=g"
+        },
+        {
+          "id": 8,
+          "name": "editor share report",
+          "accessLevel": "EDITOR_SHARE",
+          "permalink": "https://app.smartsheet.com/b/home?lx=h"
+        },
+        {
+          "id": 9,
+          "name": "owner report",
+          "accessLevel": "OWNER",
+          "permalink": "https://app.smartsheet.com/b/home?lx=i"
+        }
+      ],
+      "workspaces": [
+        {
+          "id": 10,
+          "name": "workspace",
+          "accessLevel": "ADMIN",
+          "permalink": "https://app.smartsheet.com/b/home?lx=j",
+          "sheets": [
+            {
+              "id": 11,
+              "name": "workspace sheet",
+              "accessLevel": "ADMIN",
+              "permalink": "https://app.smartsheet.com/b/home?lx=k",
+              "createdAt": "2017-08-28T16:45:57Z",
+              "modifiedAt": "2017-10-02T19:32:39Z"
+            }
+          ],
+          "folders": [
+            {
+              "id": 12,
+              "name": "workspace folder",
+              "permalink": "https://app.smartsheet.com/b/home?lx=l",
+              "sheets": [
+                {
+                  "id": 13,
+                  "name": "workspace folder sheet",
+                  "accessLevel": "OWNER",
+                  "favorite": true,
+                  "permalink": "https://app.smartsheet.com/b/home?lx=m",
+                  "createdAt": "2017-10-06T21:14:30Z",
+                  "modifiedAt": "2017-10-06T21:14:30Z"
+                }
+              ],
+              "folders": [
+                {
+                  "id": 14,
+                  "name": "workspace folder folder",
+                  "permalink": "https://app.smartsheet.com/b/home?lx=n",
+                  "sheets": [
+                    {
+                      "id": 15,
+                      "name": "workspace folder folder sheet",
+                      "accessLevel": "OWNER",
+                      "permalink": "https://app.smartsheet.com/b/home?lx=o",
+                      "createdAt": "2017-10-06T21:14:30Z",
+                      "modifiedAt": "2017-10-06T21:14:30Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 16,
+              "name": "empty folder",
+              "permalink": "https://app.smartsheet.com/b/home?lx=p"
+            }
+          ]
+        }
+      ],
+      "sights": [
+        {
+          "id": 17,
+          "name": "sight",
+          "accessLevel": "OWNER",
+          "permalink": "https://app.smartsheet.com/b/home?lx=q",
+          "createdAt": "2017-08-29T23:28:35Z",
+          "modifiedAt": "2017-08-29T23:28:35Z"
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

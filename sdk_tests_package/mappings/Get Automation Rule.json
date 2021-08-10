@@ -1,0 +1,43 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/324/automationrules/284\\/?",
+    "method": "GET",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Get Automation Rule"
+      }
+    }
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "id": 284,
+      "name": "End Date Changed",
+      "enabled": true,
+      "createdBy": {
+        "name": "John Doe",
+        "email": "j.doe@example.com"
+      },
+      "createdAt": "2018-02-25T23:04:36Z",
+      "modifiedBy": {
+        "name": "John Doe",
+        "email": "j.doe@example.com"
+      },
+      "modifiedAt": "2018-02-25T23:04:36Z",
+      "userCanModify": true,
+      "action": {
+        "type": "NOTIFICATION_ACTION",
+        "frequency": "IMMEDIATELY",
+        "message": "",
+        "includeAllColumns": true,
+        "includeAttachments": true,
+        "includeDiscussions": true,
+        "notifyAllSharedUsers": true
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

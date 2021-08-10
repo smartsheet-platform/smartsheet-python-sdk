@@ -1,0 +1,100 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/rows\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Predecessor"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "queryParameters": {
+      "include": {
+        "equalTo": "objectValue"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "[{\"cells\":[{\"columnId\":2,\"objectValue\":{\"objectType\":\"PREDECESSOR_LIST\",\"predecessors\":[{\"rowId\":3,\"type\":\"FS\",\"lag\":{\"objectType\":\"DURATION\",\"negative\":false,\"elapsed\":false,\"weeks\":1.5,\"days\":2.5,\"hours\":3.5,\"minutes\":4.5,\"seconds\":5.5,\"milliseconds\":6}}]}}]}]",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": [
+        {
+          "id": 5,
+          "sheetId": 1,
+          "rowNumber": 17,
+          "siblingId": 6,
+          "expanded": true,
+          "createdAt": "2018-03-16T20:37:04Z",
+          "modifiedAt": "2018-03-16T20:37:04Z",
+          "cells": [
+            {
+              "columnId": 7
+            },
+            {
+              "columnId": 8
+            },
+            {
+              "columnId": 9,
+              "formula": "=CALCSTART(Duration17, Start8, Finish8, 0, 300875506)"
+            },
+            {
+              "columnId": 10
+            },
+            {
+              "columnId": 2,
+              "value": "8FS +1.5w 2.5d 3.5h 4.5m 5.5s 6ms",
+              "objectValue": {
+                "objectType": "PREDECESSOR_LIST",
+                "predecessors": [
+                  {
+                    "rowId": 3,
+                    "rowNumber": 8,
+                    "type": "FS",
+                    "lag": {
+                      "objectType": "DURATION",
+                      "weeks": 1.5,
+                      "days": 2.5,
+                      "hours": 3.5,
+                      "minutes": 4.5,
+                      "seconds": 5.5,
+                      "milliseconds": 6
+                    }
+                  }
+                ]
+              },
+              "displayValue": "8FS +1.5w 2.5d 3.5h 4.5m 5.5s 6ms"
+            },
+            {
+              "columnId": 11
+            },
+            {
+              "columnId": 12
+            },
+            {
+              "columnId": 13
+            },
+            {
+              "columnId": 14
+            }
+          ]
+        }
+      ],
+      "version": 37
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/123/columns/234\\/?",
+    "method": "PUT",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Update Column - Change Type - Picklist"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"index\":2,\"title\":\"Updated Column\",\"type\":\"PICKLIST\",\"options\":[\"An\",\"updated\",\"column\"],\"width\":200}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": {
+        "id": 234,
+        "index": 2,
+        "title": "Updated Column",
+        "type": "PICKLIST",
+        "options": [
+          "An",
+          "updated",
+          "column"
+        ],
+        "validation": false,
+        "width": 200
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

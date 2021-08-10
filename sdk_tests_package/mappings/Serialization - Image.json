@@ -1,0 +1,43 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/rows/2\\/?",
+    "method": "GET",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Image"
+      }
+    }
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "id": 3,
+      "sheetId": 1,
+      "rowNumber": 5,
+      "siblingId": 4,
+      "version": 79,
+      "expanded": true,
+      "accessLevel": "OWNER",
+      "createdAt": "2017-11-03T15:31:33Z",
+      "modifiedAt": "2018-02-16T22:14:11Z",
+      "cells": [
+        {
+          "columnId": 6,
+          "value": "puppy.jpg",
+          "displayValue": "puppy.jpg",
+          "formula": "=SYS_CELLIMAGE(\"puppy.jpg\",\"abc\",300,332,\"puppy.jpg\")",
+          "image": {
+            "id": "abc",
+            "height": 300,
+            "width": 332,
+            "altText": "puppy.jpg"
+          }
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/324/automationrules\\/?",
+    "method": "GET",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "List Automation Rules"
+      }
+    }
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "pageNumber": 1,
+      "pageSize": 100,
+      "totalPages": 1,
+      "totalCount": 2,
+      "data": [
+        {
+          "id": 284,
+          "name": "End Date Changed",
+          "enabled": true,
+          "createdBy": {
+            "name": "John Doe",
+            "email": "j.doe@example.com"
+          },
+          "createdAt": "2018-02-25T23:04:36Z",
+          "modifiedBy": {
+            "name": "John Doe",
+            "email": "j.doe@example.com"
+          },
+          "modifiedAt": "2018-02-25T23:04:36Z",
+          "userCanModify": true,
+          "action": {
+            "type": "NOTIFICATION_ACTION",
+            "frequency": "IMMEDIATELY",
+            "message": "",
+            "includeAllColumns": true,
+            "includeAttachments": true,
+            "includeDiscussions": true,
+            "notifyAllSharedUsers": true
+          }
+        },
+        {
+          "id": 684,
+          "name": "Schedule Change Notification",
+          "enabled": true,
+          "createdBy": {
+            "name": "Jane Doe",
+            "email": "jane@example.com"
+          },
+          "createdAt": "2018-02-25T23:02:57Z",
+          "modifiedBy": {
+            "name": "Jane Doe",
+            "email": "jane@example.com"
+          },
+          "modifiedAt": "2018-02-25T23:02:57Z",
+          "userCanModify": true,
+          "action": {
+            "type": "NOTIFICATION_ACTION",
+            "recipients": [
+              {
+                "email": "j.doe@example.com"
+              }
+            ],
+            "frequency": "DAILY",
+            "includeAllColumns": true,
+            "includeAttachments": true,
+            "includeDiscussions": true,
+            "notifyAllSharedUsers": false
+          }
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

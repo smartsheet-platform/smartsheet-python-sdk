@@ -1,0 +1,63 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Sheet"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"The First Sheet\",\"columns\":[{\"title\":\"The First Column\",\"primary\":true,\"type\":\"TEXT_NUMBER\"},{\"title\":\"The Second Column\",\"primary\":false,\"type\":\"TEXT_NUMBER\",\"systemColumnType\":\"AUTO_NUMBER\",\"autoNumberFormat\":{\"prefix\":\"{YYYY}-{MM}-{DD}-\",\"suffix\":\"-SUFFIX\",\"fill\":\"000000\"}}]}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": {
+        "id": 1,
+        "name": "The First Sheet",
+        "accessLevel": "OWNER",
+        "permalink": "https://app.smartsheet.com/b/home?lx=a",
+        "columns": [
+          {
+            "id": 2,
+            "index": 0,
+            "title": "The First Column",
+            "type": "TEXT_NUMBER",
+            "primary": true,
+            "validation": false,
+            "width": 150
+          },
+          {
+            "id": 3,
+            "index": 1,
+            "title": "The Second Column",
+            "type": "TEXT_NUMBER",
+            "systemColumnType": "AUTO_NUMBER",
+            "validation": false,
+            "autoNumberFormat": {
+              "prefix": "{YYYY}-{MM}-{DD}-",
+              "fill": "000000",
+              "suffix": "-SUFFIX"
+            },
+            "width": 150
+          }
+        ]
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

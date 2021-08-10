@@ -1,0 +1,22 @@
+{
+  "request": {
+    "urlPathPattern": "/sights/700\\/?",
+    "method": "DELETE",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Delete Sight"
+      }
+    }
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

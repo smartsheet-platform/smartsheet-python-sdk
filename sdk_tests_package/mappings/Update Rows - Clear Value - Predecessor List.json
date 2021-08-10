@@ -1,0 +1,48 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/rows\\/?",
+    "method": "PUT",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Update Rows - Clear Value - Predecessor List"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "[{\"id\":10,\"cells\":[{\"columnId\":123,\"value\":null}]}]",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": [
+        {
+          "id": 10,
+          "rowNumber": 1,
+          "siblingId": 234,
+          "expanded": true,
+          "createdAt": "2017-11-14T21:35:00Z",
+          "modifiedAt": "2018-02-17T16:37:44Z",
+          "cells": [
+            {
+              "columnId": 123
+            }
+          ]
+        }
+      ],
+      "version": 2
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

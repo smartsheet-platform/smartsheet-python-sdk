@@ -1,0 +1,41 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/sentupdaterequests/2\\/?",
+    "method": "GET",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Sent Update Requests"
+      }
+    }
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "id": 2,
+      "updateRequestId": 3,
+      "sentAt": "2018-02-02T23:32:42Z",
+      "sentBy": {
+        "name": "Jane Doe",
+        "email": "jane.doe@smartsheet.com"
+      },
+      "sentTo": {
+        "email": "john.doe@smartsheet.com"
+      },
+      "status": "COMPLETE",
+      "subject": "Update Request: New Sheet",
+      "message": "Please update my online sheet.",
+      "rowIds": [
+        4
+      ],
+      "includeAttachments": true,
+      "includeDiscussions": true,
+      "columnIds": [
+        5
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

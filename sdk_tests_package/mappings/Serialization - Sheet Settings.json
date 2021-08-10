@@ -1,0 +1,54 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1\\/?",
+    "method": "PUT",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Sheet Settings"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"userSettings\":{\"criticalPathEnabled\":true,\"displaySummaryTasks\":true},\"projectSettings\":{\"workingDays\":[\"MONDAY\",\"TUESDAY\"],\"nonWorkingDays\":[\"2018-04-04\",\"2018-05-05\",\"2018-06-06\"],\"lengthOfDay\":23.5}}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": {
+        "id": 1,
+        "name": "Test Project Sheet",
+        "accessLevel": "OWNER",
+        "userSettings": {
+          "criticalPathEnabled": true,
+          "displaySummaryTasks": true
+        },
+        "projectSettings": {
+          "workingDays": [
+            "MONDAY",
+            "TUESDAY"
+          ],
+          "nonWorkingDays": [
+            "2018-04-04",
+            "2018-05-05",
+            "2018-06-06"
+          ],
+          "lengthOfDay": 23.5
+        },
+        "permalink": "https://app.smartsheet.com/b/home?lx=a"
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

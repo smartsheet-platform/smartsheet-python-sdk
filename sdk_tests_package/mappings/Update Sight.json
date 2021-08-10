@@ -1,0 +1,821 @@
+{
+  "request": {
+    "urlPathPattern": "/sights/812\\/?",
+    "method": "PUT",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Update Sight"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"new new sight\"}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": {
+        "id": 812,
+        "name": "new new sight",
+        "accessLevel": "OWNER",
+        "backgroundColor": "#E2E2E2",
+        "permalink": "https://app.smartsheet.com/dashboards/PP1",
+        "columnCount": 6,
+        "widgets": [
+          {
+            "id": 532,
+            "type": "SHORTCUTLIST",
+            "contents": {
+              "type": "SHORTCUT",
+              "shortcutData": [
+                {
+                  "label": "Starbucks Stores By State",
+                  "labelFormat": ",2,,,,,1,,1,,,,,,,,",
+                  "hyperlink": {
+                    "url": "https://app.smartsheet.com/sheets/r21",
+                    "sheetId": 500
+                  },
+                  "attachmentType": "SMARTSHEET",
+                  "order": 0
+                }
+              ]
+            },
+            "xPosition": 0,
+            "yPosition": 1,
+            "width": 1,
+            "height": 1,
+            "showTitleIcon": false,
+            "showTitle": true,
+            "titleFormat": ",,1,,,,,,,3,,,,,,1,",
+            "version": 1
+          },
+          {
+            "id": 28,
+            "type": "SHEETSUMMARY",
+            "contents": {
+              "type": "METRIC",
+              "hyperlink": {
+                "url": "http://www.seattle.gov/",
+                "interactionType": "WEB"
+              },
+              "cellData": [
+                {
+                  "columnId": 236,
+                  "label": "Millimetres",
+                  "labelFormat": ",2,,,,,,,1,,,,,,,1,",
+                  "valueFormat": ",2,1,,,,1,,1,3,,,,,,1,",
+                  "order": 4,
+                  "cell": {
+                    "columnId": 236,
+                    "rowId": 284,
+                    "value": 958,
+                    "objectValue": 958,
+                    "displayValue": "958"
+                  },
+                  "dataSource": "CELL",
+                  "objectValue": 958
+                },
+                {
+                  "columnId": 492,
+                  "label": "State",
+                  "labelFormat": ",2,,,,,,,1,,,,,,,1,",
+                  "valueFormat": ",2,1,,,,1,,1,3,,,,,,1,",
+                  "order": 1,
+                  "cell": {
+                    "columnId": 492,
+                    "rowId": 284,
+                    "value": "Washington",
+                    "objectValue": "Washington",
+                    "displayValue": "Washington"
+                  },
+                  "dataSource": "CELL",
+                  "objectValue": "Washington"
+                },
+                {
+                  "columnId": 612,
+                  "label": "City",
+                  "labelFormat": ",2,,,,,,,1,,,,,,,1,",
+                  "valueFormat": ",2,1,,,,1,,1,3,,,,,,1,",
+                  "order": 0,
+                  "cell": {
+                    "columnId": 612,
+                    "rowId": 284,
+                    "value": "Seattle",
+                    "objectValue": "Seattle",
+                    "displayValue": "Seattle"
+                  },
+                  "dataSource": "CELL",
+                  "objectValue": "Seattle"
+                },
+                {
+                  "columnId": 740,
+                  "label": "Inches",
+                  "labelFormat": ",2,,,,,,,1,,,,,,,1,",
+                  "valueFormat": ",2,1,,,,1,,1,3,,,,,,1,",
+                  "order": 3,
+                  "cell": {
+                    "columnId": 740,
+                    "rowId": 284,
+                    "value": 37.7,
+                    "objectValue": 37.7,
+                    "displayValue": "37.7"
+                  },
+                  "dataSource": "CELL",
+                  "objectValue": 37.7
+                },
+                {
+                  "columnId": 988,
+                  "label": "Days",
+                  "labelFormat": ",2,,,,,,,1,,,,,,,1,",
+                  "valueFormat": ",2,1,,,,1,,1,3,,,,,,1,",
+                  "order": 2,
+                  "cell": {
+                    "columnId": 988,
+                    "rowId": 284,
+                    "value": 149,
+                    "objectValue": 149,
+                    "displayValue": "149"
+                  },
+                  "dataSource": "CELL",
+                  "objectValue": 149
+                }
+              ],
+              "columns": [
+                {
+                  "id": 612,
+                  "version": 0,
+                  "index": 0,
+                  "title": "City",
+                  "type": "TEXT_NUMBER",
+                  "primary": true,
+                  "validation": false,
+                  "width": 150
+                },
+                {
+                  "id": 492,
+                  "version": 0,
+                  "index": 1,
+                  "title": "State",
+                  "type": "TEXT_NUMBER",
+                  "validation": false,
+                  "width": 150
+                },
+                {
+                  "id": 988,
+                  "version": 0,
+                  "index": 2,
+                  "title": "Days",
+                  "type": "TEXT_NUMBER",
+                  "validation": false,
+                  "width": 150
+                },
+                {
+                  "id": 740,
+                  "version": 0,
+                  "index": 3,
+                  "title": "Inches",
+                  "type": "TEXT_NUMBER",
+                  "validation": false,
+                  "width": 150
+                },
+                {
+                  "id": 236,
+                  "version": 0,
+                  "index": 4,
+                  "title": "Millimetres",
+                  "type": "TEXT_NUMBER",
+                  "validation": false,
+                  "width": 150
+                }
+              ],
+              "sheetId": 524
+            },
+            "xPosition": 1,
+            "yPosition": 1,
+            "width": 1,
+            "height": 3,
+            "title": "Annual Averages for Total Precipitation By City",
+            "showTitleIcon": true,
+            "showTitle": true,
+            "titleFormat": ",,1,,,,,,,3,,,,,,1,",
+            "version": 1
+          },
+          {
+            "id": 20,
+            "type": "RICHTEXT",
+            "contents": {
+              "type": "RICHTEXT",
+              "htmlContent": "<p>This is a&nbsp;<span class=\"clsDbFt\" style=\"font-family:'arial';font-size:10pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgb( 0 , 0 , 0 );background-color:rgb( 255 , 255 , 255 )\">rich</span><span class=\"clsDbFt\" style=\"font-family:'arial';font-size:10pt;font-weight:normal;font-style:italic;text-decoration:none;color:rgb( 0 , 0 , 0 );background-color:rgb( 255 , 255 , 255 )\">text&nbsp;</span><span class=\"clsDbFt\" style=\"font-family:'arial';font-size:10pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgb( 0 , 0 , 0 );background-color:rgb( 255 , 255 , 255 )\">test</span></p>"
+            },
+            "xPosition": 2,
+            "yPosition": 1,
+            "width": 2,
+            "height": 4,
+            "showTitleIcon": false,
+            "showTitle": false,
+            "version": 1
+          },
+          {
+            "id": 516,
+            "type": "GRIDGANTT",
+            "contents": {
+              "type": "GRIDGANTT",
+              "hyperlink": {
+                "url": "https://app.smartsheet.com/reports/J81",
+                "reportId": 876,
+                "interactionType": "SOURCE_SHEET"
+              },
+              "htmlContent": "<style type=\"text/css\">",
+              "reportId": 876
+            },
+            "xPosition": 0,
+            "yPosition": 5,
+            "width": 4,
+            "height": 6,
+            "showTitleIcon": false,
+            "showTitle": false,
+            "version": 1
+          },
+          {
+            "id": 268,
+            "type": "TITLE",
+            "contents": {
+              "type": "RICHTEXT",
+              "htmlContent": "<p style=\"text-align:center\"><span class=\"clsDbFt\" style=\"font-family:&#39;arial&#39;;font-size:20pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgb( 0 , 0 , 0 )\"></span><span class=\"clsDbFt\">This is my title</span></p>",
+              "backgroundColor": "#D0AF8F"
+            },
+            "xPosition": 0,
+            "yPosition": 0,
+            "width": 3,
+            "height": 1,
+            "showTitleIcon": false,
+            "showTitle": false,
+            "version": 1
+          },
+          {
+            "id": 764,
+            "type": "CHART",
+            "contents": {
+              "type": "CHART",
+              "hyperlink": {
+                "url": "https://app.smartsheet.com/sheets/9J1",
+                "sheetId": 660,
+                "interactionType": "SMARTSHEET_ITEM"
+              },
+              "series": [
+                {
+                  "title": "Days",
+                  "titleInfo": {
+                    "type": "TEXT_NUMBER"
+                  },
+                  "seriesType": "COLUMN",
+                  "tooltips": {
+                    "labelType": "X-SERIES-Y"
+                  },
+                  "color": "#1061C3",
+                  "axisLocationX": "BOTTOM",
+                  "axisLocationY": "LEFT",
+                  "yColumnInfo": {
+                    "type": "TEXT_NUMBER"
+                  },
+                  "xColumnInfo": {
+                    "type": "TEXT_NUMBER"
+                  },
+                  "seriesData": [
+                    {
+                      "y": 113
+                    },
+                    {
+                      "x": "Austin",
+                      "y": 88
+                    },
+                    {
+                      "x": "Baltimore",
+                      "y": 116
+                    },
+                    {
+                      "x": "Birmingham",
+                      "y": 117
+                    },
+                    {
+                      "x": "Boston",
+                      "y": 126
+                    },
+                    {
+                      "x": "Buffalo",
+                      "y": 167
+                    },
+                    {
+                      "x": "Charlotte",
+                      "y": 110
+                    },
+                    {
+                      "x": "Chicago",
+                      "y": 124
+                    },
+                    {
+                      "x": "Cincinnati",
+                      "y": 137
+                    },
+                    {
+                      "x": "Cleveland",
+                      "y": 155
+                    },
+                    {
+                      "x": "Columbus",
+                      "y": 139
+                    },
+                    {
+                      "x": "Dallas",
+                      "y": 81
+                    },
+                    {
+                      "x": "Denver",
+                      "y": 87
+                    },
+                    {
+                      "x": "Detroit",
+                      "y": 135
+                    },
+                    {
+                      "x": "Hartford",
+                      "y": 130
+                    },
+                    {
+                      "x": "Houston",
+                      "y": 104
+                    },
+                    {
+                      "x": "Indianapolis",
+                      "y": 129
+                    },
+                    {
+                      "x": "Jacksonville",
+                      "y": 114
+                    },
+                    {
+                      "x": "Kansas City",
+                      "y": 91
+                    },
+                    {
+                      "x": "Las Vegas",
+                      "y": 27
+                    },
+                    {
+                      "x": "Los Angeles",
+                      "y": 36
+                    },
+                    {
+                      "x": "Louisville",
+                      "y": 123
+                    },
+                    {
+                      "x": "Memphis",
+                      "y": 108
+                    },
+                    {
+                      "x": "Miami",
+                      "y": 135
+                    },
+                    {
+                      "x": "Milwaukee",
+                      "y": 127
+                    },
+                    {
+                      "x": "Minneapolis",
+                      "y": 117
+                    },
+                    {
+                      "x": "Nashville",
+                      "y": 119
+                    },
+                    {
+                      "x": "New Orleans",
+                      "y": 115
+                    },
+                    {
+                      "x": "New York",
+                      "y": 122
+                    },
+                    {
+                      "x": "Oklahoma City",
+                      "y": 84
+                    },
+                    {
+                      "x": "Orlando",
+                      "y": 117
+                    },
+                    {
+                      "x": "Philadelphia",
+                      "y": 118
+                    },
+                    {
+                      "x": "Phoenix",
+                      "y": 30
+                    },
+                    {
+                      "x": "Pittsburgh",
+                      "y": 151
+                    },
+                    {
+                      "x": "Portland",
+                      "y": 164
+                    },
+                    {
+                      "x": "Providence",
+                      "y": 125
+                    },
+                    {
+                      "x": "Raleigh",
+                      "y": 100
+                    },
+                    {
+                      "x": "Richmond",
+                      "y": 114
+                    },
+                    {
+                      "x": "Riverside",
+                      "y": 30
+                    },
+                    {
+                      "x": "Rochester",
+                      "y": 167
+                    },
+                    {
+                      "x": "Sacramento",
+                      "y": 60
+                    },
+                    {
+                      "x": "Salt Lake City",
+                      "y": 96
+                    },
+                    {
+                      "x": "San Antonio",
+                      "y": 83
+                    },
+                    {
+                      "x": "San Diego",
+                      "y": 42
+                    },
+                    {
+                      "x": "San Francisco",
+                      "y": 68
+                    },
+                    {
+                      "x": "San Jose",
+                      "y": 62
+                    },
+                    {
+                      "x": "Seattle",
+                      "y": 149
+                    },
+                    {
+                      "x": "St. Louis",
+                      "y": 113
+                    },
+                    {
+                      "x": "Tampa",
+                      "y": 105
+                    },
+                    {
+                      "x": "Virginia Beach",
+                      "y": 117
+                    },
+                    {
+                      "x": "Washington",
+                      "y": 114
+                    }
+                  ],
+                  "selectionRanges": [
+                    {
+                      "sourceRowId1": 292,
+                      "sourceRowId2": 908,
+                      "sourceColumnId1": 988,
+                      "sourceColumnId2": 988
+                    }
+                  ]
+                },
+                {
+                  "title": "Inches",
+                  "titleInfo": {
+                    "type": "TEXT_NUMBER"
+                  },
+                  "seriesType": "COLUMN",
+                  "tooltips": {
+                    "labelType": "X-SERIES-Y"
+                  },
+                  "color": "#EA352E",
+                  "axisLocationX": "BOTTOM",
+                  "axisLocationY": "LEFT",
+                  "yColumnInfo": {
+                    "type": "TEXT_NUMBER"
+                  },
+                  "xColumnInfo": {
+                    "type": "TEXT_NUMBER"
+                  },
+                  "seriesData": [
+                    {
+                      "y": 49.7
+                    },
+                    {
+                      "x": "Austin",
+                      "y": 34.2
+                    },
+                    {
+                      "x": "Baltimore",
+                      "y": 41.9
+                    },
+                    {
+                      "x": "Birmingham",
+                      "y": 53.7
+                    },
+                    {
+                      "x": "Boston",
+                      "y": 43.8
+                    },
+                    {
+                      "x": "Buffalo",
+                      "y": 40.5
+                    },
+                    {
+                      "x": "Charlotte",
+                      "y": 41.6
+                    },
+                    {
+                      "x": "Chicago",
+                      "y": 36.9
+                    },
+                    {
+                      "x": "Cincinnati",
+                      "y": 41.9
+                    },
+                    {
+                      "x": "Cleveland",
+                      "y": 39.1
+                    },
+                    {
+                      "x": "Columbus",
+                      "y": 39.3
+                    },
+                    {
+                      "x": "Dallas",
+                      "y": 37.6
+                    },
+                    {
+                      "x": "Denver",
+                      "y": 15.6
+                    },
+                    {
+                      "x": "Detroit",
+                      "y": 33.5
+                    },
+                    {
+                      "x": "Hartford",
+                      "y": 45.9
+                    },
+                    {
+                      "x": "Houston",
+                      "y": 49.8
+                    },
+                    {
+                      "x": "Indianapolis",
+                      "y": 42.4
+                    },
+                    {
+                      "x": "Jacksonville",
+                      "y": 52.4
+                    },
+                    {
+                      "x": "Kansas City",
+                      "y": 39.1
+                    },
+                    {
+                      "x": "Las Vegas",
+                      "y": 4.2
+                    },
+                    {
+                      "x": "Los Angeles",
+                      "y": 12.8
+                    },
+                    {
+                      "x": "Louisville",
+                      "y": 44.9
+                    },
+                    {
+                      "x": "Memphis",
+                      "y": 53.7
+                    },
+                    {
+                      "x": "Miami",
+                      "y": 61.9
+                    },
+                    {
+                      "x": "Milwaukee",
+                      "y": 34.8
+                    },
+                    {
+                      "x": "Minneapolis",
+                      "y": 30.6
+                    },
+                    {
+                      "x": "Nashville",
+                      "y": 47.3
+                    },
+                    {
+                      "x": "New Orleans",
+                      "y": 62.7
+                    },
+                    {
+                      "x": "New York",
+                      "y": 49.9
+                    },
+                    {
+                      "x": "Oklahoma City",
+                      "y": 36.5
+                    },
+                    {
+                      "x": "Orlando",
+                      "y": 50.7
+                    },
+                    {
+                      "x": "Philadelphia",
+                      "y": 41.5
+                    },
+                    {
+                      "x": "Phoenix",
+                      "y": 8.2
+                    },
+                    {
+                      "x": "Pittsburgh",
+                      "y": 38.2
+                    },
+                    {
+                      "x": "Portland",
+                      "y": 43.5
+                    },
+                    {
+                      "x": "Providence",
+                      "y": 47.2
+                    },
+                    {
+                      "x": "Raleigh",
+                      "y": 46
+                    },
+                    {
+                      "x": "Richmond",
+                      "y": 43.6
+                    },
+                    {
+                      "x": "Riverside",
+                      "y": 10.3
+                    },
+                    {
+                      "x": "Rochester",
+                      "y": 34.3
+                    },
+                    {
+                      "x": "Sacramento",
+                      "y": 18.5
+                    },
+                    {
+                      "x": "Salt Lake City",
+                      "y": 16.1
+                    },
+                    {
+                      "x": "San Antonio",
+                      "y": 32.3
+                    },
+                    {
+                      "x": "San Diego",
+                      "y": 10.3
+                    },
+                    {
+                      "x": "San Francisco",
+                      "y": 20.7
+                    },
+                    {
+                      "x": "San Jose",
+                      "y": 15.8
+                    },
+                    {
+                      "x": "Seattle",
+                      "y": 37.7
+                    },
+                    {
+                      "x": "St. Louis",
+                      "y": 41
+                    },
+                    {
+                      "x": "Tampa",
+                      "y": 46.3
+                    },
+                    {
+                      "x": "Virginia Beach",
+                      "y": 46.5
+                    },
+                    {
+                      "x": "Washington",
+                      "y": 39.7
+                    }
+                  ],
+                  "selectionRanges": [
+                    {
+                      "sourceRowId1": 292,
+                      "sourceRowId2": 908,
+                      "sourceColumnId1": 740,
+                      "sourceColumnId2": 740
+                    }
+                  ]
+                }
+              ],
+              "axes": [
+                {
+                  "location": "LEFT",
+                  "includeZero": true
+                },
+                {
+                  "location": "BOTTOM"
+                }
+              ],
+              "legend": {
+                "location": "RIGHT"
+              },
+              "sheetId": 524,
+              "selectionRanges": [
+                {
+                  "sourceRowId1": 292,
+                  "sourceRowId2": 908,
+                  "sourceColumnId1": 612,
+                  "sourceColumnId2": 740
+                }
+              ]
+            },
+            "xPosition": 0,
+            "yPosition": 11,
+            "width": 4,
+            "height": 6,
+            "title": "Annual Averages for Total Precipitation By City",
+            "showTitleIcon": false,
+            "showTitle": true,
+            "titleFormat": ",,1,,,,,,,3,,,,,,1,",
+            "version": 1
+          },
+          {
+            "id": 644,
+            "type": "IMAGE",
+            "contents": {
+              "type": "IMAGE",
+              "hyperlink": {
+                "url": "http://www.smartsheet.com",
+                "interactionType": "WEB"
+              },
+              "privateId": "Jppz",
+              "height": 48,
+              "width": 197,
+              "fileName": "smartsheet-logo-blue-197x48.png",
+              "format": ",7,1,,,,2,2,1,3,,,,,,1,"
+            },
+            "xPosition": 4,
+            "yPosition": 1,
+            "width": 1,
+            "height": 4,
+            "showTitleIcon": false,
+            "showTitle": false,
+            "version": 1
+          },
+          {
+            "id": 140,
+            "type": "WEBCONTENT",
+            "contents": {
+              "type": "WidgetWebContent",
+              "url": "https://www.youtube.com/"
+            },
+            "xPosition": 0,
+            "yPosition": 17,
+            "width": 4,
+            "height": 6,
+            "showTitleIcon": false,
+            "showTitle": true,
+            "titleFormat": ",,1,,,,,,,3,,,,,,1,",
+            "version": 1
+          }
+        ],
+        "createdAt": "2019-08-07T20:12:02Z",
+        "modifiedAt": "2019-08-07T20:12:02Z"
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

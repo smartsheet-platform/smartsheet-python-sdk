@@ -1,0 +1,74 @@
+{
+  "request": {
+    "urlPathPattern": "/sights\\/?",
+    "method": "GET",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "List Sights"
+      }
+    }
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "pageNumber": 1,
+      "pageSize": 100,
+      "totalPages": 1,
+      "totalCount": 6,
+      "data": [
+        {
+          "id": 52,
+          "name": "My New Sight",
+          "accessLevel": "OWNER",
+          "permalink": "https://app.smartsheet.com/b/home",
+          "createdAt": "2016-08-14T23:45:06Z",
+          "modifiedAt": "2017-12-07T19:26:00Z"
+        },
+        {
+          "id": 332,
+          "name": "My new Sight",
+          "accessLevel": "OWNER",
+          "permalink": "https://app.smartsheet.com/b/home",
+          "createdAt": "2016-08-14T23:39:11Z",
+          "modifiedAt": "2016-08-14T23:39:11Z"
+        },
+        {
+          "id": 84,
+          "name": "My new Sight",
+          "accessLevel": "OWNER",
+          "permalink": "https://app.smartsheet.com/b/home",
+          "createdAt": "2016-08-14T23:34:12Z",
+          "modifiedAt": "2016-08-14T23:34:12Z"
+        },
+        {
+          "id": 964,
+          "name": "My new Sight",
+          "accessLevel": "OWNER",
+          "permalink": "https://app.smartsheet.com/b/home",
+          "createdAt": "2016-08-14T23:26:23Z",
+          "modifiedAt": "2016-08-14T23:26:23Z"
+        },
+        {
+          "id": 708,
+          "name": "My new Sight Google",
+          "accessLevel": "OWNER",
+          "permalink": "https://app.smartsheet.com/b/home",
+          "createdAt": "2016-08-14T23:32:29Z",
+          "modifiedAt": "2016-08-14T23:32:29Z"
+        },
+        {
+          "id": 212,
+          "name": "Sight Test",
+          "accessLevel": "OWNER",
+          "permalink": "https://app.smartsheet.com/b/home",
+          "createdAt": "2016-08-08T16:43:55Z",
+          "modifiedAt": "2016-08-14T22:58:15Z"
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

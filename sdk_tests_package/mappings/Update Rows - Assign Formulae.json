@@ -1,0 +1,56 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/rows\\/?",
+    "method": "PUT",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Update Rows - Assign Formulae"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "[{\"id\":11,\"cells\":[{\"columnId\":101,\"formula\":\"=SUM([Column2]3, [Column2]4)*2\"},{\"columnId\":102,\"formula\":\"=SUM([Column2]3, [Column2]3, [Column2]4)\"}]}]",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": [
+        {
+          "id": 11,
+          "rowNumber": 5,
+          "expanded": true,
+          "createdAt": "2017-10-18T20:21:51Z",
+          "modifiedAt": "2017-10-18T20:32:40Z",
+          "cells": [
+            {
+              "columnId": 101,
+              "value": 14,
+              "displayValue": "14",
+              "formula": "=SUM([Column2]3, [Column2]4)*2"
+            },
+            {
+              "columnId": 102,
+              "value": 10,
+              "displayValue": "10",
+              "formula": "=SUM([Column2]3, [Column2]3, [Column2]4)"
+            }
+          ]
+        }
+      ],
+      "version": 8
+    },
+    "status": 200,
+    "statusMessage": "OK",
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

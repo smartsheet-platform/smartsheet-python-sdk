@@ -1,0 +1,73 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/rows\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Add Rows - Assign Values - String"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "[{\"cells\":[{\"columnId\":101,\"value\":\"Apple\"},{\"columnId\":102,\"value\":\"Red Fruit\"}]},{\"cells\":[{\"columnId\":101,\"value\":\"Banana\"},{\"columnId\":102,\"value\":\"Yellow Fruit\"}]}]",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": [
+        {
+          "id": 10,
+          "rowNumber": 1,
+          "expanded": true,
+          "createdAt": "2017-10-17T23:16:08Z",
+          "modifiedAt": "2017-10-17T23:20:18Z",
+          "cells": [
+            {
+              "columnId": 101,
+              "value": "Apple",
+              "displayValue": "Apple"
+            },
+            {
+              "columnId": 102,
+              "value": "Red Fruit",
+              "displayValue": "Red Fruit"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "rowNumber": 2,
+          "expanded": true,
+          "createdAt": "2017-10-17T23:16:08Z",
+          "modifiedAt": "2017-10-17T23:20:18Z",
+          "cells": [
+            {
+              "columnId": 101,
+              "value": "Banana",
+              "displayValue": "Banana"
+            },
+            {
+              "columnId": 102,
+              "value": "Yellow Fruit",
+              "displayValue": "Yellow Fruit"
+            }
+          ]
+        }
+      ],
+      "version": 14
+    },
+    "status": 200,
+    "statusMessage": "OK",
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "urlPathPattern": "/sights/52/copy\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Copy Sight"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"destinationId\":484,\"destinationType\":\"folder\",\"newName\":\"new sight\"}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": {
+        "id": 220,
+        "name": "new sight",
+        "accessLevel": "OWNER",
+        "permalink": "https://app.smartsheet.com/b/home"
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

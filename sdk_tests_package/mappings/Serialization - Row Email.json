@@ -1,0 +1,32 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/rows/emails\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Row Email"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"sendTo\":[{\"groupId\":2}],\"subject\":\"Some subject\",\"message\":\"Some message\",\"columnIds\":[3],\"includeAttachments\":false,\"includeDiscussions\":true,\"layout\":\"VERTICAL\",\"rowIds\":[4]}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

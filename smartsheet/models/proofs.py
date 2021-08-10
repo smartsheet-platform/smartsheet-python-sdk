@@ -44,10 +44,10 @@ class Proof(object):
             self._version = Number()
 
             self._last_updated_at = Number() | String() # Verify
-            self._last_updated_by = User() # Verify
+            self._last_updated_by = Object() # Verify
             self._is_completed = Boolean()
-            self._attachments = [{}] # Verify
-            self._discussions = [{}] # Verify
+            self._attachments = Array() # Verify
+            self._discussions = Array() # Verify
 
         if props:
              deserialize(self, props)
@@ -150,13 +150,13 @@ class Proof(object):
     def id_(self, value):
         self._id_.value = value
 
-#   @property
-#   def mime_type(self):
-#         return self._mime_type.value
-#
-#         @mime_type.setter
-#         def mime_type(self, value):
-#             self._mime_type.value = value
+  @property
+  def mime_type(self):
+        return self._mime_type.value
+
+        @mime_type.setter
+        def mime_type(self, value):
+            self._mime_type.value = value
 
     @property
     def name(self):
@@ -197,14 +197,6 @@ class Proof(object):
 #     @url.setter
 #     def url(self, value):
 #         self._url.value = value
-#
-#     @property
-#     def url_expires_in_millis(self):
-#         return self._url_expires_in_millis.value
-#
-#     @url_expires_in_millis.setter
-#     def url_expires_in_millis(self, value):
-#         self._url_expires_in_millis.value = value
 
     # Keep everything below here
     def to_dict(self):

@@ -1,0 +1,66 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/updaterequests\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Update Request"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"sendTo\":[{\"email\":\"john.doe@smartsheet.com\"}],\"rowIds\":[2],\"columnIds\":[3],\"includeAttachments\":true,\"includeDiscussions\":false,\"subject\":\"Some subject\",\"message\":\"Some message\",\"ccMe\":true,\"schedule\":{\"type\":\"MONTHLY\",\"startAt\":\"2018-03-01T19:00:00Z\",\"endAt\":\"2018-06-01T00:00:00Z\",\"dayOrdinal\":\"FIRST\",\"dayDescriptors\":[\"FRIDAY\"],\"repeatEvery\":1}}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": {
+        "sendTo": [
+          {
+            "email": "john.doe@smartsheet.com"
+          }
+        ],
+        "subject": "Some subject",
+        "message": "Some message",
+        "ccMe": true,
+        "includeAttachments": true,
+        "includeDiscussions": false,
+        "columnIds": [
+          3
+        ],
+        "rowIds": [
+          2
+        ],
+        "id": 4,
+        "sentBy": {
+          "name": "Jane Doe",
+          "email": "jane.doe@smartsheet.com"
+        },
+        "schedule": {
+          "type": "MONTHLY",
+          "startAt": "2018-03-01T19:00:00Z",
+          "endAt": "2018-06-01T00:00:00Z",
+          "dayOrdinal": "FIRST",
+          "dayDescriptors": [
+            "FRIDAY"
+          ],
+          "repeatEvery": 1,
+          "nextSendAt": "2018-04-06T18:00:00Z"
+        }
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

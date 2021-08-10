@@ -1,0 +1,56 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/rows\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Add Rows - Assign Object Value - Predecessor List (using floats)"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "[{\"cells\":[{\"columnId\":101,\"objectValue\":{\"objectType\":\"PREDECESSOR_LIST\",\"predecessors\":[{\"rowId\":10,\"type\":\"FS\",\"lag\":{\"objectType\":\"DURATION\",\"days\":2.5}}]}}]}]",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": [
+        {
+          "id": 11,
+          "sheetId": 1,
+          "rowNumber": 2,
+          "siblingId": 10,
+          "expanded": true,
+          "createdAt": "2017-11-02T20:58:34Z",
+          "modifiedAt": "2017-11-02T20:58:34Z",
+          "cells": [
+            {
+              "columnId": 102,
+              "value": "2017-11-07T13:00:00",
+              "formula": "=CALCSTART(Duration3, Start2, Finish2, 0, 72000000)"
+            },
+            {
+              "columnId": 101,
+              "value": "2FS +2.5d",
+              "displayValue": "2FS +2.5d"
+            }
+          ]
+        }
+      ],
+      "version": 5
+    },
+    "status": 200,
+    "statusMessage": "OK",
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

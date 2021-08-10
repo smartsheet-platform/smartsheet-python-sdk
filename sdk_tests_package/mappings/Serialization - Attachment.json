@@ -1,0 +1,47 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/attachments\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Attachment"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"Search Engine\",\"description\":\"A popular search engine\",\"attachmentType\":\"LINK\",\"url\":\"http://www.google.com\"}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": {
+        "id": 2,
+        "name": "Search Engine",
+        "description": "A popular search engine",
+        "url": "http://www.google.com",
+        "attachmentType": "LINK",
+        "parentType": "SHEET",
+        "parentId": 1,
+        "createdBy": {
+          "name": "John Doe",
+          "email": "john.doe@smartsheet.com"
+        },
+        "createdAt": "2018-03-09T23:04:12Z"
+      },
+      "version": 74
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/324/automationrules/284\\/?",
+    "method": "DELETE",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Delete Automation Rule"
+      }
+    }
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

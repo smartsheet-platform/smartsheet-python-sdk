@@ -1,0 +1,37 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/rows\\/?",
+    "method": "PUT",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Update Rows - Invalid - Assign Hyperlink URL and SheetId"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "[{\"id\":10,\"cells\":[{\"columnId\":101,\"value\":\"Google\",\"hyperlink\":{\"url\":\"http://google.com\",\"sheetId\":2}},{\"columnId\":102,\"value\":\"Bing\",\"hyperlink\":{\"url\":\"http://bing.com\"}}]}]",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "status": 400,
+    "statusMessage": "Bad Request",
+    "jsonBody": {
+      "errorCode": 1112,
+      "message": "hyperlink.url must be null for sheet, report, or Sight hyperlinks.",
+      "refId": "dbwn8owxskam",
+      "detail": {
+        "index": 0,
+        "rowId": 10
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "request": {
+    "urlPathPattern": "/templates/public\\/?",
+    "method": "GET",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Template"
+      }
+    }
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "pageNumber": 1,
+      "pageSize": 100,
+      "totalPages": 1,
+      "totalCount": 1,
+      "data": [
+        {
+          "id": 1,
+          "name": "Blank Sheet",
+          "blank": true,
+          "description": "Create and customize a new sheet",
+          "locale": "en_US",
+          "type": "sheet",
+          "categories": [
+            "Featured Templates"
+          ],
+          "globalTemplate": "BLANK_SHEET"
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

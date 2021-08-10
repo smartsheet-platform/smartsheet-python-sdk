@@ -1,0 +1,43 @@
+{
+  "request": {
+    "urlPathPattern": "/users/me\\/?",
+    "method": "GET",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - UserProfile"
+      }
+    }
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "id": 1,
+      "email": "john.doe@smartsheet.com",
+      "firstName": "John",
+      "lastName": "Doe",
+      "locale": "en_US",
+      "timeZone": "US/Pacific",
+      "account": {
+        "name": "john.doe@smartsheet.com",
+        "id": 2
+      },
+      "admin": true,
+      "licensedSheetCreator": true,
+      "groupAdmin": true,
+      "resourceViewer": true,
+      "alternateEmails": [],
+      "sheetCount": 66,
+      "lastLogin": "2018-03-16T16:06:52Z",
+      "title": "",
+      "department": "",
+      "company": "",
+      "workPhone": "",
+      "mobilePhone": "",
+      "role": ""
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

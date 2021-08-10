@@ -1,0 +1,40 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/crosssheetreferences\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - Cross Sheet Reference"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"Some Cross Sheet Reference\",\"sourceSheetId\":2,\"startRowId\":3,\"endRowId\":4,\"startColumnId\":5,\"endColumnId\":6}",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": {
+        "name": "Some Cross Sheet Reference",
+        "sourceSheetId": 2,
+        "startRowId": 3,
+        "endRowId": 4,
+        "startColumnId": 5,
+        "endColumnId": 6
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

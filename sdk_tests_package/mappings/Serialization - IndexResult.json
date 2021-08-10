@@ -1,0 +1,39 @@
+{
+  "request": {
+    "urlPathPattern": "/users\\/?",
+    "method": "GET",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - IndexResult"
+      }
+    }
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "pageNumber": 1,
+      "pageSize": 100,
+      "totalPages": 1,
+      "totalCount": 1,
+      "data": [
+        {
+          "email": "john.doe@smartsheet.com",
+          "name": "John Doe",
+          "firstName": "John",
+          "lastName": "Doe",
+          "admin": true,
+          "licensedSheetCreator": true,
+          "groupAdmin": true,
+          "resourceViewer": true,
+          "id": 1,
+          "status": "ACTIVE",
+          "sheetCount": 69
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

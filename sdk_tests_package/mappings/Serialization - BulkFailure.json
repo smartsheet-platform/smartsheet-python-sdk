@@ -1,0 +1,66 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/rows\\/?",
+    "method": "POST",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Serialization - BulkFailure"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "queryParameters": {
+      "allowPartialSuccess": {
+        "equalTo": "true"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "[{\"toBottom\":true,\"cells\":[{\"columnId\":2,\"value\":\"Some Value\"}]},{\"toBottom\":true,\"cells\":[{\"columnId\":3,\"value\":\"Some Value\"}]}]",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "statusMessage": "OK",
+    "status": 200,
+    "jsonBody": {
+      "message": "PARTIAL_SUCCESS",
+      "resultCode": 3,
+      "result": [
+        {
+          "id": 4,
+          "sheetId": 1,
+          "rowNumber": 13,
+          "siblingId": 5,
+          "expanded": true,
+          "createdAt": "2018-03-23T16:23:24Z",
+          "modifiedAt": "2018-03-23T16:23:24Z",
+          "cells": [
+            {
+              "columnId": 2,
+              "value": "Some Value",
+              "displayValue": "Some Value"
+            }
+          ]
+        }
+      ],
+      "version": 84,
+      "failedItems": [
+        {
+          "index": 1,
+          "error": {
+            "errorCode": 1036,
+            "message": "The columnId 3 is invalid.",
+            "refId": "abc"
+          }
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}

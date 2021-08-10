@@ -1,0 +1,60 @@
+{
+  "request": {
+    "urlPathPattern": "/sheets/1/rows\\/?",
+    "method": "PUT",
+    "headers": {
+      "Api-Scenario": {
+        "equalTo": "Update Rows - Assign Values - Hyperlink SheetID"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "[{\"id\":10,\"cells\":[{\"columnId\":101,\"value\":\"Sheet2\",\"hyperlink\":{\"sheetId\":2}},{\"columnId\":102,\"value\":\"Sheet3\",\"hyperlink\":{\"sheetId\":3}}]}]",
+        "ignoreExtraElements": false,
+        "ignoreArrayOrder": true
+      }
+    ]
+  },
+  "response": {
+    "jsonBody": {
+      "message": "SUCCESS",
+      "resultCode": 0,
+      "result": [
+        {
+          "id": 10,
+          "rowNumber": 1,
+          "expanded": true,
+          "createdAt": "2017-10-17T23:16:08Z",
+          "modifiedAt": "2017-10-17T23:20:18Z",
+          "cells": [
+            {
+              "columnId": 101,
+              "value": "Sheet2",
+              "displayValue": "Sheet2",
+              "hyperlink": {
+                "sheetId": 2
+              }
+            },
+            {
+              "columnId": 102,
+              "value": "Sheet3",
+              "displayValue": "Sheet3",
+              "hyperlink": {
+                "sheetId": 3
+              }
+            }
+          ]
+        }
+      ],
+      "version": 7
+    },
+    "status": 200,
+    "statusMessage": "OK",
+    "headers": {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  }
+}
