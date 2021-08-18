@@ -126,6 +126,7 @@ while events_list.more_available:
 ```
 
 ## Working with Smartsheetgov.com Accounts
+
 If you need to access Smartsheetgov you will need to specify the Smartsheetgov API URI as the base URI during creation 
 of the Smartsheet client object. Smartsheetgov uses a base URI of https://api.smartsheetgov.com/2.0/. The base URI is 
 defined as a constant (`smartsheet.__gov_base__`).
@@ -133,4 +134,13 @@ defined as a constant (`smartsheet.__gov_base__`).
 You can create a client using the Smartsheetgov.com URI using the api_base parameter:
 ```python
 client = smartsheet.Smartsheet(api_base=smartsheet.__gov_base__)
+```
+
+## Working With Smartsheet Regions Europe Accounts
+
+If you need to access Smartsheet Regions Europe you will need to specify the Smartsheet.eu API URI as the base URI during creation of the Smartsheet client object. Smartsheet.eu uses a base URI of https://api.smartsheet.eu/2.0/. The base URI is defined as a constant (`smartsheet._eu_base_`).
+
+You can create a client using the Smartsheet.eu URI using the api_base parameter:
+```python
+client = smartsheet.Smartsheet(api_base=smartsheet._eu_base_)
 ```
