@@ -94,7 +94,7 @@ using the same `stream_position` value until the next list of events is retrieve
 Many events have additional information available as a part of the event. That information can be accessed using 
 the Python dictionary stored in the `additional_details` property (Note that values of the `additional_details` 
 dictionary use camelCase/JSON names, e.g. `sheetName` not `sheet_name`). Information about the additional details 
-provided can be found [here.](https://smartsheet-platform.github.io/event-reporting-docs/) 
+provided can be found [here.](https://smartsheet.redoc.ly/tag/eventsDescription) 
 
 ```python
 # this example is looking specifically for new sheet events
