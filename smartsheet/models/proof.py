@@ -1,4 +1,4 @@
-# pylint: disable=     ### find out what goes here ###
+# pylint: disable=      # Not sure what goes here EX: C0111,R0902,R0904,R0912,R0913,R0915,E1101 etc.
 # Smartsheet Python SDK.
 #
 # Copyright 2021 Smartsheet.com, Inc.
@@ -17,7 +17,7 @@
 
 from __future__ import absolute_import
 
-# imports go here      # verify these imports
+# imports go here
 from .enums import AttachmentType
 from .comment import Comment
 from .user import User
@@ -43,11 +43,11 @@ class Proof(object):
             self._proof_request_url = String()
             self._version = Number()
 
-            self._last_updated_at = Number() | String() # Verify
-            self._last_updated_by = Object() # Verify
+            self._last_updated_at = Number() | String()
+            self._last_updated_by = Object()
             self._is_completed = Boolean()
-            self._attachments = Array() # Verify
-            self._discussions = Array() # Verify
+            self._attachments = Array()
+            self._discussions = Array()
 
         if props:
              deserialize(self, props)
@@ -67,16 +67,6 @@ class Proof(object):
             self.id_ = value
         else:
             super(Proof, self).__setattr__(key, value)
-
-            ##########################################
-
-#         @property
-#         def attachment_sub_type(self):
-#             return self._attachment_sub_type
-#
-#         @attachment_sub_type.setter
-#         def attachment_sub_type(self, value):
-#             self._attachment_sub_type.set(value)
 
     @property
     def attachment_type(self):
@@ -166,39 +156,6 @@ class Proof(object):
     def name(self, value):
         self._name.value = value
 
-#         @property
-#         def parent_id(self):
-#             return self._parent_id.value
-#
-#         @parent_id.setter
-#         def parent_id(self, value):
-#             self._parent_id.value = value
-#
-#         @property
-#         def parent_type(self):
-#             return self._parent_type
-#
-#         @parent_type.setter
-#         def parent_type(self, value):
-#             self._parent_type.set(value)
-
-#     @property
-#     def size_in_kb(self):
-#         return self._size_in_kb.value
-#
-#     @size_in_kb.setter
-#     def size_in_kb(self, value):
-#         self._size_in_kb.value = value
-#
-#     @property
-#     def url(self):
-#         return self._url.value
-#
-#     @url.setter
-#     def url(self, value):
-#         self._url.value = value
-
-    # Keep everything below here
     def to_dict(self):
         return serialize(self)
 
