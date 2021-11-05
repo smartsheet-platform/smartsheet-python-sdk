@@ -3,7 +3,7 @@
 This library is intended to simplify connecting to the [Smartsheet API](https://smartsheet.redoc.ly) from Python applications.
 
 ## System Requirements
-The SDK currently supports Python 2.7, 3.4, 3.5, 3.6, pypy, and pypy3.  
+The SDK currently supports Python 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 3.10, pypy, and pypy3.  
 **Note:** Python version 3.4 or higher is required for Unicode support, for example, if your Smartsheet data includes non-ASCII characters.  
 
 The following packages are required.
