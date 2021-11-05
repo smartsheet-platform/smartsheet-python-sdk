@@ -12,10 +12,6 @@ git:
 jobs:
   include:
     - stage: test
-      python: "2.7"
-      script: sh test.sh
-      if: env(deploy) IS NOT present
-    - # stage name not required
       python: "3.4"
       script: sh test.sh
       if: env(deploy) IS NOT present
@@ -25,6 +21,18 @@ jobs:
       if: env(deploy) IS NOT present
     - # stage name not required
       python: "3.6"
+      script: sh test.sh
+    - # stage name not required
+      python: "3.7"
+      script: sh test.sh
+    - # stage name not required
+      python: "3.8"
+      script: sh test.sh
+    - # stage name not required
+      python: "3.9"
+      script: sh test.sh
+    - # stage name not required
+      python: "3.10"
       script: sh test.sh
     - # stage name not required
       python: "pypy"
