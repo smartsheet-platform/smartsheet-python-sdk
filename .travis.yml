@@ -1,6 +1,7 @@
 dist: focal
 
 language: python
+jdk: openjdk10
 
 cache:
   directories:
@@ -13,7 +14,9 @@ jobs:
   include:
     - stage: test
       python: "3.6"
-      script: sh test.sh
+      script:
+        - jdk_switcher use openjdk10
+        - sh test.sh
     - # stage name not required
       python: "3.7"
       script: sh test.sh
@@ -22,9 +25,6 @@ jobs:
       script: sh test.sh
     - # stage name not required
       python: "3.9"
-      script: sh test.sh
-    - # stage name not required
-      python: "3.10"
       script: sh test.sh
     - # stage name not required
       python: "pypy"
