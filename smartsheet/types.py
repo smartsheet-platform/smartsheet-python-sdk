@@ -15,7 +15,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import collections
+try:
+    # For Python versions 2.7 and 3.3 to 3.9, import from collections
+    from collections import MutableSequence
+except ImportError:
+    # For Python version >= 3.10 import from collections.abc
+    from collections.abc import MutableSequence
+
 import importlib
 import json
 import logging
@@ -26,7 +32,7 @@ from dateutil.parser import parse
 from enum import Enum
 
 
-class TypedList(collections.MutableSequence):
+class TypedList(MutableSequence):
 
     def __init__(self, item_type):
         self.item_type = item_type
