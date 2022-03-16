@@ -25,8 +25,12 @@ from datetime import datetime
 from dateutil.parser import parse
 from enum import Enum
 
+try:
+    from collections import MutableSequence
+except ImportError:
+    from collections.abc import MutableSequence
 
-class TypedList(collections.MutableSequence):
+class TypedList(MutableSequence):
 
     def __init__(self, item_type):
         self.item_type = item_type
