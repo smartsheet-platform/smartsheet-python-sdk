@@ -1,6 +1,6 @@
 # Smartsheet Python SDK [![Build Status](https://travis-ci.org/smartsheet-platform/smartsheet-python-sdk.svg)](https://travis-ci.org/smartsheet-platform/smartsheet-python-sdk) [![Coverage Status](https://coveralls.io/repos/smartsheet-platform/smartsheet-python-sdk/badge.svg?branch=master&service=github)](https://coveralls.io/github/smartsheet-platform/smartsheet-python-sdk?branch=master) [![PyPI version](https://badge.fury.io/py/smartsheet-python-sdk.svg)](https://badge.fury.io/py/smartsheet-python-sdk)
 
-This library is intended to simplify connecting to the [Smartsheet API](http://smartsheet-platform.github.io/api-docs/) from Python applications.
+This library is intended to simplify connecting to the [Smartsheet API](https://smartsheet.redoc.ly) from Python applications.
 
 ## System Requirements
 The SDK currently supports Python 2.7, 3.4, 3.5, 3.6, pypy, and pypy3.  
@@ -43,13 +43,13 @@ To install this SDK manually, download the source code from [GitHub](https://git
 ## Getting Started
 Getting started with the Python SDK is easy:
 
-1.  Set **SMARTSHEET_ACCESS_TOKEN** in your environment. Find out more about [Authentication and Access Tokens](https://smartsheet-platform.github.io/api-docs/index.html#authentication-and-access-tokens) in the Smartsheet API Documentation.
+1.  Set **SMARTSHEET_ACCESS_TOKEN** in your environment. Find out more about [Authentication and Access Tokens](https://smartsheet.redoc.ly/tag/tokenDescription) in the Smartsheet API Documentation.
 
 2.  Install the Smartsheet Python SDK from the [Python Package Index](http://pypi.python.org/pypi/smartsheet-python-sdk), or by using "pip install smartsheet-python-sdk".
 
 3.  Import the smartsheet module: `import smartsheet`
 
-4.  Refer to the [Smartsheet API Documentation](https://smartsheet-platform.github.io/api-docs/?python#python-sample-code) for Python SDK usage examples.
+4.  Refer to the [Smartsheet API Documentation](https://smartsheet.redoc.ly) for Python SDK usage examples.
 
 See a sample application here: https://github.com/smartsheet-samples/python-read-write-sheet
 
@@ -58,7 +58,7 @@ For details about logging, testing, how to use a passthrough option, and how to 
 see [Advanced Topics](ADVANCED.md).
 
 ## Documentation
-The Smartsheet API is documented here: http://smartsheet-platform.github.io/api-docs/
+The Smartsheet API is documented here: https://smartsheet.redoc.ly
 
 The Python SDK documentation can be viewed here: [http://smartsheet-platform.github.io/smartsheet-python-sdk/](http://smartsheet-platform.github.io/smartsheet-python-sdk/).
 
