@@ -27,6 +27,9 @@ jobs:
       python: "3.9"
       script: sh test.sh
     - # stage name not required
+      python: "3.10"
+      script sh test.sh
+    - # stage name not required
       python: "pypy"
       script: sh test.sh
       if: env(deploy) IS NOT present
