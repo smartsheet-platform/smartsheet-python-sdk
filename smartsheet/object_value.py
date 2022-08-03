@@ -17,6 +17,7 @@
 from .models.boolean_object_value import BooleanObjectValue
 from .models.contact_object_value import ContactObjectValue
 from .models.date_object_value import DateObjectValue
+from .models.datetime_object_value import DatetimeObjectValue
 from .models.duration import Duration
 from .models.multi_contact_object_value import MultiContactObjectValue
 from .models.multi_picklist_object_value import MultiPicklistObjectValue
@@ -40,9 +41,11 @@ def assign_to_object_value(value):
                 return PredecessorList(value)
             elif enum_object_type == CONTACT:
                 return ContactObjectValue(value)
-            elif enum_object_type == DATE or enum_object_type == DATETIME or \
+            elif enum_object_type == DATE:
+                return DateObjectValue(value)
+            elif enum_object_type == DATETIME or \
                     enum_object_type == ABSTRACT_DATETIME:
-                return DateObjectValue(value, enum_object_value_type)
+                return DatetimeObjectValue(value, enum_object_value_type)
             elif enum_object_type == MULTI_CONTACT:
                 return MultiContactObjectValue(value)
             elif enum_object_type == MULTI_PICKLIST:
