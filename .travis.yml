@@ -1,6 +1,7 @@
-dist: trusty
+dist: focal
 
 language: python
+jdk: openjdk10
 
 cache:
   directories:
@@ -12,19 +13,18 @@ git:
 jobs:
   include:
     - stage: test
-      python: "2.7"
-      script: sh test.sh
-      if: env(deploy) IS NOT present
-    - # stage name not required
-      python: "3.4"
-      script: sh test.sh
-      if: env(deploy) IS NOT present
-    - # stage name not required
-      python: "3.5"
-      script: sh test.sh
-      if: env(deploy) IS NOT present
-    - # stage name not required
       python: "3.6"
+      script:
+        - jdk_switcher use openjdk10
+        - sh test.sh
+    - # stage name not required
+      python: "3.7"
+      script: sh test.sh
+    - # stage name not required
+      python: "3.8"
+      script: sh test.sh
+    - # stage name not required
+      python: "3.9"
       script: sh test.sh
     - # stage name not required
       python: "pypy"

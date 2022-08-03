@@ -8,7 +8,7 @@ applications.
 System Requirements
 -------------------
 
-The SDK currently supports Python 2.7, 3.4, 3.5, 3.6, pypy, and pypy3.
+The SDK currently supports Python 3.6, 3.7, 3.8, 3.9, 3.10, pypy, and pypy3.
 The following packages are required.
 
 -  `requests <https://pypi.python.org/pypi/requests>`__
