@@ -5,7 +5,6 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
 
    smartsheet.models
 
@@ -235,6 +234,7 @@ smartsheet.workspaces module
    :members:
    :undoc-members:
    :show-inheritance:
+
 
 Module contents
 ---------------

@@ -5,7 +5,6 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
 
    smartsheet.models.enums
 
@@ -232,6 +231,14 @@ smartsheet.models.date\_object\_value module
 --------------------------------------------
 
 .. automodule:: smartsheet.models.date_object_value
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+smartsheet.models.datetime\_object\_value module
+------------------------------------------------
+
+.. automodule:: smartsheet.models.datetime_object_value
    :members:
    :undoc-members:
    :show-inheritance:
@@ -931,6 +938,7 @@ smartsheet.models.workspace module
    :members:
    :undoc-members:
    :show-inheritance:
+
 
 Module contents
 ---------------
