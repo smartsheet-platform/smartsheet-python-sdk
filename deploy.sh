@@ -40,8 +40,7 @@ git push https://${GH_USER}:${GH_ACCESS_TOKEN}@github.com/smartsheet-platform/sm
 
 echo "updating release tag..."
 git tag ${RELEASE_TAG} -m "Release ${RELEASE_TAG}"
-git push https://${GH_USER}:${GH_ACCESS_TOKEN}@github.com/smartsheet-platform/smartsheet-python-sdk.git \
-    HEAD:${TRAVIS_BRANCH} --tags > /dev/null 2>&1
+git push https://${GH_USER}:${GH_ACCESS_TOKEN}@github.com/smartsheet-platform/smartsheet-python-sdk.git HEAD:${TRAVIS_BRANCH} --tags > /dev/null 2>&1
 
 echo "building distribution..."
 # note this must be done immediately after the tag and before other files are committed
