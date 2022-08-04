@@ -19,7 +19,8 @@ from enum import Enum
 
 class AccessLevel(Enum):
     VIEWER = 1
-    EDITOR = 2
-    EDITOR_SHARE = 3
-    ADMIN = 4
-    OWNER = 5
+    COMMENTER = 2
+    EDITOR = 3
+    EDITOR_SHARE = 4
+    ADMIN = 5
+    OWNER = 6

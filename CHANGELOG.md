@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.177.0] - 2022-08-03
+### Added
+- add support for commenter permissions
+- add base URL for smartsheet.eu
+- add `level` parameter to get_row
+
+### Changed
+- pull updates for Python 3.10 compatibility
+- update setup and readme for Python version 3.7 - 3.10
+- update EnumeratedValue `__eq__` method to handle comparisons to NoneType
+
+### Fixed
+- separate `DatetimeObjectValue` from `DateObjectValue` to fix Sheet Summary Field serialization
+
 ## [2.105.1] - 2020-10-15
 ### Fixed
 - don't add time offset to date types when serializing

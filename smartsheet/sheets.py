@@ -420,7 +420,7 @@ class Sheets(object):
 
         return response
 
-    def get_row(self, sheet_id, row_id, include=None, exclude=None):
+    def get_row(self, sheet_id, row_id, include=None, exclude=None, level=None):
         """Get the specified Row of the specified Sheet.
 
         Args:
@@ -433,6 +433,12 @@ class Sheets(object):
                 rowPermalink, rowWriterInfo.
             exclude (str): Response will not include cells
                 that have never contained any data.
+            level (int): Indicates compatibility level of data to return.
+                Valid options: 0, 1, 2
+                Option Descriptors:
+                    0 - Backwards compatible text format
+                    1 - multi-contact complex object
+                    2 - multi-picklist complex object
 
         Returns:
             Row
@@ -442,6 +448,7 @@ class Sheets(object):
         _op['path'] = '/sheets/' + str(sheet_id) + '/rows/' + str(row_id)
         _op['query_params']['include'] = include
         _op['query_params']['exclude'] = exclude
+        _op['query_params']['level'] = level
 
         expected = 'Row'
         prepped_request = self._base.prepare_request(_op)
@@ -669,7 +676,8 @@ class Sheets(object):
         return response
 
     def list_shares(self, sheet_id, page_size=None, page=None,
-                    include_all=None, include_workspace_shares=False):
+                    include_all=None, include_workspace_shares=False,
+                    access_api_level=0):
         """Get the list of all Users and Groups to whom the specified Sheet is
         shared, and their access level.
 
@@ -691,6 +699,7 @@ class Sheets(object):
         _op['query_params']['pageSize'] = page_size
         _op['query_params']['page'] = page
         _op['query_params']['includeAll'] = include_all
+        _op['query_params']['accessApiLevel'] = access_api_level
         if include_workspace_shares:
             _op['query_params']['include'] = 'workspaceShares'
 

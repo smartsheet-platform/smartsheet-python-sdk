@@ -10,6 +10,6 @@ pip install certifi
 pip install enum34 requests six python-dateutil coverage coveralls[yaml] pytest pytest-travis-fold pytest-instafail requests-toolbelt
 
 smartsheet-sdk-tests/travis_scripts/start_wiremock.sh
-coverage run --source=smartsheet setup.py test
+coverage run --source=smartsheet setup.py test -a tests/integration/
 
 coveralls --verbose
