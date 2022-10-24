@@ -74,7 +74,7 @@ For example, v2.68.0 means that you are using our 2.0 version of the API, the AP
 and then if there are numbers after the last decimal, that will indicate a minor change.
 
 ## Support
-If you have any questions or issues with this SDK please post on StackOverflow using the tag ["smartsheet-api"](http://stackoverflow.com/questions/tagged/smartsheet-api) or contact us directly at api@smartsheet.com.
+If you have any questions or issues with this SDK please post on StackOverflow using the tag ["smartsheet-api"](http://stackoverflow.com/questions/tagged/smartsheet-api) or contact us directly at devrel@smartsheet.com.
 
 ## Release Notes
 Each release with notes is available for download on the [Github Releases page](https://github.com/smartsheet-platform/smartsheet-python-sdk/releases).
