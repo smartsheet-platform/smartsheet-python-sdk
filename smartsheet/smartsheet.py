@@ -130,7 +130,7 @@ class Smartsheet(object):
                 recommend you use the format "AppName/Version". If set, we
                 append "/SmartsheetPythonSDK/__version__" to the user_agent.
             proxies (dict): See the `requests module
-                <http://docs.python-requests.org/en/latest/user/advanced/#proxies>`_
+                <https://requests.readthedocs.io/en/latest/user/advanced/#proxies>`_
                 for more details.
         """
 
